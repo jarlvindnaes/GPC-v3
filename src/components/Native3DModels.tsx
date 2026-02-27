@@ -27,27 +27,46 @@ function CustomRockModel() {
 }
 
 // ----------------------------------------------------------------------------
-// Components/Bolt Model (Procedural until custom model uploaded)
+// Components/Bolt Model (Procedural bolt with metallic texture)
 // ----------------------------------------------------------------------------
 function BoltModel() {
     const mesh = useRef<THREE.Group>(null);
     useFrame((state) => {
         if (mesh.current) {
-            mesh.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
+            mesh.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
         }
     });
     return (
-        <Float floatIntensity={1.0} rotationIntensity={0.5} speed={1.3}>
-            <group ref={mesh} position={[0, 0, 0]}>
-                {/* Bolt head */}
-                <mesh position={[0, 0.5, 0]}>
-                    <cylinderGeometry args={[0.4, 0.4, 0.2, 6]} />
-                    <meshStandardMaterial color="#9ca3af" metalness={0.9} roughness={0.2} />
+        <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
+            <group ref={mesh} position={[0, -0.5, 0]} scale={2.5}>
+                {/* Bolt head - hexagonal */}
+                <mesh position={[0, 0.4, 0]}>
+                    <cylinderGeometry args={[0.5, 0.5, 0.25, 6]} />
+                    <meshStandardMaterial
+                        color="#8a8a8a"
+                        metalness={0.95}
+                        roughness={0.15}
+                        envMapIntensity={1.5}
+                    />
                 </mesh>
-                {/* Bolt shaft */}
-                <mesh position={[0, 0, 0]}>
-                    <cylinderGeometry args={[0.2, 0.2, 1.0, 16]} />
-                    <meshStandardMaterial color="#a8a8a8" metalness={0.85} roughness={0.25} />
+                {/* Bolt shaft with threading appearance */}
+                <mesh position={[0, -0.2, 0]}>
+                    <cylinderGeometry args={[0.25, 0.25, 1.4, 32]} />
+                    <meshStandardMaterial
+                        color="#a0a0a0"
+                        metalness={0.9}
+                        roughness={0.2}
+                        envMapIntensity={1.2}
+                    />
+                </mesh>
+                {/* Bolt tip */}
+                <mesh position={[0, -0.95, 0]}>
+                    <coneGeometry args={[0.25, 0.15, 16]} />
+                    <meshStandardMaterial
+                        color="#a0a0a0"
+                        metalness={0.9}
+                        roughness={0.2}
+                    />
                 </mesh>
             </group>
         </Float>
@@ -57,13 +76,25 @@ function BoltModel() {
 export function RawMaterial3DCanvas() {
     return (
         <div className="w-full h-full cursor-grab active:cursor-grabbing">
-            <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-                <ambientLight intensity={0.5} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
-                <PresentationControls global snap={true} rotation={[0, 0, 0]} polar={[-Math.PI / 3, Math.PI / 3]} azimuth={[-Math.PI / 1.4, Math.PI / 2]}>
-                    <CustomRockModel />
+            <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+                <ambientLight intensity={0.7} />
+                <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
+                <directionalLight position={[-4, 6, -4]} intensity={0.6} color="#c7d2fe" />
+                {/* 45° iso view */}
+                <PresentationControls
+                    global
+                    snap={false}
+                    rotation={[0.1, -Math.PI / 4, 0]}
+                    polar={[-Math.PI / 4, Math.PI / 4]}
+                    azimuth={[-Math.PI, Math.PI]}
+                    config={{ mass: 2, tension: 200, friction: 30 }}
+                >
+                    <group position={[0, -0.5, 0]} scale={2.5}>
+                        <CustomRockModel />
+                    </group>
                 </PresentationControls>
-                <Environment preset="city" />
+                <ContactShadows position={[0, -1.5, 0]} opacity={0.3} scale={10} blur={3} far={5} />
+                <Environment preset="studio" />
             </Canvas>
         </div>
     );
@@ -75,15 +106,23 @@ export function RawMaterial3DCanvas() {
 export function Components3DCanvas() {
     return (
         <div className="w-full h-full cursor-grab active:cursor-grabbing">
-            <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
-                <ambientLight intensity={0.6} />
-                <spotLight position={[8, 10, 8]} angle={0.15} penumbra={1} intensity={2} />
-                <directionalLight position={[-4, 5, -4]} intensity={0.4} color="#a5b4fc" />
-                <PresentationControls global snap={true} rotation={[0.2, 0.3, 0]} polar={[-Math.PI / 3, Math.PI / 3]} azimuth={[-Math.PI, Math.PI]}>
+            <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+                <ambientLight intensity={0.7} />
+                <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
+                <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
+                {/* 45° iso view */}
+                <PresentationControls
+                    global
+                    snap={false}
+                    rotation={[0.1, -Math.PI / 4, 0]}
+                    polar={[-Math.PI / 4, Math.PI / 4]}
+                    azimuth={[-Math.PI, Math.PI]}
+                    config={{ mass: 2, tension: 200, friction: 30 }}
+                >
                     <BoltModel />
                 </PresentationControls>
-                <ContactShadows position={[0, -1, 0]} opacity={0.3} scale={5} blur={2} far={3} />
-                <Environment preset="city" />
+                <ContactShadows position={[0, -1.2, 0]} opacity={0.3} scale={10} blur={3} far={5} />
+                <Environment preset="studio" />
             </Canvas>
         </div>
     );
@@ -115,7 +154,14 @@ export function FinishedProduct3DCanvas() {
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
                 {/* 45° iso default: rotation [slight tilt down, -π/4 yaw, 0] */}
-                <PresentationControls global snap={false} rotation={[0.08, -Math.PI / 4, 0]} polar={[-Math.PI / 4, Math.PI / 4]} azimuth={[-Math.PI, Math.PI]}>
+                <PresentationControls
+                    global
+                    snap={false}
+                    rotation={[0.08, -Math.PI / 4, 0]}
+                    polar={[-Math.PI / 4, Math.PI / 4]}
+                    azimuth={[-Math.PI, Math.PI]}
+                    config={{ mass: 2, tension: 200, friction: 30 }}
+                >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
                         <group position={[0, -0.3, 0]}>
                             <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.0} />
@@ -184,7 +230,14 @@ export function DPPInteractiveProduct() {
                         <ambientLight intensity={0.9} />
                         <spotLight position={[8, 14, 8]} angle={0.2} penumbra={1} intensity={2.5} castShadow />
                         <directionalLight position={[-4, 6, -4]} intensity={0.6} color="#e0e7ff" />
-                        <PresentationControls global snap={false} rotation={[0.08, -Math.PI / 4, 0]} polar={[-Math.PI / 4, Math.PI / 4]} azimuth={[-Math.PI, Math.PI]}>
+                        <PresentationControls
+                            global
+                            snap={false}
+                            rotation={[0.08, -Math.PI / 4, 0]}
+                            polar={[-Math.PI / 4, Math.PI / 4]}
+                            azimuth={[-Math.PI, Math.PI]}
+                            config={{ mass: 2, tension: 200, friction: 30 }}
+                        >
                             <DPPChairModel />
                             {hotspots.map((h, i) => (
                                 <Html key={i} position={h.position} center>
