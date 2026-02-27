@@ -26,13 +26,15 @@ export function StatsSection() {
   }, [mousePosition, springX, springY]);
 
   const elements = useMemo(() => {
-    return Array.from({ length: 150 }).map(() => {
-      const x = 600 + (Math.random() - 0.5) * 1200;
-      const y = 400 - Math.random() * 350;
+    const count = 150;
+    return Array.from({ length: count }).map((_, i) => {
+      // Create a circular pattern
+      const angle = (i / count) * Math.PI * 2;
+      const radiusVariation = 400 + Math.random() * 250;
+      const x = 600 + Math.cos(angle) * radiusVariation;
+      const y = 300 + Math.sin(angle) * radiusVariation;
       const radius = Math.random() * 3 + 1;
-      const pullFactorX = (Math.random() - 0.5) * 80;
-      const pullFactorY = (Math.random() - 0.5) * 80;
-      return { x, y, radius, pullFactorX, pullFactorY };
+      return { x, y, radius, baseX: x, baseY: y };
     });
   }, []);
 
@@ -112,23 +114,35 @@ export function StatsSection() {
         </div>
       </div>
 
-      {/* Abstract visual representation at the bottom */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1200px] h-[400px] opacity-30 pointer-events-none mix-blend-screen">
-        <svg viewBox="0 0 1200 400" className="w-full h-full text-indigo-500 overflow-visible">
+      {/* Abstract circular visual representation behind content */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] opacity-30 pointer-events-none mix-blend-screen z-0">
+        <svg viewBox="0 0 1200 1200" className="w-full h-full text-indigo-500 overflow-visible">
           <g stroke="currentColor" strokeWidth="1.5" fill="none">
             {elements.map((el, i) => {
-              const offsetX = useTransform(springX, (latest) => latest * el.pullFactorX);
-              const offsetY = useTransform(springY, (latest) => latest * el.pullFactorY);
+              // Calculate gravitational pull toward mouse
+              const nodeX = useTransform(springX, (mouseX) => {
+                const pull = mouseX * 600; // Convert normalized mouse position to pixels
+                const distance = Math.abs(pull - el.baseX);
+                const pullStrength = Math.min(30, 3000 / (distance + 50));
+                return (pull - el.baseX) * pullStrength * 0.03;
+              });
+
+              const nodeY = useTransform(springY, (mouseY) => {
+                const pull = mouseY * 600; // Convert normalized mouse position to pixels
+                const distance = Math.abs(pull - el.baseY);
+                const pullStrength = Math.min(30, 3000 / (distance + 50));
+                return (pull - el.baseY) * pullStrength * 0.03;
+              });
 
               return (
                 <g key={i}>
                   <motion.path
-                    style={{ x: offsetX, y: offsetY }}
-                    d={`M600,400 Q${(600 + el.x) / 2},${(400 + el.y) / 2} ${el.x},${el.y}`}
+                    style={{ x: nodeX, y: nodeY }}
+                    d={`M600,900 Q${(600 + el.x) / 2},${(900 + el.y) / 2} ${el.x},${el.y}`}
                     className="opacity-40"
                   />
                   <motion.circle
-                    style={{ cx: el.x, cy: el.y, x: offsetX, y: offsetY }}
+                    style={{ cx: el.x, cy: el.y, x: nodeX, y: nodeY }}
                     r={el.radius}
                     fill="currentColor"
                     className="opacity-80"

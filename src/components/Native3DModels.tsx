@@ -62,19 +62,19 @@ function CustomChairModel() {
 export function FinishedProduct3DCanvas() {
     return (
         <div className="w-full h-full cursor-grab active:cursor-grabbing">
-            <Canvas camera={{ position: [0, 0.2, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+            <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
                 {/* 45° iso default: rotation [slight tilt down, -π/4 yaw, 0] */}
                 <PresentationControls global snap={false} rotation={[0.08, -Math.PI / 4, 0]} polar={[-Math.PI / 4, Math.PI / 4]} azimuth={[-Math.PI, Math.PI]}>
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-                        <group position={[0, -0.9, 0]}>
+                        <group position={[0, -0.3, 0]}>
                             <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.0} />
                         </group>
                     </Float>
                 </PresentationControls>
-                <ContactShadows position={[0, -0.9, 0]} opacity={0.25} scale={12} blur={3} far={5} color="#000" />
+                <ContactShadows position={[0, -0.3, 0]} opacity={0.25} scale={12} blur={3} far={5} color="#000" />
                 <Environment preset="studio" />
             </Canvas>
         </div>
@@ -96,7 +96,7 @@ function DPPChairModel() {
     });
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={group} position={[0, -0.9, 0]}>
+            <group ref={group} position={[0, -0.3, 0]}>
                 <primitive object={productScene} scale={3.2} />
             </group>
         </Float>
@@ -131,7 +131,7 @@ export function DPPInteractiveProduct() {
                         Drag to explore
                     </div>
 
-                    <Canvas camera={{ position: [0, 0.2, 7], fov: 42 }} style={{ width: '100%', height: '100%', minHeight: 380 }}>
+                    <Canvas camera={{ position: [0, 0.8, 7], fov: 42 }} style={{ width: '100%', height: '100%', minHeight: 380 }}>
                         <color attach="background" args={['transparent']} />
                         <ambientLight intensity={0.9} />
                         <spotLight position={[8, 14, 8]} angle={0.2} penumbra={1} intensity={2.5} castShadow />
@@ -148,7 +148,7 @@ export function DPPInteractiveProduct() {
                                 </Html>
                             ))}
                         </PresentationControls>
-                        <ContactShadows position={[0, -0.9, 0]} opacity={0.3} scale={14} blur={3} far={6} />
+                        <ContactShadows position={[0, -0.3, 0]} opacity={0.3} scale={14} blur={3} far={6} />
                         <Environment preset="studio" />
                     </Canvas>
                 </div>

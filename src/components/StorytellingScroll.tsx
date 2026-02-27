@@ -36,6 +36,26 @@ export function StorytellingScroll() {
 
   return (
     <section id="story" ref={containerRef} className="relative h-[700vh] bg-slate-900 text-white">
+      {/* Header section */}
+      <div className="absolute top-0 left-0 right-0 pt-24 pb-16 z-20 pointer-events-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
+              How it works
+            </h2>
+            <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              Follow a product's journey from raw material to digital passport.
+              Scroll to see how Product Connect transforms supply chain data into compliance-ready transparency.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
       <div className="sticky top-0 h-screen overflow-hidden flex items-center">
 
         {/* Metro Line */}
@@ -77,6 +97,11 @@ export function StorytellingScroll() {
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
               className="absolute inset-0 flex items-center justify-center">
               <FinishedProduct3DCanvas />
+              {/* Chair info label */}
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg">
+                <p className="text-sm font-semibold text-white mb-1">West Elm Slope Leather Chair</p>
+                <p className="text-xs text-slate-400">Drag to rotate • Interactive 3D model</p>
+              </div>
             </motion.div>
 
             {/* Visual 2: Exploded BOM */}
