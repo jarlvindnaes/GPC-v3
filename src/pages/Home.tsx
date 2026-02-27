@@ -4,7 +4,7 @@ import { TrustLogos } from "../components/TrustLogos";
 import { FeatureGrid } from "../components/FeatureGrid";
 import { StatsSection } from "../components/StatsSection";
 import { IntegrationSection } from "../components/IntegrationSection";
-import { ProductBreakdown } from "../components/ProductBreakdown";
+// import { ProductBreakdown } from "../components/ProductBreakdown";
 import { StorytellingScroll } from "../components/StorytellingScroll";
 import { Pricing } from "../components/Pricing";
 import { Testimonials } from "../components/Testimonials";
@@ -18,7 +18,7 @@ export function Home() {
       <FeatureGrid />
       <StatsSection />
       <IntegrationSection />
-      <ProductBreakdown />
+      {/* <ProductBreakdown /> */}
       <StorytellingScroll />
       <Testimonials />
       <Pricing />

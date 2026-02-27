@@ -6,10 +6,11 @@ import * as THREE from "three";
 const CHAIR_MODEL = import.meta.env.BASE_URL + "models/west_elm_slope_leather_chair.glb";
 
 // ----------------------------------------------------------------------------
-// 1. Abstract Floating Rock (Procedural geometry — no external file needed)
+// 1. Raw Material Model (using quartz.glb)
 // ----------------------------------------------------------------------------
 function CustomRockModel() {
-    const mesh = useRef<THREE.Mesh>(null);
+    const { scene } = useGLTF(import.meta.env.BASE_URL + "models/quartz.glb");
+    const mesh = useRef<THREE.Group>(null);
     useFrame((state) => {
         if (mesh.current) {
             mesh.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
@@ -18,10 +19,37 @@ function CustomRockModel() {
     });
     return (
         <Float floatIntensity={1.5} rotationIntensity={0.8} speed={1.2}>
-            <mesh ref={mesh}>
-                <icosahedronGeometry args={[1.8, 1]} />
-                <meshStandardMaterial color="#8b9dc3" roughness={0.4} metalness={0.6} envMapIntensity={1} />
-            </mesh>
+            <group ref={mesh}>
+                <primitive object={scene} scale={1.5} />
+            </group>
+        </Float>
+    );
+}
+
+// ----------------------------------------------------------------------------
+// Components/Bolt Model (Procedural until custom model uploaded)
+// ----------------------------------------------------------------------------
+function BoltModel() {
+    const mesh = useRef<THREE.Group>(null);
+    useFrame((state) => {
+        if (mesh.current) {
+            mesh.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
+        }
+    });
+    return (
+        <Float floatIntensity={1.0} rotationIntensity={0.5} speed={1.3}>
+            <group ref={mesh} position={[0, 0, 0]}>
+                {/* Bolt head */}
+                <mesh position={[0, 0.5, 0]}>
+                    <cylinderGeometry args={[0.4, 0.4, 0.2, 6]} />
+                    <meshStandardMaterial color="#9ca3af" metalness={0.9} roughness={0.2} />
+                </mesh>
+                {/* Bolt shaft */}
+                <mesh position={[0, 0, 0]}>
+                    <cylinderGeometry args={[0.2, 0.2, 1.0, 16]} />
+                    <meshStandardMaterial color="#a8a8a8" metalness={0.85} roughness={0.25} />
+                </mesh>
+            </group>
         </Float>
     );
 }
@@ -35,6 +63,26 @@ export function RawMaterial3DCanvas() {
                 <PresentationControls global snap={true} rotation={[0, 0, 0]} polar={[-Math.PI / 3, Math.PI / 3]} azimuth={[-Math.PI / 1.4, Math.PI / 2]}>
                     <CustomRockModel />
                 </PresentationControls>
+                <Environment preset="city" />
+            </Canvas>
+        </div>
+    );
+}
+
+// ----------------------------------------------------------------------------
+// 1b. Components Canvas (for bolts/fasteners)
+// ----------------------------------------------------------------------------
+export function Components3DCanvas() {
+    return (
+        <div className="w-full h-full cursor-grab active:cursor-grabbing">
+            <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+                <ambientLight intensity={0.6} />
+                <spotLight position={[8, 10, 8]} angle={0.15} penumbra={1} intensity={2} />
+                <directionalLight position={[-4, 5, -4]} intensity={0.4} color="#a5b4fc" />
+                <PresentationControls global snap={true} rotation={[0.2, 0.3, 0]} polar={[-Math.PI / 3, Math.PI / 3]} azimuth={[-Math.PI, Math.PI]}>
+                    <BoltModel />
+                </PresentationControls>
+                <ContactShadows position={[0, -1, 0]} opacity={0.3} scale={5} blur={2} far={3} />
                 <Environment preset="city" />
             </Canvas>
         </div>

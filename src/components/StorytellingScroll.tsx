@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { Box, Layers, Users, Truck, TreePine, Cpu, QrCode } from "lucide-react";
-import { FinishedProduct3DCanvas, RawMaterial3DCanvas } from "./Native3DModels";
+import { FinishedProduct3DCanvas, RawMaterial3DCanvas, Components3DCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -104,40 +104,15 @@ export function StorytellingScroll() {
               </div>
             </motion.div>
 
-            {/* Visual 2: Exploded BOM */}
+            {/* Visual 2: Components - 3D Model */}
             <motion.div style={{ opacity: vOp2, pointerEvents: pView2 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="relative w-72 h-72">
-                {/* Central product blob */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-24 h-14 rounded-2xl bg-slate-700 border border-slate-600 shadow-xl flex items-center justify-center">
-                    <span className="text-[10px] text-slate-400 font-semibold tracking-widest uppercase">Chair</span>
-                  </div>
-                </div>
-                {/* Orbiting components */}
-                {[
-                  { label: "Oak Frame", x: -110, y: -80 },
-                  { label: "Leather", x: 110, y: -80 },
-                  { label: "Steel Legs", x: -110, y: 80 },
-                  { label: "Foam", x: 110, y: 80 },
-                ].map(c => (
-                  <div key={c.label} className="absolute flex items-center gap-1.5"
-                    style={{ left: '50%', top: '50%', transform: `translate(calc(-50% + ${c.x}px), calc(-50% + ${c.y}px))` }}>
-                    {/* Connector line */}
-                    <svg className="absolute inset-0 pointer-events-none overflow-visible" style={{ left: c.x < 0 ? '100%' : 'auto', right: c.x > 0 ? '100%' : 'auto' }}>
-                      <line x1={c.x < 0 ? 0 : '100%'} y1="50%" x2={c.x < 0 ? -c.x / 2 : c.x / 2} y2="50%"
-                        stroke="#4f46e5" strokeWidth="1" strokeDasharray="3 3" />
-                    </svg>
-                    <div className="px-3 py-1.5 bg-slate-800 border border-indigo-500/40 rounded-xl shadow-lg shadow-indigo-500/10">
-                      <span className="text-[11px] text-slate-300 font-semibold">{c.label}</span>
-                    </div>
-                  </div>
-                ))}
-                {/* Pulsing rings */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <motion.div className="w-32 h-32 rounded-full border border-indigo-500/20"
-                    animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeOut" }} />
+              <div className="w-full h-full relative">
+                <Components3DCanvas />
+                {/* Component info label */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg">
+                  <p className="text-sm font-semibold text-white mb-1">Steel Bolt — M8x30</p>
+                  <p className="text-xs text-slate-400">Every component tracked • Drag to rotate</p>
                 </div>
               </div>
             </motion.div>
@@ -200,7 +175,14 @@ export function StorytellingScroll() {
             {/* Visual 5: Raw Material (3D rock) */}
             <motion.div style={{ opacity: vOp5, pointerEvents: pView5 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <RawMaterial3DCanvas />
+              <div className="w-full h-full relative">
+                <RawMaterial3DCanvas />
+                {/* Raw material info label */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg">
+                  <p className="text-sm font-semibold text-white mb-1">Iron Ore — Raw Material</p>
+                  <p className="text-xs text-slate-400">Traced to source • Drag to rotate</p>
+                </div>
+              </div>
             </motion.div>
 
             {/* Visual 6: LCA Engine */}
