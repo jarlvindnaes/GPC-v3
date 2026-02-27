@@ -1,4 +1,5 @@
 import { Hero } from "../components/Hero";
+import { CountdownBanner } from "../components/CountdownBanner";
 import { TrustLogos } from "../components/TrustLogos";
 import { FeatureGrid } from "../components/FeatureGrid";
 import { StatsSection } from "../components/StatsSection";
@@ -11,6 +12,7 @@ export function Home() {
   return (
     <main>
       <Hero />
+      <CountdownBanner />
       <TrustLogos />
       <FeatureGrid />
       <StatsSection />

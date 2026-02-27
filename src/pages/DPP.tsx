@@ -1,4 +1,5 @@
 import { QrCode, ArrowRight, ShieldCheck, Link2, Smartphone, RefreshCw, Wrench, Leaf, TrendingUp, ShoppingBag, Database } from "lucide-react";
+import { DPPInteractiveProduct } from "../components/Native3DModels";
 
 export function DPP() {
   return (
@@ -19,6 +20,10 @@ export function DPP() {
             Create your first DPP <ArrowRight className="w-4 h-4" />
           </button>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <DPPInteractiveProduct />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32">

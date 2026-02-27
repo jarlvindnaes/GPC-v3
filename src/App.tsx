@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { BackToTop } from "./components/BackToTop";
 import { Home } from "./pages/Home";
 import { Platform } from "./pages/Platform";
 import { DPP } from "./pages/DPP";
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
+        <BackToTop />
       </div>
     </Router>
   );
