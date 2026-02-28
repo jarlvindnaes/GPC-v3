@@ -22,10 +22,11 @@ interface NetNode {
 }
 
 const NODE_LABELS: { type: number; color: string; labels: string[] }[] = [
-  { type: 0, color: "#818cf8", labels: ["Oak Frame", "Steel Bolt", "Leather Seat", "Arm Rest", "Back Panel", "Leg Assembly", "Cross Bar", "Cushion Core"] },
-  { type: 1, color: "#60a5fa", labels: ["Timber Mill", "Steel Foundry", "Tannery", "Foam Factory", "Paint Shop", "CNC Router", "Welder", "Finisher"] },
+  { type: 0, color: "#60a5fa", labels: ["Oak Frame", "Steel Bolt", "Leather Seat", "Arm Rest", "Back Panel", "Leg Assembly", "Cross Bar", "Cushion Core"] },
+  { type: 1, color: "#f97316", labels: ["Timber Mill", "Steel Foundry", "Tannery", "Foam Factory", "Paint Shop", "CNC Router", "Welder", "Finisher"] },
   { type: 2, color: "#a78bfa", labels: ["Dining Chair", "Office Chair", "Lounge Sofa", "Bar Stool", "Bench", "Side Table", "Desk", "Shelf Unit"] },
-  { type: 3, color: "#34d399", labels: ["Retailer EU", "D2C Portal", "Warranty", "Spare Parts", "Recycling", "Analytics", "End User", "Inspector"] },
+  { type: 3, color: "#fb923c", labels: ["Retailer EU", "D2C Portal", "Warranty", "Spare Parts", "Recycling", "Analytics", "End User", "Inspector"] },
+  { type: 4, color: "#818cf8", labels: ["EPD Cert", "ISO 14001", "FSC Label", "ESPR Tag", "QR Code", "DPP Record"] },
 ];
 
 function HeroNetwork() {
@@ -53,7 +54,7 @@ function HeroNetwork() {
       const nodes: NetNode[] = [];
 
       for (let i = 0; i < count; i++) {
-        const type = i % 4;
+        const type = i % 5;
         const group = NODE_LABELS[type];
         const label = group.labels[i % group.labels.length];
         const depth = 0.3 + Math.random() * 0.7;
