@@ -430,34 +430,33 @@ export function StorytellingScroll() {
     </section>
 
     {/* ── Grand Finale: Your Intelligent Product ── */}
-    <section className="bg-slate-900 text-white py-24 md:py-32">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <section className="bg-slate-900 text-white pt-8 pb-32 relative overflow-hidden">
+      {/* Subtle radial glow behind the chair */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/[0.03] rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
           className="flex flex-col items-center"
         >
-          <PassportChair3DCanvas />
-        </motion.div>
-
-        <motion.div
-          className="text-center -mt-[250px]"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          <div className="flex items-center justify-center gap-3 mb-5">
-            <div className="w-11 h-11 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 shadow-lg shadow-indigo-500/10">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-tight">Your Intelligent Product</h2>
+          <div className="-mb-16">
+            <PassportChair3DCanvas />
           </div>
-          <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation, care guides, and verified claims, all accessible with a single scan.
-          </p>
+
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2.5 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-indigo-400">
+                <Sparkles className="w-4.5 h-4.5" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight">Your Intelligent Product</h2>
+            </div>
+            <p className="text-lg text-slate-400 max-w-lg mx-auto leading-relaxed">
+              The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation, care guides, and verified claims, all accessible with a single scan.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
