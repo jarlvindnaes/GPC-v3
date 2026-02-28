@@ -35,6 +35,9 @@ export function StorytellingScroll() {
   const pView2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], ["none", "auto", "auto", "none"]);
   const pView3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], ["none", "auto", "auto", "none"]);
   const pView4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], ["none", "auto", "auto", "none"]);
+  const pView5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], ["none", "auto", "auto", "none"]);
+  const pView6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], ["none", "auto", "auto", "none"]);
+  const pView7 = useTransform(scrollYProgress, [0.85, 0.9, 1], ["none", "auto", "auto"]);
 
   return (
     <>
@@ -98,9 +101,11 @@ export function StorytellingScroll() {
 
             {/* Visual 1: Chair */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
-              className="absolute inset-0">
-              <FinishedProduct3DCanvas />
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 flex items-center gap-4 z-10">
+              className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[min(100%,85vh)] aspect-square">
+                <FinishedProduct3DCanvas />
+              </div>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 flex items-center gap-4 pointer-events-none">
                 <div className="flex flex-col">
                   <p className="text-sm font-semibold text-white">West Elm Slope Leather Chair</p>
                   <p className="text-[11px] text-slate-400 mt-0.5">247 components • 18 suppliers</p>
@@ -114,9 +119,11 @@ export function StorytellingScroll() {
 
             {/* Visual 2: Components - 3D Model */}
             <motion.div style={{ opacity: vOp2, pointerEvents: pView2 as any }}
-              className="absolute inset-0">
-              <Components3DCanvas />
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 z-10">
+              className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[min(100%,85vh)] aspect-square">
+                <Components3DCanvas />
+              </div>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 pointer-events-none">
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col">
                     <p className="text-sm font-semibold text-white">Steel Bolt — ISO 4762 M8×30</p>
@@ -160,9 +167,11 @@ export function StorytellingScroll() {
 
             {/* Visual 4: Raw Material (3D rock) */}
             <motion.div style={{ opacity: vOp4, pointerEvents: pView4 as any }}
-              className="absolute inset-0">
-              <RawMaterial3DCanvas />
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 z-10">
+              className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[min(100%,85vh)] aspect-square">
+                <RawMaterial3DCanvas />
+              </div>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 pointer-events-none">
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col">
                     <p className="text-sm font-semibold text-white">Iron Ore — Raw Material</p>
@@ -183,7 +192,7 @@ export function StorytellingScroll() {
             </motion.div>
 
             {/* Visual 5: Transport Routes Card */}
-            <motion.div style={{ opacity: vOp5 }}
+            <motion.div style={{ opacity: vOp5, pointerEvents: pView5 as any }}
               className="absolute inset-0 flex items-center justify-center">
               <div className="w-full max-w-96 rounded-2xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 shadow-2xl shadow-black/20 overflow-hidden">
                 {/* Header */}
@@ -268,7 +277,7 @@ export function StorytellingScroll() {
             </motion.div>
 
             {/* Visual 6: LCA Engine */}
-            <motion.div style={{ opacity: vOp6 }}
+            <motion.div style={{ opacity: vOp6, pointerEvents: pView6 as any }}
               className="absolute inset-0 flex items-center justify-center">
               <div className="w-full max-w-[420px] aspect-square relative flex items-center justify-center">
                 {/* Outer ring */}
@@ -402,7 +411,7 @@ export function StorytellingScroll() {
             </motion.div>
 
             {/* Visual 7: DPP mini-card */}
-            <motion.div style={{ opacity: vOp7 }}
+            <motion.div style={{ opacity: vOp7, pointerEvents: pView7 as any }}
               className="absolute inset-0 flex items-center justify-center">
               <div className="w-full max-w-72 rounded-3xl border border-slate-700/40 bg-slate-800/40 backdrop-blur-xl shadow-2xl shadow-black/20 overflow-hidden">
                 <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-5 border-b border-slate-700/40">

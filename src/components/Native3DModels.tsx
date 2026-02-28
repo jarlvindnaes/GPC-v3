@@ -42,7 +42,7 @@ function BoltModel() {
     });
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={mesh} position={[0, 0.2, 0]} rotation={[Math.PI / 5, 0, 0]} scale={28}>
+            <group ref={mesh} position={[0, 0.2, 0]} rotation={[Math.PI / 5, 0, 0]} scale={20}>
                 <primitive object={scene} />
             </group>
         </Float>
@@ -51,7 +51,7 @@ function BoltModel() {
 
 export function RawMaterial3DCanvas() {
     return (
-        <div className="absolute inset-0 cursor-grab active:cursor-grabbing">
+        <div className="w-full h-full cursor-grab active:cursor-grabbing">
             <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
@@ -64,7 +64,7 @@ export function RawMaterial3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <group position={[0, -0.3, 0]} scale={3.0}>
+                    <group position={[0, -0.3, 0]} scale={2.2}>
                         <CustomRockModel />
                     </group>
                 </PresentationControls>
@@ -80,7 +80,7 @@ export function RawMaterial3DCanvas() {
 // ----------------------------------------------------------------------------
 export function Components3DCanvas() {
     return (
-        <div className="absolute inset-0 cursor-grab active:cursor-grabbing">
+        <div className="w-full h-full cursor-grab active:cursor-grabbing">
             <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
@@ -123,7 +123,7 @@ function CustomChairModel() {
 
 export function FinishedProduct3DCanvas() {
     return (
-        <div className="absolute inset-0 cursor-grab active:cursor-grabbing">
+        <div className="w-full h-full cursor-grab active:cursor-grabbing">
             <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
@@ -138,7 +138,7 @@ export function FinishedProduct3DCanvas() {
                 >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
                         <group position={[0, -0.3, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={5.76} />
+                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={4.0} />
                         </group>
                     </Float>
                 </PresentationControls>
