@@ -21,7 +21,7 @@ function CustomRockModel() {
     return (
         <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
-                <primitive object={scene} scale={2.56} />
+                <primitive object={scene} scale={0.9} />
             </group>
         </Float>
     );
