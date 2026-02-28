@@ -94,7 +94,7 @@ export function StorytellingScroll() {
           </div>
 
           {/* ── Visual panel (right) ── */}
-          <div className="hidden md:flex flex-1 relative min-h-[500px] md:min-h-[650px] items-center justify-center">
+          <div className="hidden md:flex flex-1 relative min-h-[550px] md:min-h-[700px] items-center justify-center">
 
             {/* Visual 1: Chair */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}

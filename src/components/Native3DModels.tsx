@@ -22,7 +22,7 @@ function CustomRockModel() {
     return (
         <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
-                <primitive object={scene} scale={1.2} />
+                <primitive object={scene} scale={1.8} />
             </group>
         </Float>
     );
@@ -42,7 +42,7 @@ function BoltModel() {
     });
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={mesh} position={[0, 0.2, 0]} rotation={[Math.PI / 5, 0, 0]} scale={19}>
+            <group ref={mesh} position={[0, 0.2, 0]} rotation={[Math.PI / 5, 0, 0]} scale={28}>
                 <primitive object={scene} />
             </group>
         </Float>
@@ -51,8 +51,8 @@ function BoltModel() {
 
 export function RawMaterial3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[580px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.5, 6], fov: 40 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[700px] aspect-square mx-auto">
+            <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
                 <directionalLight position={[-4, 6, -4]} intensity={0.6} color="#c7d2fe" />
@@ -64,7 +64,7 @@ export function RawMaterial3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <group position={[0, -0.3, 0]} scale={2.0}>
+                    <group position={[0, -0.3, 0]} scale={3.0}>
                         <CustomRockModel />
                     </group>
                 </PresentationControls>
@@ -80,8 +80,8 @@ export function RawMaterial3DCanvas() {
 // ----------------------------------------------------------------------------
 export function Components3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[580px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.5, 6], fov: 40 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[700px] aspect-square mx-auto">
+            <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
@@ -123,8 +123,8 @@ function CustomChairModel() {
 
 export function FinishedProduct3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[580px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.8, 6], fov: 40 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[700px] aspect-square mx-auto">
+            <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
@@ -138,7 +138,7 @@ export function FinishedProduct3DCanvas() {
                 >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
                         <group position={[0, -0.3, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.84} />
+                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={5.76} />
                         </group>
                     </Float>
                 </PresentationControls>
@@ -159,7 +159,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     return (
         <Float floatIntensity={0.6} rotationIntensity={0.02} speed={1}>
             <group position={[0, -0.3, 0]}>
-                <primitive object={passportScene} scale={5.4} />
+                <primitive object={passportScene} scale={7.0} />
                 {/* QR tag on the seat — positioned in 3D space */}
                 <Html position={[0.0, 1.05, 0.5]} center>
                     <div
@@ -168,26 +168,25 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
                         onMouseLeave={() => onHover(false)}
                     >
                         {/* Radiating rings */}
-                        <div className="absolute -inset-4 rounded-full border border-indigo-400/20 animate-[ping_3s_ease-in-out_infinite]" />
-                        <div className="absolute -inset-7 rounded-full border border-indigo-400/10 animate-[ping_3s_ease-in-out_0.5s_infinite]" />
-                        <div className="absolute -inset-10 rounded-full border border-violet-400/5 animate-[ping_3s_ease-in-out_1s_infinite]" />
+                        <div className="absolute -inset-2 rounded-full border border-indigo-400/25 animate-[ping_3s_ease-in-out_infinite]" />
+                        <div className="absolute -inset-4 rounded-full border border-indigo-400/12 animate-[ping_3s_ease-in-out_0.5s_infinite]" />
                         {/* Glow halo */}
-                        <div className="absolute -inset-3 rounded-full bg-indigo-500/15 blur-md animate-pulse" />
+                        <div className="absolute -inset-1.5 rounded-full bg-indigo-500/20 blur-sm animate-pulse" />
                         {/* Core QR icon */}
-                        <div className="relative w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.6)] ring-2 ring-white/30">
-                            <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <div className="relative w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-[0_0_14px_rgba(99,102,241,0.6)] ring-[1.5px] ring-white/30">
+                            <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
                             </svg>
                         </div>
                         {/* Floating particles */}
-                        {[0, 1, 2, 3, 4, 5].map(i => (
+                        {[0, 1, 2, 3].map(i => (
                             <div key={i}
-                                className="absolute w-1 h-1 bg-indigo-400 rounded-full"
+                                className="absolute w-0.5 h-0.5 bg-indigo-400 rounded-full"
                                 style={{
-                                    left: `${Math.cos(i * 60 * Math.PI / 180) * 20 + 10}px`,
-                                    top: `${Math.sin(i * 60 * Math.PI / 180) * 20 + 10}px`,
-                                    animation: `pulse 2s ease-in-out ${i * 0.3}s infinite`,
-                                    opacity: 0.6,
+                                    left: `${Math.cos(i * 90 * Math.PI / 180) * 14 + 7}px`,
+                                    top: `${Math.sin(i * 90 * Math.PI / 180) * 14 + 7}px`,
+                                    animation: `pulse 2s ease-in-out ${i * 0.4}s infinite`,
+                                    opacity: 0.5,
                                 }}
                             />
                         ))}
@@ -201,8 +200,8 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
-        <div className="relative w-full max-w-[820px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative w-full max-w-[1000px] aspect-[4/3] mx-auto">
+            <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
