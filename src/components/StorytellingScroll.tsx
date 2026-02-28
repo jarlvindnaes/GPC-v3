@@ -443,7 +443,7 @@ export function StorytellingScroll() {
         </motion.div>
 
         <motion.div
-          className="text-center mt-4"
+          className="text-center -mt-[250px]"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
