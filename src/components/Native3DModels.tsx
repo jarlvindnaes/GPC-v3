@@ -259,8 +259,8 @@ export function PassportChair3DCanvas() {
             </div>
 
             {/* Hint label — fades out when hovered */}
-            <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 transition-all duration-300 ${hovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-                <p className="text-xs text-slate-500 text-center">Hover the tag to explore</p>
+            <div className={`absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none ${hovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
+                <p className="text-xs text-slate-500 text-center whitespace-nowrap">Hover the tag to explore</p>
             </div>
         </div>
     );
