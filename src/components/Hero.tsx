@@ -62,7 +62,7 @@ function HeroNetwork() {
           y: Math.random() * h,
           vx: (Math.random() - 0.5) * 0.3 * depth,
           vy: (Math.random() - 0.5) * 0.2 * depth,
-          radius: (2.5 + Math.random() * 3) * depth,
+          radius: (3 + Math.random() * 4) * depth,
           depth,
           type,
           label,
@@ -135,9 +135,9 @@ function HeroNetwork() {
           const dx = a.x - b.x, dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDist) {
-            const alpha = (1 - dist / connectionDist) * 0.12 * Math.min(a.depth, b.depth);
+            const alpha = (1 - dist / connectionDist) * 0.25 * Math.min(a.depth, b.depth);
             ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
-            ctx.lineWidth = (1 - dist / connectionDist) * 1.2;
+            ctx.lineWidth = (1 - dist / connectionDist) * 1.5;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -149,12 +149,12 @@ function HeroNetwork() {
       // Nodes + labels
       for (const n of nodes) {
         const group = NODE_LABELS[n.type];
-        const baseAlpha = 0.15 + n.depth * 0.4;
+        const baseAlpha = 0.3 + n.depth * 0.5;
 
         // Outer glow
-        const glowR = n.radius * 4;
+        const glowR = n.radius * 5;
         const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
-        glow.addColorStop(0, group.color + "30");
+        glow.addColorStop(0, group.color + "40");
         glow.addColorStop(1, group.color + "00");
         ctx.fillStyle = glow;
         ctx.beginPath();
@@ -170,16 +170,16 @@ function HeroNetwork() {
 
         // Ring
         ctx.strokeStyle = group.color;
-        ctx.globalAlpha = baseAlpha * 0.4;
-        ctx.lineWidth = 0.5;
+        ctx.globalAlpha = baseAlpha * 0.5;
+        ctx.lineWidth = 0.8;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.radius * 2.2, 0, Math.PI * 2);
         ctx.stroke();
 
         // Label
-        if (n.depth > 0.55) {
-          ctx.globalAlpha = (n.depth - 0.55) * 0.5;
-          ctx.fillStyle = "#94a3b8";
+        if (n.depth > 0.5) {
+          ctx.globalAlpha = (n.depth - 0.5) * 0.7;
+          ctx.fillStyle = "#64748b";
           ctx.font = `${9 * n.depth}px ui-sans-serif, system-ui, -apple-system, sans-serif`;
           ctx.textAlign = "center";
           ctx.fillText(n.label, n.x, n.y + n.radius * 2.8 + 8);
@@ -208,16 +208,18 @@ function HeroNetwork() {
 export function Hero() {
   return (
     <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden relative">
-      {/* Network background */}
-      <div className="absolute inset-0 -z-5 pointer-events-auto">
-        <HeroNetwork />
+      {/* Background gradient shapes */}
+      <div className="absolute top-0 right-0 z-0 w-[800px] h-[800px] bg-gradient-to-br from-indigo-50 via-slate-50 to-white rounded-full blur-[120px] opacity-70 translate-x-1/3 -translate-y-1/4"></div>
+      <div className="absolute bottom-0 left-0 z-0 w-[600px] h-[600px] bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent rounded-full blur-[100px] opacity-40 -translate-x-1/2 translate-y-1/2"></div>
+
+      {/* Network background — above gradients, below content */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <div className="w-full h-full pointer-events-auto">
+          <HeroNetwork />
+        </div>
       </div>
 
-      {/* Background gradient shapes */}
-      <div className="absolute top-0 right-0 -z-10 w-[800px] h-[800px] bg-gradient-to-br from-indigo-50 via-slate-50 to-white rounded-full blur-[120px] opacity-70 translate-x-1/3 -translate-y-1/4"></div>
-      <div className="absolute bottom-0 left-0 -z-10 w-[600px] h-[600px] bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent rounded-full blur-[100px] opacity-40 -translate-x-1/2 translate-y-1/2"></div>
-
-      <div className="max-w-4xl relative z-10">
+      <div className="max-w-4xl relative z-[2]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -248,7 +250,7 @@ export function Hero() {
       </div>
 
       {/* Product Screenshots Carousel */}
-      <div className="relative z-10">
+      <div className="relative z-[2]">
         <HeroCarousel />
       </div>
 
@@ -256,7 +258,7 @@ export function Hero() {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 z-10"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 z-[2]"
       >
         <span className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Scroll to explore</span>
         <div className="w-px h-12 bg-gradient-to-b from-indigo-500 to-transparent"></div>
