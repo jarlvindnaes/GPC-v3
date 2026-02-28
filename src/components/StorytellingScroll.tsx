@@ -31,7 +31,7 @@ export function StorytellingScroll() {
   const pView1 = useTransform(scrollYProgress, [0, 0.1, 0.15], ["auto", "auto", "none"]);
   const pView2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], ["none", "auto", "auto", "none"]);
   const pView3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], ["none", "auto", "auto", "none"]);
-  const pView5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], ["none", "auto", "auto", "none"]);
+  const pView4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], ["none", "auto", "auto", "none"]);
   const pView7 = useTransform(scrollYProgress, [0.85, 0.9, 1], ["none", "auto", "auto"]);
 
   return (
@@ -49,8 +49,8 @@ export function StorytellingScroll() {
               How it works
             </h2>
             <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-              Follow a product's journey from raw material to digital passport.
-              Scroll to see how Product Connect transforms supply chain data into compliance-ready transparency.
+              From construction model to certified Digital Product Passport in seven steps.
+              Scroll to see how Product Connect digitises your product into a verified digital twin.
             </p>
           </motion.div>
         </div>
@@ -72,13 +72,13 @@ export function StorytellingScroll() {
           <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative h-[420px] flex items-center">
 
             {[
-              { op: op1, icon: <Box className="w-5 h-5" />, title: "The Finished Product", body: "Your products have a story. Most of it is hidden. We start with the physical object — a chair, a table, a textile." },
-              { op: op2, icon: <Layers className="w-5 h-5" />, title: "Exploded View", body: "Upload your 3D models or BOMs. The product breaks down into its core components. Every screw, every sheet of plywood." },
-              { op: op3, icon: <Users className="w-5 h-5" />, title: "Supplier Collaboration", body: "Suppliers input their own data directly. No middlemen. No telephone game. Real transparency across the chain." },
-              { op: op4, icon: <Truck className="w-5 h-5" />, title: "Material Transport", body: "Track the journey. From the plywood factory to the assembly line — mapping the true environmental cost of logistics." },
-              { op: op5, icon: <TreePine className="w-5 h-5" />, title: "Raw Materials", body: "All the way back to the source. The wooden log, the raw ore. Complete visibility from the very beginning." },
-              { op: op6, icon: <Cpu className="w-5 h-5" />, title: "The Engine", body: "Our PEF-aligned LCA engine crunches the numbers and certificates. Automated impact calculation without the €15K consultant fee." },
-              { op: op7, icon: <QrCode className="w-5 h-5" />, title: "Digital Product Passport", body: "A living, GS1-compliant passport. Ready for ESPR 2026. Monetize spare parts and prove your claims to the world." },
+              { op: op1, icon: <Box className="w-5 h-5" />, title: "Ingest Your Model", body: "Start with your product. Upload your construction model — BIM, IFC, or 3D CAD — and we automatically create a digital twin, splitting it into every component and sub-assembly." },
+              { op: op2, icon: <Layers className="w-5 h-5" />, title: "Add Component Details", body: "Enrich each component with the data that matters. Materials, weights, manufacturing processes, supplier assignments — building a complete digital bill of materials." },
+              { op: op3, icon: <Users className="w-5 h-5" />, title: "Supplier Verification", body: "Your suppliers verify details and add context directly. A secure portal lets them confirm specs, upload certifications, and enrich data — no middlemen, no email chains." },
+              { op: op4, icon: <TreePine className="w-5 h-5" />, title: "Raw Material Mapping", body: "Material flows are mapped all the way to the source. From the timber forest to the steel foundry — establishing full provenance for every input in your product." },
+              { op: op5, icon: <Truck className="w-5 h-5" />, title: "Transport Route Calculation", body: "Detailed transport routes are calculated automatically. Every logistics leg — distances, modes, and emissions — mapped from raw material origin to final assembly." },
+              { op: op6, icon: <Cpu className="w-5 h-5" />, title: "Impact Calculation", body: "Our engine calculates precise environmental impact per component. PEF-aligned lifecycle assessment, automated and accurate — without the €15K consultant fee." },
+              { op: op7, icon: <QrCode className="w-5 h-5" />, title: "Passport & Certifications", body: "Generate a Digital Product Passport and certifications. A living, GS1-compliant document ready for ESPR 2026 — verifiable, scannable, and built to prove your claims." },
             ].map(({ op, icon, title, body }, i) => (
               <motion.div key={i} style={{ opacity: op }} className="absolute inset-y-0 flex flex-col justify-center">
                 <div className="w-11 h-11 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mb-6 text-indigo-400 shadow-lg shadow-indigo-500/10">
@@ -93,24 +93,26 @@ export function StorytellingScroll() {
           {/* ── Visual panel (right) ── */}
           <div className="hidden md:flex flex-1 relative min-h-[600px] items-center justify-center">
 
-            {/* Visual 1: Chair — full-panel, no padding, no boxing */}
+            {/* Visual 1: Chair — 450x450px centered */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <FinishedProduct3DCanvas />
-              {/* Chair info label */}
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg">
-                <p className="text-sm font-semibold text-white mb-1">West Elm Slope Leather Chair</p>
-                <p className="text-xs text-slate-400">Drag to rotate • Interactive 3D model</p>
+              <div className="relative">
+                <FinishedProduct3DCanvas />
+                {/* Chair info label */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
+                  <p className="text-sm font-semibold text-white mb-1">West Elm Slope Leather Chair</p>
+                  <p className="text-xs text-slate-400">Drag to rotate • Interactive 3D model</p>
+                </div>
               </div>
             </motion.div>
 
             {/* Visual 2: Components - 3D Model */}
             <motion.div style={{ opacity: vOp2, pointerEvents: pView2 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-full relative">
+              <div className="relative">
                 <Components3DCanvas />
                 {/* Component info label */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
                   <p className="text-sm font-semibold text-white mb-1">Steel Bolt — M8x30</p>
                   <p className="text-xs text-slate-400">Every component tracked • Drag to rotate</p>
                 </div>
@@ -143,8 +145,20 @@ export function StorytellingScroll() {
               </div>
             </motion.div>
 
-            {/* Visual 4: Transport track */}
-            <motion.div style={{ opacity: vOp4 }}
+            {/* Visual 4: Raw Material (3D rock) */}
+            <motion.div style={{ opacity: vOp4, pointerEvents: pView4 as any }}
+              className="absolute inset-0 flex items-center justify-center">
+              <div className="relative">
+                <RawMaterial3DCanvas />
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
+                  <p className="text-sm font-semibold text-white mb-1">Iron Ore — Raw Material</p>
+                  <p className="text-xs text-slate-400">Traced to source • Drag to rotate</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Visual 5: Transport track */}
+            <motion.div style={{ opacity: vOp5 }}
               className="absolute inset-0 flex items-center justify-center">
               <div className="w-full max-w-sm px-8 space-y-4">
                 {[
@@ -169,19 +183,6 @@ export function StorytellingScroll() {
                     </div>
                   </div>
                 ))}
-              </div>
-            </motion.div>
-
-            {/* Visual 5: Raw Material (3D rock) */}
-            <motion.div style={{ opacity: vOp5, pointerEvents: pView5 as any }}
-              className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-full relative">
-                <RawMaterial3DCanvas />
-                {/* Raw material info label */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg">
-                  <p className="text-sm font-semibold text-white mb-1">Iron Ore — Raw Material</p>
-                  <p className="text-xs text-slate-400">Traced to source • Drag to rotate</p>
-                </div>
               </div>
             </motion.div>
 

@@ -51,7 +51,7 @@ function BoltModel() {
 
 export function RawMaterial3DCanvas() {
     return (
-        <div className="w-full h-full cursor-grab active:cursor-grabbing">
+        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
             <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
@@ -81,7 +81,7 @@ export function RawMaterial3DCanvas() {
 // ----------------------------------------------------------------------------
 export function Components3DCanvas() {
     return (
-        <div className="w-full h-full cursor-grab active:cursor-grabbing">
+        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
             <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
@@ -125,7 +125,7 @@ function CustomChairModel() {
 
 export function FinishedProduct3DCanvas() {
     return (
-        <div className="w-full h-full cursor-grab active:cursor-grabbing">
+        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
             <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
