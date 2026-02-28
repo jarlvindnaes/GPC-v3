@@ -160,7 +160,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
             <group position={[0, -1.0, 0]}>
                 <primitive object={passportScene} scale={3.17} />
                 {/* QR tag on the seat — positioned in 3D space */}
-                <Html position={[0.0, 0.67, 0.35]} center>
+                <Html position={[0.0, 1.13, 0.35]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}

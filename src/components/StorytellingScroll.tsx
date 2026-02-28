@@ -460,6 +460,11 @@ export function StorytellingScroll() {
 
     {/* ── Grand Finale: Your Intelligent Product ── */}
     <section className="bg-slate-900 text-white pt-4 sm:pt-8 pb-16 sm:pb-32 relative overflow-hidden">
+      {/* Metro line continuation — fades from story section into the QR on the chair */}
+      <div className="absolute left-8 md:left-1/2 top-0 w-px md:-translate-x-1/2 z-0" style={{ height: "45%" }}>
+        <div className="w-full h-full bg-gradient-to-b from-violet-500 to-transparent" />
+      </div>
+
       {/* Subtle radial glow behind the chair */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/[0.03] rounded-full blur-3xl pointer-events-none" />
 
