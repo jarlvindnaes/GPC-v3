@@ -157,7 +157,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     const passportScene = useMemo(() => scene.clone(), [scene]);
     return (
         <Float floatIntensity={0.8} rotationIntensity={0.03} speed={1.2}>
-            <group position={[0, -0.7, 0]}>
+            <group position={[0, -1.0, 0]}>
                 <primitive object={passportScene} scale={3.17} />
                 {/* QR tag on the seat — positioned in 3D space */}
                 <Html position={[0.0, 0.67, 0.35]} center>
