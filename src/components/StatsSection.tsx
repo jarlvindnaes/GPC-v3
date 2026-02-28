@@ -215,7 +215,7 @@ export function StatsSection() {
       </div>
 
       {/* Abstract circular visual — nodes gravitate toward mouse */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] opacity-30 pointer-events-auto mix-blend-screen z-0">
+      <div className="absolute -bottom-[200px] left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] opacity-30 pointer-events-auto mix-blend-screen z-0">
         <NetworkCanvas />
       </div>
     </section>
