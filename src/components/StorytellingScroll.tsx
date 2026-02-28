@@ -98,38 +98,34 @@ export function StorytellingScroll() {
 
             {/* Visual 1: Chair */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
-              className="absolute inset-0 flex items-center justify-center">
-              <div className="relative">
-                <FinishedProduct3DCanvas />
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/30 flex items-center gap-4">
-                  <div className="flex flex-col">
-                    <p className="text-sm font-semibold text-white">West Elm Slope Leather Chair</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">247 components • 18 suppliers</p>
-                  </div>
-                  <div className="flex items-center gap-1.5 pl-3 border-l border-slate-700">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Ready</span>
-                  </div>
+              className="absolute inset-0">
+              <FinishedProduct3DCanvas />
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 flex items-center gap-4 z-10">
+                <div className="flex flex-col">
+                  <p className="text-sm font-semibold text-white">West Elm Slope Leather Chair</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">247 components • 18 suppliers</p>
+                </div>
+                <div className="flex items-center gap-1.5 pl-3 border-l border-slate-600/40">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Ready</span>
                 </div>
               </div>
             </motion.div>
 
             {/* Visual 2: Components - 3D Model */}
             <motion.div style={{ opacity: vOp2, pointerEvents: pView2 as any }}
-              className="absolute inset-0 flex items-center justify-center">
-              <div className="relative">
-                <Components3DCanvas />
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/30">
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col">
-                      <p className="text-sm font-semibold text-white">Steel Bolt — ISO 4762 M8×30</p>
-                      <div className="flex items-center gap-3 mt-1">
-                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Material</span>
-                        <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
-                        <span className="text-slate-700">·</span>
-                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Weight</span>
-                        <span className="text-[11px] text-slate-300">24g</span>
-                      </div>
+              className="absolute inset-0">
+              <Components3DCanvas />
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 z-10">
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-semibold text-white">Steel Bolt — ISO 4762 M8×30</p>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Material</span>
+                      <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
+                      <span className="text-slate-700">·</span>
+                      <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Weight</span>
+                      <span className="text-[11px] text-slate-300">24g</span>
                     </div>
                   </div>
                 </div>
@@ -139,10 +135,10 @@ export function StorytellingScroll() {
             {/* Visual 3: Supplier portal card */}
             <motion.div style={{ opacity: vOp3, pointerEvents: pView3 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-80 bg-slate-800/90 backdrop-blur-md rounded-2xl border border-slate-700 p-6 shadow-2xl shadow-black/40">
+              <div className="w-80 bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-slate-700/40 p-6 shadow-2xl shadow-black/20">
                 <div className="flex items-center justify-between mb-5">
                   <p className="text-sm font-semibold text-white">Supplier Data Entry</p>
-                  <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full">Live</span>
+                  <span className="text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 px-2 py-0.5 rounded-full">Live</span>
                 </div>
                 <div className="space-y-3">
                   {[
@@ -150,12 +146,12 @@ export function StorytellingScroll() {
                     { label: "Manufacturing Origin", value: "Gdańsk, Poland" },
                     { label: "CO₂ per unit", value: "12.4 kg CO₂e" },
                   ].map(f => (
-                    <div key={f.label} className="bg-slate-900 rounded-xl border border-slate-700 px-4 py-3">
+                    <div key={f.label} className="bg-slate-900/50 rounded-xl border border-slate-700/40 px-4 py-3">
                       <p className="text-[10px] text-slate-500 mb-0.5 font-medium uppercase tracking-wide">{f.label}</p>
                       <p className="text-sm text-slate-200 font-medium">{f.value}</p>
                     </div>
                   ))}
-                  <div className="h-10 bg-indigo-600 hover:bg-indigo-500 rounded-xl flex items-center justify-center cursor-pointer transition-colors">
+                  <div className="h-10 bg-indigo-600/80 hover:bg-indigo-500/80 rounded-xl flex items-center justify-center cursor-pointer transition-colors">
                     <span className="text-sm text-white font-semibold">Submit & Verify</span>
                   </div>
                 </div>
@@ -164,25 +160,23 @@ export function StorytellingScroll() {
 
             {/* Visual 4: Raw Material (3D rock) */}
             <motion.div style={{ opacity: vOp4, pointerEvents: pView4 as any }}
-              className="absolute inset-0 flex items-center justify-center">
-              <div className="relative" style={{ marginTop: '-30px' }}>
-                <RawMaterial3DCanvas />
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/30">
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col">
-                      <p className="text-sm font-semibold text-white">Iron Ore — Raw Material</p>
-                      <div className="flex items-center gap-3 mt-1">
-                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Origin</span>
-                        <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
-                        <span className="text-slate-700">·</span>
-                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Grade</span>
-                        <span className="text-[11px] text-slate-300">Fe 65%</span>
-                      </div>
+              className="absolute inset-0">
+              <RawMaterial3DCanvas />
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/20 z-10">
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-semibold text-white">Iron Ore — Raw Material</p>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Origin</span>
+                      <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
+                      <span className="text-slate-700">·</span>
+                      <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Grade</span>
+                      <span className="text-[11px] text-slate-300">Fe 65%</span>
                     </div>
-                    <div className="pl-3 border-l border-slate-700 flex flex-col items-center">
-                      <span className="text-xs font-bold text-emerald-400">✓</span>
-                      <span className="text-[9px] text-slate-500 uppercase">Verified</span>
-                    </div>
+                  </div>
+                  <div className="pl-3 border-l border-slate-600/40 flex flex-col items-center">
+                    <span className="text-xs font-bold text-emerald-400">✓</span>
+                    <span className="text-[9px] text-slate-500 uppercase">Verified</span>
                   </div>
                 </div>
               </div>
@@ -191,7 +185,7 @@ export function StorytellingScroll() {
             {/* Visual 5: Transport Routes Card */}
             <motion.div style={{ opacity: vOp5 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-96 rounded-2xl bg-slate-800/90 backdrop-blur-md border border-slate-700 shadow-2xl shadow-black/40 overflow-hidden">
+              <div className="w-full max-w-96 rounded-2xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 shadow-2xl shadow-black/20 overflow-hidden">
                 {/* Header */}
                 <div className="px-5 pt-5 pb-4 border-b border-slate-700/50">
                   <div className="flex items-center justify-between mb-1">
@@ -213,7 +207,7 @@ export function StorytellingScroll() {
                     { from: "Hamburg, Germany", to: "Gdańsk, Poland", mode: "train", icon: <Train className="w-3 h-3" />, dist: "680 km", co2: "1.1 kg", time: "8 hrs", pct: 65 },
                     { from: "Gdańsk, Poland", to: "Copenhagen, Denmark", mode: "truck", icon: <Truck className="w-3 h-3" />, dist: "520 km", co2: "3.8 kg", time: "6 hrs", pct: 30 },
                   ].map((leg, i) => (
-                    <div key={i} className="rounded-xl bg-slate-900/60 border border-slate-700/50 p-3">
+                    <div key={i} className="rounded-xl bg-slate-900/40 border border-slate-700/30 p-3">
                       <div className="flex items-center justify-between mb-2.5">
                         <div className="flex items-center gap-2">
                           <div className={`w-5 h-5 rounded-md flex items-center justify-center ${leg.mode === 'ship' ? 'bg-cyan-500/10 text-cyan-400' : leg.mode === 'train' ? 'bg-amber-500/10 text-amber-400' : 'bg-violet-500/10 text-violet-400'}`}>
@@ -253,7 +247,7 @@ export function StorytellingScroll() {
 
                 {/* Summary footer */}
                 <div className="px-4 pb-4">
-                  <div className="rounded-xl bg-indigo-500/5 border border-indigo-500/15 p-3 flex items-center justify-between">
+                  <div className="rounded-xl bg-indigo-500/5 border border-indigo-500/10 p-3 flex items-center justify-between">
                     <div>
                       <p className="text-[10px] text-slate-500 uppercase tracking-wide font-medium">Total Route</p>
                       <p className="text-sm font-bold text-white">3,042 km</p>
@@ -381,7 +375,7 @@ export function StorytellingScroll() {
 
                 {/* Floating metric labels */}
                 <motion.div
-                  className="absolute top-6 right-8 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2 shadow-lg"
+                  className="absolute top-6 right-8 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-xl px-3 py-2 shadow-lg"
                   animate={{ y: [0, -6, 0], opacity: [0.7, 1, 0.7] }}
                   transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                 >
@@ -389,7 +383,7 @@ export function StorytellingScroll() {
                   <p className="text-sm font-bold text-indigo-400">12.4 kg</p>
                 </motion.div>
                 <motion.div
-                  className="absolute bottom-12 left-4 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2 shadow-lg"
+                  className="absolute bottom-12 left-4 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-xl px-3 py-2 shadow-lg"
                   animate={{ y: [0, 6, 0], opacity: [0.6, 1, 0.6] }}
                   transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
                 >
@@ -397,7 +391,7 @@ export function StorytellingScroll() {
                   <p className="text-sm font-bold text-emerald-400">A+</p>
                 </motion.div>
                 <motion.div
-                  className="absolute top-16 left-2 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2 shadow-lg"
+                  className="absolute top-16 left-2 bg-slate-800/40 backdrop-blur-xl border border-slate-700/40 rounded-xl px-3 py-2 shadow-lg"
                   animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
                   transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
                 >
@@ -410,11 +404,11 @@ export function StorytellingScroll() {
             {/* Visual 7: DPP mini-card */}
             <motion.div style={{ opacity: vOp7 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-72 rounded-3xl border border-slate-700 bg-slate-800/90 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden">
-                <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-5 border-b border-slate-700">
+              <div className="w-full max-w-72 rounded-3xl border border-slate-700/40 bg-slate-800/40 backdrop-blur-xl shadow-2xl shadow-black/20 overflow-hidden">
+                <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-5 border-b border-slate-700/40">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase">Digital Product Passport</span>
-                    <span className="text-[10px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-lg">ESPR 2026</span>
+                    <span className="text-[10px] font-bold bg-slate-900/50 text-white px-2 py-0.5 rounded-lg">ESPR 2026</span>
                   </div>
                   <p className="text-base font-bold text-white leading-tight">West Elm Slope<br />Leather Chair</p>
                   <p className="text-[10px] text-slate-400 font-mono mt-1">DPP-2024-WE-SL-0042</p>
@@ -435,13 +429,13 @@ export function StorytellingScroll() {
                       { label: "Repair", value: "9/10" },
                       { label: "Lifecycle", value: "25yr" },
                     ].map(s => (
-                      <div key={s.label} className="flex-1 rounded-xl bg-slate-900 border border-slate-700 p-2.5 text-center">
+                      <div key={s.label} className="flex-1 rounded-xl bg-slate-900/40 border border-slate-700/40 p-2.5 text-center">
                         <p className="text-base font-bold text-white">{s.value}</p>
                         <p className="text-[10px] text-slate-500 mt-0.5">{s.label}</p>
                       </div>
                     ))}
                   </div>
-                  <div className="flex items-center gap-3 bg-slate-900 rounded-xl p-3 border border-slate-700">
+                  <div className="flex items-center gap-3 bg-slate-900/40 rounded-xl p-3 border border-slate-700/40">
                     <QrCode className="w-10 h-10 text-white shrink-0" />
                     <div>
                       <p className="text-[11px] font-semibold text-white">Scan to verify</p>
