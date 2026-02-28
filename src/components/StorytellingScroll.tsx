@@ -437,7 +437,7 @@ export function StorytellingScroll() {
           className="absolute inset-0 flex flex-col items-center justify-center z-20">
           <PassportChair3DCanvas />
           <motion.div
-            className="text-center -mt-2"
+            className="text-center -mt-8"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
