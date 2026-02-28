@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { Box, Layers, Users, Truck, TreePine, Cpu, QrCode, Sparkles } from "lucide-react";
+import { Box, Layers, Users, Truck, TreePine, Cpu, QrCode, Sparkles, Ship, Train, MapPin } from "lucide-react";
 import { FinishedProduct3DCanvas, RawMaterial3DCanvas, Components3DCanvas, PassportChair3DCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
@@ -163,32 +163,88 @@ export function StorytellingScroll() {
               </div>
             </motion.div>
 
-            {/* Visual 5: Transport track */}
+            {/* Visual 5: Transport Routes Card */}
             <motion.div style={{ opacity: vOp5 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full max-w-sm px-8 space-y-4">
-                {[
-                  { from: "Raw forest (FI)", to: "Sawmill (DE)", pct: 100 },
-                  { from: "Sawmill (DE)", to: "Factory (PL)", pct: 65 },
-                  { from: "Factory (PL)", to: "Retailer (DK)", pct: 30 },
-                ].map((leg, i) => (
-                  <div key={i}>
-                    <div className="flex justify-between text-[11px] text-slate-400 mb-1.5">
-                      <span>{leg.from}</span>
-                      <span>{leg.to}</span>
+              <div className="w-96 rounded-2xl bg-slate-800/90 backdrop-blur-md border border-slate-700 shadow-2xl shadow-black/40 overflow-hidden">
+                {/* Header */}
+                <div className="px-5 pt-5 pb-4 border-b border-slate-700/50">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+                        <MapPin className="w-3.5 h-3.5 text-indigo-400" />
+                      </div>
+                      <span className="text-sm font-semibold text-white">Supply Chain Routes</span>
                     </div>
-                    <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
-                      <motion.div className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500"
-                        style={{ width: `${leg.pct}%` }} />
-                      <motion.div
-                        className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-slate-700 border border-indigo-400 rounded-full flex items-center justify-center shadow-lg"
-                        animate={{ left: ["2%", "88%"] }}
-                        transition={{ repeat: Infinity, duration: 3 + i, ease: "linear", delay: i * 0.8 }}>
-                        <Truck className="w-2.5 h-2.5 text-indigo-400" />
-                      </motion.div>
+                    <span className="text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full">3 legs</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 ml-9">Calculated distances · Real-time tracking</p>
+                </div>
+
+                {/* Route legs */}
+                <div className="p-4 space-y-3">
+                  {[
+                    { from: "Kuopio, Finland", to: "Hamburg, Germany", mode: "ship", icon: <Ship className="w-3 h-3" />, dist: "1,842 km", co2: "4.2 kg", time: "3 days", pct: 100 },
+                    { from: "Hamburg, Germany", to: "Gdańsk, Poland", mode: "train", icon: <Train className="w-3 h-3" />, dist: "680 km", co2: "1.1 kg", time: "8 hrs", pct: 65 },
+                    { from: "Gdańsk, Poland", to: "Copenhagen, Denmark", mode: "truck", icon: <Truck className="w-3 h-3" />, dist: "520 km", co2: "3.8 kg", time: "6 hrs", pct: 30 },
+                  ].map((leg, i) => (
+                    <div key={i} className="rounded-xl bg-slate-900/60 border border-slate-700/50 p-3">
+                      <div className="flex items-center justify-between mb-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-5 h-5 rounded-md flex items-center justify-center ${leg.mode === 'ship' ? 'bg-cyan-500/10 text-cyan-400' : leg.mode === 'train' ? 'bg-amber-500/10 text-amber-400' : 'bg-violet-500/10 text-violet-400'}`}>
+                            {leg.icon}
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-slate-400 leading-tight">{leg.from}</p>
+                            <p className="text-[10px] text-white font-medium leading-tight">{leg.to}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] text-white font-semibold">{leg.dist}</p>
+                          <p className="text-[9px] text-slate-500">{leg.time}</p>
+                        </div>
+                      </div>
+                      {/* Progress bar */}
+                      <div className="h-1 bg-slate-800 rounded-full overflow-hidden relative">
+                        <motion.div
+                          className={`absolute left-0 top-0 h-full rounded-full ${leg.mode === 'ship' ? 'bg-gradient-to-r from-cyan-500 to-cyan-400' : leg.mode === 'train' ? 'bg-gradient-to-r from-amber-500 to-amber-400' : 'bg-gradient-to-r from-violet-500 to-violet-400'}`}
+                          style={{ width: `${leg.pct}%` }}
+                        />
+                        <motion.div
+                          className="absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-slate-700 border border-slate-500 rounded-full flex items-center justify-center shadow-md"
+                          animate={{ left: ["2%", "90%"] }}
+                          transition={{ repeat: Infinity, duration: 3 + i * 0.8, ease: "linear", delay: i * 0.6 }}
+                        >
+                          <div className={`w-1.5 h-1.5 rounded-full ${leg.mode === 'ship' ? 'bg-cyan-400' : leg.mode === 'train' ? 'bg-amber-400' : 'bg-violet-400'}`} />
+                        </motion.div>
+                      </div>
+                      <div className="flex justify-between mt-1.5">
+                        <span className="text-[9px] text-slate-600 uppercase tracking-wide">{leg.mode}</span>
+                        <span className="text-[9px] text-slate-500">{leg.co2} CO₂e</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Summary footer */}
+                <div className="px-4 pb-4">
+                  <div className="rounded-xl bg-indigo-500/5 border border-indigo-500/15 p-3 flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wide font-medium">Total Route</p>
+                      <p className="text-sm font-bold text-white">3,042 km</p>
+                    </div>
+                    <div className="h-8 w-px bg-slate-700" />
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wide font-medium">Transport CO₂</p>
+                      <p className="text-sm font-bold text-indigo-400">9.1 kg</p>
+                    </div>
+                    <div className="h-8 w-px bg-slate-700" />
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wide font-medium">Transit Time</p>
+                      <p className="text-sm font-bold text-white">~4 days</p>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
             </motion.div>
 
