@@ -125,7 +125,7 @@ export function IntegrationSection() {
           <div
             ref={hubRef}
             className="absolute z-30 w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44"
-            style={{ top: "calc(38% - 90px)", left: "calc(50% - 85px)", transform: "translate(-50%, -50%)" }}
+            style={{ top: "38%", left: "50%", transform: "translate(-50%, -50%)" }}
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
