@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Database, Box, Cpu, Package, Globe, Users, Layers, CheckCircle2, QrCode } from "lucide-react";
+import { Database, Box, Cpu, Package, Globe, Users, Layers, CheckCircle2, QrCode, Factory, Truck, Warehouse, Hammer } from "lucide-react";
 
 export function IntegrationSection() {
   return (
@@ -26,6 +26,7 @@ export function IntegrationSection() {
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
             className="absolute z-30"
+            style={{ top: "38%", left: "50%", transform: "translate(-50%, -50%)" }}
           >
             <div className="relative group">
               <div className="absolute inset-0 bg-indigo-500/20 blur-3xl group-hover:bg-indigo-500/30 transition-all duration-700"></div>
@@ -43,28 +44,53 @@ export function IntegrationSection() {
             </div>
           </motion.div>
 
+          {/* QR Code — below Product Connect */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="absolute z-30"
+            style={{ top: "58%", left: "50%", transform: "translate(-50%, -50%)" }}
+          >
+            <div className="w-14 h-14 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-2xl bg-slate-900/80 border border-violet-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.15)]">
+              <QrCode className="w-7 h-7 md:w-9 md:h-9 text-violet-400" />
+            </div>
+          </motion.div>
+
           {/* Nodes Layer */}
           <div className="absolute inset-0 z-20 pointer-events-none">
+            {/* Top: ERP inputs */}
             <div className="absolute top-[5%] left-0 right-0 flex justify-center gap-8 md:gap-16">
               <IntegrationNode title="Business Central" icon={<Database className="w-4 h-4" />} delay={0.2} color="slate" />
               <IntegrationNode title="SAP S/4HANA" icon={<Box className="w-4 h-4" />} delay={0.3} color="slate" />
               <IntegrationNode title="Akeneo PIM" icon={<Layers className="w-4 h-4" />} delay={0.4} color="slate" />
             </div>
-            <div className="absolute top-1/2 -translate-y-1/2 left-[2%] md:left-[8%] flex flex-col gap-12">
-              <IntegrationNode title="Ecoinvent DB" icon={<Globe className="w-4 h-4" />} delay={0.5} color="indigo" />
-              <IntegrationNode title="Supplier Portal" icon={<Users className="w-4 h-4" />} delay={0.6} color="indigo" />
+
+            {/* Left: Suppliers */}
+            <div className="absolute top-1/2 -translate-y-1/2 left-[1%] md:left-[4%] flex flex-col gap-6 md:gap-8">
+              <IntegrationNode title="Wood Supplier" icon={<Warehouse className="w-4 h-4" />} delay={0.4} color="amber" />
+              <IntegrationNode title="Steel Foundry" icon={<Factory className="w-4 h-4" />} delay={0.5} color="amber" />
+              <IntegrationNode title="Leather Tannery" icon={<Hammer className="w-4 h-4" />} delay={0.6} color="amber" />
+              <IntegrationNode title="Logistics Partner" icon={<Truck className="w-4 h-4" />} delay={0.7} color="amber" />
             </div>
-            <div className="absolute top-1/2 -translate-y-1/2 right-[2%] md:right-[8%] flex flex-col gap-12">
+
+            {/* Right: Data sources & outputs */}
+            <div className="absolute top-1/2 -translate-y-1/2 right-[1%] md:right-[4%] flex flex-col gap-5 md:gap-7">
+              <IntegrationNode title="Ecoinvent DB" icon={<Globe className="w-4 h-4" />} delay={0.5} color="indigo" reverse />
+              <IntegrationNode title="Supplier Portal" icon={<Users className="w-4 h-4" />} delay={0.6} color="indigo" reverse />
               <IntegrationNode title="Verified EPDs" icon={<CheckCircle2 className="w-4 h-4" />} delay={0.7} color="emerald" reverse />
               <IntegrationNode title="Public DPP" icon={<QrCode className="w-4 h-4" />} delay={0.8} color="emerald" reverse />
             </div>
-            <div className="absolute bottom-[5%] left-0 right-0 flex justify-center gap-8 md:gap-16">
+
+            {/* Bottom: End consumer outputs — below QR */}
+            <div className="absolute bottom-[3%] left-0 right-0 flex justify-center gap-8 md:gap-16">
               <IntegrationNode title="D2C Spare Parts" icon={<Package className="w-4 h-4" />} delay={0.9} color="rose" />
               <IntegrationNode title="Usage Analytics" icon={<Cpu className="w-4 h-4" />} delay={1.0} color="rose" />
             </div>
           </div>
 
-          {/* Connecting Lines — animated flowing strings */}
+          {/* Connecting Lines */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
             <defs>
               <linearGradient id="flow-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -72,10 +98,20 @@ export function IntegrationSection() {
                 <stop offset="50%" stopColor="#6366f1" stopOpacity="0.5" />
                 <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
               </linearGradient>
+              <linearGradient id="flow-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0" />
+                <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+              </linearGradient>
               <linearGradient id="flow-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#10b981" stopOpacity="0" />
                 <stop offset="50%" stopColor="#10b981" stopOpacity="0.4" />
                 <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="flow-violet" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+                <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="flow-rose" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#f43f5e" stopOpacity="0" />
@@ -89,22 +125,29 @@ export function IntegrationSection() {
             </defs>
 
             <g fill="none" strokeWidth="1.5" filter="url(#glow)">
-              {/* Top lines → indigo (ERP inputs) */}
-              <FlowingPath d="M 500 400 C 500 300, 320 250, 320 120" gradient="flow-indigo" phase={0} />
-              <FlowingPath d="M 500 400 L 500 120" gradient="flow-indigo" phase={0.4} />
-              <FlowingPath d="M 500 400 C 500 300, 680 250, 680 120" gradient="flow-indigo" phase={0.8} />
+              {/* Top → Hub (ERP inputs) — endpoints adjusted to hit boxes at ~y=55 */}
+              <FlowingPath d="M 500 305 C 500 220, 300 140, 300 55" gradient="flow-indigo" phase={0} />
+              <FlowingPath d="M 500 305 L 500 55" gradient="flow-indigo" phase={0.4} />
+              <FlowingPath d="M 500 305 C 500 220, 700 140, 700 55" gradient="flow-indigo" phase={0.8} />
 
-              {/* Left lines → indigo (data sources in) */}
-              <FlowingPath d="M 500 400 C 350 400, 320 350, 200 350" gradient="flow-indigo" phase={1.2} />
-              <FlowingPath d="M 500 400 C 350 400, 320 450, 200 450" gradient="flow-indigo" phase={1.6} />
+              {/* Left → Hub (Suppliers in — amber) */}
+              <FlowingPath d="M 500 305 C 350 305, 280 280, 170 280" gradient="flow-amber" phase={0.3} />
+              <FlowingPath d="M 500 305 C 370 310, 260 340, 170 345" gradient="flow-amber" phase={0.7} />
+              <FlowingPath d="M 500 305 C 370 340, 260 400, 170 410" gradient="flow-amber" phase={1.1} />
+              <FlowingPath d="M 500 305 C 380 370, 280 460, 170 475" gradient="flow-amber" phase={1.5} />
 
-              {/* Right lines → emerald (outputs) */}
-              <FlowingPath d="M 500 400 C 650 400, 680 350, 800 350" gradient="flow-emerald" phase={0.6} />
-              <FlowingPath d="M 500 400 C 650 400, 680 450, 800 450" gradient="flow-emerald" phase={1.0} />
+              {/* Hub → Right (data sources & outputs) */}
+              <FlowingPath d="M 500 305 C 630 290, 740 270, 830 270" gradient="flow-indigo" phase={0.5} />
+              <FlowingPath d="M 500 305 C 640 305, 740 330, 830 335" gradient="flow-indigo" phase={0.9} />
+              <FlowingPath d="M 500 305 C 640 330, 740 390, 830 400" gradient="flow-emerald" phase={0.6} />
+              <FlowingPath d="M 500 305 C 630 350, 740 445, 830 460" gradient="flow-emerald" phase={1.0} />
 
-              {/* Bottom lines → rose (end consumers) */}
-              <FlowingPath d="M 500 400 C 500 550, 350 600, 350 720" gradient="flow-rose" phase={0.2} />
-              <FlowingPath d="M 500 400 C 500 550, 650 600, 650 720" gradient="flow-rose" phase={0.9} />
+              {/* Hub → QR Code (center down) */}
+              <FlowingPath d="M 500 345 L 500 450" gradient="flow-violet" phase={0.2} />
+
+              {/* QR → Bottom boxes (rose) */}
+              <FlowingPath d="M 500 480 C 500 580, 370 640, 370 730" gradient="flow-rose" phase={0.4} />
+              <FlowingPath d="M 500 480 C 500 580, 630 640, 630 730" gradient="flow-rose" phase={0.9} />
             </g>
           </svg>
         </div>
@@ -118,6 +161,7 @@ function IntegrationNode({ title, icon, delay, color, reverse = false }: any) {
     slate: "border-slate-800 bg-slate-900/40 text-slate-400",
     indigo: "border-indigo-500/20 bg-indigo-500/5 text-indigo-400",
     emerald: "border-emerald-500/20 bg-emerald-500/5 text-emerald-400",
+    amber: "border-amber-500/20 bg-amber-500/5 text-amber-400",
     rose: "border-rose-500/20 bg-rose-500/5 text-rose-400",
   };
   return (
@@ -134,21 +178,13 @@ function IntegrationNode({ title, icon, delay, color, reverse = false }: any) {
   );
 }
 
-/**
- * A path that:
- * 1. Draws in immediately with a short initial animation.
- * 2. Then runs a continuous "flow" effect — a bright dot (short dasharray dash) travels
- *    along the full path length using strokeDashoffset animation. Multiple overlapping
- *    instances with different phases give the appearance of a data-stream river.
- */
 function FlowingPath({ d, gradient, phase }: { d: string; gradient: string; phase: number }) {
-  const totalLength = 600; // generous upper bound, SVG will clip naturally
-  const dashLen = 80;      // length of the bright travelling segment
-  const gap = totalLength; // only one dot visible at a time per instance
+  const totalLength = 600;
+  const dashLen = 80;
+  const gap = totalLength;
 
   return (
     <g>
-      {/* Static faint base line */}
       <motion.path
         d={d}
         stroke={`url(#${gradient})`}
@@ -159,8 +195,6 @@ function FlowingPath({ d, gradient, phase }: { d: string; gradient: string; phas
         viewport={{ once: true }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       />
-
-      {/* Flowing bright traveller — 3 staggered copies per path */}
       {[0, 0.33, 0.66].map((offset, i) => (
         <motion.path
           key={i}
