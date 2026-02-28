@@ -10,40 +10,35 @@ export function StorytellingScroll() {
     offset: ["start start", "end end"]
   });
 
-  const lineProgress = useTransform(scrollYProgress, [0, 0.86], ["0%", "50%"]);
+  const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
-  // Text opacities — 8 steps spread evenly
-  const op1 = useTransform(scrollYProgress, [0.00, 0.04, 0.08, 0.12], [0, 1, 1, 0]);
-  const op2 = useTransform(scrollYProgress, [0.12, 0.16, 0.20, 0.24], [0, 1, 1, 0]);
-  const op3 = useTransform(scrollYProgress, [0.24, 0.28, 0.32, 0.36], [0, 1, 1, 0]);
-  const op4 = useTransform(scrollYProgress, [0.36, 0.40, 0.44, 0.48], [0, 1, 1, 0]);
-  const op5 = useTransform(scrollYProgress, [0.48, 0.52, 0.56, 0.60], [0, 1, 1, 0]);
-  const op6 = useTransform(scrollYProgress, [0.60, 0.64, 0.68, 0.72], [0, 1, 1, 0]);
-  const op7 = useTransform(scrollYProgress, [0.72, 0.76, 0.80, 0.84], [0, 1, 1, 0]);
-  const op8 = useTransform(scrollYProgress, [0.84, 0.88, 0.94, 1.00], [0, 1, 1, 1]);
+  // Text opacities — 7 steps
+  const op1 = useTransform(scrollYProgress, [0, 0.05, 0.1, 0.15], [0, 1, 1, 0]);
+  const op2 = useTransform(scrollYProgress, [0.14, 0.19, 0.24, 0.29], [0, 1, 1, 0]);
+  const op3 = useTransform(scrollYProgress, [0.28, 0.33, 0.38, 0.43], [0, 1, 1, 0]);
+  const op4 = useTransform(scrollYProgress, [0.42, 0.47, 0.52, 0.57], [0, 1, 1, 0]);
+  const op5 = useTransform(scrollYProgress, [0.57, 0.62, 0.67, 0.72], [0, 1, 1, 0]);
+  const op6 = useTransform(scrollYProgress, [0.71, 0.76, 0.81, 0.86], [0, 1, 1, 0]);
+  const op7 = useTransform(scrollYProgress, [0.85, 0.9, 0.95, 1], [0, 1, 1, 1]);
 
   // Visual opacities
-  const vOp1 = useTransform(scrollYProgress, [0.00, 0.08, 0.12], [1, 1, 0]);
-  const vOp2 = useTransform(scrollYProgress, [0.08, 0.13, 0.21, 0.26], [0, 1, 1, 0]);
-  const vOp3 = useTransform(scrollYProgress, [0.21, 0.26, 0.34, 0.38], [0, 1, 1, 0]);
-  const vOp4 = useTransform(scrollYProgress, [0.34, 0.38, 0.46, 0.50], [0, 1, 1, 0]);
-  const vOp5 = useTransform(scrollYProgress, [0.46, 0.50, 0.58, 0.62], [0, 1, 1, 0]);
-  const vOp6 = useTransform(scrollYProgress, [0.58, 0.62, 0.70, 0.74], [0, 1, 1, 0]);
-  const vOp7 = useTransform(scrollYProgress, [0.70, 0.74, 0.82, 0.86], [0, 1, 1, 0]);
-  const vOp8 = useTransform(scrollYProgress, [0.84, 0.88, 1.00], [0, 1, 1]);
+  const vOp1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
+  const vOp2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], [0, 1, 1, 0]);
+  const vOp3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], [0, 1, 1, 0]);
+  const vOp4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], [0, 1, 1, 0]);
+  const vOp5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], [0, 1, 1, 0]);
+  const vOp6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], [0, 1, 1, 0]);
+  const vOp7 = useTransform(scrollYProgress, [0.85, 0.9, 1], [0, 1, 1]);
 
   // Pointer events for interactive visuals
-  const pView1 = useTransform(scrollYProgress, [0.00, 0.08, 0.12], ["auto", "auto", "none"]);
-  const pView2 = useTransform(scrollYProgress, [0.08, 0.13, 0.21, 0.26], ["none", "auto", "auto", "none"]);
-  const pView3 = useTransform(scrollYProgress, [0.21, 0.26, 0.34, 0.38], ["none", "auto", "auto", "none"]);
-  const pView4 = useTransform(scrollYProgress, [0.34, 0.38, 0.46, 0.50], ["none", "auto", "auto", "none"]);
-  const pView8 = useTransform(scrollYProgress, [0.84, 0.88, 1.00], ["none", "auto", "auto"]);
-
-  // Fade out left/right panels when step 8 takes over
-  const panelFade = useTransform(scrollYProgress, [0.82, 0.88], [1, 0]);
+  const pView1 = useTransform(scrollYProgress, [0, 0.1, 0.15], ["auto", "auto", "none"]);
+  const pView2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], ["none", "auto", "auto", "none"]);
+  const pView3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], ["none", "auto", "auto", "none"]);
+  const pView4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], ["none", "auto", "auto", "none"]);
 
   return (
-    <section id="story" ref={containerRef} className="relative h-[800vh] bg-slate-900 text-white">
+    <>
+    <section id="story" ref={containerRef} className="relative h-[700vh] bg-slate-900 text-white">
       {/* Header section */}
       <div className="absolute top-0 left-0 right-0 pt-24 pb-16 z-20 pointer-events-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -67,14 +62,14 @@ export function StorytellingScroll() {
       <div className="sticky top-0 h-screen overflow-hidden flex items-center">
 
         {/* Metro Line */}
-        <motion.div style={{ opacity: panelFade }} className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-slate-800 md:-translate-x-1/2 z-0">
+        <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-slate-800 md:-translate-x-1/2 z-0">
           <motion.div
             className="absolute top-0 left-0 right-0 bg-gradient-to-b from-indigo-500 to-violet-500"
             style={{ height: lineProgress }}
           />
-        </motion.div>
+        </div>
 
-        <motion.div style={{ opacity: panelFade }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-12">
 
           {/* ── Text panel (left) ── */}
           <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative h-[420px] flex items-center">
@@ -430,30 +425,42 @@ export function StorytellingScroll() {
             </motion.div>
 
           </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Grand Finale: Your Intelligent Product ── */}
+    <section className="bg-slate-900 text-white py-24 md:py-32">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center"
+        >
+          <PassportChair3DCanvas />
         </motion.div>
 
-        {/* Visual 8: Grand Finale — centered full-viewport, the scroll line ends here */}
-        <motion.div style={{ opacity: vOp8, pointerEvents: pView8 as any }}
-          className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          <PassportChair3DCanvas />
-          <motion.div
-            className="text-center -mt-8"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 shadow-lg shadow-indigo-500/10">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Your Intelligent Product</h2>
+        <motion.div
+          className="text-center mt-4"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <div className="flex items-center justify-center gap-3 mb-5">
+            <div className="w-11 h-11 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 shadow-lg shadow-indigo-500/10">
+              <Sparkles className="w-5 h-5" />
             </div>
-            <p className="text-base text-slate-400 max-w-md mx-auto leading-relaxed">
-              The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation, care guides, and verified claims, all accessible with a single scan.
-            </p>
-          </motion.div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-tight">Your Intelligent Product</h2>
+          </div>
+          <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation, care guides, and verified claims, all accessible with a single scan.
+          </p>
         </motion.div>
       </div>
     </section>
+    </>
   );
 }
