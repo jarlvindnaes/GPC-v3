@@ -157,11 +157,11 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     const { scene } = useGLTF(CHAIR_MODEL);
     const passportScene = useMemo(() => scene.clone(), [scene]);
     return (
-        <Float floatIntensity={0.6} rotationIntensity={0.02} speed={1}>
+        <Float floatIntensity={0.8} rotationIntensity={0.03} speed={1.2}>
             <group position={[0, -0.3, 0]}>
-                <primitive object={passportScene} scale={4.5} />
+                <primitive object={passportScene} scale={3.6} />
                 {/* QR tag on the seat — positioned in 3D space */}
-                <Html position={[0.0, 0.95, 0.45]} center>
+                <Html position={[0.0, 0.76, 0.35]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
