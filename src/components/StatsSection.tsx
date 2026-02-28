@@ -7,6 +7,9 @@ interface Node {
   x: number;
   y: number;
   radius: number;
+  phase: number;
+  driftSpeed: number;
+  driftRadius: number;
 }
 
 function NetworkCanvas() {
@@ -19,11 +22,16 @@ function NetworkCanvas() {
     const nodes: Node[] = [];
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2;
-      const radiusVariation = 400 + Math.random() * 250;
+      const radiusVariation = 250 + Math.random() * 200;
       const x = 600 + Math.cos(angle) * radiusVariation;
-      const y = 300 + Math.sin(angle) * radiusVariation;
+      const y = 500 + Math.sin(angle) * radiusVariation;
       const r = Math.random() * 3 + 1;
-      nodes.push({ baseX: x, baseY: y, x, y, radius: r });
+      nodes.push({
+        baseX: x, baseY: y, x, y, radius: r,
+        phase: Math.random() * Math.PI * 2,
+        driftSpeed: 0.3 + Math.random() * 0.5,
+        driftRadius: 3 + Math.random() * 6,
+      });
     }
     nodesRef.current = nodes;
   }, []);
@@ -71,7 +79,9 @@ function NetworkCanvas() {
     resize();
     window.addEventListener("resize", resize);
 
+    let time = 0;
     const draw = () => {
+      time += 0.016;
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;
       ctx.clearRect(0, 0, w, h);
@@ -85,8 +95,10 @@ function NetworkCanvas() {
       const anchorY = 900 * scaleY;
 
       for (const node of nodes) {
-        const targetX = node.baseX * scaleX;
-        const targetY = node.baseY * scaleY;
+        const driftX = Math.sin(time * node.driftSpeed + node.phase) * node.driftRadius;
+        const driftY = Math.cos(time * node.driftSpeed * 0.7 + node.phase + 1.5) * node.driftRadius;
+        const targetX = node.baseX * scaleX + driftX;
+        const targetY = node.baseY * scaleY + driftY;
         let goalX = targetX;
         let goalY = targetY;
 
