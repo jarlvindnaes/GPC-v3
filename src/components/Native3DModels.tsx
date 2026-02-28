@@ -165,6 +165,8 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
                         onMouseLeave={() => onHover(false)}
+                        onClick={() => onHover(true)}
+                        onTouchStart={() => onHover(true)}
                     >
                         {/* Radiating rings */}
                         <div className="absolute -inset-2 rounded-full border border-indigo-400/25 animate-[ping_3s_ease-in-out_infinite]" />
@@ -199,7 +201,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
-        <div className="relative w-[min(90vw,800px)] h-[min(70vw,600px)] mx-auto">
+        <div className="relative w-[min(90vw,800px)] h-[min(80vw,600px)] mx-auto">
             <Canvas camera={{ position: [0, 0.3, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
@@ -218,9 +220,9 @@ export function PassportChair3DCanvas() {
                 <Environment preset="studio" />
             </Canvas>
 
-            {/* Intelligent Product panel — slides in on hover */}
+            {/* Intelligent Product panel — slides in on hover/tap */}
             <div
-                className={`absolute top-4 right-0 w-60 rounded-2xl border overflow-hidden transition-all duration-500 ease-out ${hovered ? 'opacity-100 translate-x-0 border-indigo-500/30 bg-slate-800/95 shadow-2xl shadow-indigo-500/10' : 'opacity-0 translate-x-4 border-slate-700 bg-slate-800/95 shadow-none pointer-events-none'} backdrop-blur-md`}
+                className={`absolute top-2 right-0 sm:top-4 w-[min(240px,60vw)] sm:w-60 rounded-2xl border overflow-hidden transition-all duration-500 ease-out ${hovered ? 'opacity-100 translate-x-0 border-indigo-500/30 bg-slate-800/95 shadow-2xl shadow-indigo-500/10' : 'opacity-0 translate-x-4 border-slate-700 bg-slate-800/95 shadow-none pointer-events-none'} backdrop-blur-md`}
             >
                 <div className="p-4 border-b border-slate-700/50">
                     <div className="flex items-center gap-2 mb-2">
@@ -260,7 +262,7 @@ export function PassportChair3DCanvas() {
 
             {/* Hint label — fades out when hovered */}
             <div className={`absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none ${hovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-                <p className="text-xs text-slate-500 text-center whitespace-nowrap">Hover the tag to explore</p>
+                <p className="text-xs text-slate-500 text-center whitespace-nowrap"><span className="hidden sm:inline">Hover</span><span className="sm:hidden">Tap</span> the tag to explore</p>
             </div>
         </div>
     );
