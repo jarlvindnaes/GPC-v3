@@ -1,5 +1,11 @@
-import { motion } from "motion/react";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, PlayCircle } from "lucide-react";
+
+const SCREENSHOTS = [
+  { src: import.meta.env.BASE_URL + "screenshots/product-studio.png", label: "Product Studio", desc: "3D model ingestion & component breakdown" },
+  { src: import.meta.env.BASE_URL + "screenshots/supply-chain.png", label: "Supply Chain Map", desc: "Global transport routes & logistics tracking" },
+];
 
 export function Hero() {
   return (
@@ -38,71 +44,8 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Dashboard Mockup */}
-      <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-20 relative rounded-3xl border border-slate-200/60 bg-white/50 backdrop-blur-md shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden group"
-      >
-        <div className="h-14 bg-slate-50/80 border-b border-slate-100/50 flex items-center px-6 justify-between">
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-rose-400/30"></div>
-            <div className="w-3 h-3 rounded-full bg-amber-400/30"></div>
-            <div className="w-3 h-3 rounded-full bg-emerald-400/30"></div>
-          </div>
-          <div className="px-3 py-1 rounded bg-slate-100/50 text-[10px] font-bold text-slate-400 tracking-widest uppercase">Product Analytics v1.0</div>
-        </div>
-        <div className="aspect-[16/9] bg-white p-10 flex items-center justify-center relative overflow-hidden">
-          {/* Abstract representation of the dashboard */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-          <div className="relative w-full max-w-5xl grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
-            <div className="md:col-span-3 space-y-4 md:space-y-8">
-              <div className="h-48 md:h-72 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-4 md:p-8 flex flex-col hover:border-indigo-100 transition-colors duration-500">
-                <div className="flex justify-between items-center mb-8">
-                  <div className="h-5 w-48 bg-slate-50 rounded-full"></div>
-                  <div className="h-8 w-24 bg-indigo-50/50 rounded-lg"></div>
-                </div>
-                <div className="flex-1 flex items-end gap-3 px-4">
-                  {[35, 65, 45, 85, 55, 75, 95, 65, 80, 50, 70, 40].map((h, i) => (
-                    <motion.div
-                      key={i}
-                      className="flex-1 bg-gradient-to-t from-indigo-500 to-indigo-400 rounded-t-[4px]"
-                      initial={{ height: 0 }}
-                      animate={{ height: `${h}%` }}
-                      transition={{ delay: 0.5 + i * 0.05, duration: 0.8, ease: "easeOut" }}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-4 md:gap-8">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-36 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-6 hover:border-indigo-100 transition-colors duration-500">
-                    <div className="h-3 w-20 bg-slate-50 rounded-full mb-6"></div>
-                    <div className="h-10 w-16 bg-slate-900/5 rounded-xl"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="hidden md:block md:col-span-1 space-y-8">
-              <div className="h-full bg-slate-900/5 rounded-2xl p-8 flex flex-col gap-6">
-                <div className="h-4 w-28 bg-slate-900/10 rounded-full mb-2"></div>
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
-                      <div className="w-5 h-5 bg-indigo-50 rounded-full"></div>
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <div className="h-2 w-full bg-slate-900/10 rounded-full"></div>
-                      <div className="h-2 w-2/3 bg-slate-900/5 rounded-full"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      {/* Product Screenshots Carousel */}
+      <HeroCarousel />
 
       {/* Scroll Indicator */}
       <motion.div
@@ -114,5 +57,85 @@ export function Hero() {
         <div className="w-px h-12 bg-gradient-to-b from-indigo-500 to-transparent"></div>
       </motion.div>
     </section>
+  );
+}
+
+function HeroCarousel() {
+  const [active, setActive] = useState(0);
+  const next = useCallback(() => setActive(i => (i + 1) % SCREENSHOTS.length), []);
+
+  useEffect(() => {
+    const id = setInterval(next, 5000);
+    return () => clearInterval(id);
+  }, [next]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      className="mt-20 relative rounded-3xl border border-slate-200/60 bg-slate-900 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.25)] overflow-hidden group"
+    >
+      {/* Browser chrome */}
+      <div className="h-11 bg-slate-800/80 border-b border-slate-700/50 flex items-center px-5 justify-between">
+        <div className="flex gap-2">
+          <div className="w-3 h-3 rounded-full bg-rose-500/40"></div>
+          <div className="w-3 h-3 rounded-full bg-amber-500/40"></div>
+          <div className="w-3 h-3 rounded-full bg-emerald-500/40"></div>
+        </div>
+        <div className="flex-1 max-w-md mx-auto">
+          <div className="flex items-center gap-2 bg-slate-700/50 rounded-lg px-3 py-1">
+            <svg className="w-3 h-3 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+            <span className="text-[11px] text-slate-400 font-medium">getproductconnect.com</span>
+          </div>
+        </div>
+        <div className="w-16" />
+      </div>
+
+      {/* Carousel area */}
+      <div className="relative aspect-[16/9] overflow-hidden bg-slate-950">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={active}
+            src={SCREENSHOTS[active].src}
+            alt={SCREENSHOTS[active].label}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.5 }}
+          />
+        </AnimatePresence>
+
+        {/* Bottom gradient overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-slate-900/90 to-transparent pointer-events-none" />
+
+        {/* Caption + dots */}
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-5 flex items-end justify-between">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="text-sm font-semibold text-white">{SCREENSHOTS[active].label}</p>
+              <p className="text-xs text-slate-400 mt-0.5">{SCREENSHOTS[active].desc}</p>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="flex items-center gap-2">
+            {SCREENSHOTS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? 'w-6 bg-indigo-400' : 'w-1.5 bg-slate-600 hover:bg-slate-500'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
