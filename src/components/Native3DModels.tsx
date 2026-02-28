@@ -42,7 +42,7 @@ function BoltModel() {
     });
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={mesh} position={[0, -0.3, 0]} scale={8}>
+            <group ref={mesh} position={[0, -0.3, 0]} scale={16}>
                 <primitive object={scene} />
             </group>
         </Float>
@@ -63,9 +63,9 @@ export function RawMaterial3DCanvas() {
                     rotation={[0.1, -Math.PI / 4, 0]}
                     polar={[-Math.PI / 4, Math.PI / 4]}
                     azimuth={[-Math.PI, Math.PI]}
-                    config={{ mass: 2, tension: 200, friction: 30 }}
+                    config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <group position={[0, -0.3, 0]} scale={1.0}>
+                    <group position={[0, -0.3, 0]} scale={1.4}>
                         <CustomRockModel />
                     </group>
                 </PresentationControls>
@@ -93,7 +93,7 @@ export function Components3DCanvas() {
                     rotation={[0.1, -Math.PI / 4, 0]}
                     polar={[-Math.PI / 4, Math.PI / 4]}
                     azimuth={[-Math.PI, Math.PI]}
-                    config={{ mass: 2, tension: 200, friction: 30 }}
+                    config={{ mass: 4, tension: 120, friction: 40 }}
                 >
                     <BoltModel />
                 </PresentationControls>
@@ -137,11 +137,11 @@ export function FinishedProduct3DCanvas() {
                     rotation={[0.08, -Math.PI / 4, 0]}
                     polar={[-Math.PI / 4, Math.PI / 4]}
                     azimuth={[-Math.PI, Math.PI]}
-                    config={{ mass: 2, tension: 200, friction: 30 }}
+                    config={{ mass: 4, tension: 120, friction: 40 }}
                 >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
                         <group position={[0, -0.3, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.45} />
+                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.8} />
                         </group>
                     </Float>
                 </PresentationControls>

@@ -189,32 +189,134 @@ export function StorytellingScroll() {
             {/* Visual 6: LCA Engine */}
             <motion.div style={{ opacity: vOp6 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-64 h-64 relative flex items-center justify-center">
+              <div className="w-[420px] h-[420px] relative flex items-center justify-center">
+                {/* Outer ring */}
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-                  className="absolute inset-0 border border-dashed border-indigo-500/30 rounded-full"
+                  transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                  className="absolute inset-0 border border-indigo-500/20 rounded-full"
                 />
+                {/* Second ring */}
                 <motion.div
                   animate={{ rotate: -360 }}
-                  transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-                  className="absolute inset-8 border border-dashed border-violet-500/20 rounded-full"
+                  transition={{ repeat: Infinity, duration: 14, ease: "linear" }}
+                  className="absolute inset-6 border border-dashed border-violet-500/25 rounded-full"
                 />
-                {/* Orbiting dots */}
-                {[0, 60, 120, 180, 240, 300].map(deg => (
-                  <motion.div key={deg}
-                    className="absolute w-2 h-2 bg-indigo-400 rounded-full shadow-[0_0_8px_#6366f1]"
+                {/* Third ring */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+                  className="absolute inset-16 border border-dashed border-indigo-400/20 rounded-full"
+                />
+                {/* Inner ring */}
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
+                  className="absolute inset-24 border border-violet-400/15 rounded-full"
+                />
+
+                {/* Outer orbiting data nodes */}
+                {[0, 45, 90, 135, 180, 225, 270, 315].map(deg => (
+                  <motion.div key={`outer-${deg}`}
+                    className="absolute w-1.5 h-1.5 bg-indigo-400/60 rounded-full"
                     style={{
-                      left: `calc(50% + ${Math.cos(deg * Math.PI / 180) * 100}px - 4px)`,
-                      top: `calc(50% + ${Math.sin(deg * Math.PI / 180) * 100}px - 4px)`,
+                      left: `calc(50% + ${Math.cos(deg * Math.PI / 180) * 195}px - 3px)`,
+                      top: `calc(50% + ${Math.sin(deg * Math.PI / 180) * 195}px - 3px)`,
                     }}
-                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    animate={{ opacity: [0.2, 0.8, 0.2], scale: [0.8, 1.3, 0.8] }}
+                    transition={{ repeat: Infinity, duration: 3, delay: deg / 360 * 3 }}
+                  />
+                ))}
+
+                {/* Mid orbiting data nodes */}
+                {[0, 72, 144, 216, 288].map(deg => (
+                  <motion.div key={`mid-${deg}`}
+                    className="absolute w-2.5 h-2.5 bg-indigo-400 rounded-full shadow-[0_0_12px_#6366f1]"
+                    style={{
+                      left: `calc(50% + ${Math.cos(deg * Math.PI / 180) * 140}px - 5px)`,
+                      top: `calc(50% + ${Math.sin(deg * Math.PI / 180) * 140}px - 5px)`,
+                    }}
+                    animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.4, 1] }}
+                    transition={{ repeat: Infinity, duration: 2.5, delay: deg / 360 * 2.5 }}
+                  />
+                ))}
+
+                {/* Inner orbiting nodes */}
+                {[30, 150, 270].map(deg => (
+                  <motion.div key={`inner-${deg}`}
+                    className="absolute w-2 h-2 bg-violet-400 rounded-full shadow-[0_0_10px_#8b5cf6]"
+                    style={{
+                      left: `calc(50% + ${Math.cos(deg * Math.PI / 180) * 85}px - 4px)`,
+                      top: `calc(50% + ${Math.sin(deg * Math.PI / 180) * 85}px - 4px)`,
+                    }}
+                    animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.5, 1] }}
                     transition={{ repeat: Infinity, duration: 2, delay: deg / 360 * 2 }}
                   />
                 ))}
-                <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(99,102,241,0.4)]">
-                  <Cpu className="w-9 h-9 text-white" />
-                </div>
+
+                {/* Data streams — lines flowing toward center */}
+                {[0, 60, 120, 180, 240, 300].map(deg => (
+                  <motion.div key={`stream-${deg}`}
+                    className="absolute w-px bg-gradient-to-b from-transparent via-indigo-400/40 to-transparent"
+                    style={{
+                      height: '60px',
+                      left: `calc(50% + ${Math.cos(deg * Math.PI / 180) * 120}px)`,
+                      top: `calc(50% + ${Math.sin(deg * Math.PI / 180) * 120}px - 30px)`,
+                      transform: `rotate(${deg + 90}deg)`,
+                    }}
+                    animate={{ opacity: [0, 0.8, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.8, delay: deg / 360 * 1.8 }}
+                  />
+                ))}
+
+                {/* Pulsing core glow */}
+                <motion.div
+                  className="absolute rounded-full bg-indigo-500/10"
+                  style={{ width: 120, height: 120 }}
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                />
+                <motion.div
+                  className="absolute rounded-full bg-violet-500/10"
+                  style={{ width: 80, height: 80 }}
+                  animate={{ scale: [1.1, 1.5, 1.1], opacity: [0.4, 0.7, 0.4] }}
+                  transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut", delay: 0.5 }}
+                />
+
+                {/* Core */}
+                <motion.div
+                  className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(99,102,241,0.5)] z-10"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                >
+                  <Cpu className="w-10 h-10 text-white" />
+                </motion.div>
+
+                {/* Floating metric labels */}
+                <motion.div
+                  className="absolute top-6 right-8 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2 shadow-lg"
+                  animate={{ y: [0, -6, 0], opacity: [0.7, 1, 0.7] }}
+                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                >
+                  <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wide">CO₂ Impact</p>
+                  <p className="text-sm font-bold text-indigo-400">12.4 kg</p>
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-12 left-4 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2 shadow-lg"
+                  animate={{ y: [0, 6, 0], opacity: [0.6, 1, 0.6] }}
+                  transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+                >
+                  <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wide">PEF Score</p>
+                  <p className="text-sm font-bold text-emerald-400">A+</p>
+                </motion.div>
+                <motion.div
+                  className="absolute top-16 left-2 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl px-3 py-2 shadow-lg"
+                  animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
+                  transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
+                >
+                  <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wide">Components</p>
+                  <p className="text-sm font-bold text-violet-400">24 analysed</p>
+                </motion.div>
               </div>
             </motion.div>
 
