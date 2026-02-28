@@ -51,12 +51,11 @@ function BoltModel() {
 
 export function RawMaterial3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[450px] aspect-square mx-auto">
             <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
                 <directionalLight position={[-4, 6, -4]} intensity={0.6} color="#c7d2fe" />
-                {/* 45° iso view */}
                 <PresentationControls
                     global
                     snap={false}
@@ -81,12 +80,11 @@ export function RawMaterial3DCanvas() {
 // ----------------------------------------------------------------------------
 export function Components3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[450px] aspect-square mx-auto">
             <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
-                {/* 45° iso view */}
                 <PresentationControls
                     global
                     snap={false}
@@ -125,12 +123,11 @@ function CustomChairModel() {
 
 export function FinishedProduct3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[450px] aspect-square mx-auto">
             <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
-                {/* 45° iso default: rotation [slight tilt down, -π/4 yaw, 0] */}
                 <PresentationControls
                     global
                     snap={false}
@@ -204,7 +201,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
-        <div className="relative" style={{ width: '620px', height: '620px' }}>
+        <div className="relative w-full max-w-[620px] aspect-square mx-auto">
             <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
@@ -302,10 +299,10 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
 export function DPPInteractiveProduct() {
     return (
         <div className="w-full rounded-3xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-200/60 bg-white">
-            <div className="grid lg:grid-cols-[1fr_420px] min-h-[640px]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] min-h-[400px] md:min-h-[640px]">
 
                 {/* ── Left: 3D canvas ── */}
-                <div className="relative bg-gradient-to-br from-slate-50 via-slate-100 to-indigo-50 cursor-grab active:cursor-grabbing min-h-[380px] lg:min-h-0">
+                <div className="relative bg-gradient-to-br from-slate-50 via-slate-100 to-indigo-50 cursor-grab active:cursor-grabbing min-h-[280px] md:min-h-[380px] lg:min-h-0">
                     <div className="absolute inset-0 opacity-20" style={{
                         backgroundImage: 'radial-gradient(circle, #94a3b8 1px, transparent 1px)',
                         backgroundSize: '28px 28px'
@@ -351,7 +348,7 @@ export function DPPInteractiveProduct() {
                 </div>
 
                 {/* ── Right: Info panel ── */}
-                <div className="flex flex-col p-7 lg:p-9 gap-5 border-l border-slate-100 bg-white overflow-y-auto">
+                <div className="flex flex-col p-5 sm:p-7 lg:p-9 gap-5 border-t lg:border-t-0 lg:border-l border-slate-100 bg-white overflow-y-auto">
 
                     {/* Header */}
                     <div className="flex items-start justify-between gap-3">

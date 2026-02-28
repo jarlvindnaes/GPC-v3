@@ -48,7 +48,7 @@ export function StorytellingScroll() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
               How it works
             </h2>
             <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
@@ -72,7 +72,7 @@ export function StorytellingScroll() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-12">
 
           {/* ── Text panel (left) ── */}
-          <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative h-[420px] flex items-center">
+          <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative min-h-[280px] md:h-[420px] flex items-center">
 
             {[
               { op: op1, icon: <Box className="w-5 h-5" />, title: "Ingest Your Model", body: "Start with your product. Upload your construction model — BIM, IFC, or 3D CAD — and we automatically create a digital twin, splitting it into every component and sub-assembly." },
@@ -87,14 +87,14 @@ export function StorytellingScroll() {
                 <div className="w-11 h-11 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mb-6 text-indigo-400 shadow-lg shadow-indigo-500/10">
                   {icon}
                 </div>
-                <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight leading-[1.1]">{title}</h2>
-                <p className="text-lg text-slate-400 leading-relaxed max-w-sm">{body}</p>
+                <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight leading-[1.1]">{title}</h2>
+                <p className="text-base md:text-lg text-slate-400 leading-relaxed max-w-sm">{body}</p>
               </motion.div>
             ))}
           </div>
 
           {/* ── Visual panel (right) ── */}
-          <div className="hidden md:flex flex-1 relative min-h-[600px] items-center justify-center">
+          <div className="hidden md:flex flex-1 relative min-h-[400px] md:min-h-[600px] items-center justify-center">
 
             {/* Visual 1: Chair — 450x450px centered */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
@@ -163,7 +163,7 @@ export function StorytellingScroll() {
             {/* Visual 5: Transport Routes Card */}
             <motion.div style={{ opacity: vOp5 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-96 rounded-2xl bg-slate-800/90 backdrop-blur-md border border-slate-700 shadow-2xl shadow-black/40 overflow-hidden">
+              <div className="w-full max-w-96 rounded-2xl bg-slate-800/90 backdrop-blur-md border border-slate-700 shadow-2xl shadow-black/40 overflow-hidden">
                 {/* Header */}
                 <div className="px-5 pt-5 pb-4 border-b border-slate-700/50">
                   <div className="flex items-center justify-between mb-1">
@@ -248,7 +248,7 @@ export function StorytellingScroll() {
             {/* Visual 6: LCA Engine */}
             <motion.div style={{ opacity: vOp6 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[420px] h-[420px] relative flex items-center justify-center">
+              <div className="w-full max-w-[420px] aspect-square relative flex items-center justify-center">
                 {/* Outer ring */}
                 <motion.div
                   animate={{ rotate: 360 }}
@@ -382,7 +382,7 @@ export function StorytellingScroll() {
             {/* Visual 7: DPP mini-card */}
             <motion.div style={{ opacity: vOp7 }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-72 rounded-3xl border border-slate-700 bg-slate-800/90 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden">
+              <div className="w-full max-w-72 rounded-3xl border border-slate-700 bg-slate-800/90 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden">
                 <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-5 border-b border-slate-700">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase">Digital Product Passport</span>
@@ -451,7 +451,7 @@ export function StorytellingScroll() {
               <div className="w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-indigo-400">
                 <Sparkles className="w-4.5 h-4.5" />
               </div>
-              <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight">Your Intelligent Product</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold tracking-tight">Your Intelligent Product</h2>
             </div>
             <p className="text-lg text-slate-400 max-w-lg mx-auto leading-relaxed">
               The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation, care guides, and verified claims, all accessible with a single scan.

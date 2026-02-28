@@ -13,7 +13,7 @@ export function Pricing() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Free */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col">
             <h3 className="text-lg font-semibold text-slate-900 mb-2">Free</h3>

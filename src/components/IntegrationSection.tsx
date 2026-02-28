@@ -6,7 +6,7 @@ export function IntegrationSection() {
     <section className="py-32 bg-slate-950 text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mb-24">
-          <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold tracking-tight mb-6">
             Connect to existing systems.
           </h2>
           <p className="text-xl text-slate-400 leading-relaxed">
@@ -15,7 +15,7 @@ export function IntegrationSection() {
         </div>
 
         {/* Integration Diagram */}
-        <div className="relative h-[800px] w-full max-w-6xl mx-auto flex items-center justify-center">
+        <div className="relative h-[400px] md:h-[600px] lg:h-[800px] w-full max-w-6xl mx-auto flex items-center justify-center">
           {/* Background grid */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]"></div>
@@ -29,15 +29,15 @@ export function IntegrationSection() {
           >
             <div className="relative group">
               <div className="absolute inset-0 bg-indigo-500/20 blur-3xl group-hover:bg-indigo-500/30 transition-all duration-700"></div>
-              <div className="w-44 h-44 bg-slate-900 rounded-[3rem] flex items-center justify-center border border-indigo-500/30 shadow-[0_0_80px_rgba(99,102,241,0.15)] relative overflow-hidden">
+              <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 bg-slate-900 rounded-[2rem] md:rounded-[3rem] flex items-center justify-center border border-indigo-500/30 shadow-[0_0_80px_rgba(99,102,241,0.15)] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
-                <span className="text-2xl font-display font-bold tracking-tight text-center leading-tight">
+                <span className="text-lg md:text-2xl font-display font-bold tracking-tight text-center leading-tight">
                   <span className="text-indigo-400">Product</span><br />Connect
                 </span>
                 <motion.div
                   animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
                   transition={{ repeat: Infinity, duration: 4 }}
-                  className="absolute inset-0 border-2 border-indigo-500/20 rounded-[3rem]"
+                  className="absolute inset-0 border-2 border-indigo-500/20 rounded-[2rem] md:rounded-[3rem]"
                 />
               </div>
             </div>
@@ -126,10 +126,10 @@ function IntegrationNode({ title, icon, delay, color, reverse = false }: any) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className={`px-5 py-2.5 border rounded-2xl flex items-center gap-3 backdrop-blur-xl pointer-events-auto cursor-default hover:border-white/20 transition-all duration-500 hover:scale-105 ${colors[color]} ${reverse ? "flex-row-reverse" : ""}`}
+      className={`px-3 py-2 md:px-5 md:py-2.5 border rounded-xl md:rounded-2xl flex items-center gap-2 md:gap-3 backdrop-blur-xl pointer-events-auto cursor-default hover:border-white/20 transition-all duration-500 hover:scale-105 ${colors[color]} ${reverse ? "flex-row-reverse" : ""}`}
     >
       <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center">{icon}</div>
-      <span className="text-xs font-bold tracking-widest uppercase">{title}</span>
+      <span className="text-[10px] md:text-xs font-bold tracking-widest uppercase">{title}</span>
     </motion.div>
   );
 }

@@ -53,7 +53,7 @@ function Material3D() {
 function Model3DCanvas({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <div className="relative group">
-      <div className="w-full h-80 rounded-3xl overflow-hidden border border-slate-800 bg-slate-900/40 backdrop-blur-sm">
+      <div className="w-full h-64 md:h-80 rounded-3xl overflow-hidden border border-slate-800 bg-slate-900/40 backdrop-blur-sm">
         <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
           <ambientLight intensity={0.6} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} />
@@ -100,7 +100,7 @@ export function ProductBreakdown() {
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
+          <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
             Product Journey
           </h2>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">

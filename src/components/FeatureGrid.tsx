@@ -148,10 +148,10 @@ export function FeatureGrid() {
     <section id="features" className="py-32 bg-slate-50 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16 max-w-3xl">
-          <h2 className="text-4xl md:text-5xl font-display font-semibold text-slate-900 tracking-tight mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold text-slate-900 tracking-tight mb-6">
             Everything you need to build intelligent products.
           </h2>
-          <p className="text-xl text-slate-600">
+          <p className="text-lg md:text-xl text-slate-600">
             A modular platform designed to scale with your ambition. From 3D model ingestion to direct-to-consumer commerce.
           </p>
         </div>
@@ -172,7 +172,7 @@ export function FeatureGrid() {
                 <p className="text-slate-600 leading-relaxed">{feature.shortDesc}</p>
               </motion.div>
               <motion.div layoutId={`visual-${feature.id}`} className="mt-auto pt-8">
-                <div className={`bg-gradient-to-br from-${feature.color}-50 to-${feature.color}-100/50 rounded-2xl p-8 border border-${feature.color}-100/50 flex items-center justify-center min-h-[200px]`}>
+                <div className={`bg-gradient-to-br from-${feature.color}-50 to-${feature.color}-100/50 rounded-2xl p-6 md:p-8 border border-${feature.color}-100/50 flex items-center justify-center min-h-[150px] md:min-h-[200px]`}>
                   {feature.visual}
                 </div>
               </motion.div>

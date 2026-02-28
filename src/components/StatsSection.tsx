@@ -53,7 +53,7 @@ export function StatsSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-5xl md:text-7xl lg:text-8xl font-display font-semibold tracking-tight mb-24 max-w-4xl mx-auto leading-[1.1]"
+          className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-semibold tracking-tight mb-12 md:mb-24 max-w-4xl mx-auto leading-[1.1]"
         >
           The backbone of sustainable manufacturing.
         </motion.h2>
@@ -67,8 +67,8 @@ export function StatsSection() {
             transition={{ delay: 0.1 }}
             className="flex flex-col items-center"
           >
-            <div className="text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">10M+</div>
-            <div className="text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
+            <div className="text-4xl sm:text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">10M+</div>
+            <div className="text-base md:text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
               components tracked across supply chains
             </div>
           </motion.div>
@@ -80,8 +80,8 @@ export function StatsSection() {
             transition={{ delay: 0.2 }}
             className="flex flex-col items-center"
           >
-            <div className="text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">€50M+</div>
-            <div className="text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
+            <div className="text-4xl sm:text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">€50M+</div>
+            <div className="text-base md:text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
               in consulting fees saved by manufacturers
             </div>
           </motion.div>
@@ -93,8 +93,8 @@ export function StatsSection() {
             transition={{ delay: 0.3 }}
             className="flex flex-col items-center"
           >
-            <div className="text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">99.9%</div>
-            <div className="text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
+            <div className="text-4xl sm:text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">99.9%</div>
+            <div className="text-base md:text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
               data accuracy for LCA calculations
             </div>
           </motion.div>
@@ -106,8 +106,8 @@ export function StatsSection() {
             transition={{ delay: 0.4 }}
             className="flex flex-col items-center"
           >
-            <div className="text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">2026</div>
-            <div className="text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
+            <div className="text-4xl sm:text-6xl md:text-7xl font-display font-semibold mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">2026</div>
+            <div className="text-base md:text-lg font-medium text-slate-400 max-w-[200px] leading-relaxed">
               ESPR compliance ready today
             </div>
           </motion.div>

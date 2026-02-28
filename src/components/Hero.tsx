@@ -21,7 +21,7 @@ export function Hero() {
             </span>
             ESPR 2026 Ready
           </div>
-          <h1 className="text-5xl md:text-[5rem] font-display font-bold text-slate-900 tracking-tight leading-[1.05] mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-[5rem] font-display font-bold text-slate-900 tracking-tight leading-[1.05] mb-8">
             Revolutionize Furniture Manufacturing with <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Product Connect.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium">
@@ -56,9 +56,9 @@ export function Hero() {
         <div className="aspect-[16/9] bg-white p-10 flex items-center justify-center relative overflow-hidden">
           {/* Abstract representation of the dashboard */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-          <div className="relative w-full max-w-5xl grid grid-cols-4 gap-8">
-            <div className="col-span-3 space-y-8">
-              <div className="h-72 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-8 flex flex-col hover:border-indigo-100 transition-colors duration-500">
+          <div className="relative w-full max-w-5xl grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
+            <div className="md:col-span-3 space-y-4 md:space-y-8">
+              <div className="h-48 md:h-72 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-4 md:p-8 flex flex-col hover:border-indigo-100 transition-colors duration-500">
                 <div className="flex justify-between items-center mb-8">
                   <div className="h-5 w-48 bg-slate-50 rounded-full"></div>
                   <div className="h-8 w-24 bg-indigo-50/50 rounded-lg"></div>
@@ -75,7 +75,7 @@ export function Hero() {
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-8">
+              <div className="grid grid-cols-3 gap-4 md:gap-8">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="h-36 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-6 hover:border-indigo-100 transition-colors duration-500">
                     <div className="h-3 w-20 bg-slate-50 rounded-full mb-6"></div>
@@ -84,7 +84,7 @@ export function Hero() {
                 ))}
               </div>
             </div>
-            <div className="col-span-1 space-y-8">
+            <div className="hidden md:block md:col-span-1 space-y-8">
               <div className="h-full bg-slate-900/5 rounded-2xl p-8 flex flex-col gap-6">
                 <div className="h-4 w-28 bg-slate-900/10 rounded-full mb-2"></div>
                 {[1, 2, 3, 4, 5, 6].map((i) => (
