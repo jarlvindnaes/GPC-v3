@@ -42,7 +42,7 @@ function BoltModel() {
     });
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={mesh} position={[0, -0.3, 0]} scale={16}>
+            <group ref={mesh} position={[0, 0.2, 0]} rotation={[Math.PI / 5, 0, 0]} scale={16}>
                 <primitive object={scene} />
             </group>
         </Float>
@@ -65,7 +65,7 @@ export function RawMaterial3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <group position={[0, -0.3, 0]} scale={1.4}>
+                    <group position={[0, -0.3, 0]} scale={1.68}>
                         <CustomRockModel />
                     </group>
                 </PresentationControls>
@@ -141,7 +141,7 @@ export function FinishedProduct3DCanvas() {
                 >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
                         <group position={[0, -0.3, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.8} />
+                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.2} />
                         </group>
                     </Float>
                 </PresentationControls>
@@ -162,7 +162,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     return (
         <Float floatIntensity={0.6} rotationIntensity={0.02} speed={1}>
             <group position={[0, -0.3, 0]}>
-                <primitive object={passportScene} scale={3.8} />
+                <primitive object={passportScene} scale={3.2} />
                 {/* QR tag on the seat — positioned in 3D space */}
                 <Html position={[0.15, 1.6, 0.4]} center>
                     <div
