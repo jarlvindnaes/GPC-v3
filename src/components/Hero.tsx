@@ -27,7 +27,7 @@ export function Hero() {
             </span>
             ESPR 2026 Ready
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-[5rem] font-display font-bold text-slate-900 tracking-tight leading-[1.05] mb-8">
+          <h1 className="text-[1.7rem] sm:text-4xl md:text-[5rem] font-display font-bold text-slate-900 tracking-tight leading-[1.05] mb-8">
             Revolutionize Furniture Manufacturing with <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Product Connect.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium">

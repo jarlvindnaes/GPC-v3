@@ -43,7 +43,7 @@ export function StorytellingScroll() {
     <>
     <section id="story" ref={containerRef} className="relative h-[700vh] bg-slate-900 text-white">
       {/* Header section */}
-      <div className="absolute top-0 left-0 right-0 pt-24 pb-16 z-20 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 pt-16 pb-8 md:pt-24 md:pb-16 z-20 pointer-events-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -75,7 +75,7 @@ export function StorytellingScroll() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-4 md:gap-12">
 
           {/* ── Text panel (left) ── */}
-          <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative min-h-[200px] md:h-[420px] flex items-center">
+          <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative min-h-[180px] md:h-[420px] flex items-center">
 
             {[
               { op: op1, icon: <Box className="w-5 h-5" />, title: "Ingest Your Model", body: "Start with your product. Upload your construction model — BIM, IFC, or 3D CAD — and we automatically create a digital twin, splitting it into every component and sub-assembly." },
@@ -97,7 +97,7 @@ export function StorytellingScroll() {
           </div>
 
           {/* ── Visual panel (right) ── */}
-          <div className="flex flex-1 relative min-h-[280px] sm:min-h-[350px] md:min-h-[700px] w-full items-center justify-center">
+          <div className="flex flex-1 relative min-h-[250px] sm:min-h-[350px] md:min-h-[700px] w-full items-center justify-center overflow-hidden">
 
             {/* Visual 1: Chair */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
