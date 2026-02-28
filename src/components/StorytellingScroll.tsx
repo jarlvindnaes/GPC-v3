@@ -427,14 +427,14 @@ export function StorytellingScroll() {
               </div>
             </motion.div>
 
-            {/* Visual 8: Grand Finale — Intelligent Product chair with radiating QR tag */}
-            <motion.div style={{ opacity: vOp8, pointerEvents: pView8 as any }}
-              className="absolute inset-0 flex items-center justify-center">
-              <PassportChair3DCanvas />
-            </motion.div>
-
           </div>
         </div>
+
+        {/* Visual 8: Grand Finale — centered full-viewport, the scroll line ends here */}
+        <motion.div style={{ opacity: vOp8, pointerEvents: pView8 as any }}
+          className="absolute inset-0 flex items-center justify-center z-20">
+          <PassportChair3DCanvas />
+        </motion.div>
       </div>
     </section>
   );
