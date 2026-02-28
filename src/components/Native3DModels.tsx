@@ -20,9 +20,9 @@ function CustomRockModel() {
         }
     });
     return (
-        <Float floatIntensity={1.5} rotationIntensity={0} speed={1.2}>
+        <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
-                <primitive object={scene} scale={1.5} />
+                <primitive object={scene} scale={1.0} />
             </group>
         </Float>
     );
@@ -42,7 +42,7 @@ function BoltModel() {
     });
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={mesh} position={[0, -0.5, 0]} scale={2.5}>
+            <group ref={mesh} position={[0, -0.3, 0]} scale={8}>
                 <primitive object={scene} />
             </group>
         </Float>
@@ -65,7 +65,7 @@ export function RawMaterial3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 2, tension: 200, friction: 30 }}
                 >
-                    <group position={[0, -0.5, 0]} scale={2.5}>
+                    <group position={[0, -0.3, 0]} scale={1.0}>
                         <CustomRockModel />
                     </group>
                 </PresentationControls>
@@ -141,7 +141,7 @@ export function FinishedProduct3DCanvas() {
                 >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
                         <group position={[0, -0.3, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.0} />
+                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={3.45} />
                         </group>
                     </Float>
                 </PresentationControls>
