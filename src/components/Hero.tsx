@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, PlayCircle } from "lucide-react";
 
 const SCREENSHOTS = [
-  { src: import.meta.env.BASE_URL + "screenshots/product-studio.png", label: "Product Studio", desc: "3D model ingestion & component breakdown" },
-  { src: import.meta.env.BASE_URL + "screenshots/supply-chain.png", label: "Supply Chain Map", desc: "Global transport routes & logistics tracking" },
+  { src: import.meta.env.BASE_URL + "screenshots/product-studio_crop.png", label: "Product Studio", desc: "3D model ingestion & component breakdown" },
+  { src: import.meta.env.BASE_URL + "screenshots/supply-chain_crop.png", label: "Supply Chain Map", desc: "Global transport routes & logistics tracking" },
 ];
 
 export function Hero() {
@@ -93,13 +93,13 @@ function HeroCarousel() {
       </div>
 
       {/* Carousel area */}
-      <div className="relative aspect-[16/9] overflow-hidden bg-slate-950">
+      <div className="relative aspect-[16/9.5] overflow-hidden bg-slate-950">
         <AnimatePresence mode="wait">
           <motion.img
             key={active}
             src={SCREENSHOTS[active].src}
             alt={SCREENSHOTS[active].label}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             initial={{ opacity: 0, scale: 1.02 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
