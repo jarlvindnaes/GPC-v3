@@ -154,33 +154,46 @@ export function FinishedProduct3DCanvas() {
 
 
 // ----------------------------------------------------------------------------
-// 2b. Passport Chair — 3D chair with hoverable QR hotspot (StorytellingScroll step 7)
+// 2b. Grand Finale Chair — no rotation, gentle oscillation, radiating QR tag on seat
 // ----------------------------------------------------------------------------
 function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }) {
     const { scene } = useGLTF(CHAIR_MODEL);
     const passportScene = useMemo(() => scene.clone(), [scene]);
-    const group = useRef<THREE.Group>(null);
-    useFrame(() => {
-        if (group.current) {
-            group.current.rotation.y += 0.002;
-        }
-    });
     return (
-        <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group ref={group} position={[0, -0.3, 0]}>
+        <Float floatIntensity={0.6} rotationIntensity={0.02} speed={1}>
+            <group position={[0, -0.3, 0]}>
                 <primitive object={passportScene} scale={3.8} />
-                <Html position={[0.6, 2.8, 0.8]} center>
+                {/* QR tag on the seat — positioned in 3D space */}
+                <Html position={[0.15, 1.6, 0.4]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
                         onMouseLeave={() => onHover(false)}
                     >
-                        <div className="w-5 h-5 rounded-full bg-white/90 border-2 border-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/40">
-                            <svg className="w-3 h-3 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        {/* Radiating rings */}
+                        <div className="absolute -inset-4 rounded-full border border-indigo-400/20 animate-[ping_3s_ease-in-out_infinite]" />
+                        <div className="absolute -inset-7 rounded-full border border-indigo-400/10 animate-[ping_3s_ease-in-out_0.5s_infinite]" />
+                        <div className="absolute -inset-10 rounded-full border border-violet-400/5 animate-[ping_3s_ease-in-out_1s_infinite]" />
+                        {/* Glow halo */}
+                        <div className="absolute -inset-3 rounded-full bg-indigo-500/15 blur-md animate-pulse" />
+                        {/* Core QR icon */}
+                        <div className="relative w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.6)] ring-2 ring-white/30">
+                            <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
                             </svg>
                         </div>
-                        <div className="absolute inset-0 w-5 h-5 rounded-full border-2 border-indigo-400/60 animate-ping" />
+                        {/* Floating particles */}
+                        {[0, 1, 2, 3, 4, 5].map(i => (
+                            <div key={i}
+                                className="absolute w-1 h-1 bg-indigo-400 rounded-full"
+                                style={{
+                                    left: `${Math.cos(i * 60 * Math.PI / 180) * 20 + 10}px`,
+                                    top: `${Math.sin(i * 60 * Math.PI / 180) * 20 + 10}px`,
+                                    animation: `pulse 2s ease-in-out ${i * 0.3}s infinite`,
+                                    opacity: 0.6,
+                                }}
+                            />
+                        ))}
                     </div>
                 </Html>
             </group>
@@ -191,75 +204,69 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
-        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
+        <div className="relative" style={{ width: '500px', height: '500px' }}>
             <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
-                <ambientLight intensity={0.7} />
+                <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
                 <PresentationControls
                     global
                     snap={false}
                     rotation={[0.08, -Math.PI / 4, 0]}
-                    polar={[-Math.PI / 4, Math.PI / 4]}
-                    azimuth={[-Math.PI, Math.PI]}
-                    config={{ mass: 4, tension: 120, friction: 40 }}
+                    polar={[-Math.PI / 6, Math.PI / 6]}
+                    azimuth={[-Math.PI / 3, Math.PI / 3]}
+                    config={{ mass: 6, tension: 80, friction: 50 }}
                 >
                     <PassportChairModel onHover={setHovered} />
                 </PresentationControls>
-                <ContactShadows position={[0, -0.3, 0]} opacity={0.25} scale={12} blur={3} far={5} color="#000" />
+                <ContactShadows position={[0, -0.3, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
                 <Environment preset="studio" />
             </Canvas>
 
-            {/* DPP card overlay — appears on hotspot hover */}
+            {/* Intelligent Product panel — slides in on hover */}
             <div
-                className={`absolute top-6 right-0 w-56 rounded-2xl border border-slate-700 bg-slate-800/95 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden transition-all duration-300 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`}
+                className={`absolute top-4 right-0 w-60 rounded-2xl border overflow-hidden transition-all duration-500 ease-out ${hovered ? 'opacity-100 translate-x-0 border-indigo-500/30 bg-slate-800/95 shadow-2xl shadow-indigo-500/10' : 'opacity-0 translate-x-4 border-slate-700 bg-slate-800/95 shadow-none pointer-events-none'} backdrop-blur-md`}
             >
-                <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-4 border-b border-slate-700">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-[9px] font-bold text-indigo-400 tracking-widest uppercase">Digital Product Passport</span>
-                        <span className="text-[9px] font-bold bg-slate-900 text-white px-1.5 py-0.5 rounded-md">ESPR 2026</span>
+                <div className="p-4 border-b border-slate-700/50">
+                    <div className="flex items-center gap-2 mb-2">
+                        <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                            </svg>
+                        </div>
+                        <span className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase">Intelligent Product</span>
                     </div>
                     <p className="text-sm font-bold text-white leading-tight">West Elm Slope Leather Chair</p>
-                    <p className="text-[9px] text-slate-400 font-mono mt-0.5">DPP-2024-WE-SL-0042</p>
                 </div>
-                <div className="p-4 space-y-3">
-                    <div>
-                        <div className="flex justify-between text-[10px] mb-1">
-                            <span className="text-slate-400 font-medium uppercase tracking-wide">Sustainability</span>
-                            <span className="text-emerald-400 font-bold">94 / 100</span>
-                        </div>
-                        <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style={{ width: '94%' }} />
-                        </div>
-                    </div>
-                    <div className="flex gap-1.5">
-                        {[
-                            { label: "CO₂", value: "12kg" },
-                            { label: "Repair", value: "9/10" },
-                            { label: "Lifecycle", value: "25yr" },
-                        ].map(s => (
-                            <div key={s.label} className="flex-1 rounded-lg bg-slate-900 border border-slate-700 p-1.5 text-center">
-                                <p className="text-xs font-bold text-white">{s.value}</p>
-                                <p className="text-[9px] text-slate-500">{s.label}</p>
+                <div className="p-3 space-y-1.5">
+                    {[
+                        { icon: "📋", label: "Product Passport", desc: "Full DPP & compliance docs" },
+                        { icon: "🔧", label: "Spare Parts", desc: "Order replacements directly" },
+                        { icon: "📖", label: "Care & Manuals", desc: "Maintenance guides & tips" },
+                        { icon: "♻️", label: "End of Life", desc: "Recycling & take-back info" },
+                        { icon: "🌍", label: "Impact Data", desc: "CO₂, materials & certifications" },
+                        { icon: "🛒", label: "Accessories", desc: "Compatible add-ons & upgrades" },
+                    ].map(item => (
+                        <div key={item.label} className="flex items-center gap-2.5 rounded-xl bg-slate-900/60 border border-slate-700/50 px-3 py-2 hover:border-indigo-500/30 hover:bg-slate-900 transition-colors cursor-pointer group">
+                            <span className="text-sm">{item.icon}</span>
+                            <div className="min-w-0">
+                                <p className="text-[11px] font-semibold text-white group-hover:text-indigo-300 transition-colors">{item.label}</p>
+                                <p className="text-[9px] text-slate-500 leading-tight">{item.desc}</p>
                             </div>
-                        ))}
-                    </div>
-                    <div className="flex items-center gap-2 bg-slate-900 rounded-lg p-2 border border-slate-700">
-                        <svg className="w-7 h-7 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
-                        </svg>
-                        <div>
-                            <p className="text-[10px] font-semibold text-white">Scan to verify</p>
-                            <p className="text-[9px] text-slate-500">GS1-compliant · Verified</p>
                         </div>
+                    ))}
+                </div>
+                <div className="px-3 pb-3">
+                    <div className="h-8 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 rounded-lg flex items-center justify-center cursor-pointer transition-colors">
+                        <span className="text-[11px] text-white font-semibold">Scan or Share</span>
                     </div>
                 </div>
             </div>
 
-            {/* Hint label */}
-            <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg transition-opacity duration-300 ${hovered ? 'opacity-0' : 'opacity-100'}`}>
-                <p className="text-sm font-semibold text-white mb-1">Your Product, Passport-Ready</p>
-                <p className="text-xs text-slate-400">Hover the tag to view the DPP</p>
+            {/* Hint label — fades out when hovered */}
+            <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3 shadow-lg transition-all duration-300 ${hovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
+                <p className="text-sm font-semibold text-white mb-1 text-center">Your Intelligent Product</p>
+                <p className="text-xs text-slate-400 text-center">Hover the tag to explore what's inside</p>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { Box, Layers, Users, Truck, TreePine, Cpu, QrCode } from "lucide-react";
+import { Box, Layers, Users, Truck, TreePine, Cpu, QrCode, Sparkles } from "lucide-react";
 import { FinishedProduct3DCanvas, RawMaterial3DCanvas, Components3DCanvas, PassportChair3DCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
@@ -12,30 +12,35 @@ export function StorytellingScroll() {
 
   const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
-  const op1 = useTransform(scrollYProgress, [0, 0.05, 0.1, 0.15], [0, 1, 1, 0]);
-  const op2 = useTransform(scrollYProgress, [0.14, 0.19, 0.24, 0.29], [0, 1, 1, 0]);
-  const op3 = useTransform(scrollYProgress, [0.28, 0.33, 0.38, 0.43], [0, 1, 1, 0]);
-  const op4 = useTransform(scrollYProgress, [0.42, 0.47, 0.52, 0.57], [0, 1, 1, 0]);
-  const op5 = useTransform(scrollYProgress, [0.57, 0.62, 0.67, 0.72], [0, 1, 1, 0]);
-  const op6 = useTransform(scrollYProgress, [0.71, 0.76, 0.81, 0.86], [0, 1, 1, 0]);
-  const op7 = useTransform(scrollYProgress, [0.85, 0.9, 0.95, 1], [0, 1, 1, 1]);
+  // Text opacities — 8 steps spread evenly
+  const op1 = useTransform(scrollYProgress, [0.00, 0.04, 0.08, 0.12], [0, 1, 1, 0]);
+  const op2 = useTransform(scrollYProgress, [0.12, 0.16, 0.20, 0.24], [0, 1, 1, 0]);
+  const op3 = useTransform(scrollYProgress, [0.24, 0.28, 0.32, 0.36], [0, 1, 1, 0]);
+  const op4 = useTransform(scrollYProgress, [0.36, 0.40, 0.44, 0.48], [0, 1, 1, 0]);
+  const op5 = useTransform(scrollYProgress, [0.48, 0.52, 0.56, 0.60], [0, 1, 1, 0]);
+  const op6 = useTransform(scrollYProgress, [0.60, 0.64, 0.68, 0.72], [0, 1, 1, 0]);
+  const op7 = useTransform(scrollYProgress, [0.72, 0.76, 0.80, 0.84], [0, 1, 1, 0]);
+  const op8 = useTransform(scrollYProgress, [0.84, 0.88, 0.94, 1.00], [0, 1, 1, 1]);
 
-  const vOp1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
-  const vOp2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], [0, 1, 1, 0]);
-  const vOp3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], [0, 1, 1, 0]);
-  const vOp4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], [0, 1, 1, 0]);
-  const vOp5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], [0, 1, 1, 0]);
-  const vOp6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], [0, 1, 1, 0]);
-  const vOp7 = useTransform(scrollYProgress, [0.85, 0.9, 1], [0, 1, 1]);
+  // Visual opacities
+  const vOp1 = useTransform(scrollYProgress, [0.00, 0.08, 0.12], [1, 1, 0]);
+  const vOp2 = useTransform(scrollYProgress, [0.08, 0.13, 0.21, 0.26], [0, 1, 1, 0]);
+  const vOp3 = useTransform(scrollYProgress, [0.21, 0.26, 0.34, 0.38], [0, 1, 1, 0]);
+  const vOp4 = useTransform(scrollYProgress, [0.34, 0.38, 0.46, 0.50], [0, 1, 1, 0]);
+  const vOp5 = useTransform(scrollYProgress, [0.46, 0.50, 0.58, 0.62], [0, 1, 1, 0]);
+  const vOp6 = useTransform(scrollYProgress, [0.58, 0.62, 0.70, 0.74], [0, 1, 1, 0]);
+  const vOp7 = useTransform(scrollYProgress, [0.70, 0.74, 0.82, 0.86], [0, 1, 1, 0]);
+  const vOp8 = useTransform(scrollYProgress, [0.84, 0.88, 1.00], [0, 1, 1]);
 
-  const pView1 = useTransform(scrollYProgress, [0, 0.1, 0.15], ["auto", "auto", "none"]);
-  const pView2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], ["none", "auto", "auto", "none"]);
-  const pView3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], ["none", "auto", "auto", "none"]);
-  const pView4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], ["none", "auto", "auto", "none"]);
-  const pView7 = useTransform(scrollYProgress, [0.85, 0.9, 1], ["none", "auto", "auto"]);
+  // Pointer events for interactive visuals
+  const pView1 = useTransform(scrollYProgress, [0.00, 0.08, 0.12], ["auto", "auto", "none"]);
+  const pView2 = useTransform(scrollYProgress, [0.08, 0.13, 0.21, 0.26], ["none", "auto", "auto", "none"]);
+  const pView3 = useTransform(scrollYProgress, [0.21, 0.26, 0.34, 0.38], ["none", "auto", "auto", "none"]);
+  const pView4 = useTransform(scrollYProgress, [0.34, 0.38, 0.46, 0.50], ["none", "auto", "auto", "none"]);
+  const pView8 = useTransform(scrollYProgress, [0.84, 0.88, 1.00], ["none", "auto", "auto"]);
 
   return (
-    <section id="story" ref={containerRef} className="relative h-[700vh] bg-slate-900 text-white">
+    <section id="story" ref={containerRef} className="relative h-[800vh] bg-slate-900 text-white">
       {/* Header section */}
       <div className="absolute top-0 left-0 right-0 pt-24 pb-16 z-20 pointer-events-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -79,6 +84,7 @@ export function StorytellingScroll() {
               { op: op5, icon: <Truck className="w-5 h-5" />, title: "Transport Route Calculation", body: "Detailed transport routes are calculated automatically. Every logistics leg — distances, modes, and emissions — mapped from raw material origin to final assembly." },
               { op: op6, icon: <Cpu className="w-5 h-5" />, title: "Impact Calculation", body: "Our engine calculates precise environmental impact per component. PEF-aligned lifecycle assessment, automated and accurate — without the €15K consultant fee." },
               { op: op7, icon: <QrCode className="w-5 h-5" />, title: "Passport & Certifications", body: "Generate a Digital Product Passport and certifications. A living, GS1-compliant document ready for ESPR 2026 — verifiable, scannable, and built to prove your claims." },
+              { op: op8, icon: <Sparkles className="w-5 h-5" />, title: "Your Intelligent Product", body: "The journey is complete. Your product is now a living, intelligent asset — connecting directly to end users with spare parts, care guides, documentation, and verified sustainability claims." },
             ].map(({ op, icon, title, body }, i) => (
               <motion.div key={i} style={{ opacity: op }} className="absolute inset-y-0 flex flex-col justify-center">
                 <div className="w-11 h-11 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mb-6 text-indigo-400 shadow-lg shadow-indigo-500/10">
@@ -320,8 +326,53 @@ export function StorytellingScroll() {
               </div>
             </motion.div>
 
-            {/* Visual 7: 3D Chair with DPP hotspot */}
-            <motion.div style={{ opacity: vOp7, pointerEvents: pView7 as any }}
+            {/* Visual 7: DPP mini-card */}
+            <motion.div style={{ opacity: vOp7 }}
+              className="absolute inset-0 flex items-center justify-center">
+              <div className="w-72 rounded-3xl border border-slate-700 bg-slate-800/90 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden">
+                <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-5 border-b border-slate-700">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase">Digital Product Passport</span>
+                    <span className="text-[10px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-lg">ESPR 2026</span>
+                  </div>
+                  <p className="text-base font-bold text-white leading-tight">West Elm Slope<br />Leather Chair</p>
+                  <p className="text-[10px] text-slate-400 font-mono mt-1">DPP-2024-WE-SL-0042</p>
+                </div>
+                <div className="p-5 space-y-4">
+                  <div>
+                    <div className="flex justify-between text-[11px] mb-1.5">
+                      <span className="text-slate-400 font-medium uppercase tracking-wide">Sustainability</span>
+                      <span className="text-emerald-400 font-bold">94 / 100</span>
+                    </div>
+                    <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style={{ width: '94%' }} />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    {[
+                      { label: "CO₂", value: "12kg" },
+                      { label: "Repair", value: "9/10" },
+                      { label: "Lifecycle", value: "25yr" },
+                    ].map(s => (
+                      <div key={s.label} className="flex-1 rounded-xl bg-slate-900 border border-slate-700 p-2.5 text-center">
+                        <p className="text-base font-bold text-white">{s.value}</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">{s.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-3 bg-slate-900 rounded-xl p-3 border border-slate-700">
+                    <QrCode className="w-10 h-10 text-white shrink-0" />
+                    <div>
+                      <p className="text-[11px] font-semibold text-white">Scan to verify</p>
+                      <p className="text-[10px] text-slate-500">GS1-compliant · Verified</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Visual 8: Grand Finale — Intelligent Product chair with radiating QR tag */}
+            <motion.div style={{ opacity: vOp8, pointerEvents: pView8 as any }}
               className="absolute inset-0 flex items-center justify-center">
               <PassportChair3DCanvas />
             </motion.div>
