@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { Box, Layers, Users, Truck, TreePine, Cpu, QrCode } from "lucide-react";
-import { FinishedProduct3DCanvas, RawMaterial3DCanvas, Components3DCanvas } from "./Native3DModels";
+import { FinishedProduct3DCanvas, RawMaterial3DCanvas, Components3DCanvas, PassportChair3DCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -320,52 +320,10 @@ export function StorytellingScroll() {
               </div>
             </motion.div>
 
-            {/* Visual 7: DPP mini-card */}
+            {/* Visual 7: 3D Chair with DPP hotspot */}
             <motion.div style={{ opacity: vOp7, pointerEvents: pView7 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="w-72 rounded-3xl border border-slate-700 bg-slate-800/90 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden">
-                {/* Card header */}
-                <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-5 border-b border-slate-700">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase">Digital Product Passport</span>
-                    <span className="text-[10px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-lg">ESPR 2026</span>
-                  </div>
-                  <p className="text-base font-bold text-white leading-tight">West Elm Slope<br />Leather Chair</p>
-                  <p className="text-[10px] text-slate-400 font-mono mt-1">DPP-2024-WE-SL-0042</p>
-                </div>
-                {/* Scores */}
-                <div className="p-5 space-y-4">
-                  <div>
-                    <div className="flex justify-between text-[11px] mb-1.5">
-                      <span className="text-slate-400 font-medium uppercase tracking-wide">Sustainability</span>
-                      <span className="text-emerald-400 font-bold">94 / 100</span>
-                    </div>
-                    <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style={{ width: '94%' }} />
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    {[
-                      { label: "CO₂", value: "12kg", color: "#6366f1" },
-                      { label: "Repair", value: "9/10", color: "#10b981" },
-                      { label: "Lifecycle", value: "25yr", color: "#f59e0b" },
-                    ].map(s => (
-                      <div key={s.label} className="flex-1 rounded-xl bg-slate-900 border border-slate-700 p-2.5 text-center">
-                        <p className="text-base font-bold text-white">{s.value}</p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{s.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                  {/* QR */}
-                  <div className="flex items-center gap-3 bg-slate-900 rounded-xl p-3 border border-slate-700">
-                    <QrCode className="w-10 h-10 text-white shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-semibold text-white">Scan to verify</p>
-                      <p className="text-[10px] text-slate-500">GS1-compliant · Verified</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <PassportChair3DCanvas />
             </motion.div>
 
           </div>

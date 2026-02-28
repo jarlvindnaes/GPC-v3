@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Float, PresentationControls, ContactShadows, Html, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -152,6 +152,118 @@ export function FinishedProduct3DCanvas() {
     );
 }
 
+
+// ----------------------------------------------------------------------------
+// 2b. Passport Chair — 3D chair with hoverable QR hotspot (StorytellingScroll step 7)
+// ----------------------------------------------------------------------------
+function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }) {
+    const { scene } = useGLTF(CHAIR_MODEL);
+    const passportScene = useMemo(() => scene.clone(), [scene]);
+    const group = useRef<THREE.Group>(null);
+    useFrame(() => {
+        if (group.current) {
+            group.current.rotation.y += 0.002;
+        }
+    });
+    return (
+        <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
+            <group ref={group} position={[0, -0.3, 0]}>
+                <primitive object={passportScene} scale={3.8} />
+                <Html position={[0.6, 2.8, 0.8]} center>
+                    <div
+                        className="relative cursor-pointer"
+                        onMouseEnter={() => onHover(true)}
+                        onMouseLeave={() => onHover(false)}
+                    >
+                        <div className="w-5 h-5 rounded-full bg-white/90 border-2 border-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/40">
+                            <svg className="w-3 h-3 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                            </svg>
+                        </div>
+                        <div className="absolute inset-0 w-5 h-5 rounded-full border-2 border-indigo-400/60 animate-ping" />
+                    </div>
+                </Html>
+            </group>
+        </Float>
+    );
+}
+
+export function PassportChair3DCanvas() {
+    const [hovered, setHovered] = useState(false);
+    return (
+        <div className="relative cursor-grab active:cursor-grabbing" style={{ width: '450px', height: '450px' }}>
+            <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+                <ambientLight intensity={0.7} />
+                <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
+                <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
+                <PresentationControls
+                    global
+                    snap={false}
+                    rotation={[0.08, -Math.PI / 4, 0]}
+                    polar={[-Math.PI / 4, Math.PI / 4]}
+                    azimuth={[-Math.PI, Math.PI]}
+                    config={{ mass: 4, tension: 120, friction: 40 }}
+                >
+                    <PassportChairModel onHover={setHovered} />
+                </PresentationControls>
+                <ContactShadows position={[0, -0.3, 0]} opacity={0.25} scale={12} blur={3} far={5} color="#000" />
+                <Environment preset="studio" />
+            </Canvas>
+
+            {/* DPP card overlay — appears on hotspot hover */}
+            <div
+                className={`absolute top-6 right-0 w-56 rounded-2xl border border-slate-700 bg-slate-800/95 backdrop-blur-md shadow-2xl shadow-black/60 overflow-hidden transition-all duration-300 ${hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`}
+            >
+                <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-4 border-b border-slate-700">
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-[9px] font-bold text-indigo-400 tracking-widest uppercase">Digital Product Passport</span>
+                        <span className="text-[9px] font-bold bg-slate-900 text-white px-1.5 py-0.5 rounded-md">ESPR 2026</span>
+                    </div>
+                    <p className="text-sm font-bold text-white leading-tight">West Elm Slope Leather Chair</p>
+                    <p className="text-[9px] text-slate-400 font-mono mt-0.5">DPP-2024-WE-SL-0042</p>
+                </div>
+                <div className="p-4 space-y-3">
+                    <div>
+                        <div className="flex justify-between text-[10px] mb-1">
+                            <span className="text-slate-400 font-medium uppercase tracking-wide">Sustainability</span>
+                            <span className="text-emerald-400 font-bold">94 / 100</span>
+                        </div>
+                        <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500" style={{ width: '94%' }} />
+                        </div>
+                    </div>
+                    <div className="flex gap-1.5">
+                        {[
+                            { label: "CO₂", value: "12kg" },
+                            { label: "Repair", value: "9/10" },
+                            { label: "Lifecycle", value: "25yr" },
+                        ].map(s => (
+                            <div key={s.label} className="flex-1 rounded-lg bg-slate-900 border border-slate-700 p-1.5 text-center">
+                                <p className="text-xs font-bold text-white">{s.value}</p>
+                                <p className="text-[9px] text-slate-500">{s.label}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex items-center gap-2 bg-slate-900 rounded-lg p-2 border border-slate-700">
+                        <svg className="w-7 h-7 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                        </svg>
+                        <div>
+                            <p className="text-[10px] font-semibold text-white">Scan to verify</p>
+                            <p className="text-[9px] text-slate-500">GS1-compliant · Verified</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Hint label */}
+            <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg transition-opacity duration-300 ${hovered ? 'opacity-0' : 'opacity-100'}`}>
+                <p className="text-sm font-semibold text-white mb-1">Your Product, Passport-Ready</p>
+                <p className="text-xs text-slate-400">Hover the tag to view the DPP</p>
+            </div>
+        </div>
+    );
+}
 
 // ----------------------------------------------------------------------------
 // 3. DPP Interactive Product — Large hero 3D + Stripe-style info panel
