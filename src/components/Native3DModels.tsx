@@ -4,12 +4,14 @@ import { Environment, Float, PresentationControls, ContactShadows, Html, useGLTF
 import * as THREE from "three";
 
 const CHAIR_MODEL = import.meta.env.BASE_URL + "models/west_elm_slope_leather_chair.glb";
+const BOLT_MODEL = import.meta.env.BASE_URL + "models/bolt_m10x25_hexagon_head (1).glb";
+const COPPER_ORE_MODEL = import.meta.env.BASE_URL + "models/copper_ore.glb";
 
 // ----------------------------------------------------------------------------
-// 1. Raw Material Model (using quartz.glb)
+// 1. Raw Material Model (using copper_ore.glb)
 // ----------------------------------------------------------------------------
 function CustomRockModel() {
-    const { scene } = useGLTF(import.meta.env.BASE_URL + "models/quartz.glb");
+    const { scene } = useGLTF(COPPER_ORE_MODEL);
     const mesh = useRef<THREE.Group>(null);
     useFrame(() => {
         if (mesh.current) {
@@ -27,9 +29,10 @@ function CustomRockModel() {
 }
 
 // ----------------------------------------------------------------------------
-// Components/Bolt Model (Procedural bolt with metallic texture)
+// Components/Bolt Model (using bolt_m10x25_hexagon_head GLB)
 // ----------------------------------------------------------------------------
 function BoltModel() {
+    const { scene } = useGLTF(BOLT_MODEL);
     const mesh = useRef<THREE.Group>(null);
     useFrame(() => {
         if (mesh.current) {
@@ -40,35 +43,7 @@ function BoltModel() {
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
             <group ref={mesh} position={[0, -0.5, 0]} scale={2.5}>
-                {/* Bolt head - hexagonal */}
-                <mesh position={[0, 0.4, 0]}>
-                    <cylinderGeometry args={[0.5, 0.5, 0.25, 6]} />
-                    <meshStandardMaterial
-                        color="#8a8a8a"
-                        metalness={0.95}
-                        roughness={0.15}
-                        envMapIntensity={1.5}
-                    />
-                </mesh>
-                {/* Bolt shaft with threading appearance */}
-                <mesh position={[0, -0.2, 0]}>
-                    <cylinderGeometry args={[0.25, 0.25, 1.4, 32]} />
-                    <meshStandardMaterial
-                        color="#a0a0a0"
-                        metalness={0.9}
-                        roughness={0.2}
-                        envMapIntensity={1.2}
-                    />
-                </mesh>
-                {/* Bolt tip */}
-                <mesh position={[0, -0.95, 0]}>
-                    <coneGeometry args={[0.25, 0.15, 16]} />
-                    <meshStandardMaterial
-                        color="#a0a0a0"
-                        metalness={0.9}
-                        roughness={0.2}
-                    />
-                </mesh>
+                <primitive object={scene} />
             </group>
         </Float>
     );
