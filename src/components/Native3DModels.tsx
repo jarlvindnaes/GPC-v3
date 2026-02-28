@@ -264,9 +264,8 @@ export function PassportChair3DCanvas() {
             </div>
 
             {/* Hint label — fades out when hovered */}
-            <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3 shadow-lg transition-all duration-300 ${hovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-                <p className="text-sm font-semibold text-white mb-1 text-center">Your Intelligent Product</p>
-                <p className="text-xs text-slate-400 text-center">Hover the tag to explore what's inside</p>
+            <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 transition-all duration-300 ${hovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
+                <p className="text-xs text-slate-500 text-center">Hover the tag to explore</p>
             </div>
         </div>
     );

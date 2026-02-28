@@ -10,7 +10,7 @@ export function StorytellingScroll() {
     offset: ["start start", "end end"]
   });
 
-  const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const lineProgress = useTransform(scrollYProgress, [0, 0.86], ["0%", "50%"]);
 
   // Text opacities — 8 steps spread evenly
   const op1 = useTransform(scrollYProgress, [0.00, 0.04, 0.08, 0.12], [0, 1, 1, 0]);
@@ -39,6 +39,9 @@ export function StorytellingScroll() {
   const pView4 = useTransform(scrollYProgress, [0.34, 0.38, 0.46, 0.50], ["none", "auto", "auto", "none"]);
   const pView8 = useTransform(scrollYProgress, [0.84, 0.88, 1.00], ["none", "auto", "auto"]);
 
+  // Fade out left/right panels when step 8 takes over
+  const panelFade = useTransform(scrollYProgress, [0.82, 0.88], [1, 0]);
+
   return (
     <section id="story" ref={containerRef} className="relative h-[800vh] bg-slate-900 text-white">
       {/* Header section */}
@@ -64,14 +67,14 @@ export function StorytellingScroll() {
       <div className="sticky top-0 h-screen overflow-hidden flex items-center">
 
         {/* Metro Line */}
-        <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-slate-800 md:-translate-x-1/2 z-0">
+        <motion.div style={{ opacity: panelFade }} className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-slate-800 md:-translate-x-1/2 z-0">
           <motion.div
             className="absolute top-0 left-0 right-0 bg-gradient-to-b from-indigo-500 to-violet-500"
             style={{ height: lineProgress }}
           />
-        </div>
+        </motion.div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-12">
+        <motion.div style={{ opacity: panelFade }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-12">
 
           {/* ── Text panel (left) ── */}
           <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative h-[420px] flex items-center">
@@ -84,7 +87,6 @@ export function StorytellingScroll() {
               { op: op5, icon: <Truck className="w-5 h-5" />, title: "Transport Route Calculation", body: "Detailed transport routes are calculated automatically. Every logistics leg — distances, modes, and emissions — mapped from raw material origin to final assembly." },
               { op: op6, icon: <Cpu className="w-5 h-5" />, title: "Impact Calculation", body: "Our engine calculates precise environmental impact per component. PEF-aligned lifecycle assessment, automated and accurate — without the €15K consultant fee." },
               { op: op7, icon: <QrCode className="w-5 h-5" />, title: "Passport & Certifications", body: "Generate a Digital Product Passport and certifications. A living, GS1-compliant document ready for ESPR 2026 — verifiable, scannable, and built to prove your claims." },
-              { op: op8, icon: <Sparkles className="w-5 h-5" />, title: "Your Intelligent Product", body: "The journey is complete. Your product is now a living, intelligent asset — connecting directly to end users with spare parts, care guides, documentation, and verified sustainability claims." },
             ].map(({ op, icon, title, body }, i) => (
               <motion.div key={i} style={{ opacity: op }} className="absolute inset-y-0 flex flex-col justify-center">
                 <div className="w-11 h-11 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mb-6 text-indigo-400 shadow-lg shadow-indigo-500/10">
@@ -154,7 +156,7 @@ export function StorytellingScroll() {
             {/* Visual 4: Raw Material (3D rock) */}
             <motion.div style={{ opacity: vOp4, pointerEvents: pView4 as any }}
               className="absolute inset-0 flex items-center justify-center">
-              <div className="relative">
+              <div className="relative" style={{ marginTop: '-30px' }}>
                 <RawMaterial3DCanvas />
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
                   <p className="text-sm font-semibold text-white mb-1">Iron Ore — Raw Material</p>
@@ -428,12 +430,28 @@ export function StorytellingScroll() {
             </motion.div>
 
           </div>
-        </div>
+        </motion.div>
 
         {/* Visual 8: Grand Finale — centered full-viewport, the scroll line ends here */}
         <motion.div style={{ opacity: vOp8, pointerEvents: pView8 as any }}
-          className="absolute inset-0 flex items-center justify-center z-20">
+          className="absolute inset-0 flex flex-col items-center justify-center z-20">
           <PassportChair3DCanvas />
+          <motion.div
+            className="text-center -mt-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 shadow-lg shadow-indigo-500/10">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Your Intelligent Product</h2>
+            </div>
+            <p className="text-base text-slate-400 max-w-md mx-auto leading-relaxed">
+              The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation, care guides, and verified claims, all accessible with a single scan.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>
