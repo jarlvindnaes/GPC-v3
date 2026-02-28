@@ -5,24 +5,23 @@ import * as THREE from "three";
 
 const CHAIR_MODEL = import.meta.env.BASE_URL + "models/west_elm_slope_leather_chair.glb";
 const BOLT_MODEL = import.meta.env.BASE_URL + "models/bolt_m10x25_hexagon_head (1).glb";
-const COPPER_ORE_MODEL = import.meta.env.BASE_URL + "models/copper_ore.glb";
+const QUARTZ_MODEL = import.meta.env.BASE_URL + "models/quartz.glb";
 
 // ----------------------------------------------------------------------------
-// 1. Raw Material Model (using copper_ore.glb)
+// 1. Raw Material Model (using quartz.glb)
 // ----------------------------------------------------------------------------
 function CustomRockModel() {
-    const { scene } = useGLTF(COPPER_ORE_MODEL);
+    const { scene } = useGLTF(QUARTZ_MODEL);
     const mesh = useRef<THREE.Group>(null);
     useFrame(() => {
         if (mesh.current) {
-            // Slow continuous rotation
             mesh.current.rotation.y += 0.003;
         }
     });
     return (
         <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
-                <primitive object={scene} scale={1.07} />
+                <primitive object={scene} scale={1.6} />
             </group>
         </Float>
     );
@@ -159,9 +158,9 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     return (
         <Float floatIntensity={0.8} rotationIntensity={0.03} speed={1.2}>
             <group position={[0, -0.3, 0]}>
-                <primitive object={passportScene} scale={3.6} />
+                <primitive object={passportScene} scale={3.17} />
                 {/* QR tag on the seat — positioned in 3D space */}
-                <Html position={[0.0, 0.76, 0.35]} center>
+                <Html position={[0.0, 0.67, 0.31]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
