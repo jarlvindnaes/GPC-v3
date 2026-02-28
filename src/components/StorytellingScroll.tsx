@@ -94,17 +94,22 @@ export function StorytellingScroll() {
           </div>
 
           {/* ── Visual panel (right) ── */}
-          <div className="hidden md:flex flex-1 relative min-h-[400px] md:min-h-[600px] items-center justify-center">
+          <div className="hidden md:flex flex-1 relative min-h-[500px] md:min-h-[650px] items-center justify-center">
 
-            {/* Visual 1: Chair — 450x450px centered */}
+            {/* Visual 1: Chair */}
             <motion.div style={{ opacity: vOp1, pointerEvents: pView1 as any }}
               className="absolute inset-0 flex items-center justify-center">
               <div className="relative">
                 <FinishedProduct3DCanvas />
-                {/* Chair info label */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
-                  <p className="text-sm font-semibold text-white mb-1">West Elm Slope Leather Chair</p>
-                  <p className="text-xs text-slate-400">Drag to rotate • Interactive 3D model</p>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/30 flex items-center gap-4">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-semibold text-white">West Elm Slope Leather Chair</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">247 components • 18 suppliers</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 pl-3 border-l border-slate-700">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Ready</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -114,10 +119,19 @@ export function StorytellingScroll() {
               className="absolute inset-0 flex items-center justify-center">
               <div className="relative">
                 <Components3DCanvas />
-                {/* Component info label */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
-                  <p className="text-sm font-semibold text-white mb-1">Steel Bolt — M8x30</p>
-                  <p className="text-xs text-slate-400">Every component tracked • Drag to rotate</p>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/30">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col">
+                      <p className="text-sm font-semibold text-white">Steel Bolt — ISO 4762 M8×30</p>
+                      <div className="flex items-center gap-3 mt-1">
+                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Material</span>
+                        <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
+                        <span className="text-slate-700">·</span>
+                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Weight</span>
+                        <span className="text-[11px] text-slate-300">24g</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -153,9 +167,23 @@ export function StorytellingScroll() {
               className="absolute inset-0 flex items-center justify-center">
               <div className="relative" style={{ marginTop: '-30px' }}>
                 <RawMaterial3DCanvas />
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl px-4 py-3 shadow-lg whitespace-nowrap">
-                  <p className="text-sm font-semibold text-white mb-1">Iron Ore — Raw Material</p>
-                  <p className="text-xs text-slate-400">Traced to source • Drag to rotate</p>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl px-5 py-3.5 shadow-2xl shadow-black/30">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col">
+                      <p className="text-sm font-semibold text-white">Iron Ore — Raw Material</p>
+                      <div className="flex items-center gap-3 mt-1">
+                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Origin</span>
+                        <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
+                        <span className="text-slate-700">·</span>
+                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Grade</span>
+                        <span className="text-[11px] text-slate-300">Fe 65%</span>
+                      </div>
+                    </div>
+                    <div className="pl-3 border-l border-slate-700 flex flex-col items-center">
+                      <span className="text-xs font-bold text-emerald-400">✓</span>
+                      <span className="text-[9px] text-slate-500 uppercase">Verified</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>

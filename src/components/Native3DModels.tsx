@@ -51,8 +51,8 @@ function BoltModel() {
 
 export function RawMaterial3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[450px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[580px] aspect-square mx-auto">
+            <Canvas camera={{ position: [0, 0.5, 6], fov: 40 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
                 <directionalLight position={[-4, 6, -4]} intensity={0.6} color="#c7d2fe" />
@@ -80,8 +80,8 @@ export function RawMaterial3DCanvas() {
 // ----------------------------------------------------------------------------
 export function Components3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[450px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.5, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[580px] aspect-square mx-auto">
+            <Canvas camera={{ position: [0, 0.5, 6], fov: 40 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
@@ -123,8 +123,8 @@ function CustomChairModel() {
 
 export function FinishedProduct3DCanvas() {
     return (
-        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[450px] aspect-square mx-auto">
-            <Canvas camera={{ position: [0, 0.8, 6], fov: 42 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative cursor-grab active:cursor-grabbing w-full max-w-[580px] aspect-square mx-auto">
+            <Canvas camera={{ position: [0, 0.8, 6], fov: 40 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.7} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
