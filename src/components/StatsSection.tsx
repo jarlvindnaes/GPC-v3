@@ -1,43 +1,36 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "motion/react";
 
-interface GlobePoint {
-  phi: number;
-  theta: number;
+interface Node {
+  baseX: number;
+  baseY: number;
+  x: number;
+  y: number;
+  radius: number;
 }
 
-function fibonacciSphere(n: number): GlobePoint[] {
-  const pts: GlobePoint[] = [];
-  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < n; i++) {
-    const y = 1 - (i / (n - 1)) * 2;
-    const radiusAtY = Math.sqrt(1 - y * y);
-    const theta = goldenAngle * i;
-    const phi = Math.asin(y);
-    pts.push({ phi, theta });
-  }
-  return pts;
-}
-
-function GlobeCanvas() {
+function NetworkCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const frameRef = useRef(0);
-  const pointsRef = useRef(fibonacciSphere(120));
+  const mouseRef = useRef({ x: 0, y: 0, active: false });
+  const nodesRef = useRef<Node[]>([]);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    mouseRef.current = {
-      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
-      y: ((e.clientY - rect.top) / rect.height) * 2 - 1,
-    };
+  const initNodes = useCallback(() => {
+    const count = 150;
+    const nodes: Node[] = [];
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2;
+      const radiusVariation = 400 + Math.random() * 250;
+      const x = 600 + Math.cos(angle) * radiusVariation;
+      const y = 300 + Math.sin(angle) * radiusVariation;
+      const r = Math.random() * 3 + 1;
+      nodes.push({ baseX: x, baseY: y, x, y, radius: r });
+    }
+    nodesRef.current = nodes;
   }, []);
 
-  const handleMouseLeave = useCallback(() => {
-    mouseRef.current = { x: 0, y: 0 };
-  }, []);
+  useEffect(() => {
+    initNodes();
+  }, [initNodes]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,14 +38,26 @@ function GlobeCanvas() {
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    parent.addEventListener("mousemove", handleMouseMove);
-    parent.addEventListener("mouseleave", handleMouseLeave);
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animId: number;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let animId: number;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = parent.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        active: true,
+      };
+    };
+    const handleMouseLeave = () => {
+      mouseRef.current.active = false;
+    };
+
+    parent.addEventListener("mousemove", handleMouseMove);
+    parent.addEventListener("mouseleave", handleMouseLeave);
 
     const resize = () => {
       const w = parent.clientWidth;
@@ -66,104 +71,61 @@ function GlobeCanvas() {
     resize();
     window.addEventListener("resize", resize);
 
-    const points = pointsRef.current;
-
-    const draw = (time: number) => {
+    const draw = () => {
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;
       ctx.clearRect(0, 0, w, h);
 
-      const cx = w / 2;
-      const cy = h / 2;
-      const radius = Math.min(w, h) * 0.38;
-      const focalLength = radius * 3;
+      const scaleX = w / 1200;
+      const scaleY = h / 1200;
+      const nodes = nodesRef.current;
+      const mouse = mouseRef.current;
 
-      const autoRotY = time * 0.0001;
-      const tiltX = mouseRef.current.y * 0.3;
-      const tiltY = mouseRef.current.x * 0.4;
+      const anchorX = 600 * scaleX;
+      const anchorY = 900 * scaleY;
 
-      const rotY = autoRotY + tiltY;
-      const rotX = tiltX;
+      for (const node of nodes) {
+        const targetX = node.baseX * scaleX;
+        const targetY = node.baseY * scaleY;
+        let goalX = targetX;
+        let goalY = targetY;
 
-      const cosRY = Math.cos(rotY);
-      const sinRY = Math.sin(rotY);
-      const cosRX = Math.cos(rotX);
-      const sinRX = Math.sin(rotX);
-
-      const projected: { sx: number; sy: number; z: number; depth: number }[] = [];
-
-      for (const p of points) {
-        const cosPhi = Math.cos(p.phi);
-        let x3 = cosPhi * Math.cos(p.theta);
-        let y3 = Math.sin(p.phi);
-        let z3 = cosPhi * Math.sin(p.theta);
-
-        const x1 = x3 * cosRY - z3 * sinRY;
-        const z1 = x3 * sinRY + z3 * cosRY;
-        const y1 = y3 * cosRX - z1 * sinRX;
-        const z2 = y3 * sinRX + z1 * cosRX;
-
-        const scale = focalLength / (focalLength + z2 * radius);
-        const sx = cx + x1 * radius * scale;
-        const sy = cy + y1 * radius * scale;
-        const depth = (z2 + 1) / 2;
-
-        projected.push({ sx, sy, z: z2, depth });
-      }
-
-      // Draw connections between nearby nodes (front-facing only)
-      ctx.lineWidth = 0.5;
-      for (let i = 0; i < projected.length; i++) {
-        const a = projected[i];
-        if (a.z < -0.2) continue;
-        for (let j = i + 1; j < projected.length; j++) {
-          const b = projected[j];
-          if (b.z < -0.2) continue;
-          const dx = a.sx - b.sx;
-          const dy = a.sy - b.sy;
+        if (mouse.active) {
+          const dx = mouse.x - targetX;
+          const dy = mouse.y - targetY;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const maxDist = radius * 0.35;
-          if (dist < maxDist) {
-            const alpha = (1 - dist / maxDist) * Math.min(a.depth, b.depth) * 0.4;
-            ctx.strokeStyle = `rgba(129, 140, 248, ${alpha})`;
-            ctx.beginPath();
-            ctx.moveTo(a.sx, a.sy);
-            ctx.lineTo(b.sx, b.sy);
-            ctx.stroke();
+          const pullRadius = 250;
+          if (dist < pullRadius) {
+            const strength = (1 - dist / pullRadius) * 40;
+            goalX += (dx / dist) * strength;
+            goalY += (dy / dist) * strength;
           }
         }
+
+        node.x += (goalX - node.x) * 0.08;
+        node.y += (goalY - node.y) * 0.08;
       }
 
-      // Draw nodes (sort back to front)
-      const sorted = projected.map((p, i) => ({ ...p, i })).sort((a, b) => a.z - b.z);
-      for (const p of sorted) {
-        if (p.z < -0.5) continue;
-        const nodeRadius = 1 + p.depth * 2.5;
-        const alpha = Math.max(0, p.depth * 0.9);
-
-        if (p.depth > 0.6) {
-          ctx.shadowColor = "rgba(129, 140, 248, 0.6)";
-          ctx.shadowBlur = 8;
-        } else {
-          ctx.shadowColor = "transparent";
-          ctx.shadowBlur = 0;
-        }
-
-        ctx.fillStyle = `rgba(165, 180, 252, ${alpha})`;
+      // Draw connecting lines from anchor to each node
+      ctx.lineWidth = 1.5 * Math.min(scaleX, scaleY);
+      for (const node of nodes) {
+        const cpx = (anchorX + node.x) / 2;
+        const cpy = (anchorY + node.y) / 2;
+        ctx.strokeStyle = "rgba(99, 102, 241, 0.35)";
         ctx.beginPath();
-        ctx.arc(p.sx, p.sy, nodeRadius, 0, Math.PI * 2);
+        ctx.moveTo(anchorX, anchorY);
+        ctx.quadraticCurveTo(cpx, cpy, node.x, node.y);
+        ctx.stroke();
+      }
+
+      // Draw nodes
+      for (const node of nodes) {
+        const r = node.radius * Math.min(scaleX, scaleY);
+        ctx.fillStyle = "rgba(99, 102, 241, 0.8)";
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
         ctx.fill();
       }
-
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-
-      // Subtle equator ring
-      ctx.strokeStyle = "rgba(129, 140, 248, 0.08)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, radius, radius * 0.3, 0, 0, Math.PI * 2);
-      ctx.stroke();
 
       animId = requestAnimationFrame(draw);
     };
@@ -176,7 +138,7 @@ function GlobeCanvas() {
       parent.removeEventListener("mousemove", handleMouseMove);
       parent.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [handleMouseMove, handleMouseLeave]);
+  }, []);
 
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 }
@@ -252,9 +214,9 @@ export function StatsSection() {
         </div>
       </div>
 
-      {/* 3D Globe visualization */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] sm:w-[1100px] sm:h-[1100px] opacity-30 pointer-events-auto mix-blend-screen z-0">
-        <GlobeCanvas />
+      {/* Abstract circular visual — nodes gravitate toward mouse */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] opacity-30 pointer-events-auto mix-blend-screen z-0">
+        <NetworkCanvas />
       </div>
     </section>
   );
