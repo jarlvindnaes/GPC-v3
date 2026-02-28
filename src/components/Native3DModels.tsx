@@ -5,13 +5,13 @@ import * as THREE from "three";
 
 const CHAIR_MODEL = import.meta.env.BASE_URL + "models/west_elm_slope_leather_chair.glb";
 const BOLT_MODEL = import.meta.env.BASE_URL + "models/bolt_m10x25_hexagon_head (1).glb";
-const QUARTZ_MODEL = import.meta.env.BASE_URL + "models/quartz.glb";
+const EMERALD_MODEL = import.meta.env.BASE_URL + "models/emerald_in_quartz__for_games.glb";
 
 // ----------------------------------------------------------------------------
-// 1. Raw Material Model (using quartz.glb)
+// 1. Raw Material Model (using emerald_in_quartz__for_games.glb)
 // ----------------------------------------------------------------------------
 function CustomRockModel() {
-    const { scene } = useGLTF(QUARTZ_MODEL);
+    const { scene } = useGLTF(EMERALD_MODEL);
     const mesh = useRef<THREE.Group>(null);
     useFrame(() => {
         if (mesh.current) {
@@ -21,7 +21,7 @@ function CustomRockModel() {
     return (
         <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
-                <primitive object={scene} scale={1.6} />
+                <primitive object={scene} scale={2.56} />
             </group>
         </Float>
     );
@@ -157,10 +157,10 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     const passportScene = useMemo(() => scene.clone(), [scene]);
     return (
         <Float floatIntensity={0.8} rotationIntensity={0.03} speed={1.2}>
-            <group position={[0, -0.3, 0]}>
+            <group position={[0, -0.7, 0]}>
                 <primitive object={passportScene} scale={3.17} />
                 {/* QR tag on the seat — positioned in 3D space */}
-                <Html position={[0.0, 0.67, 0.31]} center>
+                <Html position={[0.0, 0.67, 0.35]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
@@ -200,7 +200,7 @@ export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
         <div className="relative w-[min(90vw,800px)] h-[min(70vw,600px)] mx-auto">
-            <Canvas camera={{ position: [0, 0.8, 5], fov: 36 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+            <Canvas camera={{ position: [0, 0.3, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
