@@ -11,14 +11,14 @@ const CHAIR_MODEL = import.meta.env.BASE_URL + "models/west_elm_slope_leather_ch
 function CustomRockModel() {
     const { scene } = useGLTF(import.meta.env.BASE_URL + "models/quartz.glb");
     const mesh = useRef<THREE.Group>(null);
-    useFrame((state) => {
+    useFrame(() => {
         if (mesh.current) {
-            mesh.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
-            mesh.current.rotation.y += 0.004;
+            // Slow continuous rotation
+            mesh.current.rotation.y += 0.003;
         }
     });
     return (
-        <Float floatIntensity={1.5} rotationIntensity={0.8} speed={1.2}>
+        <Float floatIntensity={1.5} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
                 <primitive object={scene} scale={1.5} />
             </group>
@@ -31,9 +31,10 @@ function CustomRockModel() {
 // ----------------------------------------------------------------------------
 function BoltModel() {
     const mesh = useRef<THREE.Group>(null);
-    useFrame((state) => {
+    useFrame(() => {
         if (mesh.current) {
-            mesh.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
+            // Slow continuous rotation
+            mesh.current.rotation.y += 0.003;
         }
     });
     return (
@@ -134,9 +135,10 @@ export function Components3DCanvas() {
 function CustomChairModel() {
     const { scene } = useGLTF(CHAIR_MODEL);
     const group = useRef<THREE.Group>(null);
-    useFrame((state) => {
+    useFrame(() => {
         if (group.current) {
-            group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.15;
+            // Slow continuous rotation
+            group.current.rotation.y += 0.002;
         }
     });
     return (
@@ -183,9 +185,10 @@ function DPPChairModel() {
     const { scene } = useGLTF(CHAIR_MODEL);
     const productScene = useMemo(() => scene.clone(), [scene]);
     const group = useRef<THREE.Group>(null);
-    useFrame((state) => {
+    useFrame(() => {
         if (group.current) {
-            group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.08;
+            // Slow continuous rotation
+            group.current.rotation.y += 0.002;
         }
     });
     return (
