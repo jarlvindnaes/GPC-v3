@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, PlayCircle } from "lucide-react";
 
@@ -7,14 +7,217 @@ const SCREENSHOTS = [
   { src: import.meta.env.BASE_URL + "screenshots/supply-chain_crop.png", label: "Supply Chain Map", desc: "Global transport routes & logistics tracking" },
 ];
 
+// ─── Floating Network Canvas ─────────────────────────────────────────────────
+
+interface NetNode {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  depth: number;
+  type: number;
+  label: string;
+  phase: number;
+}
+
+const NODE_LABELS: { type: number; color: string; labels: string[] }[] = [
+  { type: 0, color: "#818cf8", labels: ["Oak Frame", "Steel Bolt", "Leather Seat", "Arm Rest", "Back Panel", "Leg Assembly", "Cross Bar", "Cushion Core"] },
+  { type: 1, color: "#60a5fa", labels: ["Timber Mill", "Steel Foundry", "Tannery", "Foam Factory", "Paint Shop", "CNC Router", "Welder", "Finisher"] },
+  { type: 2, color: "#a78bfa", labels: ["Dining Chair", "Office Chair", "Lounge Sofa", "Bar Stool", "Bench", "Side Table", "Desk", "Shelf Unit"] },
+  { type: 3, color: "#34d399", labels: ["Retailer EU", "D2C Portal", "Warranty", "Spare Parts", "Recycling", "Analytics", "End User", "Inspector"] },
+];
+
+function HeroNetwork() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0, active: false });
+  const nodesRef = useRef<NetNode[]>([]);
+  const dimRef = useRef({ w: 0, h: 0 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+    if (!parent) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let animId: number;
+
+    const initNodes = () => {
+      const w = dimRef.current.w;
+      const h = dimRef.current.h;
+      if (w === 0 || h === 0) return;
+      const count = Math.min(55, Math.floor(w * h / 15000));
+      const nodes: NetNode[] = [];
+
+      for (let i = 0; i < count; i++) {
+        const type = i % 4;
+        const group = NODE_LABELS[type];
+        const label = group.labels[i % group.labels.length];
+        const depth = 0.3 + Math.random() * 0.7;
+        nodes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3 * depth,
+          vy: (Math.random() - 0.5) * 0.2 * depth,
+          radius: (2.5 + Math.random() * 3) * depth,
+          depth,
+          type,
+          label,
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+      nodesRef.current = nodes;
+    };
+
+    const resize = () => {
+      const w = parent.clientWidth;
+      const h = parent.clientHeight;
+      dimRef.current = { w, h };
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (nodesRef.current.length === 0) initNodes();
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const onMouseMove = (e: MouseEvent) => {
+      const r = parent.getBoundingClientRect();
+      mouseRef.current = { x: e.clientX - r.left, y: e.clientY - r.top, active: true };
+    };
+    const onMouseLeave = () => { mouseRef.current.active = false; };
+    parent.addEventListener("mousemove", onMouseMove);
+    parent.addEventListener("mouseleave", onMouseLeave);
+
+    let time = 0;
+    const connectionDist = 220;
+
+    const draw = () => {
+      time += 0.008;
+      const w = dimRef.current.w;
+      const h = dimRef.current.h;
+      if (w === 0) { animId = requestAnimationFrame(draw); return; }
+      ctx.clearRect(0, 0, w, h);
+
+      const nodes = nodesRef.current;
+      const mouse = mouseRef.current;
+
+      for (const n of nodes) {
+        n.x += n.vx + Math.sin(time * 0.5 + n.phase) * 0.15 * n.depth;
+        n.y += n.vy + Math.cos(time * 0.4 + n.phase + 1) * 0.1 * n.depth;
+
+        if (n.x < -40) n.x = w + 40;
+        if (n.x > w + 40) n.x = -40;
+        if (n.y < -40) n.y = h + 40;
+        if (n.y > h + 40) n.y = -40;
+
+        if (mouse.active) {
+          const dx = mouse.x - n.x;
+          const dy = mouse.y - n.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 300) {
+            const push = (1 - dist / 300) * 0.8 * n.depth;
+            n.x -= (dx / dist) * push;
+            n.y -= (dy / dist) * push;
+          }
+        }
+      }
+
+      // Connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < connectionDist) {
+            const alpha = (1 - dist / connectionDist) * 0.12 * Math.min(a.depth, b.depth);
+            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+            ctx.lineWidth = (1 - dist / connectionDist) * 1.2;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Nodes + labels
+      for (const n of nodes) {
+        const group = NODE_LABELS[n.type];
+        const baseAlpha = 0.15 + n.depth * 0.4;
+
+        // Outer glow
+        const glowR = n.radius * 4;
+        const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
+        glow.addColorStop(0, group.color + "30");
+        glow.addColorStop(1, group.color + "00");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, glowR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Core dot
+        ctx.fillStyle = group.color;
+        ctx.globalAlpha = baseAlpha;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ring
+        ctx.strokeStyle = group.color;
+        ctx.globalAlpha = baseAlpha * 0.4;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius * 2.2, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Label
+        if (n.depth > 0.55) {
+          ctx.globalAlpha = (n.depth - 0.55) * 0.5;
+          ctx.fillStyle = "#94a3b8";
+          ctx.font = `${9 * n.depth}px ui-sans-serif, system-ui, -apple-system, sans-serif`;
+          ctx.textAlign = "center";
+          ctx.fillText(n.label, n.x, n.y + n.radius * 2.8 + 8);
+        }
+
+        ctx.globalAlpha = 1;
+      }
+
+      animId = requestAnimationFrame(draw);
+    };
+
+    animId = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+      parent.removeEventListener("mousemove", onMouseMove);
+      parent.removeEventListener("mouseleave", onMouseLeave);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
+}
+
+// ─── Hero Section ────────────────────────────────────────────────────────────
+
 export function Hero() {
   return (
     <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden relative">
-      {/* Background abstract shapes */}
+      {/* Network background */}
+      <div className="absolute inset-0 -z-5 pointer-events-auto">
+        <HeroNetwork />
+      </div>
+
+      {/* Background gradient shapes */}
       <div className="absolute top-0 right-0 -z-10 w-[800px] h-[800px] bg-gradient-to-br from-indigo-50 via-slate-50 to-white rounded-full blur-[120px] opacity-70 translate-x-1/3 -translate-y-1/4"></div>
       <div className="absolute bottom-0 left-0 -z-10 w-[600px] h-[600px] bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent rounded-full blur-[100px] opacity-40 -translate-x-1/2 translate-y-1/2"></div>
 
-      <div className="max-w-4xl">
+      <div className="max-w-4xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,13 +248,15 @@ export function Hero() {
       </div>
 
       {/* Product Screenshots Carousel */}
-      <HeroCarousel />
+      <div className="relative z-10">
+        <HeroCarousel />
+      </div>
 
       {/* Scroll Indicator */}
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 z-10"
       >
         <span className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Scroll to explore</span>
         <div className="w-px h-12 bg-gradient-to-b from-indigo-500 to-transparent"></div>
