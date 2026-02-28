@@ -51,7 +51,7 @@ export function IntegrationSection() {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
             className="absolute z-30"
-            style={{ top: "58%", left: "50%", transform: "translate(-50%, -50%)" }}
+            style={{ top: "63%", left: "50%", transform: "translate(-50%, -50%)" }}
           >
             <div className="w-14 h-14 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-2xl bg-slate-900/80 border border-violet-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.15)]">
               <QrCode className="w-7 h-7 md:w-9 md:h-9 text-violet-400" />
@@ -125,29 +125,29 @@ export function IntegrationSection() {
             </defs>
 
             <g fill="none" strokeWidth="1.5" filter="url(#glow)">
-              {/* Top → Hub (ERP inputs) */}
-              <FlowingPath d="M 500 280 C 500 200, 320 140, 320 78" gradient="flow-indigo" phase={0} />
-              <FlowingPath d="M 500 280 L 500 78" gradient="flow-indigo" phase={0.4} />
-              <FlowingPath d="M 500 280 C 500 200, 680 140, 680 78" gradient="flow-indigo" phase={0.8} />
+              {/* Top → Hub (ERP inputs) — boxes at SVG (266,60), (500,60), (734,60) */}
+              <FlowingPath d="M 500 280 C 500 180, 266 120, 266 60" gradient="flow-indigo" phase={0} />
+              <FlowingPath d="M 500 280 L 500 60" gradient="flow-indigo" phase={0.4} />
+              <FlowingPath d="M 500 280 C 500 180, 734 120, 734 60" gradient="flow-indigo" phase={0.8} />
 
-              {/* Left → Hub (Suppliers in — amber) */}
-              <FlowingPath d="M 470 290 C 370 280, 300 245, 240 240" gradient="flow-amber" phase={0.3} />
-              <FlowingPath d="M 470 305 C 380 305, 310 305, 240 305" gradient="flow-amber" phase={0.7} />
-              <FlowingPath d="M 470 320 C 380 335, 310 360, 240 365" gradient="flow-amber" phase={1.1} />
-              <FlowingPath d="M 470 335 C 390 370, 310 420, 240 430" gradient="flow-amber" phase={1.5} />
+              {/* Left → Hub (Suppliers — right edges at SVG x≈170) */}
+              <FlowingPath d="M 465 295 C 340 285, 220 292, 170 292" gradient="flow-amber" phase={0.3} />
+              <FlowingPath d="M 465 310 C 340 330, 220 360, 170 364" gradient="flow-amber" phase={0.7} />
+              <FlowingPath d="M 465 325 C 340 370, 220 430, 170 436" gradient="flow-amber" phase={1.1} />
+              <FlowingPath d="M 465 340 C 350 400, 220 490, 170 508" gradient="flow-amber" phase={1.5} />
 
-              {/* Hub → Right (data sources & outputs) */}
-              <FlowingPath d="M 530 290 C 620 280, 700 250, 770 245" gradient="flow-indigo" phase={0.5} />
-              <FlowingPath d="M 530 305 C 620 305, 700 305, 770 305" gradient="flow-indigo" phase={0.9} />
-              <FlowingPath d="M 530 320 C 620 335, 700 360, 770 365" gradient="flow-emerald" phase={0.6} />
-              <FlowingPath d="M 530 335 C 620 370, 700 420, 770 430" gradient="flow-emerald" phase={1.0} />
+              {/* Hub → Right (left edges at SVG x≈830) */}
+              <FlowingPath d="M 535 295 C 660 285, 780 295, 830 298" gradient="flow-indigo" phase={0.5} />
+              <FlowingPath d="M 535 310 C 660 330, 780 360, 830 366" gradient="flow-indigo" phase={0.9} />
+              <FlowingPath d="M 535 325 C 660 370, 780 425, 830 434" gradient="flow-emerald" phase={0.6} />
+              <FlowingPath d="M 535 340 C 660 400, 780 490, 830 502" gradient="flow-emerald" phase={1.0} />
 
-              {/* Hub → QR Code (center down) */}
-              <FlowingPath d="M 500 350 L 500 430" gradient="flow-violet" phase={0.2} />
+              {/* Hub → QR Code (center down — QR at y≈504) */}
+              <FlowingPath d="M 500 350 L 500 485" gradient="flow-violet" phase={0.2} />
 
-              {/* QR → Bottom boxes (rose) */}
-              <FlowingPath d="M 500 475 C 500 570, 390 640, 390 715" gradient="flow-rose" phase={0.4} />
-              <FlowingPath d="M 500 475 C 500 570, 610 640, 610 715" gradient="flow-rose" phase={0.9} />
+              {/* QR → Bottom boxes (at SVG (373,756), (627,756)) */}
+              <FlowingPath d="M 500 520 C 500 620, 373 680, 373 756" gradient="flow-rose" phase={0.4} />
+              <FlowingPath d="M 500 520 C 500 620, 627 680, 627 756" gradient="flow-rose" phase={0.9} />
             </g>
           </svg>
         </div>
