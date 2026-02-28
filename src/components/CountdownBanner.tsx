@@ -22,66 +22,63 @@ export function CountdownBanner() {
     }, [targetDate]);
 
     const Unit = ({ value, label }: { value: number; label: string }) => (
-        <div className="flex flex-col items-center gap-1.5">
-            <div className="relative">
-                {/* Glow */}
-                <div className="absolute inset-0 rounded-2xl blur-md opacity-30 bg-amber-400" />
-                <div className="relative min-w-[72px] md:min-w-[88px] bg-white/10 border border-white/20 backdrop-blur-sm rounded-2xl px-3 py-3 md:py-4 text-center">
-                    <span className="font-mono text-3xl md:text-4xl font-bold text-white tabular-nums leading-none">
-                        {String(value).padStart(2, "0")}
-                    </span>
-                </div>
-            </div>
-            <span className="text-[11px] font-semibold tracking-widest uppercase text-amber-300/80">{label}</span>
+        <div className="flex flex-col items-center">
+            <span className="font-mono text-4xl sm:text-5xl md:text-6xl font-semibold text-slate-900 tabular-nums leading-none tracking-tight">
+                {String(value).padStart(2, "0")}
+            </span>
+            <span className="text-[11px] font-medium tracking-widest uppercase text-slate-400 mt-2">{label}</span>
         </div>
     );
 
     return (
-        <section className="relative bg-slate-950 border-b border-white/5 overflow-hidden py-10 md:py-14">
-            {/* Background gradient orbs */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[200px] bg-amber-500/10 blur-[80px] rounded-full" />
-                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[200px] bg-indigo-500/10 blur-[80px] rounded-full" />
+        <section className="relative bg-gradient-to-b from-white to-slate-50 overflow-hidden py-16 md:py-20">
+            {/* Subtle top border accent */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-300/50 to-transparent" />
+
+            {/* Background mesh — faint grid */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
+
+            {/* Soft gradient orbs */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-1/2 left-1/3 -translate-y-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-100/60 blur-[100px] rounded-full" />
+                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[250px] bg-violet-100/40 blur-[100px] rounded-full" />
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col items-center gap-8">
+            <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col items-center gap-10">
 
-                    {/* Label */}
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                            <span className="w-1 h-1 rounded-full bg-amber-400/60" />
-                            <span className="w-1 h-1 rounded-full bg-amber-400/30" />
-                        </div>
-                        <span className="text-sm md:text-base font-semibold text-amber-300 tracking-wide">
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+                        </span>
+                        <span className="text-sm font-semibold text-slate-700 tracking-wide">
                             EU DPP Legislation — ESPR Deadline
                         </span>
-                        <div className="flex items-center gap-1.5">
-                            <span className="w-1 h-1 rounded-full bg-amber-400/30" />
-                            <span className="w-1 h-1 rounded-full bg-amber-400/60" />
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                        </div>
                     </div>
 
                     {/* Countdown */}
-                    <div className="flex items-end gap-3 md:gap-4">
+                    <div className="flex items-start gap-4 sm:gap-6 md:gap-8">
                         <Unit value={timeLeft.days} label="days" />
-                        <span className="text-3xl md:text-4xl font-bold text-white/30 mb-6 leading-none">:</span>
+                        <span className="text-3xl md:text-4xl font-light text-slate-300 mt-1.5 select-none">:</span>
                         <Unit value={timeLeft.hours} label="hours" />
-                        <span className="text-3xl md:text-4xl font-bold text-white/30 mb-6 leading-none">:</span>
-                        <Unit value={timeLeft.minutes} label="minutes" />
-                        <span className="text-3xl md:text-4xl font-bold text-white/30 mb-6 leading-none">:</span>
-                        <Unit value={timeLeft.seconds} label="seconds" />
+                        <span className="text-3xl md:text-4xl font-light text-slate-300 mt-1.5 select-none">:</span>
+                        <Unit value={timeLeft.minutes} label="min" />
+                        <span className="text-3xl md:text-4xl font-light text-slate-300 mt-1.5 select-none">:</span>
+                        <Unit value={timeLeft.seconds} label="sec" />
                     </div>
 
                     {/* Sub-text */}
-                    <p className="text-sm md:text-base text-slate-400 text-center max-w-xl leading-relaxed">
+                    <p className="text-base text-slate-500 text-center max-w-lg leading-relaxed">
                         Non-compliance risks market exclusion across the EU.{" "}
-                        <span className="text-white font-medium">Is your product passport strategy ready?</span>
+                        <span className="text-slate-900 font-medium">Is your product passport strategy ready?</span>
                     </p>
                 </div>
             </div>
+
+            {/* Subtle bottom border */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
         </section>
     );
 }
