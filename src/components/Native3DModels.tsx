@@ -22,7 +22,7 @@ function CustomRockModel() {
     return (
         <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
             <group ref={mesh}>
-                <primitive object={scene} scale={1.26} />
+                <primitive object={scene} scale={1.07} />
             </group>
         </Float>
     );
@@ -64,7 +64,7 @@ export function RawMaterial3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <group position={[0, -0.3, 0]} scale={1.54}>
+                    <group position={[0, -0.3, 0]} scale={1.31}>
                         <CustomRockModel />
                     </group>
                 </PresentationControls>
@@ -137,8 +137,8 @@ export function FinishedProduct3DCanvas() {
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
                     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-                        <group position={[0, -0.3, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={2.8} />
+                        <group position={[0, -0.6, 0]}>
+                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={2.6} />
                         </group>
                     </Float>
                 </PresentationControls>
@@ -159,9 +159,9 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     return (
         <Float floatIntensity={0.6} rotationIntensity={0.02} speed={1}>
             <group position={[0, -0.3, 0]}>
-                <primitive object={passportScene} scale={4.9} />
+                <primitive object={passportScene} scale={6.4} />
                 {/* QR tag on the seat — positioned in 3D space */}
-                <Html position={[0.0, 1.05, 0.5]} center>
+                <Html position={[0.0, 1.35, 0.6]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
@@ -200,7 +200,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
-        <div className="relative w-full max-w-[1000px] aspect-[4/3] mx-auto">
+        <div className="relative w-full h-full mx-auto">
             <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
