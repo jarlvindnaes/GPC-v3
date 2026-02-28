@@ -473,7 +473,7 @@ export function StorytellingScroll() {
           transition={{ duration: 0.8 }}
           className="flex flex-col items-center"
         >
-          <div className="-mb-16">
+          <div className="-mb-12">
             <PassportChair3DCanvas />
           </div>
 

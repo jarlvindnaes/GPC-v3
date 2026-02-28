@@ -159,9 +159,9 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     return (
         <Float floatIntensity={0.6} rotationIntensity={0.02} speed={1}>
             <group position={[0, -0.3, 0]}>
-                <primitive object={passportScene} scale={6.4} />
+                <primitive object={passportScene} scale={4.5} />
                 {/* QR tag on the seat — positioned in 3D space */}
-                <Html position={[0.0, 1.35, 0.6]} center>
+                <Html position={[0.0, 0.95, 0.45]} center>
                     <div
                         className="relative cursor-pointer"
                         onMouseEnter={() => onHover(true)}
@@ -200,8 +200,8 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 export function PassportChair3DCanvas() {
     const [hovered, setHovered] = useState(false);
     return (
-        <div className="relative w-full h-full mx-auto">
-            <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <div className="relative w-[min(90vw,800px)] h-[min(70vw,600px)] mx-auto">
+            <Canvas camera={{ position: [0, 0.8, 5], fov: 36 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
                 <ambientLight intensity={0.8} />
                 <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
                 <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
