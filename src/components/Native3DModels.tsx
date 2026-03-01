@@ -120,13 +120,38 @@ function CustomChairModel() {
     );
 }
 
+function WireframeChairModel() {
+    const { scene } = useGLTF(CHAIR_MODEL);
+    const wireScene = useMemo(() => {
+        const clone = scene.clone(true);
+        clone.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+                const mesh = child as THREE.Mesh;
+                mesh.material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color("#818cf8"),
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.7,
+                });
+            }
+        });
+        return clone;
+    }, [scene]);
+
+    return (
+        <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
+            <group position={[0, -0.6, 0]}>
+                <primitive object={wireScene} scale={2.6} />
+            </group>
+        </Float>
+    );
+}
+
 export function FinishedProduct3DCanvas() {
     return (
         <div className="w-full h-full cursor-grab active:cursor-grabbing">
             <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
-                <ambientLight intensity={0.7} />
-                <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
-                <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
+                <ambientLight intensity={0.8} />
                 <PresentationControls
                     global
                     snap={false}
@@ -135,14 +160,9 @@ export function FinishedProduct3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-                        <group position={[0, -0.6, 0]}>
-                            <primitive object={useGLTF(CHAIR_MODEL).scene} scale={2.6} />
-                        </group>
-                    </Float>
+                    <WireframeChairModel />
                 </PresentationControls>
-                <ContactShadows position={[0, -0.3, 0]} opacity={0.25} scale={12} blur={3} far={5} color="#000" />
-                <Environment preset="studio" />
+                <ContactShadows position={[0, -0.3, 0]} opacity={0.15} scale={12} blur={3} far={5} color="#6366f1" />
             </Canvas>
         </div>
     );
