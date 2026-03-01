@@ -30,33 +30,16 @@ function CustomRockModel() {
 // ----------------------------------------------------------------------------
 // Components/Bolt Model (using bolt_m10x25_hexagon_head GLB)
 // ----------------------------------------------------------------------------
-function WireframeBoltModel() {
+function BoltModel() {
     const { scene } = useGLTF(BOLT_MODEL);
     const mesh = useRef<THREE.Group>(null);
-    const wireScene = useMemo(() => {
-        const clone = scene.clone(true);
-        clone.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-                const m = child as THREE.Mesh;
-                m.material = new THREE.MeshBasicMaterial({
-                    color: new THREE.Color("#60a5fa"),
-                    wireframe: true,
-                    transparent: true,
-                    opacity: 0.7,
-                });
-            }
-        });
-        return clone;
-    }, [scene]);
-
     useFrame(() => {
         if (mesh.current) mesh.current.rotation.y += 0.003;
     });
-
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
             <group ref={mesh} position={[0, 0.2, 0]} rotation={[Math.PI / 5, 0, 0]} scale={14}>
-                <primitive object={wireScene} />
+                <primitive object={scene} />
             </group>
         </Float>
     );
@@ -95,7 +78,9 @@ export function Components3DCanvas() {
     return (
         <div className="w-full h-full cursor-grab active:cursor-grabbing">
             <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: 'transparent' }}>
-                <ambientLight intensity={0.8} />
+                <ambientLight intensity={0.7} />
+                <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
+                <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
                 <PresentationControls
                     global
                     snap={false}
@@ -104,9 +89,10 @@ export function Components3DCanvas() {
                     azimuth={[-Math.PI, Math.PI]}
                     config={{ mass: 4, tension: 120, friction: 40 }}
                 >
-                    <WireframeBoltModel />
+                    <BoltModel />
                 </PresentationControls>
-                <ContactShadows position={[0, -1.2, 0]} opacity={0.15} scale={10} blur={3} far={5} color="#3b82f6" />
+                <ContactShadows position={[0, -1.2, 0]} opacity={0.3} scale={10} blur={3} far={5} />
+                <Environment preset="studio" />
             </Canvas>
         </div>
     );
@@ -133,6 +119,7 @@ function CustomChairModel() {
 
 function WireframeChairModel() {
     const { scene } = useGLTF(CHAIR_MODEL);
+    const spinRef = useRef<THREE.Group>(null);
     const wireScene = useMemo(() => {
         const clone = scene.clone(true);
         clone.traverse((child) => {
@@ -149,9 +136,13 @@ function WireframeChairModel() {
         return clone;
     }, [scene]);
 
+    useFrame(() => {
+        if (spinRef.current) spinRef.current.rotation.y += 0.003;
+    });
+
     return (
         <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
-            <group position={[0, -0.6, 0]}>
+            <group ref={spinRef} position={[0, -0.6, 0]}>
                 <primitive object={wireScene} scale={2.6} />
             </group>
         </Float>
