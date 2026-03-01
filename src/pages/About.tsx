@@ -5,7 +5,7 @@ export function About() {
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-semibold text-slate-900 tracking-tight mb-6">
           About Product Connect
         </h1>
-        <p className="text-xl text-slate-600 max-w-3xl">
+        <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-3xl">
           We are building the infrastructure that gives intelligence to physical products.
         </p>
       </div>

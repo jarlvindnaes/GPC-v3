@@ -210,8 +210,8 @@ export function Hero() {
   return (
     <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden relative">
       {/* Background gradient shapes */}
-      <div className="absolute top-0 right-0 z-0 w-[800px] h-[800px] bg-gradient-to-br from-indigo-50 via-slate-50 to-white rounded-full blur-[120px] opacity-70 translate-x-1/3 -translate-y-1/4"></div>
-      <div className="absolute bottom-0 left-0 z-0 w-[600px] h-[600px] bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent rounded-full blur-[100px] opacity-40 -translate-x-1/2 translate-y-1/2"></div>
+      <div className="absolute top-0 right-0 z-0 w-[300px] sm:w-[500px] md:w-[800px] h-[300px] sm:h-[500px] md:h-[800px] bg-gradient-to-br from-indigo-50 via-slate-50 to-white rounded-full blur-[120px] opacity-70 translate-x-1/3 -translate-y-1/4"></div>
+      <div className="absolute bottom-0 left-0 z-0 w-[250px] sm:w-[400px] md:w-[600px] h-[250px] sm:h-[400px] md:h-[600px] bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent rounded-full blur-[100px] opacity-40 -translate-x-1/2 translate-y-1/2"></div>
 
       {/* Network background — above gradients, below content */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
@@ -291,7 +291,7 @@ function HeroCarousel() {
           <div className="w-3 h-3 rounded-full bg-amber-500/40"></div>
           <div className="w-3 h-3 rounded-full bg-emerald-500/40"></div>
         </div>
-        <div className="flex-1 max-w-md mx-auto">
+          <div className="flex-1 max-w-[85%] sm:max-w-md mx-auto">
           <div className="flex items-center gap-2 bg-slate-700/50 rounded-lg px-3 py-1">
             <svg className="w-3 h-3 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
             <span className="text-[11px] text-slate-400 font-medium">getproductconnect.com</span>
@@ -338,7 +338,7 @@ function HeroCarousel() {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? 'w-6 bg-indigo-400' : 'w-1.5 bg-slate-600 hover:bg-slate-500'}`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${i === active ? 'w-6 bg-indigo-400' : 'w-2.5 bg-slate-600 hover:bg-slate-500'}`}
               />
             ))}
           </div>

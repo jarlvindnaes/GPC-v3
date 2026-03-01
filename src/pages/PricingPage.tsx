@@ -7,7 +7,7 @@ export function PricingPage() {
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-semibold text-slate-900 tracking-tight mb-6">
           Simple, transparent pricing
         </h1>
-        <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
           We don't profit from your dependency. We profit from your capability.
         </p>
       </div>

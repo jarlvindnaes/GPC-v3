@@ -162,7 +162,7 @@ export function FeatureGrid() {
               key={feature.id}
               layoutId={`card-${feature.id}`}
               onClick={() => setSelectedFeature(feature.id)}
-              className="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm flex flex-col relative overflow-hidden group cursor-pointer hover:shadow-md transition-shadow"
+              className="bg-white rounded-[2rem] p-5 sm:p-6 md:p-8 border border-slate-200 shadow-sm flex flex-col relative overflow-hidden group cursor-pointer hover:shadow-md transition-shadow"
             >
               <div className="absolute top-6 right-6 w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ArrowUpRight className="w-5 h-5 text-slate-600" />
@@ -199,7 +199,7 @@ export function FeatureGrid() {
                 {/* Left side: Visual */}
                 <motion.div 
                   layoutId={`visual-${activeFeature.id}`}
-                  className={`md:w-1/2 bg-gradient-to-br from-${activeFeature.color}-50 to-${activeFeature.color}-100/50 p-12 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-100`}
+                  className={`md:w-1/2 bg-gradient-to-br from-${activeFeature.color}-50 to-${activeFeature.color}-100/50 p-6 sm:p-8 md:p-12 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-100`}
                 >
                   <div className="scale-125 md:scale-150 transform w-full max-w-sm">
                     {activeFeature.visual}
@@ -207,7 +207,7 @@ export function FeatureGrid() {
                 </motion.div>
                 
                 {/* Right side: Content */}
-                <div className="md:w-1/2 p-8 md:p-12 relative flex flex-col">
+                <div className="md:w-1/2 p-5 sm:p-8 md:p-12 relative flex flex-col">
                   <button 
                     onClick={() => setSelectedFeature(null)}
                     className="absolute top-6 right-6 w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors"
@@ -216,7 +216,7 @@ export function FeatureGrid() {
                   </button>
                   
                   <motion.div layoutId={`title-${activeFeature.id}`}>
-                    <h3 className="text-3xl font-display font-semibold text-slate-900 mb-6 pr-12">{activeFeature.title}</h3>
+                    <h3 className="text-2xl sm:text-3xl font-display font-semibold text-slate-900 mb-6 pr-12">{activeFeature.title}</h3>
                   </motion.div>
                   
                   <p className="text-lg text-slate-600 leading-relaxed mb-8">

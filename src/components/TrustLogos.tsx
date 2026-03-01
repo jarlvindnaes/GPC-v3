@@ -18,7 +18,7 @@ export function TrustLogos() {
 
         <div className="relative flex overflow-hidden group">
           <motion.div
-            className="flex gap-16 md:gap-32 items-center whitespace-nowrap"
+            className="flex gap-8 sm:gap-16 md:gap-32 items-center whitespace-nowrap"
             animate={{ x: [0, -1000] }}
             transition={{
               repeat: Infinity,
@@ -30,7 +30,7 @@ export function TrustLogos() {
             {[...logos, ...logos, ...logos].map((logo, i) => (
               <div
                 key={i}
-                className={`text-xl md:text-2xl text-slate-300 hover:text-slate-900 transition-colors duration-500 cursor-default grayscale hover:grayscale-0 ${logo.className}`}
+                className={`text-base sm:text-xl md:text-2xl text-slate-300 hover:text-slate-900 transition-colors duration-500 cursor-default grayscale hover:grayscale-0 ${logo.className}`}
               >
                 {logo.name}
               </div>

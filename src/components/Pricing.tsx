@@ -31,7 +31,7 @@ export function Pricing() {
                 Basic DPP generation
               </li>
             </ul>
-            <button className="w-full py-2 px-4 rounded-lg border border-slate-200 text-slate-900 font-medium hover:bg-slate-50 transition-colors">
+            <button className="w-full py-3 px-4 rounded-lg border border-slate-200 text-slate-900 font-medium hover:bg-slate-50 transition-colors">
               Get started
             </button>
           </div>
@@ -58,7 +58,7 @@ export function Pricing() {
                 €0.08 / calculation
               </li>
             </ul>
-            <button className="w-full py-2 px-4 rounded-lg bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors">
+            <button className="w-full py-3 px-4 rounded-lg bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors">
               Start Core
             </button>
           </div>
@@ -92,7 +92,7 @@ export function Pricing() {
                 Advanced analytics
               </li>
             </ul>
-            <button className="w-full py-2 px-4 rounded-lg bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition-colors">
+            <button className="w-full py-3 px-4 rounded-lg bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition-colors">
               Start Pro
             </button>
           </div>
@@ -123,7 +123,7 @@ export function Pricing() {
                 Custom integrations
               </li>
             </ul>
-            <button className="w-full py-2 px-4 rounded-lg border border-slate-200 text-slate-900 font-medium hover:bg-slate-50 transition-colors">
+            <button className="w-full py-3 px-4 rounded-lg border border-slate-200 text-slate-900 font-medium hover:bg-slate-50 transition-colors">
               Contact sales
             </button>
           </div>

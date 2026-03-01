@@ -54,7 +54,7 @@ export function StorytellingScroll() {
             <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
               How it works
             </h2>
-            <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
               From construction model to certified Digital Product Passport in seven steps.
               Scroll to see how Product Connect digitises your product into a verified digital twin.
             </p>
@@ -75,7 +75,7 @@ export function StorytellingScroll() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col md:flex-row items-center gap-4 md:gap-12">
 
           {/* ── Text panel (left) ── */}
-          <div className="w-full md:w-[44%] pl-12 md:pl-0 md:pr-12 relative min-h-[180px] md:h-[420px] flex items-center">
+          <div className="w-full md:w-[44%] pl-10 sm:pl-12 md:pl-0 md:pr-12 relative min-h-[180px] md:h-[420px] flex items-center">
 
             {[
               { op: op1, icon: <Box className="w-5 h-5" />, title: "Ingest Your Model", body: "Start with your product. Upload your construction model — BIM, IFC, or 3D CAD — and we automatically create a digital twin, splitting it into every component and sub-assembly." },
@@ -466,7 +466,7 @@ export function StorytellingScroll() {
       </div>
 
       {/* Subtle radial glow behind the chair */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/[0.03] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,800px)] h-[min(100vw,800px)] bg-indigo-500/[0.03] rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center relative z-10">
         <motion.div

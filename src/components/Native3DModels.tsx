@@ -321,7 +321,7 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
 export function DPPInteractiveProduct() {
     return (
         <div className="w-full rounded-3xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-200/60 bg-white">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] min-h-[400px] md:min-h-[640px]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(280px,420px)] min-h-[400px] md:min-h-[640px]">
 
                 {/* ── Left: 3D canvas ── */}
                 <div className="relative bg-gradient-to-br from-slate-50 via-slate-100 to-indigo-50 cursor-grab active:cursor-grabbing min-h-[280px] md:min-h-[380px] lg:min-h-0">

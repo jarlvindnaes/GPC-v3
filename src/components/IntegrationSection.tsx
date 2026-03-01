@@ -106,18 +106,18 @@ export function IntegrationSection() {
   }, [computePaths]);
 
   return (
-    <section className="py-32 bg-slate-950 text-white relative overflow-hidden">
+    <section className="py-16 sm:py-24 md:py-32 bg-slate-950 text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-3xl mb-24">
+        <div className="max-w-3xl mb-12 sm:mb-16 md:mb-24">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold tracking-tight mb-6">
             Connect to existing systems.
           </h2>
-          <p className="text-xl text-slate-400 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-slate-400 leading-relaxed">
             Orchestrate data across multiple ERPs, build custom workflows, and connect to third parties using APIs, partner apps or pre-built integrations. Securely connect directly to your end users.
           </p>
         </div>
 
-        <div ref={containerRef} className="relative h-[400px] md:h-[600px] lg:h-[800px] w-full max-w-6xl mx-auto">
+        <div ref={containerRef} className="relative h-[350px] sm:h-[400px] md:h-[600px] lg:h-[800px] w-full max-w-6xl mx-auto">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]"></div>
 
@@ -153,7 +153,7 @@ export function IntegrationSection() {
           {/* QR — explicit dimensions on ref */}
           <div
             ref={qrRef}
-            className="absolute z-30 w-14 h-14 md:w-18 md:h-18 lg:w-20 lg:h-20"
+            className="absolute z-30 w-14 h-14 md:w-[72px] md:h-[72px] lg:w-20 lg:h-20"
             style={{ top: "63%", left: "50%", transform: "translate(-50%, -50%)" }}
           >
             <motion.div
@@ -171,7 +171,7 @@ export function IntegrationSection() {
 
           {/* Nodes */}
           <div className="absolute inset-0 z-20 pointer-events-none">
-            <div ref={topRef} className="absolute top-[5%] left-0 right-0 flex justify-center gap-8 md:gap-16">
+            <div ref={topRef} className="absolute top-[5%] left-0 right-0 flex justify-center gap-3 sm:gap-6 md:gap-16">
               <IntegrationNode title="Business Central" icon={<Database className="w-4 h-4" />} delay={0.2} color="slate" />
               <IntegrationNode title="SAP S/4HANA" icon={<Box className="w-4 h-4" />} delay={0.3} color="slate" />
               <IntegrationNode title="Akeneo PIM" icon={<Layers className="w-4 h-4" />} delay={0.4} color="slate" />
@@ -191,7 +191,7 @@ export function IntegrationSection() {
               <IntegrationNode title="Public DPP" icon={<QrCode className="w-4 h-4" />} delay={0.8} color="emerald" reverse />
             </div>
 
-            <div ref={bottomRef} className="absolute bottom-[3%] left-0 right-0 flex justify-center gap-8 md:gap-16">
+            <div ref={bottomRef} className="absolute bottom-[3%] left-0 right-0 flex justify-center gap-3 sm:gap-6 md:gap-16">
               <IntegrationNode title="D2C Spare Parts" icon={<Package className="w-4 h-4" />} delay={0.9} color="rose" />
               <IntegrationNode title="Usage Analytics" icon={<Cpu className="w-4 h-4" />} delay={1.0} color="rose" />
             </div>

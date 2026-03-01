@@ -157,7 +157,7 @@ function NetworkCanvas() {
 
 export function StatsSection() {
   return (
-    <section className="py-32 md:py-48 bg-slate-950 text-white overflow-hidden relative">
+    <section className="py-16 sm:py-24 md:py-48 bg-slate-950 text-white overflow-hidden relative">
       {/* Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
 

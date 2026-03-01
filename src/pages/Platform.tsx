@@ -9,7 +9,7 @@ export function Platform() {
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-semibold text-slate-900 tracking-tight mb-6">
           The Product Connect Platform
         </h1>
-        <p className="text-xl text-slate-600 max-w-3xl">
+        <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-3xl">
           A comprehensive suite of tools designed to trace, prove, and monetize your physical products. From raw materials to the end consumer.
         </p>
       </div>
@@ -26,7 +26,7 @@ export function Platform() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8 relative">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
             {/* Connecting Line (Desktop) */}
             <div className="hidden md:block absolute top-12 left-[12.5%] right-[12.5%] h-0.5 bg-slate-800 z-0"></div>
 

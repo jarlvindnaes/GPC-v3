@@ -76,7 +76,7 @@ function Model3DCanvas({ children, label }: { children: React.ReactNode; label: 
       </div>
 
       {/* Label */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-slate-700 rounded-xl px-4 py-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-slate-700 rounded-xl px-4 py-2 shadow-lg opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
         <p className="text-sm font-semibold text-white">{label}</p>
         <p className="text-xs text-slate-400">Drag to rotate</p>
       </div>
@@ -86,7 +86,7 @@ function Model3DCanvas({ children, label }: { children: React.ReactNode; label: 
 
 export function ProductBreakdown() {
   return (
-    <section className="py-32 bg-slate-950 text-white relative overflow-hidden">
+    <section className="py-16 sm:py-24 md:py-32 bg-slate-950 text-white relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08)_0%,transparent_60%)]"></div>
@@ -103,7 +103,7 @@ export function ProductBreakdown() {
           <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-semibold tracking-tight mb-6">
             Product Journey
           </h2>
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
             From raw materials to finished product. Every component tracked, every material verified,
             every step transparent. This is the future of sustainable manufacturing.
           </p>
@@ -119,7 +119,7 @@ export function ProductBreakdown() {
             transition={{ duration: 0.6, delay: 0 }}
           >
             <div className="mb-4">
-              <h3 className="text-2xl font-bold mb-2 text-white">Finished Product</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-white">Finished Product</h3>
               <p className="text-slate-400">
                 West Elm Slope Leather Chair — assembled with care, designed for longevity,
                 ready for certification.
@@ -138,7 +138,7 @@ export function ProductBreakdown() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="mb-4">
-              <h3 className="text-2xl font-bold mb-2 text-white">Components</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-white">Components</h3>
               <p className="text-slate-400">
                 Every bolt, every screw, every fastener tracked. Bill of materials down to the smallest detail.
               </p>
@@ -156,7 +156,7 @@ export function ProductBreakdown() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <div className="mb-4">
-              <h3 className="text-2xl font-bold mb-2 text-white">Raw Materials</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-white">Raw Materials</h3>
               <p className="text-slate-400">
                 Trace back to the source. Metal ore, raw timber, natural fibers —
                 verified origin and sustainability.

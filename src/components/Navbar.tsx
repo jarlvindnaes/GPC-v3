@@ -40,7 +40,7 @@ export function Navbar() {
             </Link>
           </div>
           <div className="md:hidden flex items-center">
-            <button onClick={() => setIsOpen(!isOpen)} className="p-2 -mr-2 text-slate-600 hover:text-slate-900 transition-colors">
+            <button onClick={() => setIsOpen(!isOpen)} className="p-3 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors">
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
