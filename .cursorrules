@@ -1,0 +1,87 @@
+# Product Connect — Cursor AI Rules
+
+## Project Context
+This is a React + TypeScript marketing website for Product Connect, a B2B SaaS platform for furniture manufacturers. It features heavy use of 3D models, scroll-driven animations, and canvas-based visualizations.
+
+## Tech Stack
+- **React 19** with TypeScript (strict mode)
+- **Vite 6** for bundling
+- **Tailwind CSS 4** for styling (utility-first, no CSS files)
+- **Motion (Framer Motion)** for animations (`motion/react` import path)
+- **React Three Fiber + Drei** for 3D (`@react-three/fiber`, `@react-three/drei`)
+- **Three.js** for underlying 3D graphics
+- **Lucide React** for icons
+
+## Code Style
+
+### General
+- Use functional components with hooks
+- Prefer `useCallback` and `useMemo` for expensive computations
+- Use TypeScript interfaces for component props (avoid `any` when possible)
+- Keep components in single files — co-locate helpers and sub-components
+
+### Styling
+- Use Tailwind utility classes exclusively — no inline styles except for dynamic values (scroll transforms, canvas dimensions)
+- Responsive design: mobile-first with `sm:`, `md:`, `lg:` breakpoints
+- Use `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8` for section containers
+- Color palette: indigo/blue for primary, amber/orange for accents, slate for neutrals, emerald for success states
+
+### 3D Models
+- GLB models live in `public/models/`
+- Use `PresentationControls` from Drei for drag interaction (soft springs: mass 4+, tension 120, friction 40)
+- Use `Float` for idle oscillation
+- Use `Environment preset="studio"` for lighting
+- Always add `ContactShadows` for grounding
+- Canvas components should use `gl={{ alpha: true }}` with transparent backgrounds
+
+### Animations
+- Import from `motion/react` (NOT `framer-motion`)
+- Use `useScroll` + `useTransform` for scroll-driven animations
+- Use `whileInView` with `viewport={{ once: true }}` for entrance animations
+- Canvas animations (HTML5 Canvas) should use `requestAnimationFrame` with proper cleanup
+
+### Canvas Visualizations
+- Always handle `devicePixelRatio` for sharp rendering
+- Use `ResizeObserver` for responsive canvas sizing
+- Clean up animation frames and event listeners in useEffect return
+- For elements that need to align with DOM elements, measure positions with `getBoundingClientRect` relative to a container ref
+
+## Deployment
+- `npm run deploy` builds and pushes to GitHub Pages
+- Base URL is configured in `vite.config.ts` as `/GPC-v3/`
+- All asset paths should use `import.meta.env.BASE_URL` prefix
+
+## File Organization
+- `src/components/` — Reusable UI components
+- `src/pages/` — Route-level page components
+- `public/models/` — 3D model assets (GLB)
+- `public/screenshots/` — Product screenshot images
+
+## Common Patterns
+
+### Scroll-based sticky sections
+```tsx
+const containerRef = useRef(null);
+const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
+const opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [0, 1, 0]);
+```
+
+### Dynamic SVG from DOM positions
+```tsx
+const pos = (el: Element) => {
+  const r = el.getBoundingClientRect();
+  return { cx: r.left + r.width/2 - containerRect.left, /* ... */ };
+};
+```
+
+### 3D model component
+```tsx
+<Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }}>
+  <ambientLight intensity={0.7} />
+  <PresentationControls config={{ mass: 4, tension: 120, friction: 40 }}>
+    <Float floatIntensity={0.3}><primitive object={scene} scale={3} /></Float>
+  </PresentationControls>
+  <ContactShadows position={[0, -1, 0]} opacity={0.3} />
+  <Environment preset="studio" />
+</Canvas>
+```
