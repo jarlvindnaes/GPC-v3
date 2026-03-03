@@ -3,11 +3,11 @@ import { Pricing } from "../components/Pricing";
 export function PricingPage() {
   return (
     <main className="pt-32 pb-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-semibold text-slate-900 tracking-tight mb-6">
+      <div className="mx-auto mb-16 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <h1 className="mb-6 font-display font-semibold text-3xl text-slate-900 tracking-tight sm:text-5xl md:text-6xl">
           Simple, transparent pricing
         </h1>
-        <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
+        <p className="mx-auto max-w-2xl text-base text-slate-600 sm:text-lg md:text-xl">
           We don't profit from your dependency. We profit from your capability.
         </p>
       </div>

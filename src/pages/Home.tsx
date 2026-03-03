@@ -1,13 +1,12 @@
-import { Hero } from "../components/Hero";
 import { CountdownBanner } from "../components/CountdownBanner";
-import { TrustLogos } from "../components/TrustLogos";
 import { FeatureGrid } from "../components/FeatureGrid";
-import { StatsSection } from "../components/StatsSection";
+import { Hero } from "../components/Hero";
 import { IntegrationSection } from "../components/IntegrationSection";
-// import { ProductBreakdown } from "../components/ProductBreakdown";
-import { StorytellingScroll } from "../components/StorytellingScroll";
 import { Pricing } from "../components/Pricing";
+import { StatsSection } from "../components/StatsSection";
+import { StorytellingScroll } from "../components/StorytellingScroll";
 import { Testimonials } from "../components/Testimonials";
+import { TrustLogos } from "../components/TrustLogos";
 
 export function Home() {
   return (
@@ -18,7 +17,6 @@ export function Home() {
       <FeatureGrid />
       <StatsSection />
       <IntegrationSection />
-      {/* <ProductBreakdown /> */}
       <StorytellingScroll />
       <Testimonials />
       <Pricing />

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.5/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": false,
+    "defaultBranch": "main"
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {}
+        }
+      }
+    }
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "none"
+    },
+    "globals": ["React", "ReactNode"]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "recommended": true,
+        "useImportExtensions": "off",
+        "noUndeclaredDependencies": "off",
+        "noUndeclaredVariables": "error",
+        "noNodejsModules": "off",
+        "noUnusedVariables": "error"
+      },
+      "suspicious": {
+        "recommended": true,
+        "noReactSpecificProps": "off",
+        "noEmptyBlockStatements": "off",
+        "noConsole": {
+          "level": "error",
+          "options": {
+            "allow": ["error"]
+          }
+        }
+      },
+      "complexity": {
+        "recommended": true,
+        "noForEach": "off",
+        "useSimplifiedLogicExpression": "off"
+      },
+      "style": {
+        "recommended": true,
+        "noUnusedTemplateLiteral": "error",
+        "useTemplate": "error",
+        "noImplicitBoolean": "error",
+        "noDefaultExport": "off",
+        "useBlockStatements": "error",
+        "useConsistentBuiltinInstantiation": "error",
+        "useFilenamingConvention": "off",
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": true,
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "objectLiteralProperty"
+                },
+                "formats": ["PascalCase", "camelCase"]
+              }
+            ]
+          }
+        },
+        "noNegationElse": "off"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "options": {
+            "attributes": ["class", "className", "classList"],
+            "functions": ["clsx", "cva", "cn", "tv"]
+          }
+        }
+      }
+    }
+  },
+  "files": {
+    "includes": ["**", "!**/dist", "!**/*.css"]
+  }
+}
