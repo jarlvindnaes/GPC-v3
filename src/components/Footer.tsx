@@ -16,7 +16,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div>
+          <nav aria-label="Platform">
             <h4 className="mb-4 font-semibold text-slate-900 text-sm">Platform</h4>
             <ul className="space-y-3">
               <li>
@@ -40,39 +40,35 @@ export function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
 
-          <div>
+          <nav aria-label="Resources">
             <h4 className="mb-4 font-semibold text-slate-900 text-sm">Resources</h4>
             <ul className="space-y-3">
               <li>
-                {/* Placeholder URL until ESPR guide page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   ESPR Guide 2026
                 </a>
               </li>
               <li>
-                {/* Placeholder URL until documentation page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   Documentation
                 </a>
               </li>
               <li>
-                {/* Placeholder URL until API reference page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   API Reference
                 </a>
               </li>
               <li>
-                {/* Placeholder URL until case studies page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   Case Studies
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
 
-          <div>
+          <nav aria-label="Company">
             <h4 className="mb-4 font-semibold text-slate-900 text-sm">Company</h4>
             <ul className="space-y-3">
               <li>
@@ -81,35 +77,30 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                {/* Placeholder URL until blog page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   Blog
                 </a>
               </li>
               <li>
-                {/* Placeholder URL until careers page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   Careers
                 </a>
               </li>
               <li>
-                {/* Placeholder URL until contact page is created */}
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-slate-900">
                   Contact
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
         </div>
 
         <div className="flex flex-col items-center justify-between gap-4 border-slate-100 border-t pt-8 md:flex-row">
-          <p className="text-slate-400 text-sm">© 2026 Product Connect. All rights reserved.</p>
+          <p className="text-slate-400 text-sm">&copy; 2026 Product Connect. All rights reserved.</p>
           <div className="flex gap-6">
-            {/* Placeholder URL until privacy policy page is created */}
             <a href="https://example.com" className="text-slate-400 text-sm hover:text-slate-900">
               Privacy Policy
             </a>
-            {/* Placeholder URL until terms of service page is created */}
             <a href="https://example.com" className="text-slate-400 text-sm hover:text-slate-900">
               Terms of Service
             </a>

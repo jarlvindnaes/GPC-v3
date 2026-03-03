@@ -15,8 +15,7 @@ export function Platform() {
         </p>
       </div>
 
-      {/* Workflow Section */}
-      <div className="mb-24 bg-slate-900 py-24 text-white">
+      <section className="mb-24 bg-slate-900 py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <h2 className="mb-4 font-display font-semibold text-3xl tracking-tight md:text-4xl">How it works</h2>
@@ -81,7 +80,7 @@ export function Platform() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <FeatureGrid />
       <IntegrationSection />
