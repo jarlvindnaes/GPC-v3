@@ -2,6 +2,7 @@ import { ArrowUpRight, CheckCircle2, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
+import { WebsiteButton } from "./WebsiteButton";
 
 interface WebsiteCardDialogProps {
   identifier: string;
@@ -71,14 +72,15 @@ export function WebsiteCardDialog({
               </motion.div>
 
               <div className="relative flex flex-col p-5 sm:p-8 md:w-1/2 md:p-12">
-                <button
-                  type="button"
+                <WebsiteButton
+                  variant="ghost"
+                  size="icon"
                   onClick={onClose}
                   aria-label="Close feature details"
-                  className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 transition-colors hover:bg-slate-200"
+                  className="absolute top-6 right-6 h-10 w-10 bg-slate-100 hover:bg-slate-200"
                 >
                   <X className="h-5 w-5 text-slate-600" />
-                </button>
+                </WebsiteButton>
 
                 <motion.div layoutId={`title-${identifier}`}>
                   <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-slate-900 sm:text-3xl">{title}</h3>
@@ -96,13 +98,14 @@ export function WebsiteCardDialog({
                 </div>
 
                 <div className="mt-auto border-slate-100 border-t pt-8">
-                  <button
-                    type="button"
+                  <WebsiteButton
+                    icon={ArrowUpRight}
+                    size="small"
                     onClick={onCallToActionPress}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-4 font-medium text-lg text-white transition-colors hover:bg-slate-800"
+                    className="w-full rounded-xl py-4 text-lg"
                   >
-                    {callToActionLabel ?? `Explore ${title}`} <ArrowUpRight className="h-5 w-5" />
-                  </button>
+                    {callToActionLabel ?? `Explore ${title}`}
+                  </WebsiteButton>
                 </div>
               </div>
             </motion.div>

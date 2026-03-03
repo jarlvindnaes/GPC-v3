@@ -2,6 +2,7 @@ import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as Three from "three";
+import { WebsiteButton } from "./WebsiteButton";
 
 const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
@@ -580,10 +581,7 @@ export function DppInteractiveProduct() {
 
           {/* CTA */}
           <div>
-            <button
-              type="button"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 font-semibold text-sm text-white transition-colors hover:bg-slate-800"
-            >
+            <WebsiteButton size="small" className="w-full rounded-xl">
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <title>QR code icon</title>
                 <rect x="3" y="3" width="7" height="7" />
@@ -592,7 +590,7 @@ export function DppInteractiveProduct() {
                 <rect x="3" y="14" width="7" height="7" />
               </svg>
               Scan or Share Passport
-            </button>
+            </WebsiteButton>
             <p className="mt-2.5 text-center text-slate-400 text-xs">
               GS1-compliant · ESPR 2026 ready · Verified by Product Connect
             </p>
