@@ -86,7 +86,7 @@ function Model3dCanvas({ children, label }: { children: React.ReactNode; label: 
 
 export function ProductBreakdown() {
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-16 text-white sm:py-24 md:py-32">
+    <section className="relative overflow-hidden bg-brand-dark py-16 text-white sm:py-24 md:py-32">
       {/* Background effects */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08)_0%,transparent_60%)]"></div>

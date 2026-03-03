@@ -128,7 +128,7 @@ export function IntegrationSection() {
   }, [computePaths]);
 
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-16 text-white sm:py-24 md:py-32">
+    <section className="relative overflow-hidden bg-brand-dark py-16 text-white sm:py-24 md:py-32">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 max-w-3xl sm:mb-16 md:mb-24">
           <h2 className="mb-6 font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">

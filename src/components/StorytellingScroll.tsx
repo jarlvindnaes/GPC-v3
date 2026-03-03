@@ -42,7 +42,7 @@ export function StorytellingScroll() {
 
   return (
     <>
-      <section id="story" ref={containerRef} className="relative h-[700vh] bg-slate-900 text-white">
+      <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-dark text-white">
         {/* Header section */}
         <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
@@ -572,7 +572,7 @@ export function StorytellingScroll() {
       </section>
 
       {/* ── Grand Finale: Your Intelligent Product ── */}
-      <section className="relative overflow-hidden bg-slate-900 pt-4 pb-16 text-white sm:pt-8 sm:pb-32">
+      <section className="relative overflow-hidden bg-brand-dark pt-4 pb-16 text-white sm:pt-8 sm:pb-32">
         {/* Metro line continuation — fades from story section into the QR on the chair */}
         <div className="absolute top-0 left-8 z-0 w-px md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
           <div className="h-full w-full bg-gradient-to-b from-violet-500 to-transparent" />
