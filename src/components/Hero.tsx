@@ -1,6 +1,7 @@
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { WebsiteButton } from "./WebsiteButton";
 
 const SCREENSHOTS = [
   {
@@ -313,19 +314,10 @@ export function Hero() {
             that gives intelligence to physical products.
           </p>
           <div className="flex flex-col gap-5 sm:flex-row">
-            <button
-              type="button"
-              className="group flex items-center justify-center gap-2 rounded-full bg-slate-900 px-8 py-4 font-semibold text-base text-white shadow-lg shadow-slate-200/50 transition-all hover:scale-105 hover:bg-slate-800 active:scale-95"
-            >
-              Start Building <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </button>
-            <button
-              type="button"
-              className="group flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 py-4 font-semibold text-base text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50"
-            >
-              <PlayCircle className="h-5 w-5 text-slate-400 transition-colors group-hover:text-indigo-500" /> Book a
-              Demo
-            </button>
+            <WebsiteButton icon={ArrowRight}>Start Building</WebsiteButton>
+            <WebsiteButton variant="secondary" icon={PlayCircle} iconPosition="left">
+              Book a Demo
+            </WebsiteButton>
           </div>
         </motion.div>
       </div>
