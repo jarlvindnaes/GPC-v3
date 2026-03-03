@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { DppInteractiveProduct } from "../components/Native3DModels";
+import { WebsiteButton } from "../components/WebsiteButton";
 import { WebsiteCard, WebsiteCardIcon } from "../components/WebsiteCard";
 
 export function DPP() {
@@ -42,12 +43,9 @@ export function DPP() {
             A living, GS1-compliant passport. Ready for ESPR 2026. Monetize spare parts and prove your claims to the
             world directly through a secure, scannable interface.
           </p>
-          <button
-            type="button"
-            className="flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3 font-medium text-base text-white transition-colors hover:bg-slate-800"
-          >
-            Create your first DPP <ArrowRight className="h-4 w-4" />
-          </button>
+          <WebsiteButton size="medium" icon={ArrowRight}>
+            Create your first DPP
+          </WebsiteButton>
         </div>
       </div>
 
@@ -84,8 +82,7 @@ export function DPP() {
         </div>
       </div>
 
-      {/* Benefits Section */}
-      <div className="bg-slate-950 py-32 text-white">
+      <section className="bg-slate-950 py-32 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-20 max-w-3xl text-center">
             <h2 className="mb-6 font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
@@ -196,10 +193,10 @@ export function DPP() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* ── Analytics Section ── */}
-      <div className="bg-white py-16 sm:py-24 md:py-32">
+      <section className="bg-white py-16 sm:py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 md:mb-20">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 font-medium text-sm text-violet-600">
@@ -395,10 +392,10 @@ export function DPP() {
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* ── Modules Section ── */}
-      <div className="border-slate-100 border-t bg-slate-50 py-16 sm:py-24 md:py-32">
+      <section className="border-slate-100 border-t bg-slate-50 py-16 sm:py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 md:mb-20">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 font-medium text-indigo-600 text-sm">
@@ -519,15 +516,10 @@ export function DPP() {
             className="mt-16 text-center"
           >
             <p className="mb-6 text-slate-600">Need a custom module or integration?</p>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-8 py-3.5 font-medium text-base text-white shadow-lg shadow-slate-200/50 transition-all hover:scale-105 hover:bg-slate-800 active:scale-95"
-            >
-              Talk to sales <ArrowRight className="h-4 w-4" />
-            </button>
+            <WebsiteButton icon={ArrowRight}>Talk to sales</WebsiteButton>
           </motion.div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
