@@ -61,6 +61,46 @@ ESPR 2027 deadline countdown. Light theme (white background), Stripe-inspired mi
 5. **Canvas DPR**: Always handle `window.devicePixelRatio` when using HTML5 Canvas for sharp rendering on Retina displays
 6. **Pointer events on 3D sections**: The storytelling scroll uses `pointerEvents` transforms to prevent invisible overlapping panels from blocking 3D model drag interaction
 
+## Commit Standards
+
+### Message Format
+- **Imperative form** — "Add feature" not "Added feature" or "Adding feature"
+- **Start with capital letter** — "Fix validation" not "fix validation"
+- **No ending punctuation** — "Update component" not "Update component."
+- **Single line only** — multi-line commit messages are forbidden
+- **Describe the change and motivation** — "Add caching to improve API response time"
+
+### Good Examples
+```
+Add user dashboard API endpoint
+Implement status polling with TanStack Query
+Remove unused translations to reduce bundle size
+Extract WebsiteCard component from inline card implementations
+```
+
+### Forbidden Patterns
+```
+wip                                          # Too vague
+Fixed bug                                    # Which bug? Where?
+Updates to components                        # Which components? What updates?
+More changes.                                # Vague + has ending punctuation
+updated the dashboard                        # Not imperative, not capitalized
+Add dashboard, fix tests, update deps        # Multiple unrelated changes
+```
+
+### Commit Scope
+- **Small, atomic commits** — each commit represents one logical change
+- **Single responsibility** — one commit does one thing (add feature, fix bug, refactor component)
+- **Buildable state** — every commit must leave the codebase in a working, compilable state
+- **Logical progression** — commits build upon each other so feature development is easy to follow
+
+### Before Committing
+1. Verify the build passes (`npm run build`)
+2. Run the linter (`npm run check`)
+3. Review the diff — verify only intended changes are included
+4. Stage specific files by name — avoid `git add .` or `git add -A`
+5. Never push without explicit instructions to do so
+
 ## Design Language
 
 - **Light sections**: White/slate-50 backgrounds with indigo/blue accents
