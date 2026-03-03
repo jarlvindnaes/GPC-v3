@@ -35,14 +35,14 @@ export function CountdownBanner() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-16 md:py-20">
       {/* Subtle top border accent */}
-      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-indigo-300/50 to-transparent" />
+      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
 
       {/* Background mesh — faint grid */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:48px_48px]" />
 
       {/* Soft gradient orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/3 h-[300px] w-[min(100vw,600px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-100/60 blur-[100px]" />
+        <div className="absolute top-1/2 left-1/3 h-[300px] w-[min(100vw,600px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-surface blur-[100px]" />
         <div className="absolute top-1/2 right-1/4 h-[250px] w-[min(100vw,400px)] -translate-y-1/2 rounded-full bg-violet-100/40 blur-[100px]" />
       </div>
 

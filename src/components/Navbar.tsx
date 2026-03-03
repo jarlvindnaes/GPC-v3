@@ -10,41 +10,41 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="group flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 transition-colors duration-300 group-hover:bg-indigo-600">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 transition-colors duration-300 group-hover:bg-brand">
               <span className="font-bold text-sm text-white">PC</span>
             </div>
-            <span className="font-semibold text-lg text-slate-900 tracking-tight transition-colors duration-300 group-hover:text-indigo-600">
+            <span className="font-semibold text-lg text-slate-900 tracking-tight transition-colors duration-300 group-hover:text-brand">
               Product Connect
             </span>
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <Link
               to="/platform"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-indigo-600"
+              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
             >
               Platform
-              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-indigo-600 transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
             <Link
               to="/dpp"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-indigo-600"
+              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
             >
               DPP
-              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-indigo-600 transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
             <Link
               to="/pricing"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-indigo-600"
+              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
             >
               Pricing
-              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-indigo-600 transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
             <Link
               to="/about"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-indigo-600"
+              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
             >
               About
-              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-indigo-600 transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
           </div>
           <div className="hidden items-center gap-4 md:flex">
@@ -80,28 +80,28 @@ export function Navbar() {
           <Link
             to="/platform"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-indigo-600"
+            className="font-medium text-lg text-slate-600 hover:text-brand"
           >
             Platform
           </Link>
           <Link
             to="/dpp"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-indigo-600"
+            className="font-medium text-lg text-slate-600 hover:text-brand"
           >
             DPP
           </Link>
           <Link
             to="/pricing"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-indigo-600"
+            className="font-medium text-lg text-slate-600 hover:text-brand"
           >
             Pricing
           </Link>
           <Link
             to="/about"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-indigo-600"
+            className="font-medium text-lg text-slate-600 hover:text-brand"
           >
             About
           </Link>

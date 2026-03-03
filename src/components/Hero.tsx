@@ -280,7 +280,7 @@ export function Hero() {
   return (
     <section className="relative mx-auto max-w-7xl overflow-hidden px-4 pt-32 pb-20 sm:px-6 md:pt-48 md:pb-32 lg:px-8">
       {/* Background gradient shapes */}
-      <div className="absolute top-0 right-0 z-0 h-[300px] w-[300px] translate-x-1/3 -translate-y-1/4 rounded-full bg-gradient-to-br from-indigo-50 via-slate-50 to-white opacity-70 blur-[120px] sm:h-[500px] sm:w-[500px] md:h-[800px] md:w-[800px]"></div>
+      <div className="absolute top-0 right-0 z-0 h-[300px] w-[300px] translate-x-1/3 -translate-y-1/4 rounded-full bg-gradient-to-br from-brand-surface via-slate-50 to-white opacity-70 blur-[120px] sm:h-[500px] sm:w-[500px] md:h-[800px] md:w-[800px]"></div>
       <div className="absolute bottom-0 left-0 z-0 h-[250px] w-[250px] -translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent opacity-40 blur-[100px] sm:h-[400px] sm:w-[400px] md:h-[600px] md:w-[600px]"></div>
 
       {/* Network background — above gradients, below content */}
@@ -296,16 +296,16 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-100/50 bg-indigo-50/50 px-3 py-1 font-semibold text-indigo-700 text-sm backdrop-blur-sm">
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-surface/50 px-3 py-1 font-semibold text-brand text-sm backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-600"></span>
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand"></span>
             </span>
             ESPR 2026 Ready
           </div>
           <h1 className="mb-8 font-bold font-display text-[1.7rem] text-slate-900 leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
             Revolutionize Furniture Manufacturing with{" "}
-            <span className="bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand to-brand-glow bg-clip-text text-transparent">
               Product Connect.
             </span>
           </h1>
@@ -334,7 +334,7 @@ export function Hero() {
         className="absolute bottom-10 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-2 opacity-40"
       >
         <span className="font-bold text-[10px] text-slate-400 uppercase tracking-widest">Scroll to explore</span>
-        <div className="h-12 w-px bg-gradient-to-b from-indigo-500 to-transparent"></div>
+        <div className="h-12 w-px bg-gradient-to-b from-brand to-transparent"></div>
       </motion.div>
     </section>
   );
@@ -422,7 +422,7 @@ function HeroCarousel() {
                 key={screenshot.label}
                 aria-label={`Go to ${screenshot.label}`}
                 onClick={() => setActive(screenshotIndex)}
-                className={`h-2.5 rounded-full transition-all duration-300 ${screenshotIndex === active ? "w-6 bg-indigo-400" : "w-2.5 bg-slate-600 hover:bg-slate-500"}`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${screenshotIndex === active ? "w-6 bg-brand" : "w-2.5 bg-slate-600 hover:bg-slate-500"}`}
               />
             ))}
           </div>

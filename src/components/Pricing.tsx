@@ -23,10 +23,10 @@ export function Pricing() {
             <p className="mb-6 text-slate-500 text-sm">Perfect for testing the platform.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />3 hosted products
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />3 hosted products
               </li>
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 Basic DPP generation
               </li>
             </ul>
@@ -44,15 +44,15 @@ export function Pricing() {
             <p className="mb-6 text-slate-500 text-sm">For small manufacturers starting out.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 500 components included
               </li>
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €50 / 1K overage
               </li>
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €0.08 / calculation
               </li>
             </ul>
@@ -62,7 +62,7 @@ export function Pricing() {
           </article>
 
           <article className="relative flex flex-col rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500 px-3 py-1 font-bold text-white text-xs uppercase tracking-wide">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand px-3 py-1 font-bold text-white text-xs uppercase tracking-wide">
               Most Popular
             </div>
             <h3 className="mb-2 font-semibold text-lg text-white">Pro</h3>
@@ -73,19 +73,19 @@ export function Pricing() {
             <p className="mb-6 text-slate-400 text-sm">For growing brands with complex supply chains.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-slate-300 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-400" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-light" />
                 5,000 components included
               </li>
               <li className="flex items-start gap-2 text-slate-300 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-400" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-light" />
                 €30 / 1K overage
               </li>
               <li className="flex items-start gap-2 text-slate-300 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-400" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-light" />
                 €0.08 / calculation
               </li>
               <li className="flex items-start gap-2 text-slate-300 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-400" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-light" />
                 Advanced analytics
               </li>
             </ul>
@@ -103,19 +103,19 @@ export function Pricing() {
             <p className="mb-6 text-slate-500 text-sm">For large manufacturers with extensive catalogs.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 20,000 components included
               </li>
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €20 / 1K overage
               </li>
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €0.08 / calculation
               </li>
               <li className="flex items-start gap-2 text-slate-600 text-sm">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 Custom integrations
               </li>
             </ul>

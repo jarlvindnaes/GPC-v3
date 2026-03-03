@@ -403,7 +403,7 @@ export function DppInteractiveProduct() {
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="mb-1.5 font-semibold text-indigo-500 text-xs uppercase tracking-widest">
+              <p className="mb-1.5 font-semibold text-brand text-xs uppercase tracking-widest">
                 Digital Product Passport
               </p>
               <h2 className="font-bold text-2xl text-slate-900 leading-snug">
@@ -422,7 +422,7 @@ export function DppInteractiveProduct() {
 
           {/* Hotspot detail cards */}
           <div className="space-y-2.5">
-            <div className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3.5 transition-colors hover:border-indigo-200 hover:bg-indigo-50/40">
+            <div className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3.5 transition-colors hover:border-brand/30 hover:bg-brand-surface/40">
               <div
                 className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
                 style={{ backgroundColor: "#6366f115" }}
@@ -434,7 +434,7 @@ export function DppInteractiveProduct() {
                 <p className="text-slate-500 text-xs leading-relaxed">
                   Assembled in Gdańsk, Poland. 85% lower carbon footprint vs. global average. Certified ISO 14001.
                 </p>
-                <span className="mt-1.5 inline-block rounded-full border border-indigo-100 bg-indigo-50 px-2 py-0.5 font-medium text-[11px] text-indigo-600">
+                <span className="mt-1.5 inline-block rounded-full border border-brand/20 bg-brand-surface px-2 py-0.5 font-medium text-[11px] text-brand">
                   CO₂: 12kg · 85% lower
                 </span>
               </div>

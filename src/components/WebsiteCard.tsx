@@ -156,8 +156,8 @@ export function WebsiteCardIcon({
 }: WebsiteCardIconProps) {
   if (hoverTransition) {
     return (
-      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white transition-colors group-hover:border-indigo-200 group-hover:bg-indigo-50">
-        <Icon className="h-5 w-5 text-slate-600 transition-colors group-hover:text-indigo-600" />
+      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white transition-colors group-hover:border-brand/30 group-hover:bg-brand-surface">
+        <Icon className="h-5 w-5 text-slate-600 transition-colors group-hover:text-brand" />
       </div>
     );
   }
