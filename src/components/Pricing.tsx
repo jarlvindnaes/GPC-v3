@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { WebsiteButton } from "./WebsiteButton";
 
 export function Pricing() {
   return (
@@ -14,8 +15,7 @@ export function Pricing() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Free */}
-          <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 className="mb-2 font-semibold text-lg text-slate-900">Free</h3>
             <div className="mb-4">
               <span className="font-bold text-3xl text-slate-900">€0</span>
@@ -30,16 +30,12 @@ export function Pricing() {
                 Basic DPP generation
               </li>
             </ul>
-            <button
-              type="button"
-              className="w-full rounded-lg border border-slate-200 px-4 py-3 font-medium text-slate-900 transition-colors hover:bg-slate-50"
-            >
+            <WebsiteButton variant="outline" size="small" className="w-full">
               Get started
-            </button>
-          </div>
+            </WebsiteButton>
+          </article>
 
-          {/* Core */}
-          <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 className="mb-2 font-semibold text-lg text-slate-900">Core</h3>
             <div className="mb-4">
               <span className="font-bold text-3xl text-slate-900">€199</span>
@@ -60,16 +56,12 @@ export function Pricing() {
                 €0.08 / calculation
               </li>
             </ul>
-            <button
-              type="button"
-              className="w-full rounded-lg bg-slate-900 px-4 py-3 font-medium text-white transition-colors hover:bg-slate-800"
-            >
+            <WebsiteButton variant="primary" size="small" className="w-full">
               Start Core
-            </button>
-          </div>
+            </WebsiteButton>
+          </article>
 
-          {/* Pro */}
-          <div className="relative flex flex-col rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+          <article className="relative flex flex-col rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500 px-3 py-1 font-bold text-white text-xs uppercase tracking-wide">
               Most Popular
             </div>
@@ -97,16 +89,12 @@ export function Pricing() {
                 Advanced analytics
               </li>
             </ul>
-            <button
-              type="button"
-              className="w-full rounded-lg bg-indigo-500 px-4 py-3 font-medium text-white transition-colors hover:bg-indigo-600"
-            >
+            <WebsiteButton variant="primary" size="small" className="w-full">
               Start Pro
-            </button>
-          </div>
+            </WebsiteButton>
+          </article>
 
-          {/* Enterprise */}
-          <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 className="mb-2 font-semibold text-lg text-slate-900">Enterprise</h3>
             <div className="mb-4">
               <span className="font-bold text-3xl text-slate-900">€2,499</span>
@@ -131,13 +119,10 @@ export function Pricing() {
                 Custom integrations
               </li>
             </ul>
-            <button
-              type="button"
-              className="w-full rounded-lg border border-slate-200 px-4 py-3 font-medium text-slate-900 transition-colors hover:bg-slate-50"
-            >
+            <WebsiteButton variant="outline" size="small" className="w-full">
               Contact sales
-            </button>
-          </div>
+            </WebsiteButton>
+          </article>
         </div>
       </div>
     </section>
