@@ -6,26 +6,26 @@ export function Pricing() {
     <section id="pricing" className="border-slate-100 border-t bg-slate-50 py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="mb-4 font-display font-semibold text-3xl text-slate-900 tracking-tight md:text-4xl">
+          <h2 className="mb-4 font-display font-semibold text-3xl text-brand-dark tracking-tight md:text-4xl">
             Component-based pricing
           </h2>
-          <p className="text-lg text-slate-600">
+          <p className="text-brand-text text-lg">
             Pricing scales with actual product complexity, not arbitrary product counts.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 font-semibold text-lg text-slate-900">Free</h3>
+            <h3 className="mb-2 font-semibold text-brand-dark text-lg">Free</h3>
             <div className="mb-4">
-              <span className="font-bold text-3xl text-slate-900">€0</span>
+              <span className="font-bold text-3xl text-brand-dark">€0</span>
             </div>
             <p className="mb-6 text-slate-500 text-sm">Perfect for testing the platform.</p>
             <ul className="mb-8 flex-1 space-y-3">
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />3 hosted products
               </li>
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 Basic DPP generation
               </li>
@@ -36,22 +36,22 @@ export function Pricing() {
           </article>
 
           <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 font-semibold text-lg text-slate-900">Core</h3>
+            <h3 className="mb-2 font-semibold text-brand-dark text-lg">Core</h3>
             <div className="mb-4">
-              <span className="font-bold text-3xl text-slate-900">€199</span>
+              <span className="font-bold text-3xl text-brand-dark">€199</span>
               <span className="text-slate-500">/mo</span>
             </div>
             <p className="mb-6 text-slate-500 text-sm">For small manufacturers starting out.</p>
             <ul className="mb-8 flex-1 space-y-3">
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 500 components included
               </li>
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €50 / 1K overage
               </li>
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €0.08 / calculation
               </li>
@@ -95,26 +95,26 @@ export function Pricing() {
           </article>
 
           <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 font-semibold text-lg text-slate-900">Enterprise</h3>
+            <h3 className="mb-2 font-semibold text-brand-dark text-lg">Enterprise</h3>
             <div className="mb-4">
-              <span className="font-bold text-3xl text-slate-900">€2,499</span>
+              <span className="font-bold text-3xl text-brand-dark">€2,499</span>
               <span className="text-slate-500">/mo</span>
             </div>
             <p className="mb-6 text-slate-500 text-sm">For large manufacturers with extensive catalogs.</p>
             <ul className="mb-8 flex-1 space-y-3">
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 20,000 components included
               </li>
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €20 / 1K overage
               </li>
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 €0.08 / calculation
               </li>
-              <li className="flex items-start gap-2 text-slate-600 text-sm">
+              <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                 Custom integrations
               </li>

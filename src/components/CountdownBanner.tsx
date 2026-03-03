@@ -25,7 +25,7 @@ export function CountdownBanner() {
 
   const Unit = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
-      <span className="font-mono font-semibold text-3xl text-slate-900 tabular-nums leading-none tracking-tight sm:text-5xl md:text-6xl">
+      <span className="font-mono font-semibold text-3xl text-brand-dark tabular-nums leading-none tracking-tight sm:text-5xl md:text-6xl">
         {String(value).padStart(2, "0")}
       </span>
       <span className="mt-2 font-medium text-[11px] text-slate-400 uppercase tracking-widest">{label}</span>
@@ -73,7 +73,7 @@ export function CountdownBanner() {
           {/* Sub-text */}
           <p className="max-w-lg text-center text-base text-slate-500 leading-relaxed">
             Non-compliance risks market exclusion across the EU.{" "}
-            <span className="font-medium text-slate-900">Is your product passport strategy ready?</span>
+            <span className="font-medium text-brand-dark">Is your product passport strategy ready?</span>
           </p>
         </div>
       </div>

@@ -32,7 +32,7 @@ export function TrustLogos() {
             {repeatedLogos.map((logo) => (
               <div
                 key={logo.key}
-                className={`cursor-default text-base text-slate-300 grayscale transition-colors duration-500 hover:text-slate-900 hover:grayscale-0 sm:text-xl md:text-2xl ${logo.className}`}
+                className={`cursor-default text-base text-slate-300 grayscale transition-colors duration-500 hover:text-brand-dark hover:grayscale-0 sm:text-xl md:text-2xl ${logo.className}`}
               >
                 {logo.name}
               </div>

@@ -89,9 +89,9 @@ const features = [
           <div key={item.name} className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-indigo-400"></div>
-              <span className="text-slate-600">{item.name}</span>
+              <span className="text-brand-text">{item.name}</span>
             </div>
-            <span className="font-medium text-slate-900">{item.value}</span>
+            <span className="font-medium text-brand-dark">{item.value}</span>
           </div>
         ))}
       </div>
@@ -194,10 +194,10 @@ export function FeatureGrid() {
     <section id="features" className="relative bg-slate-50 py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 max-w-3xl">
-          <h2 className="mb-6 font-display font-semibold text-3xl text-slate-900 tracking-tight sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-dark tracking-tight sm:text-4xl md:text-5xl">
             Everything you need to build intelligent products.
           </h2>
-          <p className="text-lg text-slate-600 md:text-xl">
+          <p className="text-brand-text text-lg md:text-xl">
             A modular platform designed to scale with your ambition. From 3D model ingestion to direct-to-consumer
             commerce.
           </p>
@@ -214,8 +214,8 @@ export function FeatureGrid() {
               illustrationColor={feature.color}
             >
               <motion.div layoutId={`title-${feature.id}`} className="mb-6">
-                <h3 className="mb-3 font-display font-semibold text-2xl text-slate-900">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.shortDescription}</p>
+                <h3 className="mb-3 font-display font-semibold text-2xl text-brand-dark">{feature.title}</h3>
+                <p className="text-brand-text leading-relaxed">{feature.shortDescription}</p>
               </motion.div>
             </WebsiteCard>
           ))}

@@ -406,7 +406,7 @@ export function DppInteractiveProduct() {
               <p className="mb-1.5 font-semibold text-brand text-xs uppercase tracking-widest">
                 Digital Product Passport
               </p>
-              <h2 className="font-bold text-2xl text-slate-900 leading-snug">
+              <h2 className="font-bold text-2xl text-brand-dark leading-snug">
                 West Elm Slope
                 <br />
                 Leather Chair

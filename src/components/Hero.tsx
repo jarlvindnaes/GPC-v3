@@ -303,13 +303,13 @@ export function Hero() {
             </span>
             ESPR 2026 Ready
           </div>
-          <h1 className="mb-8 font-bold font-display text-[1.7rem] text-slate-900 leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
+          <h1 className="mb-8 font-bold font-display text-[1.7rem] text-brand-dark leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
             Revolutionize Furniture Manufacturing with{" "}
             <span className="bg-gradient-to-r from-brand to-brand-glow bg-clip-text text-transparent">
               Product Connect.
             </span>
           </h1>
-          <p className="mb-12 max-w-2xl font-medium text-lg text-slate-600 leading-relaxed md:text-xl">
+          <p className="mb-12 max-w-2xl font-medium text-brand-text text-lg leading-relaxed md:text-xl">
             Streamline your supply chain, integrate data seamlessly, and track environmental impact. The infrastructure
             that gives intelligence to physical products.
           </p>

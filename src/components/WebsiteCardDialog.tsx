@@ -97,14 +97,16 @@ export function WebsiteCardDialog({
                   aria-label="Close feature details"
                   className="absolute top-6 right-6 h-10 w-10 bg-slate-100 hover:bg-slate-200"
                 >
-                  <X className="h-5 w-5 text-slate-600" />
+                  <X className="h-5 w-5 text-brand-text" />
                 </WebsiteButton>
 
                 <motion.div layoutId={`title-${identifier}`}>
-                  <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-slate-900 sm:text-3xl">{title}</h3>
+                  <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-brand-dark sm:text-3xl">
+                    {title}
+                  </h3>
                 </motion.div>
 
-                <p className="mb-8 text-lg text-slate-600 leading-relaxed">{description}</p>
+                <p className="mb-8 text-brand-text text-lg leading-relaxed">{description}</p>
 
                 <div className="mb-12 space-y-4">
                   {benefits.map((benefit) => (

@@ -13,42 +13,42 @@ export function Navbar() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 transition-colors duration-300 group-hover:bg-brand">
               <span className="font-bold text-sm text-white">PC</span>
             </div>
-            <span className="font-semibold text-lg text-slate-900 tracking-tight transition-colors duration-300 group-hover:text-brand">
+            <span className="font-semibold text-brand-dark text-lg tracking-tight transition-colors duration-300 group-hover:text-brand">
               Product Connect
             </span>
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <Link
               to="/platform"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
+              className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               Platform
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
             <Link
               to="/dpp"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
+              className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               DPP
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
             <Link
               to="/pricing"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
+              className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               Pricing
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
             <Link
               to="/about"
-              className="group relative font-medium text-slate-600 text-sm transition-colors hover:text-brand"
+              className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               About
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
             </Link>
           </div>
           <div className="hidden items-center gap-4 md:flex">
-            <Link to="/login" className="font-medium text-slate-600 text-sm transition-colors hover:text-slate-900">
+            <Link to="/login" className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark">
               Sign in
             </Link>
             <Link
@@ -64,7 +64,7 @@ export function Navbar() {
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle navigation menu"
               aria-expanded={isOpen}
-              className="-mr-2 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-slate-600 transition-colors hover:text-slate-900"
+              className="-mr-2 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-brand-text transition-colors hover:text-brand-dark"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -80,33 +80,33 @@ export function Navbar() {
           <Link
             to="/platform"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-brand"
+            className="font-medium text-brand-text text-lg hover:text-brand"
           >
             Platform
           </Link>
           <Link
             to="/dpp"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-brand"
+            className="font-medium text-brand-text text-lg hover:text-brand"
           >
             DPP
           </Link>
           <Link
             to="/pricing"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-brand"
+            className="font-medium text-brand-text text-lg hover:text-brand"
           >
             Pricing
           </Link>
           <Link
             to="/about"
             onClick={() => setIsOpen(false)}
-            className="font-medium text-lg text-slate-600 hover:text-brand"
+            className="font-medium text-brand-text text-lg hover:text-brand"
           >
             About
           </Link>
           <hr className="my-2 border-slate-100" />
-          <Link to="/login" onClick={() => setIsOpen(false)} className="font-medium text-lg text-slate-600">
+          <Link to="/login" onClick={() => setIsOpen(false)} className="font-medium text-brand-text text-lg">
             Sign in
           </Link>
           <Link
