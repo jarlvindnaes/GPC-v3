@@ -10,7 +10,7 @@ interface WebsiteButtonProps extends ComponentPropsWithRef<"button"> {
 }
 
 const variantClassNames: Record<NonNullable<WebsiteButtonProps["variant"]>, string> = {
-  primary: "bg-brand text-white shadow-lg shadow-brand/20 hover:bg-brand/90 hover:scale-105 active:scale-95",
+  primary: "bg-brand text-white shadow-lg shadow-brand/20 hover:bg-brand-dark hover:scale-105 active:scale-95",
   secondary: "border border-slate-200 bg-white text-slate-900 hover:border-slate-300 hover:bg-slate-50",
   outline: "border border-slate-200 text-slate-900 hover:bg-slate-50",
   ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
@@ -44,7 +44,7 @@ export function WebsiteButton({
     <button
       type={type}
       className={classNames(
-        "group inline-flex items-center justify-center gap-2 transition-all",
+        "group inline-flex cursor-pointer items-center justify-center gap-2 transition-all",
         variantClassNames[variant],
         sizeClassNames[size],
         className
