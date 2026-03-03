@@ -30,6 +30,15 @@ const baseClassName =
 const defaultHoverClassName = "hover:border-slate-300";
 const expandableHoverClassName = "hover:border-brand";
 
+const illustrationGradientClassNames: Record<string, string> = {
+  slate: "bg-gradient-to-br from-slate-50 to-slate-100/50",
+  emerald: "bg-gradient-to-br from-emerald-50 to-emerald-100/50",
+  indigo: "bg-gradient-to-br from-indigo-50 to-indigo-100/50",
+  cyan: "bg-gradient-to-br from-cyan-50 to-cyan-100/50",
+  rose: "bg-gradient-to-br from-rose-50 to-rose-100/50",
+  blue: "bg-gradient-to-br from-blue-50 to-blue-100/50"
+};
+
 export function WebsiteCard({
   children,
   expandableIdentifier,
@@ -72,9 +81,8 @@ export function WebsiteCard({
     </div>
   ) : null;
 
-  const illustrationGradient = illustrationColor
-    ? `bg-gradient-to-br from-${illustrationColor}-50 to-${illustrationColor}-100/50`
-    : "bg-brand-surface";
+  const illustrationGradient =
+    (illustrationColor && illustrationGradientClassNames[illustrationColor]) ?? "bg-brand-surface";
 
   const illustrationInner = illustration ? (
     <div

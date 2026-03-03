@@ -4,6 +4,24 @@ import type { ReactNode } from "react";
 import { useEffect } from "react";
 import { WebsiteButton } from "./WebsiteButton";
 
+const visualGradientClassNames: Record<string, string> = {
+  slate: "bg-gradient-to-br from-slate-50 to-slate-100/50",
+  emerald: "bg-gradient-to-br from-emerald-50 to-emerald-100/50",
+  indigo: "bg-gradient-to-br from-indigo-50 to-indigo-100/50",
+  cyan: "bg-gradient-to-br from-cyan-50 to-cyan-100/50",
+  rose: "bg-gradient-to-br from-rose-50 to-rose-100/50",
+  blue: "bg-gradient-to-br from-blue-50 to-blue-100/50"
+};
+
+const checkIconClassNames: Record<string, string> = {
+  slate: "text-slate-500",
+  emerald: "text-emerald-500",
+  indigo: "text-indigo-500",
+  cyan: "text-cyan-500",
+  rose: "text-rose-500",
+  blue: "text-blue-500"
+};
+
 interface WebsiteCardDialogProps {
   identifier: string;
   isOpen: boolean;
@@ -66,7 +84,7 @@ export function WebsiteCardDialog({
             >
               <motion.div
                 layoutId={`visual-${identifier}`}
-                className={`flex items-center justify-center border-slate-100 border-b bg-gradient-to-br from-${color}-50 to-${color}-100/50 p-6 sm:p-8 md:w-1/2 md:border-r md:border-b-0 md:p-12`}
+                className={`flex items-center justify-center border-slate-100 border-b p-6 sm:p-8 md:w-1/2 md:border-r md:border-b-0 md:p-12 ${visualGradientClassNames[color] ?? "bg-brand-surface"}`}
               >
                 <div className="w-full max-w-sm scale-125 transform md:scale-150">{visual}</div>
               </motion.div>
@@ -91,7 +109,7 @@ export function WebsiteCardDialog({
                 <div className="mb-12 space-y-4">
                   {benefits.map((benefit) => (
                     <div key={benefit} className="flex items-start gap-3">
-                      <CheckCircle2 className={`h-6 w-6 shrink-0 text-${color}-500`} />
+                      <CheckCircle2 className={`h-6 w-6 shrink-0 ${checkIconClassNames[color] ?? "text-brand"}`} />
                       <span className="font-medium text-slate-700">{benefit}</span>
                     </div>
                   ))}
