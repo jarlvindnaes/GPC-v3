@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  ArrowUpRight,
   BadgeCheck,
   BarChart3,
   Database,
@@ -25,6 +24,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { DppInteractiveProduct } from "../components/Native3DModels";
+import { WebsiteCard, WebsiteCardIcon } from "../components/WebsiteCard";
 
 export function DPP() {
   return (
@@ -57,30 +57,30 @@ export function DPP() {
 
       <div className="mx-auto mb-32 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 md:grid-cols-3">
-          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5 sm:p-6 md:p-8">
-            <ShieldCheck className="mb-6 h-8 w-8 text-indigo-600" />
+          <WebsiteCard>
+            <WebsiteCardIcon icon={ShieldCheck} />
             <h3 className="mb-4 font-display font-semibold text-slate-900 text-xl sm:text-2xl">ESPR Compliant</h3>
             <p className="text-slate-600">
               Built from the ground up to meet the strict requirements of the Ecodesign for Sustainable Products
               Regulation coming in 2026.
             </p>
-          </div>
-          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5 sm:p-6 md:p-8">
-            <Smartphone className="mb-6 h-8 w-8 text-indigo-600" />
+          </WebsiteCard>
+          <WebsiteCard>
+            <WebsiteCardIcon icon={Smartphone} />
             <h3 className="mb-4 font-display font-semibold text-slate-900 text-xl sm:text-2xl">Consumer Facing</h3>
             <p className="text-slate-600">
               A beautiful, mobile-optimized experience that tells your product's story, shows its impact, and builds
               brand trust.
             </p>
-          </div>
-          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5 sm:p-6 md:p-8">
-            <Link2 className="mb-6 h-8 w-8 text-indigo-600" />
+          </WebsiteCard>
+          <WebsiteCard>
+            <WebsiteCardIcon icon={Link2} />
             <h3 className="mb-4 font-display font-semibold text-slate-900 text-xl sm:text-2xl">Direct Connection</h3>
             <p className="text-slate-600">
               Bypass retailers and connect directly with the end user. Offer spare parts, care instructions, and
               upgrades instantly.
             </p>
-          </div>
+          </WebsiteCard>
         </div>
       </div>
 
@@ -387,20 +387,11 @@ export function DPP() {
                   "Auto-generate regulatory reports for ESPR, DPP, and eco-labeling requirements with one click."
               }
             ].map((feature, featureIndex) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: featureIndex * 0.08 }}
-                className="group rounded-2xl border border-slate-100 bg-slate-50 p-5 transition-all hover:border-slate-200 hover:shadow-md sm:p-6"
-              >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white transition-colors group-hover:border-indigo-200 group-hover:bg-indigo-50">
-                  <feature.icon className="h-5 w-5 text-slate-600 transition-colors group-hover:text-indigo-600" />
-                </div>
+              <WebsiteCard key={feature.title} entranceDelay={featureIndex * 0.08}>
+                <WebsiteCardIcon icon={feature.icon} />
                 <h4 className="mb-2 font-semibold text-lg text-slate-900">{feature.title}</h4>
                 <p className="text-slate-600 text-sm leading-relaxed">{feature.description}</p>
-              </motion.div>
+              </WebsiteCard>
             ))}
           </div>
         </div>
@@ -491,41 +482,32 @@ export function DPP() {
                 soon: false
               }
             ].map((platformModule, moduleIndex) => (
-              <motion.div
+              <WebsiteCard
                 key={platformModule.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: moduleIndex * 0.08 }}
-                className="group relative flex flex-col overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-slate-300 hover:shadow-lg sm:p-6 md:p-7"
-              >
-                {platformModule.soon && (
-                  <div className="absolute top-4 right-4 rounded-full border border-slate-200 bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-500 uppercase tracking-wider">
-                    Coming Soon
+                entranceDelay={moduleIndex * 0.08}
+                badge={platformModule.soon ? "Coming Soon" : undefined}
+                showArrow={true}
+                arrowPosition="bottom"
+                footer={
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-semibold text-slate-900 text-sm">{platformModule.price}</div>
+                      <div className="mt-0.5 text-[11px] text-slate-400">{platformModule.plans}</div>
+                    </div>
                   </div>
-                )}
-
-                <div
-                  className={`mb-5 flex h-11 w-11 items-center justify-center rounded-xl border ${platformModule.iconWrapperClassName}`}
-                >
-                  <platformModule.icon className={`h-5 w-5 ${platformModule.iconClassName}`} />
-                </div>
-
+                }
+              >
+                <WebsiteCardIcon
+                  icon={platformModule.icon}
+                  iconClassName={platformModule.iconClassName}
+                  iconWrapperClassName={platformModule.iconWrapperClassName}
+                  hoverTransition={false}
+                />
                 <h3 className="mb-2 font-display font-semibold text-lg text-slate-900 sm:text-xl">
                   {platformModule.title}
                 </h3>
                 <p className="mb-6 flex-1 text-slate-600 text-sm leading-relaxed">{platformModule.description}</p>
-
-                <div className="flex items-center justify-between border-slate-100 border-t pt-4">
-                  <div>
-                    <div className="font-semibold text-slate-900 text-sm">{platformModule.price}</div>
-                    <div className="mt-0.5 text-[11px] text-slate-400">{platformModule.plans}</div>
-                  </div>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 opacity-0 transition-opacity group-hover:opacity-100">
-                    <ArrowUpRight className="h-4 w-4 text-slate-600" />
-                  </div>
-                </div>
-              </motion.div>
+              </WebsiteCard>
             ))}
           </div>
 

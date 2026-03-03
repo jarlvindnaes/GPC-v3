@@ -1,6 +1,7 @@
-import { ArrowUpRight, CheckCircle2, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
+import { WebsiteCard } from "./WebsiteCard";
+import { WebsiteCardDialog } from "./WebsiteCardDialog";
 
 const features = [
   {
@@ -204,107 +205,40 @@ export function FeatureGrid() {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
-            <motion.div
+            <WebsiteCard
               key={feature.id}
-              layoutId={`card-${feature.id}`}
-              onClick={() => setSelectedFeature(feature.id)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  setSelectedFeature(feature.id);
-                }
-              }}
-              className="group relative flex cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6 md:p-8"
+              expandableIdentifier={feature.id}
+              onPress={() => setSelectedFeature(feature.id)}
+              showArrow={true}
             >
-              <div className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 opacity-0 transition-opacity group-hover:opacity-100">
-                <ArrowUpRight className="h-5 w-5 text-slate-600" />
-              </div>
               <motion.div layoutId={`title-${feature.id}`} className="mb-6">
                 <h3 className="mb-3 font-display font-semibold text-2xl text-slate-900">{feature.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{feature.shortDescription}</p>
               </motion.div>
               <motion.div layoutId={`visual-${feature.id}`} className="mt-auto pt-8">
                 <div
-                  className={`bg-gradient-to-br from-${feature.color}-50 to-${feature.color}-100/50 rounded-2xl border p-6 md:p-8 border-${feature.color}-100/50 flex min-h-[150px] items-center justify-center md:min-h-[200px]`}
+                  className={`flex min-h-[150px] items-center justify-center rounded-2xl border bg-gradient-to-br border-${feature.color}-100/50 from-${feature.color}-50 to-${feature.color}-100/50 p-6 md:min-h-[200px] md:p-8`}
                 >
                   {feature.visual}
                 </div>
               </motion.div>
-            </motion.div>
+            </WebsiteCard>
           ))}
         </div>
       </div>
 
-      <AnimatePresence>
-        {selectedFeature && activeFeature && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedFeature(null)}
-              aria-hidden="true"
-              className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm"
-            />
-            <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-              <motion.div
-                layoutId={`card-${activeFeature.id}`}
-                role="dialog"
-                aria-modal="true"
-                aria-label={activeFeature.title}
-                className="pointer-events-auto flex max-h-[90vh] w-full max-w-5xl flex-col overflow-y-auto rounded-[2rem] bg-white shadow-2xl md:flex-row"
-              >
-                {/* Left side: Visual */}
-                <motion.div
-                  layoutId={`visual-${activeFeature.id}`}
-                  className={`bg-gradient-to-br md:w-1/2 from-${activeFeature.color}-50 to-${activeFeature.color}-100/50 flex items-center justify-center border-slate-100 border-b p-6 sm:p-8 md:border-r md:border-b-0 md:p-12`}
-                >
-                  <div className="w-full max-w-sm scale-125 transform md:scale-150">{activeFeature.visual}</div>
-                </motion.div>
-
-                {/* Right side: Content */}
-                <div className="relative flex flex-col p-5 sm:p-8 md:w-1/2 md:p-12">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedFeature(null)}
-                    aria-label="Close feature details"
-                    className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 transition-colors hover:bg-slate-200"
-                  >
-                    <X className="h-5 w-5 text-slate-600" />
-                  </button>
-
-                  <motion.div layoutId={`title-${activeFeature.id}`}>
-                    <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-slate-900 sm:text-3xl">
-                      {activeFeature.title}
-                    </h3>
-                  </motion.div>
-
-                  <p className="mb-8 text-lg text-slate-600 leading-relaxed">{activeFeature.longDescription}</p>
-
-                  <div className="mb-12 space-y-4">
-                    {activeFeature.benefits.map((benefit) => (
-                      <div key={benefit} className="flex items-start gap-3">
-                        <CheckCircle2 className={`h-6 w-6 text-${activeFeature.color}-500 shrink-0`} />
-                        <span className="font-medium text-slate-700">{benefit}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto border-slate-100 border-t pt-8">
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-4 font-medium text-lg text-white transition-colors hover:bg-slate-800"
-                    >
-                      Explore {activeFeature.title} <ArrowUpRight className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
+      {activeFeature && (
+        <WebsiteCardDialog
+          identifier={activeFeature.id}
+          isOpen={selectedFeature !== null}
+          onClose={() => setSelectedFeature(null)}
+          title={activeFeature.title}
+          visual={activeFeature.visual}
+          color={activeFeature.color}
+          description={activeFeature.longDescription}
+          benefits={activeFeature.benefits}
+        />
+      )}
     </section>
   );
 }
