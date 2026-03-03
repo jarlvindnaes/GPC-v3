@@ -13,6 +13,8 @@ interface WebsiteCardProps {
   entranceDelay?: number;
   footer?: ReactNode;
   className?: string;
+  illustration?: ReactNode;
+  illustrationColor?: string;
 }
 
 interface WebsiteCardIconProps {
@@ -37,7 +39,9 @@ export function WebsiteCard({
   badge,
   entranceDelay,
   footer,
-  className
+  className,
+  illustration,
+  illustrationColor
 }: WebsiteCardProps) {
   const hoverClassName = expandableIdentifier ? expandableHoverClassName : defaultHoverClassName;
   const combinedClassName = className
@@ -68,11 +72,34 @@ export function WebsiteCard({
     </div>
   ) : null;
 
+  const illustrationGradient = illustrationColor
+    ? `bg-gradient-to-br from-${illustrationColor}-50 to-${illustrationColor}-100/50`
+    : "bg-brand-surface";
+
+  const illustrationInner = illustration ? (
+    <div
+      className={`flex min-h-[150px] items-center justify-center p-6 md:min-h-[200px] md:p-8 ${illustrationGradient}`}
+    >
+      {illustration}
+    </div>
+  ) : null;
+
+  const illustrationSection = illustration ? (
+    <div className="-mx-5 mt-auto -mb-5 pt-6 sm:-mx-6 sm:-mb-6">
+      {expandableIdentifier ? (
+        <motion.div layoutId={`visual-${expandableIdentifier}`}>{illustrationInner}</motion.div>
+      ) : (
+        illustrationInner
+      )}
+    </div>
+  ) : null;
+
   const content = (
     <>
       {badgeElement}
       {topArrowElement}
       {children}
+      {illustrationSection}
       {footerElement}
     </>
   );

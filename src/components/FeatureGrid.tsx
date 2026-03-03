@@ -210,17 +210,12 @@ export function FeatureGrid() {
               expandableIdentifier={feature.id}
               onPress={() => setSelectedFeature(feature.id)}
               showArrow={true}
+              illustration={feature.visual}
+              illustrationColor={feature.color}
             >
               <motion.div layoutId={`title-${feature.id}`} className="mb-6">
                 <h3 className="mb-3 font-display font-semibold text-2xl text-slate-900">{feature.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{feature.shortDescription}</p>
-              </motion.div>
-              <motion.div layoutId={`visual-${feature.id}`} className="mt-auto pt-8">
-                <div
-                  className={`flex min-h-[150px] items-center justify-center rounded-2xl border bg-gradient-to-br border-${feature.color}-100/50 from-${feature.color}-50 to-${feature.color}-100/50 p-6 md:min-h-[200px] md:p-8`}
-                >
-                  {feature.visual}
-                </div>
               </motion.div>
             </WebsiteCard>
           ))}
