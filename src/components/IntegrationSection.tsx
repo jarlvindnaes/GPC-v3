@@ -15,11 +15,13 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { InteractiveGrid } from "./CountdownBanner";
 
 interface PathData {
   d: string;
   gradient: string;
   phase: number;
+  reverse: boolean;
 }
 
 export function IntegrationSection() {
@@ -73,7 +75,8 @@ export function IntegrationSection() {
             ? `M ${h.cx} ${h.t} L ${n.cx} ${n.b}`
             : `M ${h.cx} ${h.t} C ${h.cx} ${mid}, ${n.cx} ${mid}, ${n.cx} ${n.b}`,
         gradient: "flow-indigo",
-        phase: i * 0.4
+        phase: i * 0.4,
+        reverse: true
       });
     });
 
@@ -83,7 +86,8 @@ export function IntegrationSection() {
       p.push({
         d: `M ${h.l} ${ey} C ${mx} ${ey}, ${mx} ${n.cy}, ${n.r} ${n.cy}`,
         gradient: "flow-amber",
-        phase: 0.3 + i * 0.4
+        phase: 0.3 + i * 0.4,
+        reverse: true
       });
     });
 
@@ -93,14 +97,16 @@ export function IntegrationSection() {
       p.push({
         d: `M ${h.r} ${ey} C ${mx} ${ey}, ${mx} ${n.cy}, ${n.l} ${n.cy}`,
         gradient: i < 2 ? "flow-indigo" : "flow-emerald",
-        phase: 0.5 + i * 0.4
+        phase: 0.5 + i * 0.4,
+        reverse: i < 2
       });
     });
 
     p.push({
       d: `M ${h.cx} ${h.b} L ${q.cx} ${q.t}`,
       gradient: "flow-violet",
-      phase: 0.2
+      phase: 0.2,
+      reverse: false
     });
 
     bots.forEach((n, i) => {
@@ -108,7 +114,8 @@ export function IntegrationSection() {
       p.push({
         d: `M ${q.cx} ${q.b} C ${q.cx} ${mid}, ${n.cx} ${mid}, ${n.cx} ${n.t}`,
         gradient: "flow-rose",
-        phase: 0.4 + i * 0.5
+        phase: 0.4 + i * 0.5,
+        reverse: i === 1
       });
     });
 
@@ -128,7 +135,7 @@ export function IntegrationSection() {
   }, [computePaths]);
 
   return (
-    <section className="relative overflow-hidden bg-brand-dark py-16 text-white sm:py-24 md:py-32">
+    <section className="relative overflow-hidden bg-brand-deep py-16 text-white sm:py-24 md:py-32">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 max-w-3xl sm:mb-16 md:mb-24">
           <h2 className="mb-6 font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
@@ -144,8 +151,11 @@ export function IntegrationSection() {
           ref={containerRef}
           className="relative mx-auto h-[350px] w-full max-w-6xl sm:h-[400px] md:h-[600px] lg:h-[800px]"
         >
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]"></div>
+          <div className="pointer-events-none absolute inset-0">
+            <div className="pointer-events-auto h-full w-full">
+              <InteractiveGrid />
+            </div>
+          </div>
 
           {/* Hub — explicit dimensions on ref so measurements are stable */}
           <div
@@ -160,9 +170,9 @@ export function IntegrationSection() {
               className="h-full w-full"
             >
               <div className="group relative h-full w-full">
-                <div className="absolute inset-0 bg-indigo-500/20 blur-3xl transition-all duration-700 group-hover:bg-indigo-500/30"></div>
-                <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[2rem] border border-indigo-500/30 bg-slate-900 shadow-[0_0_80px_rgba(99,102,241,0.15)] md:rounded-[3rem]">
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
+                <div className="absolute inset-0 bg-brand/20 blur-3xl transition-all duration-700 group-hover:bg-brand/30"></div>
+                <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[2rem] border border-brand-light/50 bg-brand-deep shadow-[0_0_80px_color-mix(in_srgb,var(--color-brand)_15%,transparent)] md:rounded-[3rem]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent"></div>
                   <span className="text-center font-bold font-display text-lg leading-tight tracking-tight md:text-2xl">
                     <span className="text-indigo-400">Product</span>
                     <br />
@@ -171,7 +181,7 @@ export function IntegrationSection() {
                   <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
                     transition={{ repeat: Infinity, duration: 4 }}
-                    className="absolute inset-0 rounded-[2rem] border-2 border-indigo-500/20 md:rounded-[3rem]"
+                    className="absolute inset-0 rounded-[2rem] border-2 border-indigo-400/30 md:rounded-[3rem]"
                   />
                 </div>
               </div>
@@ -191,7 +201,7 @@ export function IntegrationSection() {
               transition={{ delay: 0.5 }}
               className="h-full w-full"
             >
-              <div className="flex h-full w-full items-center justify-center rounded-2xl border border-violet-500/30 bg-slate-900/80 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
+              <div className="flex h-full w-full items-center justify-center rounded-2xl border border-violet-400/50 bg-brand-deep/80 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
                 <QrCode className="h-7 w-7 text-violet-400 md:h-9 md:w-9" />
               </div>
             </motion.div>
@@ -322,7 +332,13 @@ export function IntegrationSection() {
             </defs>
             <g fill="none" strokeWidth="1.5" filter="url(#glow)">
               {paths.map((p) => (
-                <FlowingPath key={`${p.gradient}-${p.phase}`} d={p.d} gradient={p.gradient} phase={p.phase} />
+                <FlowingPath
+                  key={`${p.gradient}-${p.phase}`}
+                  d={p.d}
+                  gradient={p.gradient}
+                  phase={p.phase}
+                  reverse={p.reverse}
+                />
               ))}
             </g>
           </svg>
@@ -343,8 +359,8 @@ interface IntegrationNodeProperties {
 }
 
 const integrationNodeColors: Record<IntegrationNodeColor, string> = {
-  slate: "border-slate-800 bg-slate-900/40 text-slate-400",
-  indigo: "border-indigo-500/20 bg-indigo-500/5 text-indigo-400",
+  slate: "border-slate-400/40 bg-brand-deep/40 text-slate-400",
+  indigo: "border-indigo-400/40 bg-indigo-500/5 text-indigo-400",
   emerald: "border-emerald-500/20 bg-emerald-500/5 text-emerald-400",
   amber: "border-amber-500/20 bg-amber-500/5 text-amber-400",
   rose: "border-rose-500/20 bg-rose-500/5 text-rose-400"
@@ -365,30 +381,43 @@ function IntegrationNode({ title, icon, delay, color, reverse = false }: Integra
   );
 }
 
-function FlowingPath({ d, gradient, phase }: { d: string; gradient: string; phase: number }) {
-  const totalLength = 1200;
-  const dashLen = 120;
-  const gap = totalLength;
+const flowingPathColors: Record<string, string> = {
+  "flow-indigo": "#6366f1",
+  "flow-amber": "#f59e0b",
+  "flow-emerald": "#10b981",
+  "flow-violet": "#8b5cf6",
+  "flow-rose": "#f43f5e"
+};
+
+function FlowingPath({
+  d,
+  gradient,
+  phase,
+  reverse
+}: {
+  d: string;
+  gradient: string;
+  phase: number;
+  reverse: boolean;
+}) {
+  const color = flowingPathColors[gradient] ?? "#6366f1";
+  const duration = 3.5;
+  const keyPoints = reverse ? "1;0" : "0;1";
 
   return (
     <g>
-      <path d={d} stroke={`url(#${gradient})`} strokeOpacity={0.15} strokeWidth={1} />
+      <path d={d} stroke={`url(#${gradient})`} strokeOpacity={0.6} strokeWidth={1.5} />
       {[0, 0.33, 0.66].map((offset) => (
-        <motion.path
-          key={offset}
-          d={d}
-          stroke={`url(#${gradient})`}
-          strokeWidth={1.8}
-          strokeDasharray={`${dashLen} ${gap}`}
-          initial={{ strokeDashoffset: totalLength + dashLen }}
-          animate={{ strokeDashoffset: -dashLen }}
-          transition={{
-            repeat: Infinity,
-            duration: 3.5,
-            ease: "linear",
-            delay: phase + offset * 3.5
-          }}
-        />
+        <circle key={offset} r={3} fill={color} opacity={0.8} filter="url(#glow)">
+          <animateMotion
+            dur={`${duration}s`}
+            repeatCount="indefinite"
+            begin={`${phase + offset * duration}s`}
+            path={d}
+            keyPoints={keyPoints}
+            keyTimes="0;1"
+          />
+        </circle>
       ))}
     </g>
   );

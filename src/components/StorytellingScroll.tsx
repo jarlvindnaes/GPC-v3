@@ -42,7 +42,7 @@ export function StorytellingScroll() {
 
   return (
     <>
-      <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-dark text-white">
+      <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-deep text-white">
         {/* Header section */}
         <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
@@ -65,7 +65,7 @@ export function StorytellingScroll() {
 
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
-          <div className="absolute top-0 bottom-0 left-8 z-0 w-px bg-slate-800 md:left-1/2 md:-translate-x-1/2">
+          <div className="absolute top-0 bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
             <motion.div
               className="absolute top-0 right-0 left-0 bg-gradient-to-b from-indigo-500 to-violet-500"
               style={{ height: lineProgress }}
@@ -124,7 +124,7 @@ export function StorytellingScroll() {
                   style={{ opacity: op }}
                   className="absolute inset-y-0 flex flex-col justify-center"
                 >
-                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800 text-indigo-400 shadow-indigo-500/10 shadow-lg">
+                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark text-indigo-400 shadow-indigo-500/10 shadow-lg">
                     {icon}
                   </div>
                   <h2 className="mb-4 font-bold text-2xl leading-[1.1] tracking-tight sm:text-4xl md:text-5xl">
@@ -145,7 +145,7 @@ export function StorytellingScroll() {
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
                   <FinishedProductCanvas />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-slate-700/40 bg-slate-800/40 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
                   <div className="flex flex-col">
                     <p className="whitespace-nowrap font-semibold text-sm text-white">West Elm Slope Leather Chair</p>
                     <p className="mt-0.5 text-[11px] text-slate-400">247 components • 18 suppliers</p>
@@ -165,7 +165,7 @@ export function StorytellingScroll() {
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
                   <ComponentsCanvas />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-slate-700/40 bg-slate-800/40 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:block md:bottom-6 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:block md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <p className="whitespace-nowrap font-semibold text-sm text-white">Steel Bolt — ISO 4762 M8×30</p>
@@ -188,7 +188,7 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp3, pointerEvents: pView3 as MotionStyle["pointerEvents"] }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="w-full max-w-80 rounded-2xl border border-slate-700/40 bg-slate-800/40 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-6">
+                <div className="w-full max-w-80 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-6">
                   <div className="mb-5 flex items-center justify-between">
                     <p className="font-semibold text-sm text-white">Supplier Data Entry</p>
                     <span className="rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2 py-0.5 font-bold text-[10px] text-emerald-400">
@@ -201,7 +201,7 @@ export function StorytellingScroll() {
                       { label: "Manufacturing Origin", value: "Gdańsk, Poland" },
                       { label: "CO₂ per unit", value: "12.4 kg CO₂e" }
                     ].map((f) => (
-                      <div key={f.label} className="rounded-xl border border-slate-700/40 bg-slate-900/50 px-4 py-3">
+                      <div key={f.label} className="rounded-xl border border-brand-dark/20 bg-brand-deep/50 px-4 py-3">
                         <p className="mb-0.5 font-medium text-[10px] text-slate-500 uppercase tracking-wide">
                           {f.label}
                         </p>
@@ -223,7 +223,7 @@ export function StorytellingScroll() {
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
                   <RawMaterialCanvas />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-slate-700/40 bg-slate-800/40 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <p className="font-semibold text-sm text-white">Iron Ore — Raw Material</p>
@@ -248,7 +248,7 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"] }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-800/40 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-96">
+                <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-96">
                   {/* Header */}
                   <div className="border-slate-700/50 border-b px-4 pt-4 pb-3 sm:px-5 sm:pt-5 sm:pb-4">
                     <div className="mb-1 flex items-center justify-between">
@@ -299,7 +299,7 @@ export function StorytellingScroll() {
                         pct: 30
                       }
                     ].map((leg, legIndex) => (
-                      <div key={leg.from} className="rounded-xl border border-slate-700/30 bg-slate-900/40 p-3">
+                      <div key={leg.from} className="rounded-xl border border-brand-dark/15 bg-brand-deep/40 p-3">
                         <div className="mb-2.5 flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <div
@@ -318,7 +318,7 @@ export function StorytellingScroll() {
                           </div>
                         </div>
                         {/* Progress bar */}
-                        <div className="relative h-1 overflow-hidden rounded-full bg-slate-800">
+                        <div className="relative h-1 overflow-hidden rounded-full bg-brand-dark">
                           <motion.div
                             className={`absolute top-0 left-0 h-full rounded-full ${leg.mode === "ship" ? "bg-gradient-to-r from-cyan-500 to-cyan-400" : leg.mode === "train" ? "bg-gradient-to-r from-amber-500 to-amber-400" : "bg-gradient-to-r from-violet-500 to-violet-400"}`}
                             style={{ width: `${leg.pct}%` }}
@@ -480,7 +480,7 @@ export function StorytellingScroll() {
 
                   {/* Floating metric labels */}
                   <motion.div
-                    className="absolute top-6 right-8 hidden rounded-xl border border-slate-700/40 bg-slate-800/40 px-3 py-2 shadow-lg backdrop-blur-xl sm:block"
+                    className="absolute top-6 right-8 hidden rounded-xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-lg backdrop-blur-xl sm:block"
                     animate={{ y: [0, -6, 0], opacity: [0.7, 1, 0.7] }}
                     transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                   >
@@ -488,7 +488,7 @@ export function StorytellingScroll() {
                     <p className="font-bold text-indigo-400 text-sm">12.4 kg</p>
                   </motion.div>
                   <motion.div
-                    className="absolute bottom-12 left-4 hidden rounded-xl border border-slate-700/40 bg-slate-800/40 px-3 py-2 shadow-lg backdrop-blur-xl sm:block"
+                    className="absolute bottom-12 left-4 hidden rounded-xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-lg backdrop-blur-xl sm:block"
                     animate={{ y: [0, 6, 0], opacity: [0.6, 1, 0.6] }}
                     transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
                   >
@@ -496,7 +496,7 @@ export function StorytellingScroll() {
                     <p className="font-bold text-emerald-400 text-sm">A+</p>
                   </motion.div>
                   <motion.div
-                    className="absolute top-16 left-2 hidden rounded-xl border border-slate-700/40 bg-slate-800/40 px-3 py-2 shadow-lg backdrop-blur-xl sm:block"
+                    className="absolute top-16 left-2 hidden rounded-xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-lg backdrop-blur-xl sm:block"
                     animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
                     transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
                   >
@@ -511,13 +511,13 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp7, pointerEvents: pView7 as MotionStyle["pointerEvents"] }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="w-full max-w-[260px] overflow-hidden rounded-3xl border border-slate-700/40 bg-slate-800/40 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-72">
-                  <div className="border-slate-700/40 border-b bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-5">
+                <div className="w-full max-w-[260px] overflow-hidden rounded-3xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-72">
+                  <div className="border-slate-700/40 border-b bg-gradient-to-br from-brand-dark/30 to-brand-dark/20 p-5">
                     <div className="mb-3 flex items-center justify-between">
                       <span className="font-bold text-[10px] text-indigo-400 uppercase tracking-widest">
                         Digital Product Passport
                       </span>
-                      <span className="rounded-lg bg-slate-900/50 px-2 py-0.5 font-bold text-[10px] text-white">
+                      <span className="rounded-lg bg-brand-deep/50 px-2 py-0.5 font-bold text-[10px] text-white">
                         ESPR 2026
                       </span>
                     </div>
@@ -549,14 +549,14 @@ export function StorytellingScroll() {
                       ].map((s) => (
                         <div
                           key={s.label}
-                          className="flex-1 rounded-xl border border-slate-700/40 bg-slate-900/40 p-2.5 text-center"
+                          className="flex-1 rounded-xl border border-brand-dark/20 bg-brand-deep/40 p-2.5 text-center"
                         >
                           <p className="font-bold text-base text-white">{s.value}</p>
                           <p className="mt-0.5 text-[10px] text-slate-500">{s.label}</p>
                         </div>
                       ))}
                     </div>
-                    <div className="flex items-center gap-3 rounded-xl border border-slate-700/40 bg-slate-900/40 p-3">
+                    <div className="flex items-center gap-3 rounded-xl border border-brand-dark/20 bg-brand-deep/40 p-3">
                       <QrCode className="h-10 w-10 shrink-0 text-white" />
                       <div>
                         <p className="font-semibold text-[11px] text-white">Scan to verify</p>
@@ -572,7 +572,7 @@ export function StorytellingScroll() {
       </section>
 
       {/* ── Grand Finale: Your Intelligent Product ── */}
-      <section className="relative overflow-hidden bg-brand-dark pt-4 pb-16 text-white sm:pt-8 sm:pb-32">
+      <section className="relative overflow-hidden bg-brand-deep pt-4 pb-16 text-white sm:pt-8 sm:pb-32">
         {/* Metro line continuation — fades from story section into the QR on the chair */}
         <div className="absolute top-0 left-8 z-0 w-px md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
           <div className="h-full w-full bg-gradient-to-b from-violet-500 to-transparent" />
@@ -595,7 +595,7 @@ export function StorytellingScroll() {
 
             <div className="text-center">
               <div className="mb-4 flex items-center justify-center gap-2.5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700 bg-slate-800/80 text-indigo-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-dark/60 bg-brand-dark/80 text-indigo-400">
                   <Sparkles className="h-4.5 w-4.5" />
                 </div>
                 <h2 className="font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">

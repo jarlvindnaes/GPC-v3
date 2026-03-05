@@ -1,12 +1,13 @@
 import { Box, Calculator, QrCode, Smartphone } from "lucide-react";
 import { FeatureGrid } from "../components/FeatureGrid";
 import { IntegrationSection } from "../components/IntegrationSection";
+import { ScreenshotCarousel } from "../components/ScreenshotCarousel";
 
 export function Platform() {
   return (
     <main className="pt-32 pb-24">
       <div className="mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="mb-6 font-display font-semibold text-3xl text-brand-dark tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-5xl md:text-6xl">
           The Product Connect Platform
         </h1>
         <p className="max-w-3xl text-base text-brand-text sm:text-lg md:text-xl">
@@ -15,7 +16,7 @@ export function Platform() {
         </p>
       </div>
 
-      <section className="mb-24 bg-brand-dark py-24 text-white">
+      <section className="mb-24 bg-brand-deep py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <h2 className="mb-4 font-display font-semibold text-3xl tracking-tight md:text-4xl">How it works</h2>
@@ -26,11 +27,11 @@ export function Platform() {
 
           <div className="relative grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             {/* Connecting Line (Desktop) */}
-            <div className="absolute top-12 right-[12.5%] left-[12.5%] z-0 hidden h-0.5 bg-slate-800 md:block"></div>
+            <div className="absolute top-12 right-[12.5%] left-[12.5%] z-0 hidden h-0.5 bg-brand-dark md:block"></div>
 
             {/* Step 1 */}
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800 shadow-xl">
+              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
                 <Box className="h-10 w-10 text-indigo-400" />
               </div>
               <div className="mb-2 font-bold text-indigo-400 text-sm uppercase tracking-widest">Step 01</div>
@@ -43,7 +44,7 @@ export function Platform() {
 
             {/* Step 2 */}
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800 shadow-xl">
+              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
                 <Smartphone className="h-10 w-10 text-emerald-400" />
               </div>
               <div className="mb-2 font-bold text-emerald-400 text-sm uppercase tracking-widest">Step 02</div>
@@ -56,7 +57,7 @@ export function Platform() {
 
             {/* Step 3 */}
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800 shadow-xl">
+              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
                 <Calculator className="h-10 w-10 text-cyan-400" />
               </div>
               <div className="mb-2 font-bold text-cyan-400 text-sm uppercase tracking-widest">Step 03</div>
@@ -68,7 +69,7 @@ export function Platform() {
 
             {/* Step 4 */}
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800 shadow-xl">
+              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
                 <QrCode className="h-10 w-10 text-rose-400" />
               </div>
               <div className="mb-2 font-bold text-rose-400 text-sm uppercase tracking-widest">Step 04</div>
@@ -84,6 +85,20 @@ export function Platform() {
 
       <FeatureGrid />
       <IntegrationSection />
+
+      <section className="py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <h2 className="mb-4 font-display font-semibold text-3xl text-brand-darkest tracking-tight md:text-4xl">
+              See it in action
+            </h2>
+            <p className="text-base text-brand-text sm:text-lg">
+              Explore the Product Connect interface — from 3D model ingestion to global supply chain mapping.
+            </p>
+          </div>
+          <ScreenshotCarousel />
+        </div>
+      </section>
     </main>
   );
 }

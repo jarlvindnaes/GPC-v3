@@ -1,5 +1,5 @@
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as Three from "three";
 import { WebsiteButton } from "./WebsiteButton";
@@ -96,20 +96,73 @@ export function ComponentsCanvas() {
   );
 }
 
+const wireframeLabelScale = 2.6 / 3.2;
+const chairLabels: { label: string; position: [number, number, number]; dotColor: string }[] = [
+  {
+    label: "Legs",
+    position: [0.8 * wireframeLabelScale, 0.15 * wireframeLabelScale, 0.6 * wireframeLabelScale],
+    dotColor: "#60a5fa"
+  },
+  {
+    label: "Seat",
+    position: [1.2 * wireframeLabelScale, 1.2 * wireframeLabelScale, 1.0 * wireframeLabelScale],
+    dotColor: "#a78bfa"
+  },
+  {
+    label: "Back",
+    position: [0.0, 2.0 * wireframeLabelScale, -0.5 * wireframeLabelScale],
+    dotColor: "#f472b6"
+  }
+];
+
+function MouseLight({
+  mouseRef,
+  hoverRef,
+  lightColor
+}: {
+  mouseRef: React.RefObject<Three.Vector2>;
+  hoverRef: React.RefObject<boolean>;
+  lightColor: Three.Color;
+}) {
+  const lightRef = useRef<Three.PointLight>(null);
+  const targetPosition = useRef(new Three.Vector3(0, 0, 5));
+
+  useFrame(() => {
+    if (!lightRef.current) {
+      return;
+    }
+    targetPosition.current.set(mouseRef.current.x * 2.5, mouseRef.current.y * 2 + 0.5, 0.5);
+    lightRef.current.position.lerp(targetPosition.current, 0.15);
+    const targetIntensity = hoverRef.current ? 6 : 0;
+    lightRef.current.intensity = Three.MathUtils.lerp(lightRef.current.intensity, targetIntensity, 0.12);
+  });
+
+  return <pointLight ref={lightRef} intensity={0} distance={0} color={lightColor} />;
+}
+
 function WireframeChairModel() {
   const { scene } = useGLTF(CHAIR_MODEL);
+  const { size } = useThree();
+  const tooltipScale = Math.min(1, size.width / 480);
   const spinRef = useRef<Three.Group>(null);
+
   const wireScene = useMemo(() => {
+    const brandLight = getComputedStyle(document.documentElement).getPropertyValue("--color-brand-light").trim();
+    const wireColor = new Three.Color(brandLight || "#8B6FFF").lerp(new Three.Color(1, 1, 1), 0.25);
     const clone = scene.clone(true);
+
+    const material = new Three.MeshStandardMaterial({
+      wireframe: true,
+      color: wireColor,
+      emissive: wireColor,
+      emissiveIntensity: 0.6,
+      toneMapped: false,
+      depthWrite: false
+    });
+
     clone.traverse((child) => {
       if ((child as Three.Mesh).isMesh) {
-        const mesh = child as Three.Mesh;
-        mesh.material = new Three.MeshBasicMaterial({
-          color: new Three.Color("#818cf8"),
-          wireframe: true,
-          transparent: true,
-          opacity: 0.7
-        });
+        (child as Three.Mesh).material = material;
       }
     });
     return clone;
@@ -125,20 +178,51 @@ function WireframeChairModel() {
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
       <group ref={spinRef} position={[0, -0.6, 0]}>
         <primitive object={wireScene} scale={2.6} />
+        {chairLabels.map((item) => (
+          <Html key={item.label} position={item.position} center={true} zIndexRange={[0, 10]}>
+            <div className="pointer-events-none" style={{ transform: `scale(${tooltipScale})` }}>
+              <div className="flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md">
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.dotColor }} />
+                <span className="whitespace-nowrap font-semibold text-[13px] text-white">{item.label}</span>
+              </div>
+            </div>
+          </Html>
+        ))}
       </group>
     </Float>
   );
 }
 
 export function FinishedProductCanvas() {
+  const mouseRef = useRef(new Three.Vector2(0, 0));
+  const hoverRef = useRef(false);
+  const lightColor = useMemo(() => {
+    const brandLight = getComputedStyle(document.documentElement).getPropertyValue("--color-brand-light").trim();
+    const color = new Three.Color(brandLight || "#8B6FFF");
+    color.lerp(new Three.Color(1, 1, 1), 0.85);
+    return color;
+  }, []);
+
   return (
     <div
       role="img"
       aria-label="3D finished product model viewer"
-      className="h-full w-full cursor-grab active:cursor-grabbing"
+      className="absolute inset-0 cursor-grab active:cursor-grabbing"
+      onPointerMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        mouseRef.current.set(
+          ((event.clientX - rect.left) / rect.width) * 2 - 1,
+          -((event.clientY - rect.top) / rect.height) * 2 + 1
+        );
+        hoverRef.current = true;
+      }}
+      onPointerLeave={() => {
+        hoverRef.current = false;
+      }}
     >
-      <Canvas camera={{ position: [0, 0.8, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
-        <ambientLight intensity={0.8} />
+      <Canvas camera={{ position: [0, 0.7, 4], fov: 36 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
+        <ambientLight intensity={0.03} />
+        <MouseLight mouseRef={mouseRef} hoverRef={hoverRef} lightColor={lightColor} />
         <PresentationControls
           global={true}
           snap={false}
@@ -149,7 +233,6 @@ export function FinishedProductCanvas() {
         >
           <WireframeChairModel />
         </PresentationControls>
-        <ContactShadows position={[0, -0.3, 0]} opacity={0.15} scale={12} blur={3} far={5} color="#6366f1" />
       </Canvas>
     </div>
   );
@@ -242,9 +325,9 @@ export function PassportChairCanvas() {
 
       {/* Intelligent Product panel — slides in on hover/tap */}
       <div
-        className={`absolute top-2 right-0 w-[min(240px,60vw)] overflow-hidden rounded-2xl border transition-all duration-500 ease-out sm:top-4 sm:w-60 ${hovered ? "translate-x-0 border-indigo-500/30 bg-slate-800/95 opacity-100 shadow-2xl shadow-indigo-500/10" : "pointer-events-none translate-x-4 border-slate-700 bg-slate-800/95 opacity-0 shadow-none"} backdrop-blur-md`}
+        className={`absolute top-2 right-0 w-[min(240px,60vw)] overflow-hidden rounded-2xl border transition-all duration-500 ease-out sm:top-4 sm:w-60 ${hovered ? "translate-x-0 border-indigo-500/30 bg-brand-dark/95 opacity-100 shadow-2xl shadow-indigo-500/10" : "pointer-events-none translate-x-4 border-brand-dark/60 bg-brand-dark/95 opacity-0 shadow-none"} backdrop-blur-md`}
       >
-        <div className="border-slate-700/50 border-b p-4">
+        <div className="border-brand-deep/50 border-b p-4">
           <div className="mb-2 flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600">
               <svg
@@ -276,7 +359,7 @@ export function PassportChairCanvas() {
           ].map((item) => (
             <div
               key={item.label}
-              className="group flex cursor-pointer items-center gap-2.5 rounded-xl border border-slate-700/50 bg-slate-900/60 px-3 py-2 transition-colors hover:border-indigo-500/30 hover:bg-slate-900"
+              className="group flex cursor-pointer items-center gap-2.5 rounded-xl border border-brand-dark/30 bg-brand-deep/60 px-3 py-2 transition-colors hover:border-indigo-500/30 hover:bg-brand-deep"
             >
               <span className="text-sm">{item.icon}</span>
               <div className="min-w-0">
@@ -406,14 +489,14 @@ export function DppInteractiveProduct() {
               <p className="mb-1.5 font-semibold text-brand text-xs uppercase tracking-widest">
                 Digital Product Passport
               </p>
-              <h2 className="font-bold text-2xl text-brand-dark leading-snug">
+              <h2 className="font-bold text-2xl text-brand-darkest leading-snug">
                 West Elm Slope
                 <br />
                 Leather Chair
               </h2>
               <p className="mt-1 font-mono text-slate-400 text-xs">DPP-2024-WE-SL-0042</p>
             </div>
-            <div className="mt-1 shrink-0 rounded-lg bg-slate-900 px-2.5 py-1 font-bold text-[10px] text-white">
+            <div className="mt-1 shrink-0 rounded-lg bg-brand-deep px-2.5 py-1 font-bold text-[10px] text-white">
               ESPR 2026
             </div>
           </div>

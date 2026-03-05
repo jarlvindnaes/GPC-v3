@@ -12,7 +12,7 @@ export function TrustLogos() {
   const repeatedLogos = [1, 2, 3].flatMap((set) => logos.map((logo) => ({ ...logo, key: `${logo.name}-${set}` })));
 
   return (
-    <section className="overflow-hidden border-slate-100 border-y bg-slate-50/50 py-20">
+    <section className="overflow-hidden border-brand/15 border-y bg-brand-surface/50 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="mb-12 text-center font-bold text-slate-400 text-xs uppercase tracking-[0.2em]">
           Partnering with World-Class Manufacturers
@@ -40,8 +40,8 @@ export function TrustLogos() {
           </motion.div>
 
           {/* Fades */}
-          <div className="absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-slate-50/50 to-transparent"></div>
-          <div className="absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-slate-50/50 to-transparent"></div>
+          <div className="absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-brand-surface to-transparent"></div>
+          <div className="absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-brand-surface to-transparent"></div>
         </div>
       </div>
     </section>

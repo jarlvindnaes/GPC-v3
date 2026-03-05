@@ -53,7 +53,7 @@ function Material3D() {
 function Model3dCanvas({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <div className="group relative">
-      <div className="h-64 w-full overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/40 backdrop-blur-sm md:h-80">
+      <div className="h-64 w-full overflow-hidden rounded-3xl border border-brand-dark/40 bg-brand-deep/40 backdrop-blur-sm md:h-80">
         <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
           <ambientLight intensity={0.6} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} />
@@ -76,7 +76,7 @@ function Model3dCanvas({ children, label }: { children: React.ReactNode; label: 
       </div>
 
       {/* Label */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2 opacity-80 shadow-lg backdrop-blur-md transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-xl border border-brand-dark/60 bg-brand-deep/90 px-4 py-2 opacity-80 shadow-lg backdrop-blur-md transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
         <p className="font-semibold text-sm text-white">{label}</p>
         <p className="text-slate-400 text-xs">Drag to rotate</p>
       </div>
@@ -86,10 +86,10 @@ function Model3dCanvas({ children, label }: { children: React.ReactNode; label: 
 
 export function ProductBreakdown() {
   return (
-    <section className="relative overflow-hidden bg-brand-dark py-16 text-white sm:py-24 md:py-32">
+    <section className="relative overflow-hidden bg-brand-deep py-16 text-white sm:py-24 md:py-32">
       {/* Background effects */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08)_0%,transparent_60%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--color-brand-dark)_12%,transparent)_0%,transparent_60%)]"></div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}

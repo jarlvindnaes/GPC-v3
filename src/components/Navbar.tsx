@@ -2,6 +2,7 @@ import { ChevronRight, Menu, X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="group flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 transition-colors duration-300 group-hover:bg-brand">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-deep transition-colors duration-300 group-hover:bg-brand">
               <span className="font-bold text-sm text-white">PC</span>
             </div>
             <span className="font-semibold text-brand-dark text-lg tracking-tight transition-colors duration-300 group-hover:text-brand">
@@ -48,12 +49,13 @@ export function Navbar() {
             </Link>
           </div>
           <div className="hidden items-center gap-4 md:flex">
+            <ThemeSwitcher />
             <Link to="/login" className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark">
               Sign in
             </Link>
             <Link
               to="/contact"
-              className="flex items-center gap-1 rounded-full bg-slate-900 px-5 py-2.5 font-medium text-sm text-white shadow-sm transition-all hover:scale-105 hover:bg-slate-800 hover:shadow-md active:scale-95"
+              className="flex items-center gap-1 rounded-full bg-brand-deep px-5 py-2.5 font-medium text-sm text-white shadow-sm transition-all hover:scale-105 hover:bg-brand-dark hover:shadow-md active:scale-95"
             >
               Start now <ChevronRight className="h-4 w-4" />
             </Link>
@@ -106,13 +108,17 @@ export function Navbar() {
             About
           </Link>
           <hr className="my-2 border-slate-100" />
+          <div className="flex items-center gap-3">
+            <span className="font-medium text-brand-text text-lg">Theme</span>
+            <ThemeSwitcher />
+          </div>
           <Link to="/login" onClick={() => setIsOpen(false)} className="font-medium text-brand-text text-lg">
             Sign in
           </Link>
           <Link
             to="/contact"
             onClick={() => setIsOpen(false)}
-            className="rounded-2xl bg-slate-900 px-4 py-4 text-center font-medium text-lg text-white shadow-lg active:scale-[0.98]"
+            className="rounded-2xl bg-brand-deep px-4 py-4 text-center font-medium text-lg text-white shadow-lg active:scale-[0.98]"
           >
             Get Started
           </Link>

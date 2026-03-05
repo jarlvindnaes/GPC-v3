@@ -3,10 +3,10 @@ import { WebsiteButton } from "./WebsiteButton";
 
 export function Pricing() {
   return (
-    <section id="pricing" className="border-slate-100 border-t bg-slate-50 py-24">
+    <section id="pricing" className="border-brand/15 border-t bg-brand-surface py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="mb-4 font-display font-semibold text-3xl text-brand-dark tracking-tight md:text-4xl">
+          <h2 className="mb-4 font-display font-semibold text-3xl text-brand-darkest tracking-tight md:text-4xl">
             Component-based pricing
           </h2>
           <p className="text-brand-text text-lg">
@@ -16,9 +16,9 @@ export function Pricing() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 font-semibold text-brand-dark text-lg">Free</h3>
+            <h3 className="mb-2 font-semibold text-brand-darkest text-lg">Free</h3>
             <div className="mb-4">
-              <span className="font-bold text-3xl text-brand-dark">€0</span>
+              <span className="font-bold text-3xl text-brand-darkest">€0</span>
             </div>
             <p className="mb-6 text-slate-500 text-sm">Perfect for testing the platform.</p>
             <ul className="mb-8 flex-1 space-y-3">
@@ -36,9 +36,9 @@ export function Pricing() {
           </article>
 
           <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 font-semibold text-brand-dark text-lg">Core</h3>
+            <h3 className="mb-2 font-semibold text-brand-darkest text-lg">Core</h3>
             <div className="mb-4">
-              <span className="font-bold text-3xl text-brand-dark">€199</span>
+              <span className="font-bold text-3xl text-brand-darkest">€199</span>
               <span className="text-slate-500">/mo</span>
             </div>
             <p className="mb-6 text-slate-500 text-sm">For small manufacturers starting out.</p>
@@ -61,7 +61,7 @@ export function Pricing() {
             </WebsiteButton>
           </article>
 
-          <article className="relative flex flex-col rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+          <article className="relative flex flex-col rounded-2xl border border-brand-dark/40 bg-brand-deep p-6 shadow-xl">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand px-3 py-1 font-bold text-white text-xs uppercase tracking-wide">
               Most Popular
             </div>
@@ -95,9 +95,9 @@ export function Pricing() {
           </article>
 
           <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-2 font-semibold text-brand-dark text-lg">Enterprise</h3>
+            <h3 className="mb-2 font-semibold text-brand-darkest text-lg">Enterprise</h3>
             <div className="mb-4">
-              <span className="font-bold text-3xl text-brand-dark">€2,499</span>
+              <span className="font-bold text-3xl text-brand-darkest">€2,499</span>
               <span className="text-slate-500">/mo</span>
             </div>
             <p className="mb-6 text-slate-500 text-sm">For large manufacturers with extensive catalogs.</p>

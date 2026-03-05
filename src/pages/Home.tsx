@@ -12,10 +12,10 @@ export function Home() {
   return (
     <main>
       <Hero />
+      <StatsSection />
       <CountdownBanner />
       <TrustLogos />
       <FeatureGrid />
-      <StatsSection />
       <IntegrationSection />
       <StorytellingScroll />
       <Testimonials />

@@ -5,12 +5,12 @@ import { useEffect } from "react";
 import { WebsiteButton } from "./WebsiteButton";
 
 const visualGradientClassNames: Record<string, string> = {
-  slate: "bg-gradient-to-br from-slate-50 to-slate-100/50",
-  emerald: "bg-gradient-to-br from-emerald-50 to-emerald-100/50",
-  indigo: "bg-gradient-to-br from-indigo-50 to-indigo-100/50",
-  cyan: "bg-gradient-to-br from-cyan-50 to-cyan-100/50",
-  rose: "bg-gradient-to-br from-rose-50 to-rose-100/50",
-  blue: "bg-gradient-to-br from-blue-50 to-blue-100/50"
+  slate: "bg-radial-dark-sun-corner",
+  emerald: "bg-radial-dark-sun-corner",
+  indigo: "bg-radial-dark-sun-corner",
+  cyan: "bg-radial-dark-sun-corner",
+  rose: "bg-radial-dark-sun-corner",
+  blue: "bg-radial-dark-sun-corner"
 };
 
 const checkIconClassNames: Record<string, string> = {
@@ -31,6 +31,9 @@ interface WebsiteCardDialogProps {
   color: string;
   description: string;
   benefits: string[];
+  badge?: string;
+  badgeClassName?: string;
+  fillVisual?: boolean;
   callToActionLabel?: string;
   onCallToActionPress?: () => void;
 }
@@ -44,6 +47,9 @@ export function WebsiteCardDialog({
   color,
   description,
   benefits,
+  badge,
+  badgeClassName,
+  fillVisual = false,
   callToActionLabel,
   onCallToActionPress
 }: WebsiteCardDialogProps) {
@@ -84,9 +90,12 @@ export function WebsiteCardDialog({
             >
               <motion.div
                 layoutId={`visual-${identifier}`}
-                className={`flex items-center justify-center border-slate-100 border-b p-6 sm:p-8 md:w-1/2 md:border-r md:border-b-0 md:p-12 ${visualGradientClassNames[color] ?? "bg-brand-surface"}`}
+                onLayoutAnimationComplete={() => {
+                  window.dispatchEvent(new Event("resize"));
+                }}
+                className={`relative flex min-h-[280px] items-center justify-center overflow-hidden rounded-t-2xl border-brand-dark/30 border-b md:min-h-[400px] md:w-1/2 md:rounded-t-none md:rounded-l-2xl md:border-r md:border-b-0 ${fillVisual ? "" : "p-6 sm:p-8 md:p-12"} ${visualGradientClassNames[color] ?? "bg-brand-surface"}`}
               >
-                <div className="w-full max-w-sm scale-125 transform md:scale-150">{visual}</div>
+                {fillVisual ? visual : <div className="w-full max-w-sm scale-125 transform md:scale-150">{visual}</div>}
               </motion.div>
 
               <div className="relative flex flex-col p-5 sm:p-8 md:w-1/2 md:p-12">
@@ -100,8 +109,17 @@ export function WebsiteCardDialog({
                   <X className="h-5 w-5 text-brand-text" />
                 </WebsiteButton>
 
+                {badge && (
+                  <div className="mb-3">
+                    <span
+                      className={`inline-flex rounded-full border px-2.5 py-0.5 font-bold text-[10px] uppercase tracking-wider ${badgeClassName ?? "border-brand-accent/20 bg-brand-accent/10 text-brand-accent"}`}
+                    >
+                      {badge}
+                    </span>
+                  </div>
+                )}
                 <motion.div layoutId={`title-${identifier}`}>
-                  <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-brand-dark sm:text-3xl">
+                  <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-brand-darkest sm:text-3xl">
                     {title}
                   </h3>
                 </motion.div>

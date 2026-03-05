@@ -8,7 +8,79 @@
   --color-brand: #6D4BFF;
   --color-brand-light: #8B6FFF;
   --color-brand-dark: #382580;
-  --color-brand-glow: #25AFAA;
+  --color-brand-deep: #1B1340;
+  --color-brand-accent: #F59E0B;
+  --color-brand-darkest: #1A1035;
   --color-brand-surface: #F7F5FF;
   --color-brand-text: #4B5563;
+}
+
+:root[data-theme="platform"] {
+  --color-brand: #3E63DD;
+  --color-brand-light: #5B7EE5;
+  --color-brand-dark: #1E3A8A;
+  --color-brand-deep: #0F1D45;
+  --color-brand-accent: #F5A623;
+  --color-brand-darkest: #0F1629;
+  --color-brand-surface: #F5F7FC;
+}
+
+:root[data-theme="bright"] {
+  --color-brand: #0EA5E9;
+  --color-brand-light: #38BDF8;
+  --color-brand-dark: #0369A1;
+  --color-brand-deep: #082F49;
+  --color-brand-accent: #F97316;
+  --color-brand-darkest: #0C1A2A;
+  --color-brand-surface: #F0F9FF;
+}
+
+:root[data-theme="stripe"] {
+  --color-brand: #635BFF;
+  --color-brand-light: #7A73FF;
+  --color-brand-dark: #3A2DB8;
+  --color-brand-deep: #0A2540;
+  --color-brand-accent: #FF7A5C;
+  --color-brand-darkest: #13102E;
+  --color-brand-surface: #F6F9FC;
+}
+
+:root[data-theme="instagram"] {
+  --color-brand: #E1306C;
+  --color-brand-light: #F0608F;
+  --color-brand-dark: #9B1B4A;
+  --color-brand-deep: #3D0A1F;
+  --color-brand-accent: #405DE6;
+  --color-brand-darkest: #25101A;
+  --color-brand-surface: #FFF5F7;
+}
+
+:root[data-theme="zendesk"] {
+  --color-brand: #17494D;
+  --color-brand-light: #2D7178;
+  --color-brand-dark: #03363D;
+  --color-brand-deep: #011A1E;
+  --color-brand-accent: #F79A3E;
+  --color-brand-darkest: #0D1E20;
+  --color-brand-surface: #F3F0EE;
+}
+
+@utility bg-radial-dark-sun {
+  background: radial-gradient(ellipse at 50% 125%, color-mix(in srgb, var(--color-brand) 50%, var(--color-brand-deep)) 0%, var(--color-brand-deep) 50%);
+}
+
+@utility bg-radial-dark-sun-corner {
+  background: radial-gradient(ellipse at 100% 125%, color-mix(in srgb, var(--color-brand) 50%, var(--color-brand-deep)) 0%, var(--color-brand-deep) 50%);
+}
+
+@utility bg-radial-green-sun-corner {
+  background: radial-gradient(ellipse at 100% 125%, color-mix(in srgb, #86efac 40%, #14201c) 0%, #14201c 50%);
+}
+
+@utility bg-radial-accent-sun-corner {
+  background: radial-gradient(ellipse at 100% 125%, color-mix(in srgb, #fcd34d 40%, #1c1812) 0%, #1c1812 50%);
+}
+
+@utility bg-linear-bright {
+  background: linear-gradient(to top left, var(--color-brand-surface), var(--color-brand-light));
 }

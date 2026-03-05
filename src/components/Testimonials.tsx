@@ -26,10 +26,10 @@ export function Testimonials() {
   ];
 
   return (
-    <section className="border-slate-100 border-t bg-slate-50 py-16 sm:py-24 md:py-32">
+    <section className="border-brand/15 border-t bg-linear-bright py-16 sm:py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 md:mb-20">
-          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-dark tracking-tight sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
             Trusted by the next generation of makers.
           </h2>
           <p className="text-base text-brand-text sm:text-lg md:text-xl">

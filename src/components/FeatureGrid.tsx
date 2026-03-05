@@ -1,7 +1,20 @@
 import { motion } from "motion/react";
 import { useState } from "react";
+import { useTheme } from "../theme";
+import { FinishedProductCanvas } from "./Native3DModels";
+import { SupplyChainGlobe } from "./SupplyChainGlobe";
 import { WebsiteCard } from "./WebsiteCard";
 import { WebsiteCardDialog } from "./WebsiteCardDialog";
+
+function ThemedSupplyChainGlobe() {
+  const { theme } = useTheme();
+  return <SupplyChainGlobe key={theme} />;
+}
+
+function ThemedFinishedProductCanvas() {
+  const { theme } = useTheme();
+  return <FinishedProductCanvas key={theme} />;
+}
 
 const features = [
   {
@@ -17,23 +30,8 @@ const features = [
       "Initial material classification"
     ],
     color: "slate",
-    visual: (
-      <div className="flex w-full items-center justify-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-8 w-8 rotate-45 transform rounded-[4px] border-2 border-slate-300"></div>
-        </div>
-        <div className="h-px w-8 bg-slate-300"></div>
-        <div className="grid grid-cols-2 gap-2">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-6 w-6 rounded-md bg-slate-200"></div>
-          ))}
-        </div>
-        <div className="h-px w-8 bg-slate-300"></div>
-        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-slate-800 shadow-sm">
-          <div className="h-4 w-8 rounded-sm bg-slate-600"></div>
-        </div>
-      </div>
-    )
+    fillVisual: true,
+    visual: <ThemedFinishedProductCanvas />
   },
   {
     id: "harvest",
@@ -49,14 +47,14 @@ const features = [
     ],
     color: "emerald",
     visual: (
-      <div className="relative mx-auto flex h-48 w-32 flex-col overflow-hidden rounded-2xl border-4 border-slate-800 bg-slate-900">
-        <div className="flex h-6 items-center justify-center border-slate-700 border-b">
-          <div className="h-1.5 w-12 rounded-full bg-slate-800"></div>
+      <div className="relative mx-auto flex h-48 w-32 flex-col overflow-hidden rounded-2xl border-4 border-brand-dark bg-brand-deep">
+        <div className="flex h-6 items-center justify-center border-brand-dark border-b">
+          <div className="h-1.5 w-12 rounded-full bg-brand-dark"></div>
         </div>
         <div className="flex flex-1 flex-col gap-2 p-3">
-          <div className="mb-2 h-16 w-full rounded-lg bg-slate-800"></div>
-          <div className="h-2 w-3/4 rounded bg-slate-700"></div>
-          <div className="h-2 w-1/2 rounded bg-slate-700"></div>
+          <div className="mb-2 h-16 w-full rounded-lg bg-brand-dark"></div>
+          <div className="h-2 w-3/4 rounded bg-brand-dark/60"></div>
+          <div className="h-2 w-1/2 rounded bg-brand-dark/60"></div>
           <div className="mt-auto h-6 w-full rounded-md bg-emerald-500"></div>
         </div>
       </div>
@@ -67,9 +65,9 @@ const features = [
     title: "Calculate the impact",
     shortDescription: "Turn supply chain data into verified CO₂ numbers for the whole product and every component.",
     longDescription:
-      "Traditional Life Cycle Assessments are expensive and static. Our calculation engine uses your harvested supply chain data to dynamically generate EN 15804 compliant LCAs. As your supply chain changes, your impact metrics update in real-time.",
+      "Traditional Life Cycle Assessments are expensive and static. Our calculation engine uses your harvested supply chain data to dynamically generate EN 15804+A2 compliant LCAs. As your supply chain changes, your impact metrics update in real-time.",
     benefits: [
-      "EN 15804 compliant methodology",
+      "EN 15804+A2 / ISO 14025 / ISO 14040/44 · PEF-aligned",
       "Cradle-to-gate & cradle-to-grave analysis",
       "Transport, energy & end-of-life modelled",
       "Output: PDF, JSON, machine-readable EPD"
@@ -110,24 +108,8 @@ const features = [
       "Verify trade routes and origins"
     ],
     color: "cyan",
-    visual: (
-      <div className="relative h-32 w-full overflow-hidden rounded-xl bg-slate-900">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:10px_10px] opacity-30"></div>
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 200 100">
-          <title>Supply chain route map</title>
-          <path
-            d="M 40 60 Q 80 20 120 50 T 180 30"
-            fill="none"
-            stroke="#06b6d4"
-            strokeWidth="2"
-            strokeDasharray="4 4"
-          />
-          <circle cx="40" cy="60" r="4" fill="#fff" />
-          <circle cx="120" cy="50" r="4" fill="#fff" />
-          <circle cx="180" cy="30" r="4" fill="#fff" />
-        </svg>
-      </div>
-    )
+    fillVisual: true,
+    visual: <ThemedSupplyChainGlobe />
   },
   {
     id: "dpp",
@@ -191,10 +173,10 @@ export function FeatureGrid() {
   const activeFeature = features.find((feature) => feature.id === selectedFeature);
 
   return (
-    <section id="features" className="relative bg-slate-50 py-32">
+    <section id="features" className="relative border-brand/15 border-y bg-brand-surface py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 max-w-3xl">
-          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-dark tracking-tight sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
             Everything you need to build intelligent products.
           </h2>
           <p className="text-brand-text text-lg md:text-xl">
@@ -204,17 +186,22 @@ export function FeatureGrid() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
+          {features.map((feature, featureIndex) => (
             <WebsiteCard
               key={feature.id}
               expandableIdentifier={feature.id}
               onPress={() => setSelectedFeature(feature.id)}
               showArrow={true}
+              badge={featureIndex < 3 ? `Step ${featureIndex + 1}` : `Gain ${featureIndex - 2}`}
+              badgeClassName={
+                featureIndex >= 3 ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600" : undefined
+              }
               illustration={feature.visual}
               illustrationColor={feature.color}
+              fillVisual={feature.fillVisual}
             >
               <motion.div layoutId={`title-${feature.id}`} className="mb-6">
-                <h3 className="mb-3 font-display font-semibold text-2xl text-brand-dark">{feature.title}</h3>
+                <h3 className="mb-3 font-display font-semibold text-2xl text-brand-darkest">{feature.title}</h3>
                 <p className="text-brand-text leading-relaxed">{feature.shortDescription}</p>
               </motion.div>
             </WebsiteCard>
@@ -232,6 +219,17 @@ export function FeatureGrid() {
           color={activeFeature.color}
           description={activeFeature.longDescription}
           benefits={activeFeature.benefits}
+          badge={
+            features.indexOf(activeFeature) < 3
+              ? `Step ${features.indexOf(activeFeature) + 1}`
+              : `Gain ${features.indexOf(activeFeature) - 2}`
+          }
+          badgeClassName={
+            features.indexOf(activeFeature) >= 3
+              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600"
+              : undefined
+          }
+          fillVisual={activeFeature.fillVisual}
         />
       )}
     </section>

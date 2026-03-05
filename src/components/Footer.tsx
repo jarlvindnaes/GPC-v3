@@ -5,7 +5,7 @@ export function Footer() {
         <div className="mb-12 grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           <div className="col-span-2 lg:col-span-2">
             <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-slate-900">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-brand-deep">
                 <span className="font-bold text-[10px] text-white">PC</span>
               </div>
               <span className="font-semibold text-brand-dark">Product Connect</span>
@@ -17,7 +17,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="Platform">
-            <h4 className="mb-4 font-semibold text-brand-dark text-sm">Platform</h4>
+            <h4 className="mb-4 font-semibold text-brand-darkest text-sm">Platform</h4>
             <ul className="space-y-3">
               <li>
                 <a href="#/dpp" className="text-slate-500 text-sm hover:text-brand-dark">
@@ -43,7 +43,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label="Resources">
-            <h4 className="mb-4 font-semibold text-brand-dark text-sm">Resources</h4>
+            <h4 className="mb-4 font-semibold text-brand-darkest text-sm">Resources</h4>
             <ul className="space-y-3">
               <li>
                 <a href="https://example.com" className="text-slate-500 text-sm hover:text-brand-dark">
@@ -69,7 +69,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label="Company">
-            <h4 className="mb-4 font-semibold text-brand-dark text-sm">Company</h4>
+            <h4 className="mb-4 font-semibold text-brand-darkest text-sm">Company</h4>
             <ul className="space-y-3">
               <li>
                 <a href="#/about" className="text-slate-500 text-sm hover:text-brand-dark">

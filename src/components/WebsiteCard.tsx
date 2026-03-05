@@ -10,11 +10,13 @@ interface WebsiteCardProps {
   showArrow?: boolean;
   arrowPosition?: "top" | "bottom";
   badge?: string;
+  badgeClassName?: string;
   entranceDelay?: number;
   footer?: ReactNode;
   className?: string;
   illustration?: ReactNode;
   illustrationColor?: string;
+  fillVisual?: boolean;
 }
 
 interface WebsiteCardIconProps {
@@ -31,12 +33,12 @@ const defaultHoverClassName = "hover:border-slate-300";
 const expandableHoverClassName = "hover:border-brand";
 
 const illustrationGradientClassNames: Record<string, string> = {
-  slate: "bg-gradient-to-br from-slate-50 to-slate-100/50",
-  emerald: "bg-gradient-to-br from-emerald-50 to-emerald-100/50",
-  indigo: "bg-gradient-to-br from-indigo-50 to-indigo-100/50",
-  cyan: "bg-gradient-to-br from-cyan-50 to-cyan-100/50",
-  rose: "bg-gradient-to-br from-rose-50 to-rose-100/50",
-  blue: "bg-gradient-to-br from-blue-50 to-blue-100/50"
+  slate: "bg-radial-dark-sun-corner",
+  emerald: "bg-radial-accent-sun-corner",
+  indigo: "bg-radial-green-sun-corner",
+  cyan: "bg-radial-dark-sun-corner",
+  rose: "bg-radial-accent-sun-corner",
+  blue: "bg-radial-green-sun-corner"
 };
 
 export function WebsiteCard({
@@ -46,11 +48,13 @@ export function WebsiteCard({
   showArrow = false,
   arrowPosition = "top",
   badge,
+  badgeClassName,
   entranceDelay,
   footer,
   className,
   illustration,
-  illustrationColor
+  illustrationColor,
+  fillVisual = false
 }: WebsiteCardProps) {
   const hoverClassName = expandableIdentifier ? expandableHoverClassName : defaultHoverClassName;
   const combinedClassName = className
@@ -66,9 +70,14 @@ export function WebsiteCard({
   const topArrowElement =
     showArrow && arrowPosition === "top" ? <div className="absolute top-5 right-5">{arrowIndicator}</div> : null;
 
+  const defaultBadgeClassName = "border-brand-accent/20 bg-brand-accent/10 text-brand-accent";
   const badgeElement = badge ? (
-    <div className="absolute top-4 right-4 rounded-full border border-slate-200 bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-500 uppercase tracking-wider">
-      {badge}
+    <div className="mb-3">
+      <span
+        className={`inline-flex rounded-full border px-2.5 py-0.5 font-bold text-[10px] uppercase tracking-wider ${badgeClassName ?? defaultBadgeClassName}`}
+      >
+        {badge}
+      </span>
     </div>
   ) : null;
 
@@ -84,18 +93,26 @@ export function WebsiteCard({
   const illustrationGradient =
     (illustrationColor && illustrationGradientClassNames[illustrationColor]) ?? "bg-brand-surface";
 
+  const illustrationPadding = fillVisual ? "" : "p-6 md:p-8";
   const illustrationInner = illustration ? (
     <div
-      className={`flex min-h-[150px] items-center justify-center p-6 md:min-h-[200px] md:p-8 ${illustrationGradient}`}
+      className={`relative flex h-[180px] items-center justify-center overflow-hidden md:h-[220px] ${illustrationPadding} ${illustrationGradient}`}
     >
-      {illustration}
+      {fillVisual ? illustration : <div className="w-full max-w-sm">{illustration}</div>}
     </div>
   ) : null;
 
   const illustrationSection = illustration ? (
     <div className="-mx-5 mt-auto -mb-5 pt-6 sm:-mx-6 sm:-mb-6">
       {expandableIdentifier ? (
-        <motion.div layoutId={`visual-${expandableIdentifier}`}>{illustrationInner}</motion.div>
+        <motion.div
+          layoutId={`visual-${expandableIdentifier}`}
+          onLayoutAnimationComplete={() => {
+            window.dispatchEvent(new Event("resize"));
+          }}
+        >
+          {illustrationInner}
+        </motion.div>
       ) : (
         illustrationInner
       )}
