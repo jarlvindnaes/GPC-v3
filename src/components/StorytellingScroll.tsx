@@ -1,7 +1,7 @@
 import { Box, Cpu, Layers, MapPin, QrCode, Ship, Sparkles, Train, TreePine, Truck, Users } from "lucide-react";
 import type { MotionStyle } from "motion/react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ComponentsCanvas, FinishedProductCanvas, PassportChairCanvas, RawMaterialCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
@@ -14,7 +14,8 @@ export function StorytellingScroll() {
   const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   // Text opacities — 7 steps
-  const op1 = useTransform(scrollYProgress, [0, 0.05, 0.1, 0.15], [0, 1, 1, 0]);
+  const op1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
+  const text1Y = useTransform(scrollYProgress, [0, 0.05], ["15vh", "0vh"]);
   const op2 = useTransform(scrollYProgress, [0.14, 0.19, 0.24, 0.29], [0, 1, 1, 0]);
   const op3 = useTransform(scrollYProgress, [0.28, 0.33, 0.38, 0.43], [0, 1, 1, 0]);
   const op4 = useTransform(scrollYProgress, [0.42, 0.47, 0.52, 0.57], [0, 1, 1, 0]);
@@ -22,10 +23,25 @@ export function StorytellingScroll() {
   const op6 = useTransform(scrollYProgress, [0.71, 0.76, 0.81, 0.86], [0, 1, 1, 0]);
   const op7 = useTransform(scrollYProgress, [0.85, 0.9, 0.95, 1], [0, 1, 1, 1]);
 
+  // Chair rises into position then fades out with the rest
+  const chairY = useTransform(scrollYProgress, [0, 0.05], ["15vh", "0vh"]);
+
   // Visual opacities
   const vOp1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
   const vOp2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], [0, 1, 1, 0]);
+
+  // Bolt camera distance: far away (small) → normal (close) as it fades in
+  const boltCameraDistance = useTransform(scrollYProgress, [0.1, 0.15], [14, 5]);
+  const boltDistanceRef = useRef(14);
+  useEffect(
+    () =>
+      boltCameraDistance.on("change", (v) => {
+        boltDistanceRef.current = v;
+      }),
+    [boltCameraDistance]
+  );
   const vOp3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], [0, 1, 1, 0]);
+  const vX3 = useTransform(scrollYProgress, [0.25, 0.3], ["40vw", "0vw"]);
   const vOp4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], [0, 1, 1, 0]);
   const vOp5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], [0, 1, 1, 0]);
   const vOp6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], [0, 1, 1, 0]);
@@ -39,6 +55,15 @@ export function StorytellingScroll() {
   const pView5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], ["none", "auto", "auto", "none"]);
   const pView6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], ["none", "auto", "auto", "none"]);
   const pView7 = useTransform(scrollYProgress, [0.85, 0.9, 1], ["none", "auto", "auto"]);
+
+  // Z-index — active visual must be on top so R3F canvases in inactive layers don't steal events
+  const z1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [30, 30, 0]);
+  const z2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], [0, 10, 10, 0]);
+  const z3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], [0, 10, 10, 0]);
+  const z4 = useTransform(scrollYProgress, [0.4, 0.45, 0.55, 0.6], [0, 10, 10, 0]);
+  const z5 = useTransform(scrollYProgress, [0.55, 0.6, 0.7, 0.75], [0, 10, 10, 0]);
+  const z6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], [0, 10, 10, 0]);
+  const z7 = useTransform(scrollYProgress, [0.85, 0.9, 1], [0, 10, 10]);
 
   return (
     <>
@@ -65,9 +90,11 @@ export function StorytellingScroll() {
 
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
-          <div className="absolute top-0 bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
+          <div className="absolute top-[35%] bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
+            {/* Starting circle */}
+            <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-accent" />
             <motion.div
-              className="absolute top-0 right-0 left-0 bg-gradient-to-b from-indigo-500 to-violet-500"
+              className="absolute top-0 right-0 left-0 bg-gradient-to-b from-brand-accent to-violet-500"
               style={{ height: lineProgress }}
             />
           </div>
@@ -78,6 +105,7 @@ export function StorytellingScroll() {
               {[
                 {
                   op: op1,
+                  slideY: text1Y,
                   icon: <Box className="h-5 w-5" />,
                   title: "Ingest Your Model",
                   body: "Start with your product. Upload your construction model — BIM, IFC, or 3D CAD — and we automatically create a digital twin, splitting it into every component and sub-assembly."
@@ -118,10 +146,10 @@ export function StorytellingScroll() {
                   title: "Passport & Certifications",
                   body: "Generate a Digital Product Passport and certifications. A living, GS1-compliant document ready for ESPR 2026 — verifiable, scannable, and built to prove your claims."
                 }
-              ].map(({ op, icon, title, body }) => (
+              ].map(({ op, slideY, icon, title, body }) => (
                 <motion.div
                   key={title}
-                  style={{ opacity: op }}
+                  style={{ opacity: op, y: slideY }}
                   className="absolute inset-y-0 flex flex-col justify-center"
                 >
                   <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark text-indigo-400 shadow-indigo-500/10 shadow-lg">
@@ -136,14 +164,14 @@ export function StorytellingScroll() {
             </div>
 
             {/* ── Visual panel (right) ── */}
-            <div className="relative flex min-h-[250px] w-full flex-1 items-center justify-center overflow-hidden sm:min-h-[350px] md:min-h-[700px]">
+            <div className="relative flex min-h-[250px] w-full flex-1 items-center justify-center sm:min-h-[350px] md:min-h-[700px]">
               {/* Visual 1: Chair */}
               <motion.div
-                style={{ opacity: vOp1, pointerEvents: pView1 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp1, pointerEvents: pView1 as MotionStyle["pointerEvents"], zIndex: z1, y: chairY }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
-                  <FinishedProductCanvas />
+                <div className="relative h-full w-full touch-none">
+                  <FinishedProductCanvas fieldOfView={55} />
                 </div>
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
                   <div className="flex flex-col">
@@ -159,11 +187,11 @@ export function StorytellingScroll() {
 
               {/* Visual 2: Components - 3D Model */}
               <motion.div
-                style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"], zIndex: z2 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
-                  <ComponentsCanvas />
+                  <ComponentsCanvas cameraDistanceRef={boltDistanceRef} />
                 </div>
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:block md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
@@ -185,7 +213,7 @@ export function StorytellingScroll() {
 
               {/* Visual 3: Supplier portal card */}
               <motion.div
-                style={{ opacity: vOp3, pointerEvents: pView3 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp3, x: vX3, pointerEvents: pView3 as MotionStyle["pointerEvents"], zIndex: z3 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="w-full max-w-80 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-6">
@@ -217,7 +245,7 @@ export function StorytellingScroll() {
 
               {/* Visual 4: Raw Material (3D rock) */}
               <motion.div
-                style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"], zIndex: z4 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
@@ -245,7 +273,7 @@ export function StorytellingScroll() {
 
               {/* Visual 5: Transport Routes Card */}
               <motion.div
-                style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"], zIndex: z5 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-96">
@@ -370,7 +398,7 @@ export function StorytellingScroll() {
 
               {/* Visual 6: LCA Engine */}
               <motion.div
-                style={{ opacity: vOp6, pointerEvents: pView6 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp6, pointerEvents: pView6 as MotionStyle["pointerEvents"], zIndex: z6 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="relative flex aspect-square w-full max-w-[280px] items-center justify-center sm:max-w-[350px] md:max-w-[420px]">
@@ -508,7 +536,7 @@ export function StorytellingScroll() {
 
               {/* Visual 7: DPP mini-card */}
               <motion.div
-                style={{ opacity: vOp7, pointerEvents: pView7 as MotionStyle["pointerEvents"] }}
+                style={{ opacity: vOp7, pointerEvents: pView7 as MotionStyle["pointerEvents"], zIndex: z7 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="w-full max-w-[260px] overflow-hidden rounded-3xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-72">

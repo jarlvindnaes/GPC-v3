@@ -72,10 +72,23 @@ export function RawMaterialCanvas() {
   );
 }
 
-export function ComponentsCanvas() {
+function AnimatedCamera({ targetDistance }: { targetDistance: React.RefObject<number> }) {
+  const { camera } = useThree();
+  useFrame(() => {
+    const target = targetDistance.current;
+    camera.position.z += (target - camera.position.z) * 0.1;
+  });
+  return null;
+}
+
+export function ComponentsCanvas({ cameraDistanceRef }: { cameraDistanceRef?: React.RefObject<number> }) {
+  const defaultDistance = useRef(5);
+  const distanceRef = cameraDistanceRef ?? defaultDistance;
+
   return (
     <div role="img" aria-label="3D component model viewer" className="h-full w-full cursor-grab active:cursor-grabbing">
       <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
+        <AnimatedCamera targetDistance={distanceRef} />
         <ambientLight intensity={0.7} />
         <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
         <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
@@ -193,7 +206,7 @@ function WireframeChairModel() {
   );
 }
 
-export function FinishedProductCanvas() {
+export function FinishedProductCanvas({ fieldOfView = 36 }: { fieldOfView?: number }) {
   const mouseRef = useRef(new Three.Vector2(0, 0));
   const hoverRef = useRef(false);
   const lightColor = useMemo(() => {
@@ -220,7 +233,11 @@ export function FinishedProductCanvas() {
         hoverRef.current = false;
       }}
     >
-      <Canvas camera={{ position: [0, 0.7, 4], fov: 36 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
+      <Canvas
+        camera={{ position: [0, 0.7, 4], fov: fieldOfView }}
+        gl={{ alpha: true }}
+        style={{ background: "transparent" }}
+      >
         <ambientLight intensity={0.03} />
         <MouseLight mouseRef={mouseRef} hoverRef={hoverRef} lightColor={lightColor} />
         <PresentationControls
