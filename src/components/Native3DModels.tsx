@@ -184,17 +184,17 @@ const chairLabels: { label: string; position: [number, number, number]; dotColor
   {
     label: "Legs",
     position: [0.8 * wireframeLabelScale, 0.15 * wireframeLabelScale, 0.6 * wireframeLabelScale],
-    dotColor: "#60a5fa"
+    dotColor: "var(--color-brand-cyan)"
   },
   {
     label: "Seat",
     position: [1.2 * wireframeLabelScale, 1.2 * wireframeLabelScale, 1.0 * wireframeLabelScale],
-    dotColor: "#a78bfa"
+    dotColor: "var(--color-brand-amber)"
   },
   {
     label: "Back",
     position: [0.0, 2.0 * wireframeLabelScale, -0.5 * wireframeLabelScale],
-    dotColor: "#f472b6"
+    dotColor: "var(--color-brand-violet)"
   }
 ];
 

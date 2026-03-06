@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
-import type { ReactNode } from "react";
+import { type ReactNode, useCallback, useRef } from "react";
 
 interface WebsiteCardProps {
   children: ReactNode;
@@ -27,10 +27,7 @@ interface WebsiteCardIconProps {
 }
 
 const baseClassName =
-  "group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-lg sm:p-6";
-
-const defaultHoverClassName = "hover:border-slate-300";
-const expandableHoverClassName = "hover:border-brand";
+  "group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-lg sm:p-6 hover-gradient-border";
 
 const illustrationGradientClassNames: Record<string, string> = {
   slate: "bg-radial-dark-sun-corner",
@@ -40,6 +37,27 @@ const illustrationGradientClassNames: Record<string, string> = {
   rose: "bg-radial-accent-sun-corner",
   blue: "bg-radial-green-sun-corner"
 };
+
+function useGradientAngle() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMouseMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) {
+      return;
+    }
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mouse-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+    el.style.setProperty("--mouse-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    ref.current?.style.removeProperty("--mouse-x");
+    ref.current?.style.removeProperty("--mouse-y");
+  }, []);
+
+  return { ref, onMouseMove, onMouseLeave };
+}
 
 export function WebsiteCard({
   children,
@@ -56,10 +74,8 @@ export function WebsiteCard({
   illustrationColor,
   fillVisual = false
 }: WebsiteCardProps) {
-  const hoverClassName = expandableIdentifier ? expandableHoverClassName : defaultHoverClassName;
-  const combinedClassName = className
-    ? `${baseClassName} ${hoverClassName} ${className}`
-    : `${baseClassName} ${hoverClassName}`;
+  const { ref, onMouseMove, onMouseLeave } = useGradientAngle();
+  const combinedClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
   const arrowIndicator = showArrow ? (
     <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
@@ -132,6 +148,9 @@ export function WebsiteCard({
   if (expandableIdentifier) {
     return (
       <motion.div
+        ref={ref}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
         layoutId={`card-${expandableIdentifier}`}
         onClick={onPress}
         role="button"
@@ -151,6 +170,9 @@ export function WebsiteCard({
   if (entranceDelay !== undefined) {
     return (
       <motion.div
+        ref={ref}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -162,7 +184,12 @@ export function WebsiteCard({
     );
   }
 
-  return <div className={combinedClassName}>{content}</div>;
+  return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: mouse handlers are purely decorative (gradient tracking)
+    <div ref={ref} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className={combinedClassName}>
+      {content}
+    </div>
+  );
 }
 
 export function WebsiteCardIcon({

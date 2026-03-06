@@ -24,7 +24,9 @@ const NODE_TYPE_LABELS: string[][] = [
   ["Timber Mill", "Steel Foundry", "Tannery", "Foam Factory", "Paint Shop", "CNC Router", "Welder", "Finisher"],
   ["Dining Chair", "Office Chair", "Lounge Sofa", "Bar Stool", "Bench", "Side Table", "Desk", "Shelf Unit"],
   ["Retailer EU", "D2C Portal", "Warranty", "Spare Parts", "Recycling", "Analytics", "End User", "Inspector"],
-  ["EPD Cert", "ISO 14001", "FSC Label", "ESPR Tag", "QR Code", "DPP Record"]
+  ["EPD Cert", "ISO 14001", "FSC Label", "ESPR Tag", "QR Code", "DPP Record"],
+  ["LCA Report", "Carbon Map", "Impact Score", "Emission Log", "Green Audit", "Eco Rating"],
+  ["Ship Route", "Rail Link", "Road Haul", "Port Hub", "Warehouse", "Last Mile"]
 ];
 
 interface NetworkColors {
@@ -40,17 +42,19 @@ function readNetworkColors(): NetworkColors {
   const brandDark = styles.getPropertyValue("--color-brand-dark").trim();
   const accent = styles.getPropertyValue("--color-brand-accent").trim();
   const text = styles.getPropertyValue("--color-brand-text").trim();
+  const cyan = styles.getPropertyValue("--color-brand-cyan").trim();
+  const amber = styles.getPropertyValue("--color-brand-amber").trim();
+  const violet = styles.getPropertyValue("--color-brand-violet").trim();
   return {
-    nodeTypes: [brandLight, accent, brand, accent, brandDark],
+    nodeTypes: [brand, brandLight, accent, cyan, amber, violet, brandDark],
     connection: brand,
     label: text
   };
 }
 
-function HeroNetwork() {
+function HeroNetwork({ mouseRef }: { mouseRef: React.RefObject<{ x: number; y: number; active: boolean }> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isNearViewport = useIsNearViewport(canvasRef);
-  const mouseRef = useRef({ x: 0, y: 0, active: false });
   const nodesRef = useRef<NetworkNode[]>([]);
   const dimensionsRef = useRef({ width: 0, height: 0 });
 
@@ -83,7 +87,7 @@ function HeroNetwork() {
       const nodes: NetworkNode[] = [];
 
       for (let i = 0; i < count; i++) {
-        const type = i % 5;
+        const type = i % NODE_TYPE_LABELS.length;
         const labels = NODE_TYPE_LABELS[type];
         const label = labels[i % labels.length];
         const depth = 0.3 + Math.random() * 0.7;
@@ -120,21 +124,6 @@ function HeroNetwork() {
     };
     resize();
     window.addEventListener("resize", resize);
-
-    const section = canvas.closest("section");
-    if (!section) {
-      return;
-    }
-
-    const onMouseMove = (event: MouseEvent) => {
-      const rectangle = section.getBoundingClientRect();
-      mouseRef.current = { x: event.clientX - rectangle.left, y: event.clientY - rectangle.top, active: true };
-    };
-    const onMouseLeave = () => {
-      mouseRef.current.active = false;
-    };
-    section.addEventListener("mousemove", onMouseMove);
-    section.addEventListener("mouseleave", onMouseLeave);
 
     let time = 0;
     const connectionDist = 220;
@@ -234,13 +223,6 @@ function HeroNetwork() {
         context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
         context.fill();
 
-        context.strokeStyle = nodeColor;
-        context.globalAlpha = brightenedAlpha * 0.6;
-        context.lineWidth = 0.8 + node.brighten * 0.6;
-        context.beginPath();
-        context.arc(node.x, node.y, node.radius * 2.2, 0, Math.PI * 2);
-        context.stroke();
-
         if (node.depth > 0.4) {
           const labelAlpha = 0.3 + (node.depth - 0.4) * 0.8 + node.brighten * 0.3;
           context.globalAlpha = Math.min(1, labelAlpha);
@@ -258,8 +240,6 @@ function HeroNetwork() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
-      section.removeEventListener("mousemove", onMouseMove);
-      section.removeEventListener("mouseleave", onMouseLeave);
     };
   }, []);
 
@@ -274,16 +254,49 @@ function HeroNetwork() {
 
 export function Hero() {
   const { theme } = useTheme();
+  const sectionRef = useRef<HTMLElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0, active: false });
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const textEl = textRef.current;
+    if (!section || !textEl) {
+      return;
+    }
+
+    const onMouseMove = (event: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      mouseRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top, active: true };
+
+      const textRect = textEl.getBoundingClientRect();
+      textEl.style.setProperty("--mouse-x", `${((event.clientX - textRect.left) / textRect.width) * 100}%`);
+      textEl.style.setProperty("--mouse-y", `${((event.clientY - textRect.top) / textRect.height) * 100}%`);
+    };
+
+    const onMouseLeave = () => {
+      mouseRef.current.active = false;
+      textEl.style.removeProperty("--mouse-x");
+      textEl.style.removeProperty("--mouse-y");
+    };
+
+    section.addEventListener("mousemove", onMouseMove);
+    section.addEventListener("mouseleave", onMouseLeave);
+    return () => {
+      section.removeEventListener("mousemove", onMouseMove);
+      section.removeEventListener("mouseleave", onMouseLeave);
+    };
+  }, []);
 
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section ref={sectionRef} className="relative overflow-hidden bg-white">
       <div className="pointer-events-none absolute inset-0 z-[1]">
         <div className="pointer-events-auto h-full w-full">
-          <HeroNetwork key={theme} />
+          <HeroNetwork key={theme} mouseRef={mouseRef} />
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-brand-surface/30 [backdrop-filter:blur(4px)] [mask-image:radial-gradient(ellipse_at_30%_50%,black_0%,black_20%,transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-white [mask-image:radial-gradient(ellipse_at_30%_50%,black_0%,black_40%,transparent_75%)]" />
 
       <div className="relative z-[2] mx-auto max-w-7xl px-4 pt-32 pb-20 sm:px-6 md:pt-48 md:pb-32 lg:px-8">
         <div className="max-w-4xl">
@@ -300,7 +313,17 @@ export function Hero() {
               ESPR 2026 Ready
             </div>
             <h1 className="mb-8 font-bold font-display text-[1.7rem] text-brand-darkest leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
-              Revolutionize Furniture Manufacturing with <span className="text-brand">Product Connect.</span>
+              Revolutionize Furniture Manufacturing with{" "}
+              <span
+                ref={textRef}
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--color-brand-accent), var(--color-brand-violet))"
+                }}
+              >
+                Product Connect.
+              </span>
             </h1>
             <p className="mb-12 max-w-2xl font-medium text-brand-text text-lg leading-relaxed md:text-xl">
               Streamline your supply chain, integrate data seamlessly, and track environmental impact. The

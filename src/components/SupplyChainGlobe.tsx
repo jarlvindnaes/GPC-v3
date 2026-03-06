@@ -110,13 +110,15 @@ interface TooltipConfig {
 function readTooltipColors(): TooltipConfig[] {
   const styles = getComputedStyle(document.documentElement);
   const accent = styles.getPropertyValue("--color-brand-accent").trim();
-  const brandLight = styles.getPropertyValue("--color-brand-light").trim();
+  const cyan = styles.getPropertyValue("--color-brand-cyan").trim();
+  const amber = styles.getPropertyValue("--color-brand-amber").trim();
+  const violet = styles.getPropertyValue("--color-brand-violet").trim();
   return [
     { label: "Home Factory", dotColor: accent },
-    { label: "Component Supplier", dotColor: brandLight, anchor: "bottom-left" },
-    { label: "Raw Material", dotColor: "#fbbf24" },
-    { label: "Raw Material", dotColor: "#fbbf24" },
-    { label: "Product User", dotColor: "#ffffff" }
+    { label: "Component Supplier", dotColor: cyan, anchor: "bottom-left" },
+    { label: "Raw Material", dotColor: amber },
+    { label: "Raw Material", dotColor: amber },
+    { label: "Product User", dotColor: violet }
   ];
 }
 

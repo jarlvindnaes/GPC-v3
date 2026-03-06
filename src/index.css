@@ -13,6 +13,9 @@
   --color-brand-darkest: #1A1035;
   --color-brand-surface: #F7F5FF;
   --color-brand-text: #4B5563;
+  --color-brand-cyan: #22d3ee;
+  --color-brand-amber: #fbbf24;
+  --color-brand-violet: #8b5cf6;
 }
 
 :root[data-theme="platform"] {
@@ -23,6 +26,9 @@
   --color-brand-accent: #F5A623;
   --color-brand-darkest: #0F1629;
   --color-brand-surface: #F5F7FC;
+  --color-brand-cyan: #22d3ee;
+  --color-brand-amber: #fbbf24;
+  --color-brand-violet: #8b5cf6;
 }
 
 :root[data-theme="bright"] {
@@ -83,4 +89,14 @@
 
 @utility bg-linear-bright {
   background: linear-gradient(to top left, var(--color-brand-surface), var(--color-brand-light));
+}
+
+@utility hover-gradient-border {
+  background-image: linear-gradient(white, white), radial-gradient(circle 600px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--color-brand-accent), var(--color-brand-violet));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+  &:hover {
+    border-color: transparent;
+  }
 }
