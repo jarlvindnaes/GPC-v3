@@ -1,10 +1,12 @@
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { BookOpen, ClipboardList, Globe, Recycle, ShoppingCart, Wrench } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import * as Three from "three";
 import { WebsiteButton } from "./WebsiteButton";
 
 const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
+const CHAIR_WIREFRAME_MODEL = `${import.meta.env.BASE_URL}models/chair-wireframe.glb`;
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
 const EMERALD_MODEL = `${import.meta.env.BASE_URL}models/emerald_in_quartz__for_games.glb`;
 
@@ -154,7 +156,7 @@ function MouseLight({
 }
 
 function WireframeChairModel() {
-  const { scene } = useGLTF(CHAIR_MODEL);
+  const { scene } = useGLTF(CHAIR_WIREFRAME_MODEL);
   const { size } = useThree();
   const tooltipScale = Math.min(1, size.width / 480);
   const spinRef = useRef<Three.Group>(null);
@@ -274,14 +276,14 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
             onTouchStart={() => onHover(true)}
           >
             {/* Radiating rings */}
-            <div className="absolute -inset-2 animate-[ping_3s_ease-in-out_infinite] rounded-full border border-indigo-400/25" />
-            <div className="absolute -inset-4 animate-[ping_3s_ease-in-out_0.5s_infinite] rounded-full border border-indigo-400/12" />
+            <div className="absolute -inset-5 animate-[ping_3s_ease-in-out_infinite] rounded-full border border-indigo-400/25" />
+            <div className="absolute -inset-10 animate-[ping_3s_ease-in-out_0.5s_infinite] rounded-full border border-indigo-400/12" />
             {/* Glow halo */}
-            <div className="absolute -inset-1.5 animate-pulse rounded-full bg-indigo-500/20 blur-sm" />
+            <div className="absolute -inset-3 animate-pulse rounded-full bg-indigo-500/20 blur-md" />
             {/* Core QR icon */}
-            <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_14px_rgba(99,102,241,0.6)] ring-[1.5px] ring-white/30">
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_20px_rgba(99,102,241,0.6)] ring-2 ring-white/30">
               <svg
-                className="h-2.5 w-2.5 text-white"
+                className="h-6 w-6 text-white"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -298,10 +300,10 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
             {[0, 1, 2, 3].map((particleIndex) => (
               <div
                 key={particleIndex}
-                className="absolute h-0.5 w-0.5 rounded-full bg-indigo-400"
+                className="absolute h-1.5 w-1.5 rounded-full bg-indigo-400"
                 style={{
-                  left: `${Math.cos((particleIndex * 90 * Math.PI) / 180) * 14 + 7}px`,
-                  top: `${Math.sin((particleIndex * 90 * Math.PI) / 180) * 14 + 7}px`,
+                  left: `${Math.cos((particleIndex * 90 * Math.PI) / 180) * 30 + 20}px`,
+                  top: `${Math.sin((particleIndex * 90 * Math.PI) / 180) * 30 + 20}px`,
                   animation: `pulse 2s ease-in-out ${particleIndex * 0.4}s infinite`,
                   opacity: 0.5
                 }}
@@ -367,18 +369,42 @@ export function PassportChairCanvas() {
         </div>
         <div className="space-y-1.5 p-3">
           {[
-            { icon: "📋", label: "Product Passport", description: "Full DPP & compliance docs" },
-            { icon: "🔧", label: "Spare Parts", description: "Order replacements directly" },
-            { icon: "📖", label: "Care & Manuals", description: "Maintenance guides & tips" },
-            { icon: "♻️", label: "End of Life", description: "Recycling & take-back info" },
-            { icon: "🌍", label: "Impact Data", description: "CO₂, materials & certifications" },
-            { icon: "🛒", label: "Accessories", description: "Compatible add-ons & upgrades" }
+            {
+              icon: <ClipboardList className="h-3.5 w-3.5" />,
+              label: "Product Passport",
+              description: "Full DPP & compliance docs"
+            },
+            {
+              icon: <Wrench className="h-3.5 w-3.5" />,
+              label: "Spare Parts",
+              description: "Order replacements directly"
+            },
+            {
+              icon: <BookOpen className="h-3.5 w-3.5" />,
+              label: "Care & Manuals",
+              description: "Maintenance guides & tips"
+            },
+            {
+              icon: <Recycle className="h-3.5 w-3.5" />,
+              label: "End of Life",
+              description: "Recycling & take-back info"
+            },
+            {
+              icon: <Globe className="h-3.5 w-3.5" />,
+              label: "Impact Data",
+              description: "CO₂, materials & certifications"
+            },
+            {
+              icon: <ShoppingCart className="h-3.5 w-3.5" />,
+              label: "Accessories",
+              description: "Compatible add-ons & upgrades"
+            }
           ].map((item) => (
             <div
               key={item.label}
               className="group flex cursor-pointer items-center gap-2.5 rounded-xl border border-brand-dark/30 bg-brand-deep/60 px-3 py-2 transition-colors hover:border-indigo-500/30 hover:bg-brand-deep"
             >
-              <span className="text-sm">{item.icon}</span>
+              <span className="text-indigo-400">{item.icon}</span>
               <div className="min-w-0">
                 <p className="font-semibold text-[11px] text-white transition-colors group-hover:text-indigo-300">
                   {item.label}
@@ -662,19 +688,27 @@ export function DppInteractiveProduct() {
           {/* Spare parts & end of life */}
           <div className="grid grid-cols-2 gap-2">
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
-              <p className="mb-0.5 font-semibold text-[11px] text-slate-700">🔧 Spare Parts</p>
+              <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
+                <Wrench className="h-3 w-3" /> Spare Parts
+              </p>
               <p className="text-[11px] text-slate-400 leading-snug">4 parts available in-passport</p>
             </div>
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
-              <p className="mb-0.5 font-semibold text-[11px] text-slate-700">♻️ End of Life</p>
+              <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
+                <Recycle className="h-3 w-3" /> End of Life
+              </p>
               <p className="text-[11px] text-slate-400 leading-snug">Certified recycling partner</p>
             </div>
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
-              <p className="mb-0.5 font-semibold text-[11px] text-slate-700">📋 Care Guide</p>
+              <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
+                <BookOpen className="h-3 w-3" /> Care Guide
+              </p>
               <p className="text-[11px] text-slate-400 leading-snug">Leather maintenance tips</p>
             </div>
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
-              <p className="mb-0.5 font-semibold text-[11px] text-slate-700">🌍 Resale Market</p>
+              <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
+                <Globe className="h-3 w-3" /> Resale Market
+              </p>
               <p className="text-[11px] text-slate-400 leading-snug">Verified second-hand listing</p>
             </div>
           </div>

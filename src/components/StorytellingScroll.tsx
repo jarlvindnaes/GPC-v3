@@ -1,7 +1,11 @@
-import { Box, Cpu, Layers, MapPin, QrCode, Ship, Sparkles, Train, TreePine, Truck, Users } from "lucide-react";
+import { Box, Cpu, Layers, MapPin, QrCode, Sparkles, TreePine, Truck, Users } from "lucide-react";
 import type { MotionStyle } from "motion/react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef } from "react";
+import shipAnimation from "../animations/ship-animation.json";
+import trainAnimation from "../animations/train-animation.json";
+import truckAnimation from "../animations/truck-animation.json";
+import { AnimatedIcon } from "./AnimatedIcon";
 import { ComponentsCanvas, FinishedProductCanvas, PassportChairCanvas, RawMaterialCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
@@ -47,6 +51,8 @@ export function StorytellingScroll() {
   const vOp6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], [0, 1, 1, 0]);
   const vOp7 = useTransform(scrollYProgress, [0.85, 0.9, 1], [0, 1, 1]);
 
+  const scoreBarWidth = useTransform(scrollYProgress, [0.87, 0.95], ["0%", "94%"]);
+
   // Pointer events for interactive visuals
   const pView1 = useTransform(scrollYProgress, [0, 0.1, 0.15], ["auto", "auto", "none"]);
   const pView2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], ["none", "auto", "auto", "none"]);
@@ -80,7 +86,7 @@ export function StorytellingScroll() {
               <h2 className="mb-6 font-display font-semibold text-3xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 How it works
               </h2>
-              <p className="mx-auto max-w-3xl text-base text-slate-400 leading-relaxed sm:text-lg md:text-xl">
+              <p className="mx-auto max-w-4xl text-base text-slate-400 leading-relaxed sm:text-lg md:text-xl">
                 From construction model to certified Digital Product Passport in seven steps. Scroll to see how Product
                 Connect digitises your product into a verified digital twin.
               </p>
@@ -300,75 +306,95 @@ export function StorytellingScroll() {
                         from: "Kuopio, Finland",
                         to: "Hamburg, Germany",
                         mode: "ship",
-                        icon: <Ship className="h-3 w-3" />,
+                        icon: <AnimatedIcon animationData={shipAnimation} className="h-6 w-6" playOnHover={true} />,
                         dist: "1,842 km",
                         co2: "4.2 kg",
                         time: "3 days",
-                        pct: 100
+                        pct: 100,
+                        colorClassName: "bg-cyan-500/10 text-cyan-400",
+                        barClassName: "bg-gradient-to-r from-cyan-500 to-cyan-400",
+                        dotClassName: "bg-cyan-400",
+                        modeColorClassName: "text-cyan-400"
                       },
                       {
                         from: "Hamburg, Germany",
                         to: "Gdańsk, Poland",
                         mode: "train",
-                        icon: <Train className="h-3 w-3" />,
+                        icon: <AnimatedIcon animationData={trainAnimation} className="h-6 w-6" playOnHover={true} />,
                         dist: "680 km",
                         co2: "1.1 kg",
                         time: "8 hrs",
-                        pct: 65
+                        pct: 65,
+                        colorClassName: "bg-amber-500/10 text-amber-400",
+                        barClassName: "bg-gradient-to-r from-amber-500 to-amber-400",
+                        dotClassName: "bg-amber-400",
+                        modeColorClassName: "text-amber-400"
                       },
                       {
                         from: "Gdańsk, Poland",
                         to: "Copenhagen, Denmark",
                         mode: "truck",
-                        icon: <Truck className="h-3 w-3" />,
+                        icon: <AnimatedIcon animationData={truckAnimation} className="h-6 w-6" playOnHover={true} />,
                         dist: "520 km",
                         co2: "3.8 kg",
                         time: "6 hrs",
-                        pct: 30
+                        pct: 30,
+                        colorClassName: "bg-violet-500/10 text-violet-400",
+                        barClassName: "bg-gradient-to-r from-violet-500 to-violet-400",
+                        dotClassName: "bg-violet-400",
+                        modeColorClassName: "text-violet-400"
                       }
                     ].map((leg, legIndex) => (
-                      <div key={leg.from} className="rounded-xl border border-brand-dark/15 bg-brand-deep/40 p-3">
-                        <div className="mb-2.5 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`flex h-5 w-5 items-center justify-center rounded-md ${leg.mode === "ship" ? "bg-cyan-500/10 text-cyan-400" : leg.mode === "train" ? "bg-amber-500/10 text-amber-400" : "bg-violet-500/10 text-violet-400"}`}
-                            >
-                              {leg.icon}
-                            </div>
+                      <div
+                        key={leg.from}
+                        data-hover-trigger=""
+                        className="flex gap-3 rounded-xl border border-brand-dark/15 bg-brand-deep/40 p-3"
+                      >
+                        {/* Icon + label */}
+                        <div className="flex shrink-0 flex-col items-center">
+                          <div
+                            className={`flex h-10 w-10 items-center justify-center rounded-lg ${leg.colorClassName}`}
+                          >
+                            {leg.icon}
+                          </div>
+                          <span className={`mt-1 text-[9px] uppercase tracking-wide ${leg.modeColorClassName}`}>
+                            {leg.mode}
+                          </span>
+                        </div>
+                        {/* Content */}
+                        <div className="flex min-w-0 flex-1 flex-col">
+                          <div className="mb-2 flex items-center justify-between">
                             <div>
                               <p className="text-[10px] text-slate-400 leading-tight">{leg.from}</p>
                               <p className="font-medium text-[10px] text-white leading-tight">{leg.to}</p>
                             </div>
+                            <div className="text-right">
+                              <p className="font-semibold text-[10px] text-white">{leg.dist}</p>
+                              <p className="text-[9px] text-slate-500">{leg.time}</p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-[10px] text-white">{leg.dist}</p>
-                            <p className="text-[9px] text-slate-500">{leg.time}</p>
-                          </div>
-                        </div>
-                        {/* Progress bar */}
-                        <div className="relative h-1 overflow-hidden rounded-full bg-brand-dark">
-                          <motion.div
-                            className={`absolute top-0 left-0 h-full rounded-full ${leg.mode === "ship" ? "bg-gradient-to-r from-cyan-500 to-cyan-400" : leg.mode === "train" ? "bg-gradient-to-r from-amber-500 to-amber-400" : "bg-gradient-to-r from-violet-500 to-violet-400"}`}
-                            style={{ width: `${leg.pct}%` }}
-                          />
-                          <motion.div
-                            className="absolute top-1/2 flex h-3.5 w-3.5 -translate-y-1/2 items-center justify-center rounded-full border border-slate-500 bg-slate-700 shadow-md"
-                            animate={{ left: ["2%", "90%"] }}
-                            transition={{
-                              repeat: Infinity,
-                              duration: 3 + legIndex * 0.8,
-                              ease: "linear",
-                              delay: legIndex * 0.6
-                            }}
-                          >
-                            <div
-                              className={`h-1.5 w-1.5 rounded-full ${leg.mode === "ship" ? "bg-cyan-400" : leg.mode === "train" ? "bg-amber-400" : "bg-violet-400"}`}
+                          {/* Progress bar */}
+                          <div className="relative h-1 overflow-hidden rounded-full bg-brand-dark">
+                            <motion.div
+                              className={`absolute top-0 left-0 h-full rounded-full ${leg.barClassName}`}
+                              style={{ width: `${leg.pct}%` }}
                             />
-                          </motion.div>
-                        </div>
-                        <div className="mt-1.5 flex justify-between">
-                          <span className="text-[9px] text-slate-600 uppercase tracking-wide">{leg.mode}</span>
-                          <span className="text-[9px] text-slate-500">{leg.co2} CO₂e</span>
+                            <motion.div
+                              className="absolute top-1/2 flex h-3.5 w-3.5 -translate-y-1/2 items-center justify-center rounded-full border border-slate-500 bg-slate-700 shadow-md"
+                              animate={{ left: ["0%", `${leg.pct - 3}%`] }}
+                              transition={{
+                                repeat: Infinity,
+                                duration: 3 + legIndex * 0.8,
+                                ease: "linear",
+                                delay: legIndex * 0.6
+                              }}
+                            >
+                              <div className={`h-1.5 w-1.5 rounded-full ${leg.dotClassName}`} />
+                            </motion.div>
+                          </div>
+                          <div className="mt-1.5 flex justify-end">
+                            <span className="text-[9px] text-slate-500">{leg.co2} CO₂e</span>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -563,9 +589,9 @@ export function StorytellingScroll() {
                         <span className="font-bold text-emerald-400">94 / 100</span>
                       </div>
                       <div className="h-1.5 overflow-hidden rounded-full bg-slate-700">
-                        <div
+                        <motion.div
                           className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
-                          style={{ width: "94%" }}
+                          style={{ width: scoreBarWidth }}
                         />
                       </div>
                     </div>
