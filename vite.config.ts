@@ -13,7 +13,17 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, ".")
+        "@": path.resolve(__dirname, "."),
+        "lottie-web": path.resolve(__dirname, "node_modules/lottie-web/build/player/esm/lottie_light.min.js")
+      }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            three: ["three", "@react-three/fiber", "@react-three/drei"]
+          }
+        }
       }
     },
     server: {
