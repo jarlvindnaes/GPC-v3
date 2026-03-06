@@ -1,16 +1,16 @@
 import { ArrowUpRight, CheckCircle2, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { WebsiteButton } from "./WebsiteButton";
 
 const visualGradientClassNames: Record<string, string> = {
   slate: "bg-radial-dark-sun-corner",
-  emerald: "bg-radial-dark-sun-corner",
-  indigo: "bg-radial-dark-sun-corner",
+  emerald: "bg-radial-accent-sun-corner",
+  indigo: "bg-radial-green-sun-corner",
   cyan: "bg-radial-dark-sun-corner",
-  rose: "bg-radial-dark-sun-corner",
-  blue: "bg-radial-dark-sun-corner"
+  rose: "bg-radial-accent-sun-corner",
+  blue: "bg-radial-green-sun-corner"
 };
 
 const checkIconClassNames: Record<string, string> = {
@@ -34,6 +34,7 @@ interface WebsiteCardDialogProps {
   badge?: string;
   badgeClassName?: string;
   fillVisual?: boolean;
+  fadeVisualOnResize?: boolean;
   callToActionLabel?: string;
   onCallToActionPress?: () => void;
 }
@@ -50,9 +51,11 @@ export function WebsiteCardDialog({
   badge,
   badgeClassName,
   fillVisual = false,
+  fadeVisualOnResize = false,
   callToActionLabel,
   onCallToActionPress
 }: WebsiteCardDialogProps) {
+  const visualRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -83,20 +86,37 @@ export function WebsiteCardDialog({
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
             <motion.div
               layoutId={`card-${identifier}`}
+              onLayoutAnimationStart={() => {
+                if (fadeVisualOnResize && visualRef.current) {
+                  visualRef.current.style.transition = "none";
+                  visualRef.current.style.opacity = "0";
+                }
+              }}
+              onLayoutAnimationComplete={() => {
+                window.dispatchEvent(new Event("resize"));
+                requestAnimationFrame(() => {
+                  if (fadeVisualOnResize && visualRef.current) {
+                    visualRef.current.style.transition = "opacity 0.5s ease";
+                    visualRef.current.style.opacity = "1";
+                  }
+                });
+              }}
               role="dialog"
               aria-modal="true"
               aria-label={title}
               className="pointer-events-auto flex max-h-[90vh] w-full max-w-5xl flex-col overflow-y-auto rounded-2xl bg-white shadow-2xl md:flex-row"
             >
-              <motion.div
-                layoutId={`visual-${identifier}`}
-                onLayoutAnimationComplete={() => {
-                  window.dispatchEvent(new Event("resize"));
-                }}
+              <div
                 className={`relative flex min-h-[280px] items-center justify-center overflow-hidden rounded-t-2xl border-brand-dark/30 border-b md:min-h-[400px] md:w-1/2 md:rounded-t-none md:rounded-l-2xl md:border-r md:border-b-0 ${fillVisual ? "" : "p-6 sm:p-8 md:p-12"} ${visualGradientClassNames[color] ?? "bg-brand-surface"}`}
               >
-                {fillVisual ? visual : <div className="w-full max-w-sm scale-125 transform md:scale-150">{visual}</div>}
-              </motion.div>
+                {fillVisual ? (
+                  <div ref={fadeVisualOnResize ? visualRef : undefined} className="h-full w-full">
+                    {visual}
+                  </div>
+                ) : (
+                  <div className="w-full max-w-sm scale-125 transform md:scale-150">{visual}</div>
+                )}
+              </div>
 
               <div className="relative flex flex-col p-5 sm:p-8 md:w-1/2 md:p-12">
                 <WebsiteButton

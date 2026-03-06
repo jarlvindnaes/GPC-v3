@@ -76,15 +76,15 @@
 }
 
 @utility bg-radial-dark-sun-corner {
-  background: radial-gradient(ellipse at 100% 125%, color-mix(in srgb, var(--color-brand) 50%, var(--color-brand-deep)) 0%, var(--color-brand-deep) 50%);
+  background: radial-gradient(ellipse at 100% 125%, var(--color-brand-light) 0%, var(--color-brand-light) 30%, var(--color-brand-deep) 70%);
 }
 
 @utility bg-radial-green-sun-corner {
-  background: radial-gradient(ellipse at 100% 125%, color-mix(in srgb, #86efac 40%, #14201c) 0%, #14201c 50%);
+  background: radial-gradient(ellipse at 100% 125%, var(--color-brand-cyan) 0%, var(--color-brand-cyan) 30%, var(--color-brand-deep) 70%);
 }
 
 @utility bg-radial-accent-sun-corner {
-  background: radial-gradient(ellipse at 100% 125%, color-mix(in srgb, #fcd34d 40%, #1c1812) 0%, #1c1812 50%);
+  background: radial-gradient(ellipse at 100% 125%, var(--color-brand-violet) 0%, var(--color-brand-violet) 30%, var(--color-brand-deep) 70%);
 }
 
 @utility bg-linear-bright {

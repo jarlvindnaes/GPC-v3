@@ -17,6 +17,7 @@ interface WebsiteCardProps {
   illustration?: ReactNode;
   illustrationColor?: string;
   fillVisual?: boolean;
+  fadeVisualOnResize?: boolean;
 }
 
 interface WebsiteCardIconProps {
@@ -59,6 +60,8 @@ function useGradientAngle() {
   return { ref, onMouseMove, onMouseLeave };
 }
 
+const dispatchResize = () => window.dispatchEvent(new Event("resize"));
+
 export function WebsiteCard({
   children,
   expandableIdentifier,
@@ -72,9 +75,11 @@ export function WebsiteCard({
   className,
   illustration,
   illustrationColor,
-  fillVisual = false
+  fillVisual = false,
+  fadeVisualOnResize = false
 }: WebsiteCardProps) {
   const { ref, onMouseMove, onMouseLeave } = useGradientAngle();
+  const visualRef = useRef<HTMLDivElement>(null);
   const combinedClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
   const arrowIndicator = showArrow ? (
@@ -114,25 +119,18 @@ export function WebsiteCard({
     <div
       className={`relative flex h-[180px] items-center justify-center overflow-hidden md:h-[220px] ${illustrationPadding} ${illustrationGradient}`}
     >
-      {fillVisual ? illustration : <div className="w-full max-w-sm">{illustration}</div>}
+      {fillVisual ? (
+        <div ref={fadeVisualOnResize && expandableIdentifier ? visualRef : undefined} className="h-full w-full">
+          {illustration}
+        </div>
+      ) : (
+        <div className="w-full max-w-sm">{illustration}</div>
+      )}
     </div>
   ) : null;
 
   const illustrationSection = illustration ? (
-    <div className="-mx-5 mt-auto -mb-5 pt-6 sm:-mx-6 sm:-mb-6">
-      {expandableIdentifier ? (
-        <motion.div
-          layoutId={`visual-${expandableIdentifier}`}
-          onLayoutAnimationComplete={() => {
-            window.dispatchEvent(new Event("resize"));
-          }}
-        >
-          {illustrationInner}
-        </motion.div>
-      ) : (
-        illustrationInner
-      )}
-    </div>
+    <div className="-mx-5 mt-auto -mb-5 pt-6 sm:-mx-6 sm:-mb-6">{illustrationInner}</div>
   ) : null;
 
   const content = (
@@ -152,6 +150,21 @@ export function WebsiteCard({
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
         layoutId={`card-${expandableIdentifier}`}
+        onLayoutAnimationStart={() => {
+          if (fadeVisualOnResize && visualRef.current) {
+            visualRef.current.style.transition = "none";
+            visualRef.current.style.opacity = "0";
+          }
+        }}
+        onLayoutAnimationComplete={() => {
+          dispatchResize();
+          requestAnimationFrame(() => {
+            if (fadeVisualOnResize && visualRef.current) {
+              visualRef.current.style.transition = "opacity 0.5s ease";
+              visualRef.current.style.opacity = "1";
+            }
+          });
+        }}
         onClick={onPress}
         role="button"
         tabIndex={0}

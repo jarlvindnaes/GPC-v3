@@ -31,6 +31,7 @@ const features = [
     ],
     color: "slate",
     fillVisual: true,
+    fadeVisualOnResize: true,
     visual: <ThemedFinishedProductCanvas />
   },
   {
@@ -199,6 +200,7 @@ export function FeatureGrid() {
               illustration={feature.visual}
               illustrationColor={feature.color}
               fillVisual={feature.fillVisual}
+              fadeVisualOnResize={feature.fadeVisualOnResize}
             >
               <motion.div layoutId={`title-${feature.id}`} className="mb-6">
                 <h3 className="mb-3 font-display font-semibold text-2xl text-brand-darkest">{feature.title}</h3>
@@ -230,6 +232,7 @@ export function FeatureGrid() {
               : undefined
           }
           fillVisual={activeFeature.fillVisual}
+          fadeVisualOnResize={activeFeature.fadeVisualOnResize}
         />
       )}
     </section>
