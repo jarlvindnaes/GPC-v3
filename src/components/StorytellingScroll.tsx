@@ -78,7 +78,7 @@ export function StorytellingScroll() {
     <>
       <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-deep text-white">
         {/* Header section */}
-        <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
+        <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-8 pb-8 md:pt-12 md:pb-16">
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -99,7 +99,7 @@ export function StorytellingScroll() {
 
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
-          <div className="absolute top-[35%] bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
+          <div className="absolute top-[45%] bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
             {/* Starting circle */}
             <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-accent" />
             <motion.div
@@ -108,7 +108,7 @@ export function StorytellingScroll() {
             />
           </div>
 
-          <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-4 px-4 sm:px-6 md:flex-row md:gap-12 lg:px-8">
+          <div className="relative z-10 mx-auto mt-20 flex w-full max-w-7xl flex-col items-center gap-4 px-4 sm:px-6 md:flex-row md:gap-12 lg:px-8">
             {/* ── Text panel (left) ── */}
             <div className="relative flex min-h-[180px] w-full items-center pl-10 sm:pl-12 md:h-[420px] md:w-[44%] md:pr-12 md:pl-0">
               {[
@@ -646,11 +646,11 @@ export function StorytellingScroll() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center"
           >
-            <div className="-mb-12">
+            <div>
               <PassportChairCanvas />
             </div>
 
-            <div className="text-center">
+            <div className="mt-8 text-center">
               <div className="mb-4 flex items-center justify-center gap-2.5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-dark/60 bg-brand-dark/80 text-indigo-400">
                   <Sparkles className="h-4.5 w-4.5" />
