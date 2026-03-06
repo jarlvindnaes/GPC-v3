@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../theme";
+import { useIsNearViewport } from "../utilities/useIsNearViewport";
 
 interface GridNode {
   baseX: number;
@@ -17,11 +18,13 @@ const GRID_SPACING = 48;
 
 export function InteractiveGrid() {
   const canvasReference = useRef<HTMLCanvasElement>(null);
+  const isNearViewport = useIsNearViewport(canvasReference);
   const mouseReference = useRef({ x: 0, y: 0, active: false });
   const nodesReference = useRef<GridNode[]>([]);
   const gridColumnsReference = useRef(0);
   const dimensionsReference = useRef({ width: 0, height: 0 });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isNearViewport is a stable ref read inside rAF
   useEffect(() => {
     const canvas = canvasReference.current;
     if (!canvas) {
@@ -107,10 +110,13 @@ export function InteractiveGrid() {
     const springSpeed = 0.08;
 
     const draw = () => {
+      animationId = requestAnimationFrame(draw);
+      if (!isNearViewport.current) {
+        return;
+      }
       const w = dimensionsReference.current.width;
       const h = dimensionsReference.current.height;
       if (w === 0) {
-        animationId = requestAnimationFrame(draw);
         return;
       }
       context.clearRect(0, 0, w, h);
@@ -187,8 +193,6 @@ export function InteractiveGrid() {
           }
         }
       }
-
-      animationId = requestAnimationFrame(draw);
     };
 
     animationId = requestAnimationFrame(draw);

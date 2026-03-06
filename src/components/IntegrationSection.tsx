@@ -198,7 +198,6 @@ export function IntegrationSection() {
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
               className="h-full w-full"
             >
               <div className="flex h-full w-full items-center justify-center rounded-2xl border border-violet-400/50 bg-brand-deep/80 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
@@ -210,39 +209,19 @@ export function IntegrationSection() {
           {/* Nodes */}
           <div className="pointer-events-none absolute inset-0 z-20">
             <div ref={topRef} className="absolute top-[5%] right-0 left-0 flex justify-center gap-3 sm:gap-6 md:gap-16">
-              <IntegrationNode
-                title="Business Central"
-                icon={<Database className="h-4 w-4" />}
-                delay={0.2}
-                color="slate"
-              />
-              <IntegrationNode title="SAP S/4HANA" icon={<Box className="h-4 w-4" />} delay={0.3} color="slate" />
-              <IntegrationNode title="Akeneo PIM" icon={<Layers className="h-4 w-4" />} delay={0.4} color="slate" />
+              <IntegrationNode title="Business Central" icon={<Database className="h-4 w-4" />} color="slate" />
+              <IntegrationNode title="SAP S/4HANA" icon={<Box className="h-4 w-4" />} color="slate" />
+              <IntegrationNode title="Akeneo PIM" icon={<Layers className="h-4 w-4" />} color="slate" />
             </div>
 
             <div
               ref={leftRef}
               className="absolute top-1/2 left-[1%] flex -translate-y-1/2 flex-col gap-6 md:left-[4%] md:gap-8"
             >
-              <IntegrationNode
-                title="Wood Supplier"
-                icon={<Warehouse className="h-4 w-4" />}
-                delay={0.4}
-                color="amber"
-              />
-              <IntegrationNode title="Steel Foundry" icon={<Factory className="h-4 w-4" />} delay={0.5} color="amber" />
-              <IntegrationNode
-                title="Leather Tannery"
-                icon={<Hammer className="h-4 w-4" />}
-                delay={0.6}
-                color="amber"
-              />
-              <IntegrationNode
-                title="Logistics Partner"
-                icon={<Truck className="h-4 w-4" />}
-                delay={0.7}
-                color="amber"
-              />
+              <IntegrationNode title="Wood Supplier" icon={<Warehouse className="h-4 w-4" />} color="amber" />
+              <IntegrationNode title="Steel Foundry" icon={<Factory className="h-4 w-4" />} color="amber" />
+              <IntegrationNode title="Leather Tannery" icon={<Hammer className="h-4 w-4" />} color="amber" />
+              <IntegrationNode title="Logistics Partner" icon={<Truck className="h-4 w-4" />} color="amber" />
             </div>
 
             <div
@@ -252,28 +231,24 @@ export function IntegrationSection() {
               <IntegrationNode
                 title="Ecoinvent DB"
                 icon={<Globe className="h-4 w-4" />}
-                delay={0.5}
                 color="indigo"
                 reverse={true}
               />
               <IntegrationNode
                 title="Supplier Portal"
                 icon={<Users className="h-4 w-4" />}
-                delay={0.6}
                 color="indigo"
                 reverse={true}
               />
               <IntegrationNode
                 title="Verified EPDs"
                 icon={<CheckCircle2 className="h-4 w-4" />}
-                delay={0.7}
                 color="emerald"
                 reverse={true}
               />
               <IntegrationNode
                 title="Public DPP"
                 icon={<QrCode className="h-4 w-4" />}
-                delay={0.8}
                 color="emerald"
                 reverse={true}
               />
@@ -283,13 +258,8 @@ export function IntegrationSection() {
               ref={bottomRef}
               className="absolute right-0 bottom-[3%] left-0 flex justify-center gap-3 sm:gap-6 md:gap-16"
             >
-              <IntegrationNode
-                title="D2C Spare Parts"
-                icon={<Package className="h-4 w-4" />}
-                delay={0.9}
-                color="rose"
-              />
-              <IntegrationNode title="Usage Analytics" icon={<Cpu className="h-4 w-4" />} delay={1.0} color="rose" />
+              <IntegrationNode title="D2C Spare Parts" icon={<Package className="h-4 w-4" />} color="rose" />
+              <IntegrationNode title="Usage Analytics" icon={<Cpu className="h-4 w-4" />} color="rose" />
             </div>
           </div>
 
@@ -353,7 +323,6 @@ type IntegrationNodeColor = "amber" | "emerald" | "indigo" | "rose" | "slate";
 interface IntegrationNodeProperties {
   title: string;
   icon: ReactNode;
-  delay: number;
   color: IntegrationNodeColor;
   reverse?: boolean;
 }
@@ -366,13 +335,13 @@ const integrationNodeColors: Record<IntegrationNodeColor, string> = {
   rose: "border-rose-500/20 bg-rose-500/5 text-rose-400"
 };
 
-function IntegrationNode({ title, icon, delay, color, reverse = false }: IntegrationNodeProperties) {
+function IntegrationNode({ title, icon, color, reverse = false }: IntegrationNodeProperties) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      transition={{ delay, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`pointer-events-auto flex cursor-default items-center gap-2 rounded-xl border px-3 py-2 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-white/20 md:gap-3 md:rounded-2xl md:px-5 md:py-2.5 ${integrationNodeColors[color]} ${reverse ? "flex-row-reverse" : ""}`}
     >
       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5">{icon}</div>

@@ -2,6 +2,7 @@ import { ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { useTheme } from "../theme";
+import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { WebsiteButton } from "./WebsiteButton";
 
 interface NetworkNode {
@@ -48,10 +49,12 @@ function readNetworkColors(): NetworkColors {
 
 function HeroNetwork() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isNearViewport = useIsNearViewport(canvasRef);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
   const nodesRef = useRef<NetworkNode[]>([]);
   const dimensionsRef = useRef({ width: 0, height: 0 });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isNearViewport is a stable ref read inside rAF
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -137,11 +140,14 @@ function HeroNetwork() {
     const connectionDist = 220;
 
     const draw = () => {
+      animationId = requestAnimationFrame(draw);
+      if (!isNearViewport.current) {
+        return;
+      }
       time += 0.008;
       const w = dimensionsRef.current.width;
       const h = dimensionsRef.current.height;
       if (w === 0) {
-        animationId = requestAnimationFrame(draw);
         return;
       }
       context.clearRect(0, 0, w, h);
@@ -246,8 +252,6 @@ function HeroNetwork() {
 
         context.globalAlpha = 1;
       }
-
-      animationId = requestAnimationFrame(draw);
     };
 
     animationId = requestAnimationFrame(draw);

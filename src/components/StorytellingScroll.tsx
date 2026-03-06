@@ -15,6 +15,21 @@ export function StorytellingScroll() {
     offset: ["start start", "end end"]
   });
 
+  // Scroll-based active refs for R3F canvases (wider than opacity ranges so they render before fade-in)
+  const canvas1Active = useRef(true);
+  const canvas2Active = useRef(false);
+  const canvas4Active = useRef(false);
+
+  useEffect(
+    () =>
+      scrollYProgress.on("change", (v) => {
+        canvas1Active.current = v < 0.2;
+        canvas2Active.current = v > 0.08 && v < 0.35;
+        canvas4Active.current = v > 0.38 && v < 0.65;
+      }),
+    [scrollYProgress]
+  );
+
   const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   // Text opacities — 7 steps
@@ -177,7 +192,7 @@ export function StorytellingScroll() {
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="relative h-full w-full touch-none">
-                  <FinishedProductCanvas fieldOfView={55} />
+                  <FinishedProductCanvas fieldOfView={55} isActiveReference={canvas1Active} />
                 </div>
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
                   <div className="flex flex-col">
@@ -197,7 +212,7 @@ export function StorytellingScroll() {
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
-                  <ComponentsCanvas cameraDistanceRef={boltDistanceRef} />
+                  <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvas2Active} />
                 </div>
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:block md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
@@ -255,7 +270,7 @@ export function StorytellingScroll() {
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
-                  <RawMaterialCanvas />
+                  <RawMaterialCanvas isActiveReference={canvas4Active} />
                 </div>
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">

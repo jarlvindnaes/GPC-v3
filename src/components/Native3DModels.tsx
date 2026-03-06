@@ -1,22 +1,49 @@
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { BookOpen, ClipboardList, Globe, Recycle, ShoppingCart, Wrench } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as Three from "three";
+import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { WebsiteButton } from "./WebsiteButton";
+
+/**
+ * Drives rendering for a demand-mode Canvas. Uses its own rAF loop to call
+ * invalidate() only when the canvas should be active. When inactive, nothing
+ * calls invalidate, so the Canvas does zero GPU work — no useFrame callbacks
+ * run, no scene renders, drei's Float/PresentationControls are fully paused.
+ */
+function RenderController({ isActive }: { isActive: React.RefObject<boolean> }) {
+  const invalidate = useThree((state) => state.invalidate);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isActive is a stable ref read inside rAF
+  useEffect(() => {
+    let animationFrameId: number;
+    const loop = () => {
+      animationFrameId = requestAnimationFrame(loop);
+      if (isActive.current) {
+        invalidate();
+      }
+    };
+    animationFrameId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [invalidate]);
+
+  return null;
+}
 
 const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
 const CHAIR_WIREFRAME_MODEL = `${import.meta.env.BASE_URL}models/chair-wireframe.glb`;
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
 const EMERALD_MODEL = `${import.meta.env.BASE_URL}models/emerald_in_quartz__for_games.glb`;
 
-function CustomRockModel() {
+function CustomRockModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(EMERALD_MODEL);
   const mesh = useRef<Three.Group>(null);
   useFrame(() => {
-    if (mesh.current) {
-      mesh.current.rotation.y += 0.003;
+    if (!isActiveReference.current || !mesh.current) {
+      return;
     }
+    mesh.current.rotation.y += 0.003;
   });
   return (
     <Float floatIntensity={0.4} rotationIntensity={0} speed={1.2}>
@@ -27,13 +54,14 @@ function CustomRockModel() {
   );
 }
 
-function BoltModel() {
+function BoltModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(BOLT_MODEL);
   const mesh = useRef<Three.Group>(null);
   useFrame(() => {
-    if (mesh.current) {
-      mesh.current.rotation.y += 0.003;
+    if (!isActiveReference.current || !mesh.current) {
+      return;
     }
+    mesh.current.rotation.y += 0.003;
   });
   return (
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
@@ -44,14 +72,25 @@ function BoltModel() {
   );
 }
 
-export function RawMaterialCanvas() {
+export function RawMaterialCanvas({ isActiveReference }: { isActiveReference?: React.RefObject<boolean> }) {
+  const containerReference = useRef<HTMLDivElement>(null);
+  const internalNearReference = useIsNearViewport(containerReference);
+  const effectiveReference = isActiveReference ?? internalNearReference;
+
   return (
     <div
+      ref={containerReference}
       role="img"
       aria-label="3D raw material model viewer"
       className="h-full w-full cursor-grab active:cursor-grabbing"
     >
-      <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
+      <Canvas
+        frameloop="demand"
+        camera={{ position: [0, 0.5, 5], fov: 38 }}
+        gl={{ alpha: true }}
+        style={{ background: "transparent" }}
+      >
+        <RenderController isActive={effectiveReference} />
         <ambientLight intensity={0.7} />
         <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
         <directionalLight position={[-4, 6, -4]} intensity={0.6} color="#c7d2fe" />
@@ -64,7 +103,7 @@ export function RawMaterialCanvas() {
           config={{ mass: 4, tension: 120, friction: 40 }}
         >
           <group position={[0, -0.3, 0]} scale={1.31}>
-            <CustomRockModel />
+            <CustomRockModel isActiveReference={effectiveReference} />
           </group>
         </PresentationControls>
         <ContactShadows position={[0, -1.5, 0]} opacity={0.3} scale={10} blur={3} far={5} />
@@ -74,23 +113,52 @@ export function RawMaterialCanvas() {
   );
 }
 
-function AnimatedCamera({ targetDistance }: { targetDistance: React.RefObject<number> }) {
+function AnimatedCamera({
+  targetDistance,
+  isActiveReference
+}: {
+  targetDistance: React.RefObject<number>;
+  isActiveReference: React.RefObject<boolean>;
+}) {
   const { camera } = useThree();
   useFrame(() => {
+    if (!isActiveReference.current) {
+      return;
+    }
     const target = targetDistance.current;
     camera.position.z += (target - camera.position.z) * 0.1;
   });
   return null;
 }
 
-export function ComponentsCanvas({ cameraDistanceRef }: { cameraDistanceRef?: React.RefObject<number> }) {
+export function ComponentsCanvas({
+  cameraDistanceRef,
+  isActiveReference
+}: {
+  cameraDistanceRef?: React.RefObject<number>;
+  isActiveReference?: React.RefObject<boolean>;
+}) {
+  const containerReference = useRef<HTMLDivElement>(null);
+  const internalNearReference = useIsNearViewport(containerReference);
+  const effectiveReference = isActiveReference ?? internalNearReference;
   const defaultDistance = useRef(5);
   const distanceRef = cameraDistanceRef ?? defaultDistance;
 
   return (
-    <div role="img" aria-label="3D component model viewer" className="h-full w-full cursor-grab active:cursor-grabbing">
-      <Canvas camera={{ position: [0, 0.5, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
-        <AnimatedCamera targetDistance={distanceRef} />
+    <div
+      ref={containerReference}
+      role="img"
+      aria-label="3D component model viewer"
+      className="h-full w-full cursor-grab active:cursor-grabbing"
+    >
+      <Canvas
+        frameloop="demand"
+        camera={{ position: [0, 0.5, 5], fov: 38 }}
+        gl={{ alpha: true }}
+        style={{ background: "transparent" }}
+      >
+        <RenderController isActive={effectiveReference} />
+        <AnimatedCamera targetDistance={distanceRef} isActiveReference={effectiveReference} />
         <ambientLight intensity={0.7} />
         <spotLight position={[8, 12, 8]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
         <directionalLight position={[-4, 6, -4]} intensity={0.5} color="#c7d2fe" />
@@ -102,7 +170,7 @@ export function ComponentsCanvas({ cameraDistanceRef }: { cameraDistanceRef?: Re
           azimuth={[-Math.PI, Math.PI]}
           config={{ mass: 4, tension: 120, friction: 40 }}
         >
-          <BoltModel />
+          <BoltModel isActiveReference={effectiveReference} />
         </PresentationControls>
         <ContactShadows position={[0, -1.2, 0]} opacity={0.3} scale={10} blur={3} far={5} />
         <Environment preset="studio" />
@@ -133,17 +201,19 @@ const chairLabels: { label: string; position: [number, number, number]; dotColor
 function MouseLight({
   mouseRef,
   hoverRef,
-  lightColor
+  lightColor,
+  isActiveReference
 }: {
   mouseRef: React.RefObject<Three.Vector2>;
   hoverRef: React.RefObject<boolean>;
   lightColor: Three.Color;
+  isActiveReference: React.RefObject<boolean>;
 }) {
   const lightRef = useRef<Three.PointLight>(null);
   const targetPosition = useRef(new Three.Vector3(0, 0, 5));
 
   useFrame(() => {
-    if (!lightRef.current) {
+    if (!isActiveReference.current || !lightRef.current) {
       return;
     }
     targetPosition.current.set(mouseRef.current.x * 2.5, mouseRef.current.y * 2 + 0.5, 0.5);
@@ -155,7 +225,7 @@ function MouseLight({
   return <pointLight ref={lightRef} intensity={0} distance={0} color={lightColor} />;
 }
 
-function WireframeChairModel() {
+function WireframeChairModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(CHAIR_WIREFRAME_MODEL);
   const { size } = useThree();
   const tooltipScale = Math.min(1, size.width / 480);
@@ -184,9 +254,10 @@ function WireframeChairModel() {
   }, [scene]);
 
   useFrame(() => {
-    if (spinRef.current) {
-      spinRef.current.rotation.y += 0.003;
+    if (!isActiveReference.current || !spinRef.current) {
+      return;
     }
+    spinRef.current.rotation.y += 0.003;
   });
 
   return (
@@ -208,7 +279,16 @@ function WireframeChairModel() {
   );
 }
 
-export function FinishedProductCanvas({ fieldOfView = 36 }: { fieldOfView?: number }) {
+export function FinishedProductCanvas({
+  fieldOfView = 36,
+  isActiveReference
+}: {
+  fieldOfView?: number;
+  isActiveReference?: React.RefObject<boolean>;
+}) {
+  const containerReference = useRef<HTMLDivElement>(null);
+  const internalNearReference = useIsNearViewport(containerReference);
+  const effectiveReference = isActiveReference ?? internalNearReference;
   const mouseRef = useRef(new Three.Vector2(0, 0));
   const hoverRef = useRef(false);
   const lightColor = useMemo(() => {
@@ -220,6 +300,7 @@ export function FinishedProductCanvas({ fieldOfView = 36 }: { fieldOfView?: numb
 
   return (
     <div
+      ref={containerReference}
       role="img"
       aria-label="3D finished product model viewer"
       className="absolute inset-0 cursor-grab active:cursor-grabbing"
@@ -236,12 +317,19 @@ export function FinishedProductCanvas({ fieldOfView = 36 }: { fieldOfView?: numb
       }}
     >
       <Canvas
+        frameloop="demand"
         camera={{ position: [0, 0.7, 4], fov: fieldOfView }}
         gl={{ alpha: true }}
         style={{ background: "transparent" }}
       >
+        <RenderController isActive={effectiveReference} />
         <ambientLight intensity={0.03} />
-        <MouseLight mouseRef={mouseRef} hoverRef={hoverRef} lightColor={lightColor} />
+        <MouseLight
+          mouseRef={mouseRef}
+          hoverRef={hoverRef}
+          lightColor={lightColor}
+          isActiveReference={effectiveReference}
+        />
         <PresentationControls
           global={true}
           snap={false}
@@ -250,7 +338,7 @@ export function FinishedProductCanvas({ fieldOfView = 36 }: { fieldOfView?: numb
           azimuth={[-Math.PI, Math.PI]}
           config={{ mass: 4, tension: 120, friction: 40 }}
         >
-          <WireframeChairModel />
+          <WireframeChairModel isActiveReference={effectiveReference} />
         </PresentationControls>
       </Canvas>
     </div>
@@ -318,13 +406,23 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 
 export function PassportChairCanvas() {
   const [hovered, setHovered] = useState(false);
+  const containerReference = useRef<HTMLDivElement>(null);
+  const isNearReference = useIsNearViewport(containerReference);
+
   return (
     <div
+      ref={containerReference}
       role="img"
       aria-label="Interactive 3D chair with product passport"
       className="relative mx-auto h-[min(80vw,600px)] w-[min(90vw,800px)]"
     >
-      <Canvas camera={{ position: [0, 0.3, 5], fov: 38 }} gl={{ alpha: true }} style={{ background: "transparent" }}>
+      <Canvas
+        frameloop="demand"
+        camera={{ position: [0, 0.3, 5], fov: 38 }}
+        gl={{ alpha: true }}
+        style={{ background: "transparent" }}
+      >
+        <RenderController isActive={isNearReference} />
         <ambientLight intensity={0.8} />
         <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
         <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
@@ -434,15 +532,15 @@ export function PassportChairCanvas() {
   );
 }
 
-function DppChairModel() {
+function DppChairModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(CHAIR_MODEL);
   const productScene = useMemo(() => scene.clone(), [scene]);
   const group = useRef<Three.Group>(null);
   useFrame(() => {
-    if (group.current) {
-      // Slow continuous rotation
-      group.current.rotation.y += 0.002;
+    if (!isActiveReference.current || !group.current) {
+      return;
     }
+    group.current.rotation.y += 0.002;
   });
   return (
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.5}>
@@ -460,8 +558,14 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
 ];
 
 export function DppInteractiveProduct() {
+  const containerReference = useRef<HTMLDivElement>(null);
+  const isNearReference = useIsNearViewport(containerReference);
+
   return (
-    <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60">
+    <div
+      ref={containerReference}
+      className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60"
+    >
       <div className="grid min-h-[400px] grid-cols-1 md:min-h-[640px] lg:grid-cols-[1fr_minmax(280px,420px)]">
         {/* ── Left: 3D canvas ── */}
         <div
@@ -491,7 +595,12 @@ export function DppInteractiveProduct() {
             Drag to explore
           </div>
 
-          <Canvas camera={{ position: [0, 0.8, 7], fov: 42 }} style={{ width: "100%", height: "100%", minHeight: 380 }}>
+          <Canvas
+            frameloop="demand"
+            camera={{ position: [0, 0.8, 7], fov: 42 }}
+            style={{ width: "100%", height: "100%", minHeight: 380 }}
+          >
+            <RenderController isActive={isNearReference} />
             <color attach="background" args={["transparent"]} />
             <ambientLight intensity={0.9} />
             <spotLight position={[8, 14, 8]} angle={0.2} penumbra={1} intensity={2.5} castShadow={true} />
@@ -504,7 +613,7 @@ export function DppInteractiveProduct() {
               azimuth={[-Math.PI, Math.PI]}
               config={{ mass: 2, tension: 200, friction: 30 }}
             >
-              <DppChairModel />
+              <DppChairModel isActiveReference={isNearReference} />
               {hotspots.map((hotspot) => (
                 <Html key={hotspot.label} position={hotspot.position} center={true}>
                   <div

@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
+import { useIsNearViewport } from "../utilities/useIsNearViewport";
 
 interface Node {
   baseX: number;
@@ -14,6 +15,7 @@ interface Node {
 
 function NetworkCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isNearViewport = useIsNearViewport(canvasRef);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
   const nodesRef = useRef<Node[]>([]);
 
@@ -44,6 +46,7 @@ function NetworkCanvas() {
     initNodes();
   }, [initNodes]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isNearViewport is a stable ref read inside rAF
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -91,6 +94,10 @@ function NetworkCanvas() {
 
     let time = 0;
     const draw = () => {
+      animationId = requestAnimationFrame(draw);
+      if (!isNearViewport.current) {
+        return;
+      }
       time += 0.016;
       const w = canvas.width / devicePixelRatio;
       const h = canvas.height / devicePixelRatio;
@@ -148,8 +155,6 @@ function NetworkCanvas() {
         context.arc(node.x, node.y, scaledRadius, 0, Math.PI * 2);
         context.fill();
       }
-
-      animationId = requestAnimationFrame(draw);
     };
 
     animationId = requestAnimationFrame(draw);

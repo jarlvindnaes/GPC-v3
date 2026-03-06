@@ -3,6 +3,7 @@ import * as Three from "three";
 import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
+import { useIsNearViewport } from "../utilities/useIsNearViewport";
 
 const GLOBE_RADIUS = 120;
 const AUTO_ROTATION_SPEED = 0.0015;
@@ -473,6 +474,7 @@ function buildParticleSystem(
 
 export function SupplyChainGlobe() {
   const containerReference = useRef<HTMLDivElement>(null);
+  const isNearViewport = useIsNearViewport(containerReference);
   const tooltipReferences = useRef<(HTMLDivElement | null)[]>([]);
   const mousePosition = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
   const dragState = useRef<{ isDragging: boolean; previousX: number; previousY: number }>({
@@ -483,6 +485,7 @@ export function SupplyChainGlobe() {
 
   const tooltipConfigs = useMemo(() => readTooltipColors(), []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isNearViewport is a stable ref read inside rAF
   useEffect(() => {
     const container = containerReference.current;
     if (!container) {
@@ -607,6 +610,10 @@ export function SupplyChainGlobe() {
 
     function animate() {
       animationFrameId = requestAnimationFrame(animate);
+
+      if (!isNearViewport.current) {
+        return;
+      }
 
       if (!dragState.current.isDragging) {
         globeGroup.rotation.y += AUTO_ROTATION_SPEED;
