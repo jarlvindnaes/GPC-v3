@@ -78,7 +78,7 @@ export function StorytellingScroll() {
     <>
       <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-deep text-white">
         {/* Header section */}
-        <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-8 pb-8 md:pt-12 md:pb-16">
+        <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

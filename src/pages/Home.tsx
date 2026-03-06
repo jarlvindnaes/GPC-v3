@@ -1,7 +1,6 @@
 import { CountdownBanner } from "../components/CountdownBanner";
 import { FeatureGrid } from "../components/FeatureGrid";
 import { Hero } from "../components/Hero";
-import { IntegrationSection } from "../components/IntegrationSection";
 import { Pricing } from "../components/Pricing";
 import { StatsSection } from "../components/StatsSection";
 import { StorytellingScroll } from "../components/StorytellingScroll";
@@ -15,8 +14,7 @@ export function Home() {
       <StatsSection />
       <CountdownBanner />
       <TrustLogos />
-      <FeatureGrid />
-      <IntegrationSection />
+      <FeatureGrid variant="compact" />
       <StorytellingScroll />
       <Testimonials />
       <Pricing />

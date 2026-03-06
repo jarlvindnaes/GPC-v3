@@ -168,10 +168,28 @@ const features = [
   }
 ];
 
-export function FeatureGrid() {
+const compactFeatureIds = new Set(["lca", "map", "dpp", "commerce"]);
+
+export function FeatureGrid({ variant = "full" }: { variant?: "full" | "compact" }) {
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
 
-  const activeFeature = features.find((feature) => feature.id === selectedFeature);
+  const displayFeatures = variant === "compact" ? features.filter((f) => compactFeatureIds.has(f.id)) : features;
+  const activeFeature = displayFeatures.find((feature) => feature.id === selectedFeature);
+  const activeIdx = activeFeature ? displayFeatures.indexOf(activeFeature) : -1;
+  const dialogBadge =
+    activeFeature == null
+      ? ""
+      : variant === "compact"
+        ? `Gain ${activeIdx + 1}`
+        : activeIdx < 3
+          ? `Step ${activeIdx + 1}`
+          : `Gain ${activeIdx - 2}`;
+  const dialogBadgeClassName =
+    variant === "compact" || activeIdx >= 3 ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600" : undefined;
+  const gridClassName =
+    variant === "compact"
+      ? "grid grid-cols-1 gap-6 md:grid-cols-2"
+      : "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3";
 
   return (
     <section id="features" className="relative border-brand/15 border-y bg-brand-surface py-32">
@@ -186,28 +204,39 @@ export function FeatureGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, featureIndex) => (
-            <WebsiteCard
-              key={feature.id}
-              expandableIdentifier={feature.id}
-              onPress={() => setSelectedFeature(feature.id)}
-              showArrow={true}
-              badge={featureIndex < 3 ? `Step ${featureIndex + 1}` : `Gain ${featureIndex - 2}`}
-              badgeClassName={
-                featureIndex >= 3 ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600" : undefined
-              }
-              illustration={feature.visual}
-              illustrationColor={feature.color}
-              fillVisual={feature.fillVisual}
-              fadeVisualOnResize={feature.fadeVisualOnResize}
-            >
-              <motion.div layoutId={`title-${feature.id}`} className="mb-6">
-                <h3 className="mb-3 font-display font-semibold text-2xl text-brand-darkest">{feature.title}</h3>
-                <p className="text-brand-text leading-relaxed">{feature.shortDescription}</p>
-              </motion.div>
-            </WebsiteCard>
-          ))}
+        <div className={gridClassName}>
+          {displayFeatures.map((feature, featureIndex) => {
+            const badge =
+              variant === "compact"
+                ? `Gain ${featureIndex + 1}`
+                : featureIndex < 3
+                  ? `Step ${featureIndex + 1}`
+                  : `Gain ${featureIndex - 2}`;
+            const badgeClassName =
+              variant === "compact" || featureIndex >= 3
+                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600"
+                : undefined;
+
+            return (
+              <WebsiteCard
+                key={feature.id}
+                expandableIdentifier={feature.id}
+                onPress={() => setSelectedFeature(feature.id)}
+                showArrow={true}
+                badge={badge}
+                badgeClassName={badgeClassName}
+                illustration={feature.visual}
+                illustrationColor={feature.color}
+                fillVisual={feature.fillVisual}
+                fadeVisualOnResize={feature.fadeVisualOnResize}
+              >
+                <motion.div layoutId={`title-${feature.id}`} className="mb-6">
+                  <h3 className="mb-3 font-display font-semibold text-2xl text-brand-darkest">{feature.title}</h3>
+                  <p className="text-brand-text leading-relaxed">{feature.shortDescription}</p>
+                </motion.div>
+              </WebsiteCard>
+            );
+          })}
         </div>
       </div>
 
@@ -221,16 +250,8 @@ export function FeatureGrid() {
           color={activeFeature.color}
           description={activeFeature.longDescription}
           benefits={activeFeature.benefits}
-          badge={
-            features.indexOf(activeFeature) < 3
-              ? `Step ${features.indexOf(activeFeature) + 1}`
-              : `Gain ${features.indexOf(activeFeature) - 2}`
-          }
-          badgeClassName={
-            features.indexOf(activeFeature) >= 3
-              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600"
-              : undefined
-          }
+          badge={dialogBadge}
+          badgeClassName={dialogBadgeClassName}
           fillVisual={activeFeature.fillVisual}
           fadeVisualOnResize={activeFeature.fadeVisualOnResize}
         />
