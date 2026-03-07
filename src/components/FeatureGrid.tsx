@@ -168,12 +168,13 @@ const features = [
   }
 ];
 
-const compactFeatureIds = new Set(["lca", "map", "dpp", "commerce"]);
+const compactFeatureOrder = ["map", "lca", "dpp", "commerce"];
 
 export function FeatureGrid({ variant = "full" }: { variant?: "full" | "compact" }) {
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
 
-  const displayFeatures = variant === "compact" ? features.filter((f) => compactFeatureIds.has(f.id)) : features;
+  const displayFeatures =
+    variant === "compact" ? compactFeatureOrder.flatMap((id) => features.filter((f) => f.id === id)) : features;
   const activeFeature = displayFeatures.find((feature) => feature.id === selectedFeature);
   const activeIdx = activeFeature ? displayFeatures.indexOf(activeFeature) : -1;
   const dialogBadge =
@@ -192,7 +193,8 @@ export function FeatureGrid({ variant = "full" }: { variant?: "full" | "compact"
       : "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3";
 
   return (
-    <section id="features" className="relative border-brand/15 border-y bg-brand-surface py-32">
+    <section id="features" className="relative bg-brand-surface py-32">
+      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 max-w-3xl">
           <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">

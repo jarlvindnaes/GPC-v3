@@ -285,9 +285,6 @@ export function CountdownBanner() {
           </p>
         </div>
       </div>
-
-      {/* Subtle bottom border */}
-      <div className="absolute right-0 bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
     </section>
   );
 }

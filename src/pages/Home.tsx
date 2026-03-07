@@ -11,9 +11,9 @@ export function Home() {
   return (
     <main>
       <Hero />
+      <TrustLogos />
       <StatsSection />
       <CountdownBanner />
-      <TrustLogos />
       <FeatureGrid variant="compact" />
       <StorytellingScroll />
       <Testimonials />

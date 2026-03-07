@@ -26,7 +26,8 @@ export function Testimonials() {
   ];
 
   return (
-    <section className="border-brand/15 border-t bg-linear-bright py-16 sm:py-24 md:py-32">
+    <section className="relative bg-linear-bright py-16 sm:py-24 md:py-32">
+      <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 md:mb-20">
           <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">

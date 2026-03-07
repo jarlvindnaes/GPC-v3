@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useCallback, useEffect, useRef } from "react";
+import { type RefObject, useCallback, useEffect, useRef } from "react";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 
 interface Node {
@@ -11,22 +11,35 @@ interface Node {
   phase: number;
   driftSpeed: number;
   driftRadius: number;
+  colorIndex: number;
 }
 
-function NetworkCanvas() {
+function readBrandColors(): string[] {
+  const styles = getComputedStyle(document.documentElement);
+  return [
+    styles.getPropertyValue("--color-brand").trim(),
+    styles.getPropertyValue("--color-brand-light").trim(),
+    styles.getPropertyValue("--color-brand-accent").trim(),
+    styles.getPropertyValue("--color-brand-cyan").trim(),
+    styles.getPropertyValue("--color-brand-amber").trim(),
+    styles.getPropertyValue("--color-brand-violet").trim()
+  ];
+}
+
+function NetworkCanvas({ sectionMouseRef }: { sectionMouseRef: RefObject<{ x: number; y: number; active: boolean }> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isNearViewport = useIsNearViewport(canvasRef);
-  const mouseRef = useRef({ x: 0, y: 0, active: false });
   const nodesRef = useRef<Node[]>([]);
 
   const initNodes = useCallback(() => {
     const count = 150;
     const nodes: Node[] = [];
     for (let i = 0; i < count; i++) {
-      const angle = (i / count) * Math.PI * 2;
-      const radiusVariation = 250 + Math.random() * 200;
+      // Fan upward: angles from -150° to -30° (upper hemisphere, wide spread)
+      const angle = -Math.PI * (5 / 6) + (i / count) * Math.PI * (4 / 6);
+      const radiusVariation = 250 + Math.random() * 550;
       const x = 600 + Math.cos(angle) * radiusVariation;
-      const y = 500 + Math.sin(angle) * radiusVariation;
+      const y = 1100 + Math.sin(angle) * radiusVariation;
       const nodeRadius = Math.random() * 3 + 1;
       nodes.push({
         baseX: x,
@@ -36,7 +49,8 @@ function NetworkCanvas() {
         radius: nodeRadius,
         phase: Math.random() * Math.PI * 2,
         driftSpeed: 0.3 + Math.random() * 0.5,
-        driftRadius: 3 + Math.random() * 6
+        driftRadius: 3 + Math.random() * 6,
+        colorIndex: Math.floor(Math.random() * 6)
       });
     }
     nodesRef.current = nodes;
@@ -62,23 +76,9 @@ function NetworkCanvas() {
       return;
     }
 
+    const brandColors = readBrandColors();
     const devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     let animationId: number;
-
-    const handleMouseMove = (event: MouseEvent) => {
-      const rect = parent.getBoundingClientRect();
-      mouseRef.current = {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
-        active: true
-      };
-    };
-    const handleMouseLeave = () => {
-      mouseRef.current.active = false;
-    };
-
-    parent.addEventListener("mousemove", handleMouseMove);
-    parent.addEventListener("mouseleave", handleMouseLeave);
 
     const resize = () => {
       const w = parent.clientWidth;
@@ -106,10 +106,20 @@ function NetworkCanvas() {
       const scaleX = w / 1200;
       const scaleY = h / 1200;
       const nodes = nodesRef.current;
-      const mouse = mouseRef.current;
+
+      // Translate section-relative mouse coords to canvas parent-relative coords
+      const sectionMouse = sectionMouseRef.current;
+      const section = parent.closest("section");
+      const mouse = { x: 0, y: 0, active: sectionMouse.active };
+      if (section && sectionMouse.active) {
+        const sectionRect = section.getBoundingClientRect();
+        const parentRect = parent.getBoundingClientRect();
+        mouse.x = sectionMouse.x - (parentRect.left - sectionRect.left);
+        mouse.y = sectionMouse.y - (parentRect.top - sectionRect.top);
+      }
 
       const anchorX = 600 * scaleX;
-      const anchorY = 900 * scaleY;
+      const anchorY = 1100 * scaleY;
 
       for (const node of nodes) {
         const driftX = Math.sin(time * node.driftSpeed + node.phase) * node.driftRadius;
@@ -140,7 +150,8 @@ function NetworkCanvas() {
       for (const node of nodes) {
         const controlPointX = (anchorX + node.x) / 2;
         const controlPointY = (anchorY + node.y) / 2;
-        context.strokeStyle = "rgba(99, 102, 241, 0.35)";
+        const color = brandColors[node.colorIndex];
+        context.strokeStyle = `${color}66`;
         context.beginPath();
         context.moveTo(anchorX, anchorY);
         context.quadraticCurveTo(controlPointX, controlPointY, node.x, node.y);
@@ -150,7 +161,8 @@ function NetworkCanvas() {
       // Draw nodes
       for (const node of nodes) {
         const scaledRadius = node.radius * Math.min(scaleX, scaleY);
-        context.fillStyle = "rgba(99, 102, 241, 0.8)";
+        const color = brandColors[node.colorIndex];
+        context.fillStyle = `${color}cc`;
         context.beginPath();
         context.arc(node.x, node.y, scaledRadius, 0, Math.PI * 2);
         context.fill();
@@ -162,8 +174,6 @@ function NetworkCanvas() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
-      parent.removeEventListener("mousemove", handleMouseMove);
-      parent.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
 
@@ -172,18 +182,69 @@ function NetworkCanvas() {
   );
 }
 
-export function StatsSection() {
-  return (
-    <section className="relative overflow-hidden bg-radial-dark-sun py-16 text-white sm:py-24 md:py-48">
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+const STAT_GRADIENT =
+  "radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--color-brand-accent), var(--color-brand-violet))";
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+export function StatsSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0, active: false });
+  const statEls = useRef<Set<HTMLDivElement>>(new Set());
+  const addStatRef = useCallback((el: HTMLDivElement | null) => {
+    if (el) {
+      statEls.current.add(el);
+    }
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      mouseRef.current = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+        active: true
+      };
+      for (const el of statEls.current) {
+        const elRect = el.getBoundingClientRect();
+        el.style.setProperty("--mouse-x", `${((event.clientX - elRect.left) / elRect.width) * 100}%`);
+        el.style.setProperty("--mouse-y", `${((event.clientY - elRect.top) / elRect.height) * 100}%`);
+      }
+    };
+    const handleMouseLeave = () => {
+      mouseRef.current.active = false;
+      for (const el of statEls.current) {
+        el.style.removeProperty("--mouse-x");
+        el.style.removeProperty("--mouse-y");
+      }
+    };
+
+    section.addEventListener("mousemove", handleMouseMove);
+    section.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      section.removeEventListener("mousemove", handleMouseMove);
+      section.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden py-12 sm:py-16 md:py-24"
+      style={{
+        background: "radial-gradient(ellipse 80% 70% at 50% 100%, var(--color-brand-surface) 0%, white 70%)"
+      }}
+    >
+      <div className="absolute top-0 right-0 left-0 z-20 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
+      <div className="pointer-events-none relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mx-auto mb-12 max-w-4xl font-display font-semibold text-3xl leading-[1.1] tracking-tight sm:text-5xl md:mb-24 md:text-7xl lg:text-8xl"
+          className="mx-auto mb-8 max-w-4xl font-display font-semibold text-2xl text-brand-darkest leading-[1.1] tracking-tight sm:text-3xl md:mb-16 md:text-4xl"
         >
           The backbone of sustainable manufacturing.
         </motion.h2>
@@ -196,10 +257,14 @@ export function StatsSection() {
             transition={{ delay: 0.1 }}
             className="flex flex-col items-center"
           >
-            <div className="mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text font-display font-semibold text-4xl text-transparent sm:text-6xl md:text-7xl">
+            <div
+              ref={addStatRef}
+              className="mb-3 bg-clip-text font-display font-semibold text-3xl text-transparent sm:text-4xl md:text-5xl"
+              style={{ backgroundImage: STAT_GRADIENT }}
+            >
               10M+
             </div>
-            <div className="max-w-[200px] font-medium text-base text-slate-400 leading-relaxed md:text-lg">
+            <div className="max-w-[200px] font-medium text-brand-text text-sm leading-relaxed md:text-base">
               components tracked across supply chains
             </div>
           </motion.div>
@@ -211,10 +276,14 @@ export function StatsSection() {
             transition={{ delay: 0.2 }}
             className="flex flex-col items-center"
           >
-            <div className="mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text font-display font-semibold text-4xl text-transparent sm:text-6xl md:text-7xl">
+            <div
+              ref={addStatRef}
+              className="mb-3 bg-clip-text font-display font-semibold text-3xl text-transparent sm:text-4xl md:text-5xl"
+              style={{ backgroundImage: STAT_GRADIENT }}
+            >
               €50M+
             </div>
-            <div className="max-w-[200px] font-medium text-base text-slate-400 leading-relaxed md:text-lg">
+            <div className="max-w-[200px] font-medium text-brand-text text-sm leading-relaxed md:text-base">
               in consulting fees saved by manufacturers
             </div>
           </motion.div>
@@ -226,10 +295,14 @@ export function StatsSection() {
             transition={{ delay: 0.3 }}
             className="flex flex-col items-center"
           >
-            <div className="mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text font-display font-semibold text-4xl text-transparent sm:text-6xl md:text-7xl">
+            <div
+              ref={addStatRef}
+              className="mb-3 bg-clip-text font-display font-semibold text-3xl text-transparent sm:text-4xl md:text-5xl"
+              style={{ backgroundImage: STAT_GRADIENT }}
+            >
               99.9%
             </div>
-            <div className="max-w-[200px] font-medium text-base text-slate-400 leading-relaxed md:text-lg">
+            <div className="max-w-[200px] font-medium text-brand-text text-sm leading-relaxed md:text-base">
               data accuracy for LCA calculations
             </div>
           </motion.div>
@@ -241,10 +314,14 @@ export function StatsSection() {
             transition={{ delay: 0.4 }}
             className="flex flex-col items-center"
           >
-            <div className="mb-4 bg-gradient-to-b from-white to-slate-400 bg-clip-text font-display font-semibold text-4xl text-transparent sm:text-6xl md:text-7xl">
+            <div
+              ref={addStatRef}
+              className="mb-3 bg-clip-text font-display font-semibold text-3xl text-transparent sm:text-4xl md:text-5xl"
+              style={{ backgroundImage: STAT_GRADIENT }}
+            >
               2026
             </div>
-            <div className="max-w-[200px] font-medium text-base text-slate-400 leading-relaxed md:text-lg">
+            <div className="max-w-[200px] font-medium text-brand-text text-sm leading-relaxed md:text-base">
               ESPR compliance ready today
             </div>
           </motion.div>
@@ -252,8 +329,8 @@ export function StatsSection() {
       </div>
 
       {/* Abstract circular visual — nodes gravitate toward mouse */}
-      <div className="pointer-events-auto absolute -bottom-[200px] left-1/2 z-0 h-[1200px] w-[1200px] -translate-x-1/2 opacity-30 mix-blend-screen">
-        <NetworkCanvas />
+      <div className="pointer-events-auto absolute -bottom-[200px] left-1/2 z-0 h-[900px] w-[900px] -translate-x-1/2 opacity-25">
+        <NetworkCanvas sectionMouseRef={mouseRef} />
       </div>
     </section>
   );
