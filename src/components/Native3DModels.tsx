@@ -36,6 +36,7 @@ const CHAIR_WIREFRAME_MODEL = `${import.meta.env.BASE_URL}models/chair-wireframe
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
 const EMERALD_MODEL = `${import.meta.env.BASE_URL}models/emerald_in_quartz__for_games.glb`;
 const IPHONE_MODEL = `${import.meta.env.BASE_URL}models/iphone_17_pro_max.glb`;
+const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
 
 function CustomRockModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(EMERALD_MODEL);
@@ -108,7 +109,7 @@ export function RawMaterialCanvas({ isActiveReference }: { isActiveReference?: R
           </group>
         </PresentationControls>
         <ContactShadows position={[0, -1.5, 0]} opacity={0.3} scale={10} blur={3} far={5} />
-        <Environment preset="studio" />
+        <Environment files={STUDIO_HDR} />
       </Canvas>
     </div>
   );
@@ -174,7 +175,7 @@ export function ComponentsCanvas({
           <BoltModel isActiveReference={effectiveReference} />
         </PresentationControls>
         <ContactShadows position={[0, -1.2, 0]} opacity={0.3} scale={10} blur={3} far={5} />
-        <Environment preset="studio" />
+        <Environment files={STUDIO_HDR} />
       </Canvas>
     </div>
   );
@@ -438,7 +439,7 @@ export function PassportChairCanvas() {
           <PassportChairModel onHover={setHovered} />
         </PresentationControls>
         <ContactShadows position={[0, -0.3, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
-        <Environment preset="studio" />
+        <Environment files={STUDIO_HDR} />
       </Canvas>
 
       {/* Intelligent Product panel — slides in on hover/tap */}
@@ -680,7 +681,7 @@ export function IphoneCommerceCanvas() {
           <IphoneModel />
         </PresentationControls>
         <ContactShadows position={[0, -0.5, 0]} opacity={0.25} scale={3} blur={2} far={2} />
-        <Environment preset="studio" />
+        <Environment files={STUDIO_HDR} />
       </Canvas>
     </div>
   );
@@ -758,7 +759,7 @@ export function DppInteractiveProduct() {
               ))}
             </PresentationControls>
             <ContactShadows position={[0, -0.3, 0]} opacity={0.3} scale={14} blur={3} far={6} />
-            <Environment preset="studio" />
+            <Environment files={STUDIO_HDR} />
           </Canvas>
         </div>
 
