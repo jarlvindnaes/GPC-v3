@@ -563,39 +563,36 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
 
 /**
  * Replace this image to change what's shown on the phone screen.
- * Recommended size: 360×780px (portrait phone aspect ratio ≈ 1:2.17).
+ * Recommended size: 720×1560px (portrait phone aspect ratio ≈ 1:2.17).
  */
-const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen.png`;
+const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen02.jpg`;
 
 function IphoneModel() {
   const { scene: originalScene } = useGLTF(IPHONE_MODEL);
-  // Clone so each mount gets its own scene (shared objects can only live in one R3F tree)
-  const scene = useMemo(() => originalScene.clone(true), [originalScene]);
   const screenTexture = useTexture(COMMERCE_SCREEN_IMAGE);
-  const [offset, setOffset] = useState<[number, number, number]>([0, 0, 0]);
 
-  useEffect(() => {
+  // Process scene exactly once: clone, hide parts, remap UVs, apply material, center.
+  // Using useMemo (not useEffect) prevents re-runs from flipping UVs back and forth.
+  const { scene, offset } = useMemo(() => {
+    const cloned = originalScene.clone(true);
+
     screenTexture.colorSpace = Three.SRGBColorSpace;
     screenTexture.flipY = true;
-  }, [screenTexture]);
 
-  useEffect(() => {
-    // Hide the second phone copy (all 002 nodes)
-    scene.traverse((child) => {
-      if (child.name.includes("002")) {
-        child.visible = false;
-      }
-      // Hide the glass overlay — reflections are handled by clearcoat on the display mesh
-      if (child.name === "Glass_over_display001_Glass_0") {
+    // Hide the second phone copy (all 002 nodes) and the glass overlay
+    cloned.traverse((child) => {
+      if (child.name.includes("002") || child.name === "Glass_over_display001_Glass_0") {
         child.visible = false;
       }
     });
 
-    // Apply screen image to the display mesh, remapping UVs to span full [0,1]
-    scene.traverse((child) => {
+    // Apply screen image to the display mesh, remapping UVs to span full [0,1].
+    // The model's UVs are baked right-to-left so U is flipped to correct the mirror.
+    cloned.traverse((child) => {
       if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
         const mesh = child as Three.Mesh;
-        const geo = mesh.geometry as Three.BufferGeometry;
+        const geo = (mesh.geometry as Three.BufferGeometry).clone();
+        mesh.geometry = geo;
         const uv = geo.getAttribute("uv");
         if (uv) {
           let minU = Infinity;
@@ -611,7 +608,7 @@ function IphoneModel() {
           const rangeU = maxU - minU || 1;
           const rangeV = maxV - minV || 1;
           for (let i = 0; i < uv.count; i++) {
-            uv.setX(i, (uv.getX(i) - minU) / rangeU);
+            uv.setX(i, 1.0 - (uv.getX(i) - minU) / rangeU);
             uv.setY(i, (uv.getY(i) - minV) / rangeV);
           }
           uv.needsUpdate = true;
@@ -631,16 +628,20 @@ function IphoneModel() {
       }
     });
 
-    // Compute bounding box of remaining visible meshes to center the phone
+    // Compute bounding box of visible meshes to center the phone
     const visibleBox = new Three.Box3();
-    scene.traverse((child) => {
+    cloned.traverse((child) => {
       if ((child as Three.Mesh).isMesh && child.visible) {
         visibleBox.expandByObject(child);
       }
     });
-    const phoneCenter = visibleBox.getCenter(new Three.Vector3());
-    setOffset([-phoneCenter.x, -phoneCenter.y, -phoneCenter.z]);
-  }, [scene, screenTexture]);
+    const center = visibleBox.getCenter(new Three.Vector3());
+
+    return {
+      scene: cloned,
+      offset: [-center.x, -center.y, -center.z] as [number, number, number]
+    };
+  }, [originalScene, screenTexture]);
 
   return (
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
