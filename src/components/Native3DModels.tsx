@@ -569,22 +569,22 @@ const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen
 
 const phoneTooltips: { label: string; position: [number, number, number]; dotColor: string; side: "left" | "right" }[] = [
   {
+    label: "Directly linked to ERP system",
+    position: [-0.60, 0.6, 0],
+    dotColor: "var(--color-brand-violet)",
+    side: "left"
+  },
+  {
     label: "Use digital twin to locate parts",
-    position: [0.21, 0.4, 0],
+    position: [-0.60, 0.4, 0],
     dotColor: "var(--color-brand-cyan)",
-    side: "right"
+    side: "left"
   },
   {
     label: "Pay with any preferred method",
-    position: [0.21, 0.2, 0],
+    position: [-0.22, -0.08, 0],
     dotColor: "var(--color-brand-amber)",
     side: "right"
-  },
-  {
-    label: "Directly linked to ERP system",
-    position: [-0.62, 0.6, 0],
-    dotColor: "var(--color-brand-violet)",
-    side: "left"
   }
 ];
 
@@ -595,13 +595,14 @@ function PhoneCameraRig() {
   useEffect(() => {
     const isSmall = size.height < 280;
     if (isSmall) {
-      // Small card: zoom in tight on the lower part of the phone
+      // Small card: zoom in tight, phone shifted upward
       camera.position.set(0.15, -0.15, 0.5);
+      camera.lookAt(0, -0.35, 0);
     } else {
       // Dialog: slight low-angle hero view from the side
-      camera.position.set(0.4, -0.3, 2.7);
+      camera.position.set(-1.5, -0.55, 0.9);
+      camera.lookAt(0, -0.05, 0);
     }
-    camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
     invalidate();
   }, [camera, size, invalidate]);
