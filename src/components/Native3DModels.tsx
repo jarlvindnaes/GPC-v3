@@ -1,4 +1,4 @@
-import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from "@react-three/drei";
+import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF, useTexture } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { BookOpen, ClipboardList, Globe, Recycle, ShoppingCart, Wrench } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -35,6 +35,7 @@ const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_ch
 const CHAIR_WIREFRAME_MODEL = `${import.meta.env.BASE_URL}models/chair-wireframe.glb`;
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
 const EMERALD_MODEL = `${import.meta.env.BASE_URL}models/emerald_in_quartz__for_games.glb`;
+const IPHONE_MODEL = `${import.meta.env.BASE_URL}models/iphone_17_pro_max.glb`;
 
 function CustomRockModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(EMERALD_MODEL);
@@ -556,6 +557,122 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
   { position: [1.2, 0.8, 1.0], color: "#10b981", label: "Material" },
   { position: [0, 3.2, 0], color: "#f59e0b", label: "Frame" }
 ];
+
+// ── iPhone Commerce ──────────────────────────────────────────────────────────
+
+/**
+ * Replace this image to change what's shown on the phone screen.
+ * Recommended size: 360×780px (portrait phone aspect ratio ≈ 1:2.17).
+ */
+const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen.png`;
+
+function IphoneModel() {
+  const { scene } = useGLTF(IPHONE_MODEL);
+  const screenTexture = useTexture(COMMERCE_SCREEN_IMAGE);
+  const [offset, setOffset] = useState<[number, number, number]>([0, 0, 0]);
+
+  useEffect(() => {
+    screenTexture.colorSpace = Three.SRGBColorSpace;
+    screenTexture.flipY = true;
+  }, [screenTexture]);
+
+  useEffect(() => {
+    // Hide the second phone copy (all 002 nodes) and the glass overlay on screen
+    scene.traverse((child) => {
+      if (child.name.includes("002") || child.name === "Glass_over_display001_Glass_0") {
+        child.visible = false;
+      }
+    });
+
+    // Apply screen image to the display mesh, remapping UVs to span full [0,1]
+    scene.traverse((child) => {
+      if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
+        const mesh = child as Three.Mesh;
+        const geo = mesh.geometry as Three.BufferGeometry;
+        const uv = geo.getAttribute("uv");
+        if (uv) {
+          let minU = Infinity;
+          let maxU = -Infinity;
+          let minV = Infinity;
+          let maxV = -Infinity;
+          for (let i = 0; i < uv.count; i++) {
+            minU = Math.min(minU, uv.getX(i));
+            maxU = Math.max(maxU, uv.getX(i));
+            minV = Math.min(minV, uv.getY(i));
+            maxV = Math.max(maxV, uv.getY(i));
+          }
+          const rangeU = maxU - minU || 1;
+          const rangeV = maxV - minV || 1;
+          for (let i = 0; i < uv.count; i++) {
+            uv.setX(i, (uv.getX(i) - minU) / rangeU);
+            uv.setY(i, (uv.getY(i) - minV) / rangeV);
+          }
+          uv.needsUpdate = true;
+        }
+        mesh.material = new Three.MeshBasicMaterial({
+          map: screenTexture,
+          toneMapped: false
+        });
+      }
+    });
+
+    // Compute bounding box of remaining visible meshes to center the phone
+    const visibleBox = new Three.Box3();
+    scene.traverse((child) => {
+      if ((child as Three.Mesh).isMesh && child.visible) {
+        visibleBox.expandByObject(child);
+      }
+    });
+    const phoneCenter = visibleBox.getCenter(new Three.Vector3());
+    setOffset([-phoneCenter.x, -phoneCenter.y, -phoneCenter.z]);
+  }, [scene, screenTexture]);
+
+  return (
+    <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
+      <group position={offset}>
+        <primitive object={scene} />
+      </group>
+    </Float>
+  );
+}
+
+export function IphoneCommerceCanvas() {
+  const containerReference = useRef<HTMLDivElement>(null);
+  const isNearReference = useIsNearViewport(containerReference);
+
+  return (
+    <div
+      ref={containerReference}
+      role="img"
+      aria-label="3D iPhone with spare parts shop"
+      className="absolute inset-0 cursor-grab active:cursor-grabbing"
+    >
+      <Canvas
+        frameloop="demand"
+        camera={{ position: [0, 0, 1.8], fov: 34 }}
+        gl={{ alpha: true }}
+        style={{ background: "transparent" }}
+      >
+        <RenderController isActive={isNearReference} />
+        <ambientLight intensity={0.8} />
+        <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
+        <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
+        <PresentationControls
+          global={true}
+          snap={false}
+          rotation={[0.05, 0, 0]}
+          polar={[-Math.PI / 6, Math.PI / 6]}
+          azimuth={[-Math.PI / 4, Math.PI / 4]}
+          config={{ mass: 4, tension: 120, friction: 40 }}
+        >
+          <IphoneModel />
+        </PresentationControls>
+        <ContactShadows position={[0, -0.5, 0]} opacity={0.25} scale={3} blur={2} far={2} />
+        <Environment preset="studio" />
+      </Canvas>
+    </div>
+  );
+}
 
 export function DppInteractiveProduct() {
   const containerReference = useRef<HTMLDivElement>(null);

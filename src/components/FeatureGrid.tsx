@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useTheme } from "../theme";
-import { FinishedProductCanvas } from "./Native3DModels";
+import { FinishedProductCanvas, IphoneCommerceCanvas } from "./Native3DModels";
 import { SupplyChainGlobe } from "./SupplyChainGlobe";
 import { WebsiteCard } from "./WebsiteCard";
 import { WebsiteCardDialog } from "./WebsiteCardDialog";
@@ -14,6 +14,11 @@ function ThemedSupplyChainGlobe() {
 function ThemedFinishedProductCanvas() {
   const { theme } = useTheme();
   return <FinishedProductCanvas key={theme} />;
+}
+
+function ThemedIphoneCommerceCanvas() {
+  const { theme } = useTheme();
+  return <IphoneCommerceCanvas key={theme} />;
 }
 
 const features = [
@@ -149,22 +154,9 @@ const features = [
       "Extend product life span conveniently"
     ],
     color: "blue",
-    visual: (
-      <div className="flex w-full justify-center gap-4">
-        {[1, 2].map((i) => (
-          <motion.div
-            key={i}
-            whileHover={{ y: -5 }}
-            className="flex h-28 w-20 flex-col rounded-lg border border-blue-100 bg-white p-2 shadow-sm"
-          >
-            <div className="mb-2 flex-1 rounded bg-slate-100"></div>
-            <div className="mb-1 h-2 w-full rounded bg-slate-200"></div>
-            <div className="mb-3 h-2 w-1/2 rounded bg-slate-200"></div>
-            <div className="mt-auto h-6 w-full rounded bg-blue-500"></div>
-          </motion.div>
-        ))}
-      </div>
-    )
+    fillVisual: true,
+    fadeVisualOnResize: true,
+    visual: <ThemedIphoneCommerceCanvas />
   }
 ];
 
