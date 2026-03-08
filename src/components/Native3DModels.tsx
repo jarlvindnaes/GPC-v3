@@ -568,7 +568,9 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
 const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen.png`;
 
 function IphoneModel() {
-  const { scene } = useGLTF(IPHONE_MODEL);
+  const { scene: originalScene } = useGLTF(IPHONE_MODEL);
+  // Clone so each mount gets its own scene (shared objects can only live in one R3F tree)
+  const scene = useMemo(() => originalScene.clone(true), [originalScene]);
   const screenTexture = useTexture(COMMERCE_SCREEN_IMAGE);
   const [offset, setOffset] = useState<[number, number, number]>([0, 0, 0]);
 
@@ -615,15 +617,15 @@ function IphoneModel() {
           uv.needsUpdate = true;
         }
         mesh.material = new Three.MeshPhysicalMaterial({
-          map: screenTexture,
-          emissiveMap: screenTexture,
+          color: new Three.Color(0x000000),
           emissive: new Three.Color(0xffffff),
-          emissiveIntensity: 0.8,
-          roughness: 0.2,
-          metalness: 0.0,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.08,
-          envMapIntensity: 1.0,
+          emissiveMap: screenTexture,
+          emissiveIntensity: 1.0,
+          roughness: 1.0,
+          metalness: 0,
+          clearcoat: 0.15,
+          clearcoatRoughness: 0.1,
+          envMapIntensity: 0.0,
           toneMapped: false
         });
       }
@@ -661,9 +663,10 @@ export function IphoneCommerceCanvas() {
       className="absolute inset-0 cursor-grab active:cursor-grabbing"
     >
       <Canvas
+        flat={true}
         frameloop="demand"
         camera={{ position: [0, 0, 1.8], fov: 34 }}
-        gl={{ alpha: true }}
+        gl={{ alpha: true, premultipliedAlpha: false }}
         style={{ background: "transparent" }}
       >
         <RenderController isActive={isNearReference} />
