@@ -567,9 +567,54 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
  */
 const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen02.jpg`;
 
+const phoneTooltips: { label: string; position: [number, number, number]; dotColor: string; side: "left" | "right" }[] = [
+  {
+    label: "Use digital twin to locate parts",
+    position: [0.21, 0.4, 0],
+    dotColor: "var(--color-brand-cyan)",
+    side: "right"
+  },
+  {
+    label: "Pay with any preferred method",
+    position: [0.21, 0.2, 0],
+    dotColor: "var(--color-brand-amber)",
+    side: "right"
+  },
+  {
+    label: "Directly linked to ERP system",
+    position: [-0.62, 0.6, 0],
+    dotColor: "var(--color-brand-violet)",
+    side: "left"
+  }
+];
+
+/** Adjusts camera zoom and vertical framing based on canvas size. */
+function PhoneCameraRig() {
+  const { camera, size, invalidate } = useThree();
+
+  useEffect(() => {
+    const isSmall = size.height < 280;
+    if (isSmall) {
+      // Small card: zoom in tight on the lower part of the phone
+      camera.position.set(0.15, -0.15, 0.5);
+    } else {
+      // Dialog: slight low-angle hero view from the side
+      camera.position.set(0.4, -0.3, 2.7);
+    }
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
+    invalidate();
+  }, [camera, size, invalidate]);
+
+  return null;
+}
+
 function IphoneModel() {
   const { scene: originalScene } = useGLTF(IPHONE_MODEL);
   const screenTexture = useTexture(COMMERCE_SCREEN_IMAGE);
+  const { size } = useThree();
+  const isSmall = size.height < 280;
+  const tooltipScale = Math.min(1, size.width / 480);
 
   // Process scene exactly once: clone, hide parts, remap UVs, apply material, center.
   // Using useMemo (not useEffect) prevents re-runs from flipping UVs back and forth.
@@ -579,10 +624,36 @@ function IphoneModel() {
     screenTexture.colorSpace = Three.SRGBColorSpace;
     screenTexture.flipY = true;
 
-    // Hide the second phone copy (all 002 nodes) and the glass overlay
+    // Hide the second phone copy (all 002 nodes).
+    // Keep Glass_over_display001 visible — it seals the speaker grille holes at the bottom.
+    // Ensure all remaining materials are DoubleSide (matches original model's doubleSided: true).
     cloned.traverse((child) => {
-      if (child.name.includes("002") || child.name === "Glass_over_display001_Glass_0") {
+      if (child.name.includes("002")) {
         child.visible = false;
+      }
+      if ((child as Three.Mesh).isMesh) {
+        const mat = (child as Three.Mesh).material as Three.MeshStandardMaterial;
+        if (mat) mat.side = Three.DoubleSide;
+      }
+      // Glass overlay: make it opaque but don't write to depth buffer, so the display
+      // (rendered after with higher renderOrder) paints over it on the screen area.
+      // The glass still visually seals the speaker grille holes at the bottom edge.
+      if (child.name === "Glass_over_display001_Glass_0" && (child as Three.Mesh).isMesh) {
+        const mesh = child as Three.Mesh;
+        const mat = mesh.material as Three.MeshPhysicalMaterial;
+        mat.transmission = 0;
+        mat.transparent = false;
+        mat.opacity = 1;
+        mat.color = new Three.Color(0x000000);
+        mat.roughness = 0.3;
+        mat.metalness = 0;
+        mat.depthWrite = false;
+        mat.blending = Three.NormalBlending;
+        mesh.renderOrder = 1;
+      }
+      // Display renders after the glass so it paints over it
+      if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
+        (child as Three.Mesh).renderOrder = 2;
       }
     });
 
@@ -647,6 +718,19 @@ function IphoneModel() {
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
       <group position={offset}>
         <primitive object={scene} />
+        {phoneTooltips.map((item) => (
+          <Html key={item.label} position={item.position} center={true} zIndexRange={[0, 10]}>
+            <div
+              className="pointer-events-none"
+              style={{ transform: `scale(${tooltipScale})` }}
+            >
+              <div className={`flex items-start gap-2 rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md ${item.side === "left" ? "flex-row-reverse" : ""}`}>
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.dotColor }} />
+                <span className="min-w-[7rem] max-w-[16rem] font-semibold text-[13px] leading-tight text-white">{item.label}</span>
+              </div>
+            </div>
+          </Html>
+        ))}
       </group>
     </Float>
   );
@@ -664,12 +748,12 @@ export function IphoneCommerceCanvas() {
       className="absolute inset-0 cursor-grab active:cursor-grabbing"
     >
       <Canvas
-        flat={true}
         frameloop="demand"
         camera={{ position: [0, 0, 1.8], fov: 34 }}
-        gl={{ alpha: true, premultipliedAlpha: false }}
+        gl={{ alpha: true }}
         style={{ background: "transparent" }}
       >
+        <PhoneCameraRig />
         <RenderController isActive={isNearReference} />
         <ambientLight intensity={0.8} />
         <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
@@ -684,7 +768,6 @@ export function IphoneCommerceCanvas() {
         >
           <IphoneModel />
         </PresentationControls>
-        <ContactShadows position={[0, -0.5, 0]} opacity={0.25} scale={3} blur={2} far={2} />
         <Environment files={STUDIO_HDR} />
       </Canvas>
     </div>
