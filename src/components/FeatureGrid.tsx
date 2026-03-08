@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useTheme } from "../theme";
-import { FinishedProductCanvas, IphoneCommerceCanvas } from "./Native3DModels";
+import { FinishedProductCanvas, IphoneCommerceCanvas, IphoneDppCanvas } from "./Native3DModels";
 import { SupplyChainGlobe } from "./SupplyChainGlobe";
 import { WebsiteCard } from "./WebsiteCard";
 import { WebsiteCardDialog } from "./WebsiteCardDialog";
@@ -19,6 +19,11 @@ function ThemedFinishedProductCanvas() {
 function ThemedIphoneCommerceCanvas() {
   const { theme } = useTheme();
   return <IphoneCommerceCanvas key={theme} />;
+}
+
+function ThemedIphoneDppCanvas() {
+  const { theme } = useTheme();
+  return <IphoneDppCanvas key={theme} />;
 }
 
 const features = [
@@ -130,16 +135,9 @@ const features = [
       "Verification certificates and ECO Labels"
     ],
     color: "rose",
-    visual: (
-      <div className="relative mx-auto flex h-32 w-32 flex-col gap-2 rounded-xl border border-rose-100 bg-white p-4 shadow-sm">
-        <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-rose-100">
-          <div className="h-4 w-4 rounded-full border-2 border-rose-500"></div>
-        </div>
-        <div className="h-2 w-full rounded bg-slate-100"></div>
-        <div className="mx-auto h-2 w-3/4 rounded bg-slate-100"></div>
-        <div className="mx-auto h-2 w-1/2 rounded bg-slate-100"></div>
-      </div>
-    )
+    fillVisual: true,
+    fadeVisualOnResize: true,
+    visual: <ThemedIphoneDppCanvas />
   },
   {
     id: "commerce",

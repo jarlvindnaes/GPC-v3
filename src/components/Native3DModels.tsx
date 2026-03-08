@@ -567,16 +567,28 @@ const hotspots: { position: [number, number, number]; color: string; label: stri
  */
 const COMMERCE_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen02.jpg`;
 
-const phoneTooltips: { label: string; position: [number, number, number]; dotColor: string; side: "left" | "right" }[] = [
+export interface PhoneTooltip {
+  label: string;
+  position: [number, number, number];
+  dotColor: string;
+  side: "left" | "right";
+}
+
+export interface PhoneCameraConfig {
+  small: { position: [number, number, number]; lookAt: [number, number, number] };
+  large: { position: [number, number, number]; lookAt: [number, number, number] };
+}
+
+const commerceTooltips: PhoneTooltip[] = [
   {
     label: "Directly linked to ERP system",
-    position: [-0.60, 0.6, 0],
+    position: [-0.6, 0.6, 0],
     dotColor: "var(--color-brand-violet)",
     side: "left"
   },
   {
     label: "Use digital twin to locate parts",
-    position: [-0.60, 0.4, 0],
+    position: [-0.6, 0.4, 0],
     dotColor: "var(--color-brand-cyan)",
     side: "left"
   },
@@ -588,33 +600,30 @@ const phoneTooltips: { label: string; position: [number, number, number]; dotCol
   }
 ];
 
+const commerceCameraConfig: PhoneCameraConfig = {
+  small: { position: [0.15, -0.15, 0.5], lookAt: [0, -0.35, 0] },
+  large: { position: [-1.5, -0.55, 0.9], lookAt: [0, -0.05, 0] }
+};
+
 /** Adjusts camera zoom and vertical framing based on canvas size. */
-function PhoneCameraRig() {
+function PhoneCameraRig({ config }: { config: PhoneCameraConfig }) {
   const { camera, size, invalidate } = useThree();
 
   useEffect(() => {
-    const isSmall = size.height < 280;
-    if (isSmall) {
-      // Small card: zoom in tight, phone shifted upward
-      camera.position.set(0.15, -0.15, 0.5);
-      camera.lookAt(0, -0.35, 0);
-    } else {
-      // Dialog: slight low-angle hero view from the side
-      camera.position.set(-1.5, -0.55, 0.9);
-      camera.lookAt(0, -0.05, 0);
-    }
+    const { position, lookAt } = size.height < 280 ? config.small : config.large;
+    camera.position.set(...position);
+    camera.lookAt(...lookAt);
     camera.updateProjectionMatrix();
     invalidate();
-  }, [camera, size, invalidate]);
+  }, [camera, size, invalidate, config]);
 
   return null;
 }
 
-function IphoneModel() {
+function IphoneModel({ screenImage, tooltips }: { screenImage: string; tooltips: PhoneTooltip[] }) {
   const { scene: originalScene } = useGLTF(IPHONE_MODEL);
-  const screenTexture = useTexture(COMMERCE_SCREEN_IMAGE);
+  const screenTexture = useTexture(screenImage);
   const { size } = useThree();
-  const isSmall = size.height < 280;
   const tooltipScale = Math.min(1, size.width / 480);
 
   // Process scene exactly once: clone, hide parts, remap UVs, apply material, center.
@@ -634,7 +643,9 @@ function IphoneModel() {
       }
       if ((child as Three.Mesh).isMesh) {
         const mat = (child as Three.Mesh).material as Three.MeshStandardMaterial;
-        if (mat) mat.side = Three.DoubleSide;
+        if (mat) {
+          mat.side = Three.DoubleSide;
+        }
       }
       // Glass overlay: make it opaque but don't write to depth buffer, so the display
       // (rendered after with higher renderOrder) paints over it on the screen area.
@@ -719,15 +730,16 @@ function IphoneModel() {
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
       <group position={offset}>
         <primitive object={scene} />
-        {phoneTooltips.map((item) => (
+        {tooltips.map((item) => (
           <Html key={item.label} position={item.position} center={true} zIndexRange={[0, 10]}>
-            <div
-              className="pointer-events-none"
-              style={{ transform: `scale(${tooltipScale})` }}
-            >
-              <div className={`flex items-start gap-2 rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md ${item.side === "left" ? "flex-row-reverse" : ""}`}>
+            <div className="pointer-events-none" style={{ transform: `scale(${tooltipScale})` }}>
+              <div
+                className={`flex items-start gap-2 rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md ${item.side === "left" ? "flex-row-reverse" : ""}`}
+              >
                 <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.dotColor }} />
-                <span className="min-w-[7rem] max-w-[16rem] font-semibold text-[13px] leading-tight text-white">{item.label}</span>
+                <span className="min-w-[7rem] max-w-[16rem] font-semibold text-[13px] text-white leading-tight">
+                  {item.label}
+                </span>
               </div>
             </div>
           </Html>
@@ -737,7 +749,22 @@ function IphoneModel() {
   );
 }
 
-export function IphoneCommerceCanvas() {
+export interface IphoneCanvasProps {
+  screenImage: string;
+  tooltips: PhoneTooltip[];
+  cameraConfig: PhoneCameraConfig;
+  ariaLabel?: string;
+  /** Extra elements rendered inside PresentationControls (move with the phone on drag). */
+  children?: React.ReactNode;
+}
+
+export function IphoneCanvas({
+  screenImage,
+  tooltips,
+  cameraConfig,
+  ariaLabel = "3D iPhone",
+  children
+}: IphoneCanvasProps) {
   const containerReference = useRef<HTMLDivElement>(null);
   const isNearReference = useIsNearViewport(containerReference);
 
@@ -745,7 +772,7 @@ export function IphoneCommerceCanvas() {
     <div
       ref={containerReference}
       role="img"
-      aria-label="3D iPhone with spare parts shop"
+      aria-label={ariaLabel}
       className="absolute inset-0 cursor-grab active:cursor-grabbing"
     >
       <Canvas
@@ -754,7 +781,7 @@ export function IphoneCommerceCanvas() {
         gl={{ alpha: true }}
         style={{ background: "transparent" }}
       >
-        <PhoneCameraRig />
+        <PhoneCameraRig config={cameraConfig} />
         <RenderController isActive={isNearReference} />
         <ambientLight intensity={0.8} />
         <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
@@ -767,11 +794,187 @@ export function IphoneCommerceCanvas() {
           azimuth={[-Math.PI / 4, Math.PI / 4]}
           config={{ mass: 4, tension: 120, friction: 40 }}
         >
-          <IphoneModel />
+          <IphoneModel screenImage={screenImage} tooltips={tooltips} />
+          {children}
         </PresentationControls>
         <Environment files={STUDIO_HDR} />
       </Canvas>
     </div>
+  );
+}
+
+export function IphoneCommerceCanvas() {
+  return (
+    <IphoneCanvas
+      screenImage={COMMERCE_SCREEN_IMAGE}
+      tooltips={commerceTooltips}
+      cameraConfig={commerceCameraConfig}
+      ariaLabel="3D iPhone with spare parts shop"
+    />
+  );
+}
+
+// ── iPhone DPP ──────────────────────────────────────────────────────────────
+
+/** Temporary placeholder — swap for a real DPP screen image when available. */
+const DPP_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen02.jpg`;
+
+const dppTooltips: PhoneTooltip[] = [
+  {
+    label: "ESPR-compliant digital passport",
+    position: [-0.6, 0.6, 0],
+    dotColor: "var(--color-brand-cyan)",
+    side: "left"
+  },
+  {
+    label: "Full lifecycle impact data",
+    position: [-0.6, 0.4, 0],
+    dotColor: "var(--color-brand-amber)",
+    side: "left"
+  },
+  {
+    label: "Consumer-facing QR access",
+    position: [-0.22, -0.08, 0],
+    dotColor: "var(--color-brand-violet)",
+    side: "right"
+  }
+];
+
+const dppCameraConfig: PhoneCameraConfig = {
+  small: { position: [0.15, -0.15, 0.5], lookAt: [0, -0.35, 0] },
+  large: { position: [-1.5, -0.55, 0.9], lookAt: [0, -0.05, 0] }
+};
+
+/** QR module layout on a 21×21 grid (finder patterns + decorative data). */
+const QR_MODULES: [number, number, number, number][] = [
+  // Top-left finder
+  [0, 0, 7, 1],
+  [0, 6, 7, 1],
+  [0, 1, 1, 5],
+  [6, 1, 1, 5],
+  [2, 2, 3, 3],
+  // Top-right finder
+  [14, 0, 7, 1],
+  [14, 6, 7, 1],
+  [14, 1, 1, 5],
+  [20, 1, 1, 5],
+  [16, 2, 3, 3],
+  // Bottom-left finder
+  [0, 14, 7, 1],
+  [0, 20, 7, 1],
+  [0, 15, 1, 5],
+  [6, 15, 1, 5],
+  [2, 16, 3, 3],
+  // Data modules
+  [8, 0, 1, 1],
+  [10, 1, 1, 1],
+  [9, 3, 1, 1],
+  [11, 4, 1, 1],
+  [8, 5, 1, 1],
+  [12, 2, 1, 1],
+  [8, 8, 1, 1],
+  [10, 9, 1, 1],
+  [12, 8, 1, 1],
+  [9, 10, 1, 1],
+  [11, 11, 1, 1],
+  [13, 10, 1, 1],
+  [0, 8, 1, 1],
+  [2, 9, 1, 1],
+  [4, 8, 1, 1],
+  [1, 10, 1, 1],
+  [3, 11, 1, 1],
+  [5, 10, 1, 1],
+  [14, 8, 1, 1],
+  [16, 9, 1, 1],
+  [18, 8, 1, 1],
+  [15, 11, 1, 1],
+  [17, 10, 1, 1],
+  [19, 12, 1, 1],
+  [8, 14, 1, 1],
+  [10, 15, 1, 1],
+  [12, 14, 1, 1],
+  [9, 17, 1, 1],
+  [11, 16, 1, 1],
+  [14, 15, 1, 1],
+  [16, 16, 1, 1],
+  [18, 15, 1, 1],
+  [20, 17, 1, 1],
+  [15, 18, 1, 1],
+  [17, 19, 1, 1],
+  [19, 20, 1, 1],
+  [10, 19, 1, 1],
+  [12, 20, 1, 1]
+];
+
+function buildQrTexture(): Three.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size / 2;
+
+  // Circle background — semi-transparent white (like tooltip bg-white/20)
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 2, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
+  ctx.fill();
+
+  // Circle border — (like tooltip border-white/30)
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.30)";
+  ctx.stroke();
+
+  // Clip QR drawing to the circle so modules don't poke out
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 6, 0, Math.PI * 2);
+  ctx.clip();
+
+  // Draw QR modules centered in the circle
+  const grid = 21;
+  const qrSize = r * 1.2; // QR occupies ~60% of diameter
+  const cellSize = qrSize / grid;
+  const offsetX = cx - qrSize / 2;
+  const offsetY = cy - qrSize / 2;
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+  for (const [mx, my, mw, mh] of QR_MODULES) {
+    ctx.fillRect(offsetX + mx * cellSize, offsetY + my * cellSize, mw * cellSize, mh * cellSize);
+  }
+  ctx.restore();
+
+  const tex = new Three.CanvasTexture(canvas);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function FloatingQrCode() {
+  const texture = useMemo(() => buildQrTexture(), []);
+
+  return (
+    <Float floatIntensity={0.15} rotationIntensity={0.02} speed={0.8}>
+      <mesh position={[0.25, 0.35, -0.15]}>
+        <planeGeometry args={[0.55, 0.55]} />
+        <meshBasicMaterial map={texture} transparent={true} depthWrite={false} />
+      </mesh>
+    </Float>
+  );
+}
+
+export function IphoneDppCanvas() {
+  return (
+    <IphoneCanvas
+      screenImage={DPP_SCREEN_IMAGE}
+      tooltips={dppTooltips}
+      cameraConfig={dppCameraConfig}
+      ariaLabel="3D iPhone with digital product passport"
+    >
+      <FloatingQrCode />
+    </IphoneCanvas>
   );
 }
 
