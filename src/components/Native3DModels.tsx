@@ -577,9 +577,13 @@ function IphoneModel() {
   }, [screenTexture]);
 
   useEffect(() => {
-    // Hide the second phone copy (all 002 nodes) and the glass overlay on screen
+    // Hide the second phone copy (all 002 nodes)
     scene.traverse((child) => {
-      if (child.name.includes("002") || child.name === "Glass_over_display001_Glass_0") {
+      if (child.name.includes("002")) {
+        child.visible = false;
+      }
+      // Hide the glass overlay — reflections are handled by clearcoat on the display mesh
+      if (child.name === "Glass_over_display001_Glass_0") {
         child.visible = false;
       }
     });
@@ -609,8 +613,16 @@ function IphoneModel() {
           }
           uv.needsUpdate = true;
         }
-        mesh.material = new Three.MeshBasicMaterial({
+        mesh.material = new Three.MeshPhysicalMaterial({
           map: screenTexture,
+          emissiveMap: screenTexture,
+          emissive: new Three.Color(0xffffff),
+          emissiveIntensity: 0.8,
+          roughness: 0.2,
+          metalness: 0.0,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.08,
+          envMapIntensity: 1.0,
           toneMapped: false
         });
       }
