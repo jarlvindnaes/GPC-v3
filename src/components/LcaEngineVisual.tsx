@@ -42,7 +42,7 @@ export function LcaEngineVisual() {
       {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
         <motion.div
           key={`outer-${deg}`}
-          className="absolute h-1.5 w-1.5 rounded-full bg-indigo-400"
+          className="absolute h-1.5 w-1.5 rounded-full bg-white"
           style={{
             left: `calc(50% + ${Math.cos((deg * Math.PI) / 180) * 46}% - 3px)`,
             top: `calc(50% + ${Math.sin((deg * Math.PI) / 180) * 46}% - 3px)`
@@ -57,7 +57,7 @@ export function LcaEngineVisual() {
       {[0, 72, 144, 216, 288].map((deg) => (
         <motion.div
           key={`mid-${deg}`}
-          className="absolute h-2.5 w-2.5 rounded-full bg-indigo-400 shadow-[0_0_12px_#6366f1]"
+          className="absolute h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.4)]"
           style={{
             left: `calc(50% + ${Math.cos((deg * Math.PI) / 180) * 33}% - 5px)`,
             top: `calc(50% + ${Math.sin((deg * Math.PI) / 180) * 33}% - 5px)`
@@ -72,7 +72,7 @@ export function LcaEngineVisual() {
       {[30, 150, 270].map((deg) => (
         <motion.div
           key={`inner-${deg}`}
-          className="absolute h-2 w-2 rounded-full bg-violet-400 shadow-[0_0_10px_#8b5cf6]"
+          className="absolute h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.4)]"
           style={{
             left: `calc(50% + ${Math.cos((deg * Math.PI) / 180) * 20}% - 4px)`,
             top: `calc(50% + ${Math.sin((deg * Math.PI) / 180) * 20}% - 4px)`
@@ -87,7 +87,7 @@ export function LcaEngineVisual() {
       {[0, 60, 120, 180, 240, 300].map((deg) => (
         <motion.div
           key={`stream-${deg}`}
-          className="absolute w-px bg-gradient-to-b from-transparent via-indigo-400/40 to-transparent"
+          className="absolute w-px bg-gradient-to-b from-transparent via-white/40 to-transparent"
           style={{
             height: "14%",
             left: `calc(50% + ${Math.cos((deg * Math.PI) / 180) * 28}%)`,
@@ -102,13 +102,13 @@ export function LcaEngineVisual() {
 
       {/* Pulsing core glow */}
       <motion.div
-        className="absolute aspect-square w-[28%] rounded-full bg-indigo-500/10"
+        className="absolute aspect-square w-[28%] rounded-full bg-white/10"
         animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
         whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute aspect-square w-[19%] rounded-full bg-violet-500/10"
+        className="absolute aspect-square w-[19%] rounded-full bg-white/10"
         animate={{ scale: [1.1, 1.5, 1.1], opacity: [0.4, 0.7, 0.4] }}
         whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut", delay: 0.5 }}
@@ -116,7 +116,7 @@ export function LcaEngineVisual() {
 
       {/* Core */}
       <motion.div
-        className="z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_60px_rgba(99,102,241,0.5)] sm:h-20 sm:w-20 md:h-24 md:w-24"
+        className="z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-brand-emerald)] to-emerald-700 shadow-[0_0_60px_rgba(0,208,142,0.5)] sm:h-20 sm:w-20 md:h-24 md:w-24"
         animate={{ scale: [1, 1.05, 1] }}
         whileHover={{ scale: 1.12, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -164,6 +164,20 @@ export function LcaEngineVisual() {
           <div>
             <p className="font-semibold text-[10px] text-white uppercase tracking-wide">Components</p>
             <p className="font-bold text-sm text-white">24 analysed</p>
+          </div>
+        </div>
+      </motion.div>
+      <motion.div
+        className="absolute right-2 bottom-6 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        animate={{ y: [0, 5, 0], opacity: [0.6, 1, 0.6] }}
+        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
+        transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 1.5 }}
+      >
+        <div className="flex items-start gap-2">
+          <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-brand-amber)]" />
+          <div>
+            <p className="font-semibold text-[10px] text-white uppercase tracking-wide">Verifying EPD</p>
+            <p className="font-bold text-sm text-white">In progress</p>
           </div>
         </div>
       </motion.div>
