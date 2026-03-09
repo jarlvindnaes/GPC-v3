@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "../theme";
+
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 
 interface GridNode {
@@ -210,7 +210,6 @@ export function InteractiveGrid() {
 }
 
 export function CountdownBanner() {
-  const { theme } = useTheme();
   const targetDate = new Date("2027-01-01T00:00:00Z").getTime();
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -250,7 +249,7 @@ export function CountdownBanner() {
       {/* Interactive grid background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="pointer-events-auto h-full w-full">
-          <InteractiveGrid key={theme} />
+          <InteractiveGrid />
         </div>
       </div>
 

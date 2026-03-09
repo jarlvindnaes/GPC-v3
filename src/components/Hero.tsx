@@ -1,7 +1,7 @@
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
-import { useTheme } from "../theme";
+
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { WebsiteButton } from "./WebsiteButton";
 
@@ -253,7 +253,6 @@ function HeroNetwork({ mouseRef }: { mouseRef: React.RefObject<{ x: number; y: n
 }
 
 export function Hero() {
-  const { theme } = useTheme();
   const sectionRef = useRef<HTMLElement>(null);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
   const textRef = useRef<HTMLSpanElement>(null);
@@ -292,7 +291,7 @@ export function Hero() {
     <section ref={sectionRef} className="relative overflow-hidden bg-white">
       <div className="pointer-events-none absolute inset-0 z-[1]">
         <div className="pointer-events-auto h-full w-full">
-          <HeroNetwork key={theme} mouseRef={mouseRef} />
+          <HeroNetwork mouseRef={mouseRef} />
         </div>
       </div>
 

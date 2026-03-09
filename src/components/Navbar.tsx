@@ -2,7 +2,6 @@ import { ChevronRight, Menu, X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +48,6 @@ export function Navbar() {
             </Link>
           </div>
           <div className="hidden items-center gap-4 md:flex">
-            <ThemeSwitcher />
             <Link to="/login" className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark">
               Sign in
             </Link>
@@ -108,10 +106,6 @@ export function Navbar() {
             About
           </Link>
           <hr className="my-2 border-slate-100" />
-          <div className="flex items-center gap-3">
-            <span className="font-medium text-brand-text text-lg">Theme</span>
-            <ThemeSwitcher />
-          </div>
           <Link to="/login" onClick={() => setIsOpen(false)} className="font-medium text-brand-text text-lg">
             Sign in
           </Link>

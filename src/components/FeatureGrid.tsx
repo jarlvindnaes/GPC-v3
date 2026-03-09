@@ -1,31 +1,10 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { useTheme } from "../theme";
 import { LcaEngineVisual } from "./LcaEngineVisual";
 import { FinishedProductCanvas, IphoneCommerceCanvas, IphoneDppCanvas } from "./Native3DModels";
 import { SupplyChainGlobe } from "./SupplyChainGlobe";
 import { WebsiteCard } from "./WebsiteCard";
 import { WebsiteCardDialog } from "./WebsiteCardDialog";
-
-function ThemedSupplyChainGlobe() {
-  const { theme } = useTheme();
-  return <SupplyChainGlobe key={theme} />;
-}
-
-function ThemedFinishedProductCanvas() {
-  const { theme } = useTheme();
-  return <FinishedProductCanvas key={theme} />;
-}
-
-function ThemedIphoneCommerceCanvas() {
-  const { theme } = useTheme();
-  return <IphoneCommerceCanvas key={theme} />;
-}
-
-function ThemedIphoneDppCanvas() {
-  const { theme } = useTheme();
-  return <IphoneDppCanvas key={theme} />;
-}
 
 const features = [
   {
@@ -43,7 +22,7 @@ const features = [
     color: "slate",
     fillVisual: true,
     fadeVisualOnResize: true,
-    visual: <ThemedFinishedProductCanvas />
+    visual: <FinishedProductCanvas />
   },
   {
     id: "harvest",
@@ -101,7 +80,7 @@ const features = [
     ],
     color: "cyan",
     fillVisual: true,
-    visual: <ThemedSupplyChainGlobe />
+    visual: <SupplyChainGlobe />
   },
   {
     id: "dpp",
@@ -119,7 +98,7 @@ const features = [
     color: "rose",
     fillVisual: true,
     fadeVisualOnResize: true,
-    visual: <ThemedIphoneDppCanvas />
+    visual: <IphoneDppCanvas />
   },
   {
     id: "commerce",
@@ -136,7 +115,7 @@ const features = [
     color: "blue",
     fillVisual: true,
     fadeVisualOnResize: true,
-    visual: <ThemedIphoneCommerceCanvas />
+    visual: <IphoneCommerceCanvas />
   }
 ];
 
