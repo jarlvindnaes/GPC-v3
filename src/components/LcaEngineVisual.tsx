@@ -11,47 +11,44 @@ import { motion } from "motion/react";
 export function LcaEngineVisual() {
   return (
     <div className="relative flex aspect-square w-full max-w-[280px] items-center justify-center sm:max-w-[350px] md:max-w-[420px]">
-      {/* Outer ring */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-        className="absolute inset-0 rounded-full border-2 border-white/20"
-      />
-      {/* Second ring */}
-      <motion.svg
-        animate={{ rotate: -360 }}
-        transition={{ repeat: Infinity, duration: 28, ease: "linear" }}
-        className="absolute inset-6 h-[calc(100%-3rem)] w-[calc(100%-3rem)]"
-        viewBox="0 0 100 100"
-      >
-        <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" strokeDasharray="2 8" strokeLinecap="round" />
-      </motion.svg>
+      {/* Outer ring — solid circle, rotation invisible so plain div with CSS hover */}
+      <div className="absolute inset-0 rounded-full border-2 border-white/20 transition-[border-color] duration-[400ms] hover:border-white" />
+      {/* Second ring — group wrapper handles hover, inner svg rotates */}
+      <div className="group absolute inset-6 h-[calc(100%-3rem)] w-[calc(100%-3rem)]">
+        <motion.svg
+          animate={{ rotate: -360 }}
+          transition={{ repeat: Infinity, duration: 28, ease: "linear" }}
+          className="h-full w-full opacity-40 transition-opacity duration-[400ms] group-hover:opacity-100"
+          viewBox="0 0 100 100"
+        >
+          <circle cx="50" cy="50" r="49" fill="none" stroke="white" strokeWidth="0.8" strokeDasharray="1.5 2.5" strokeLinecap="round" />
+        </motion.svg>
+      </div>
       {/* Third ring */}
-      <motion.svg
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-        className="absolute inset-16 h-[calc(100%-8rem)] w-[calc(100%-8rem)]"
-        viewBox="0 0 100 100"
-      >
-        <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" strokeDasharray="2 8" strokeLinecap="round" />
-      </motion.svg>
-      {/* Inner ring */}
-      <motion.div
-        animate={{ rotate: -360 }}
-        transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-        className="absolute inset-24 rounded-full border-2 border-white/15"
-      />
+      <div className="group absolute inset-16 h-[calc(100%-8rem)] w-[calc(100%-8rem)]">
+        <motion.svg
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          className="h-full w-full opacity-35 transition-opacity duration-[400ms] group-hover:opacity-100"
+          viewBox="0 0 100 100"
+        >
+          <circle cx="50" cy="50" r="49" fill="none" stroke="white" strokeWidth="0.8" strokeDasharray="1.5 2.5" strokeLinecap="round" />
+        </motion.svg>
+      </div>
+      {/* Inner ring — solid circle, rotation invisible so plain div with CSS hover */}
+      <div className="absolute inset-24 rounded-full border-2 border-white/15 transition-[border-color] duration-[400ms] hover:border-white" />
 
       {/* Outer orbiting data nodes */}
       {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
         <motion.div
           key={`outer-${deg}`}
-          className="absolute h-1.5 w-1.5 rounded-full bg-indigo-400/60"
+          className="absolute h-1.5 w-1.5 rounded-full bg-indigo-400"
           style={{
             left: `calc(50% + ${Math.cos((deg * Math.PI) / 180) * 46}% - 3px)`,
             top: `calc(50% + ${Math.sin((deg * Math.PI) / 180) * 46}% - 3px)`
           }}
-          animate={{ opacity: [0.2, 0.8, 0.2], scale: [0.8, 1.3, 0.8] }}
+          animate={{ opacity: [0.12, 0.48, 0.12], scale: [0.8, 1.3, 0.8] }}
+          whileHover={{ opacity: 1, scale: 1.5, transition: { duration: 0.4 } }}
           transition={{ repeat: Infinity, duration: 3, delay: (deg / 360) * 3 }}
         />
       ))}
@@ -66,6 +63,7 @@ export function LcaEngineVisual() {
             top: `calc(50% + ${Math.sin((deg * Math.PI) / 180) * 33}% - 5px)`
           }}
           animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.4, 1] }}
+          whileHover={{ opacity: 1, scale: 1.6, transition: { duration: 0.4 } }}
           transition={{ repeat: Infinity, duration: 2.5, delay: (deg / 360) * 2.5 }}
         />
       ))}
@@ -80,6 +78,7 @@ export function LcaEngineVisual() {
             top: `calc(50% + ${Math.sin((deg * Math.PI) / 180) * 20}% - 4px)`
           }}
           animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.5, 1] }}
+          whileHover={{ opacity: 1, scale: 1.8, transition: { duration: 0.4 } }}
           transition={{ repeat: Infinity, duration: 2, delay: (deg / 360) * 2 }}
         />
       ))}
@@ -96,6 +95,7 @@ export function LcaEngineVisual() {
             transform: `rotate(${deg + 90}deg)`
           }}
           animate={{ opacity: [0, 0.8, 0] }}
+          whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
           transition={{ repeat: Infinity, duration: 1.8, delay: (deg / 360) * 1.8 }}
         />
       ))}
@@ -104,11 +104,13 @@ export function LcaEngineVisual() {
       <motion.div
         className="absolute aspect-square w-[28%] rounded-full bg-indigo-500/10"
         animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute aspect-square w-[19%] rounded-full bg-violet-500/10"
         animate={{ scale: [1.1, 1.5, 1.1], opacity: [0.4, 0.7, 0.4] }}
+        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut", delay: 0.5 }}
       />
 
@@ -116,6 +118,7 @@ export function LcaEngineVisual() {
       <motion.div
         className="z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_60px_rgba(99,102,241,0.5)] sm:h-20 sm:w-20 md:h-24 md:w-24"
         animate={{ scale: [1, 1.05, 1] }}
+        whileHover={{ scale: 1.12, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
       >
         <Cpu className="h-6 w-6 text-white sm:h-8 sm:w-8 md:h-10 md:w-10" />
@@ -123,8 +126,9 @@ export function LcaEngineVisual() {
 
       {/* Floating metric labels */}
       <motion.div
-        className="absolute top-6 right-8 pointer-events-none hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute top-6 right-8 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, -6, 0], opacity: [0.7, 1, 0.7] }}
+        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
       >
         <div className="flex items-start gap-2">
@@ -136,8 +140,9 @@ export function LcaEngineVisual() {
         </div>
       </motion.div>
       <motion.div
-        className="absolute bottom-12 left-4 pointer-events-none hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute bottom-12 left-4 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, 6, 0], opacity: [0.6, 1, 0.6] }}
+        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
       >
         <div className="flex items-start gap-2">
@@ -149,8 +154,9 @@ export function LcaEngineVisual() {
         </div>
       </motion.div>
       <motion.div
-        className="absolute top-16 left-2 pointer-events-none hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute top-16 left-2 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
+        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
       >
         <div className="flex items-start gap-2">
