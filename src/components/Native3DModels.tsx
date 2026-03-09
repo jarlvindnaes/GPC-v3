@@ -732,7 +732,7 @@ function IphoneModel({ screenImage, tooltips }: { screenImage: string; tooltips:
         <primitive object={scene} />
         {tooltips.map((item) => (
           <Html key={item.label} position={item.position} center={true} zIndexRange={[0, 10]}>
-            <div className="pointer-events-none" style={{ transform: `scale(${tooltipScale})` }}>
+            <div className="pointer-events-none select-none" style={{ transform: `scale(${tooltipScale})` }}>
               <div
                 className={`flex items-start gap-2 rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md ${item.side === "left" ? "flex-row-reverse" : ""}`}
               >
@@ -816,8 +816,7 @@ export function IphoneCommerceCanvas() {
 
 // ── iPhone DPP ──────────────────────────────────────────────────────────────
 
-/** Temporary placeholder — swap for a real DPP screen image when available. */
-const DPP_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/commerce-screen02.jpg`;
+const DPP_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/DPP-screen01.jpg`;
 
 const dppTooltips: PhoneTooltip[] = [
   {
@@ -829,20 +828,20 @@ const dppTooltips: PhoneTooltip[] = [
   {
     label: "Full lifecycle impact data",
     position: [-0.6, 0.4, 0],
-    dotColor: "var(--color-brand-amber)",
+    dotColor: "var(--color-brand-emerald)",
     side: "left"
   },
   {
-    label: "Consumer-facing QR access",
+    label: "Matches your brand",
     position: [-0.22, -0.08, 0],
-    dotColor: "var(--color-brand-violet)",
+    dotColor: "var(--color-brand-amber)",
     side: "right"
   }
 ];
 
 const dppCameraConfig: PhoneCameraConfig = {
-  small: { position: [0.15, -0.15, 0.5], lookAt: [0, -0.35, 0] },
-  large: { position: [-1.5, -0.55, 0.9], lookAt: [0, -0.05, 0] }
+  small: { position: [0.15, 0.48, 0.5], lookAt: [0, 0.33, 0] },
+  large: { position: [-0.075, 0, 2.2], lookAt: [-0.075, -0.05, 0] }
 };
 
 /** QR module layout on a 21×21 grid (finder patterns + decorative data). */
@@ -941,7 +940,7 @@ function buildQrTexture(): Three.CanvasTexture {
   const offsetX = cx - qrSize / 2;
   const offsetY = cy - qrSize / 2;
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+  ctx.fillStyle = "rgb(255, 255, 255)";
   for (const [mx, my, mw, mh] of QR_MODULES) {
     ctx.fillRect(offsetX + mx * cellSize, offsetY + my * cellSize, mw * cellSize, mh * cellSize);
   }
@@ -958,8 +957,8 @@ function FloatingQrCode() {
   return (
     <Float floatIntensity={0.15} rotationIntensity={0.02} speed={0.8}>
       <mesh position={[0.25, 0.35, -0.15]}>
-        <planeGeometry args={[0.55, 0.55]} />
-        <meshBasicMaterial map={texture} transparent={true} depthWrite={false} />
+        <planeGeometry args={[0.28, 0.28]} />
+        <meshBasicMaterial map={texture} transparent={true} depthWrite={false} side={Three.DoubleSide} />
       </mesh>
     </Float>
   );

@@ -33,7 +33,7 @@ const baseClassName =
 const illustrationGradientClassNames: Record<string, string> = {
   slate: "bg-radial-dark-sun-corner",
   emerald: "bg-radial-accent-sun-corner",
-  indigo: "bg-radial-green-sun-corner",
+  indigo: "bg-radial-emerald-sun-corner",
   cyan: "bg-radial-dark-sun-corner",
   rose: "bg-radial-accent-sun-corner",
   blue: "bg-radial-green-sun-corner"
@@ -130,7 +130,7 @@ export function WebsiteCard({
   ) : null;
 
   const illustrationSection = illustration ? (
-    <div className="-mx-5 mt-auto -mb-5 pt-6 sm:-mx-6 sm:-mb-6">{illustrationInner}</div>
+    <div className="-mx-5 mt-auto -mb-5 mt-6 border-t border-slate-200 sm:-mx-6 sm:-mb-6">{illustrationInner}</div>
   ) : null;
 
   const content = (

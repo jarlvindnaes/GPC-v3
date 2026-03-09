@@ -16,6 +16,7 @@
   --color-brand-cyan: #22d3ee;
   --color-brand-amber: #fbbf24;
   --color-brand-violet: #8b5cf6;
+  --color-brand-emerald: #00D08E;
 }
 
 :root[data-theme="platform"] {
@@ -29,6 +30,7 @@
   --color-brand-cyan: #22d3ee;
   --color-brand-amber: #fbbf24;
   --color-brand-violet: #8b5cf6;
+  --color-brand-emerald: #00D08E;
 }
 
 :root[data-theme="bright"] {
@@ -81,6 +83,10 @@
 
 @utility bg-radial-green-sun-corner {
   background: radial-gradient(ellipse at 100% 125%, var(--color-brand-cyan) 0%, var(--color-brand-cyan) 30%, var(--color-brand-deep) 70%);
+}
+
+@utility bg-radial-emerald-sun-corner {
+  background: radial-gradient(ellipse at 100% 125%, var(--color-brand-emerald) 0%, var(--color-brand-emerald) 30%, var(--color-brand-deep) 70%);
 }
 
 @utility bg-radial-accent-sun-corner {

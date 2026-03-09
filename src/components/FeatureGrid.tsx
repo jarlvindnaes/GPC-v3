@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useTheme } from "../theme";
+import { LcaEngineVisual } from "./LcaEngineVisual";
 import { FinishedProductCanvas, IphoneCommerceCanvas, IphoneDppCanvas } from "./Native3DModels";
 import { SupplyChainGlobe } from "./SupplyChainGlobe";
 import { WebsiteCard } from "./WebsiteCard";
@@ -84,27 +85,7 @@ const features = [
       "Output: PDF, JSON, machine-readable EPD"
     ],
     color: "indigo",
-    visual: (
-      <div className="mx-auto flex w-full max-w-xs flex-col gap-3 rounded-xl border border-indigo-100 bg-white p-4 shadow-sm">
-        <div className="mb-2 flex items-end justify-between border-slate-100 border-b pb-2">
-          <div className="font-bold font-display text-3xl text-indigo-600">62.3</div>
-          <div className="mb-1 text-slate-500 text-xs">kg CO₂e total</div>
-        </div>
-        {[
-          { name: "Backrest frame", value: "18.7 kg" },
-          { name: "5-Star base", value: "15.8 kg" },
-          { name: "Seat cushion", value: "12.4 kg" }
-        ].map((item) => (
-          <div key={item.name} className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-indigo-400"></div>
-              <span className="text-brand-text">{item.name}</span>
-            </div>
-            <span className="font-medium text-brand-dark">{item.value}</span>
-          </div>
-        ))}
-      </div>
-    )
+    visual: <LcaEngineVisual />
   },
   {
     id: "map",

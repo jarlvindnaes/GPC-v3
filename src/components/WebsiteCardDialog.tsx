@@ -7,7 +7,7 @@ import { WebsiteButton } from "./WebsiteButton";
 const visualGradientClassNames: Record<string, string> = {
   slate: "bg-radial-dark-sun-corner",
   emerald: "bg-radial-accent-sun-corner",
-  indigo: "bg-radial-green-sun-corner",
+  indigo: "bg-radial-emerald-sun-corner",
   cyan: "bg-radial-dark-sun-corner",
   rose: "bg-radial-accent-sun-corner",
   blue: "bg-radial-green-sun-corner"
@@ -107,7 +107,7 @@ export function WebsiteCardDialog({
               className="pointer-events-auto flex max-h-[90vh] w-full max-w-5xl flex-col overflow-y-auto rounded-2xl bg-white shadow-2xl md:flex-row"
             >
               <div
-                className={`relative flex min-h-[280px] items-center justify-center overflow-hidden rounded-t-2xl border-brand-dark/30 border-b md:min-h-[400px] md:w-1/2 md:rounded-t-none md:rounded-l-2xl md:border-r md:border-b-0 ${fillVisual ? "" : "p-6 sm:p-8 md:p-12"} ${visualGradientClassNames[color] ?? "bg-brand-surface"}`}
+                className={`relative flex min-h-[280px] items-center justify-center overflow-hidden rounded-t-2xl border-slate-200 border-b md:min-h-[400px] md:w-1/2 md:rounded-t-none md:rounded-l-2xl md:border-r md:border-b-0 ${fillVisual ? "" : "p-6 sm:p-8 md:p-12"} ${visualGradientClassNames[color] ?? "bg-brand-surface"}`}
               >
                 {fillVisual ? (
                   <div ref={fadeVisualOnResize ? visualRef : undefined} className="h-full w-full">
