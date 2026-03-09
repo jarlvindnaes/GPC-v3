@@ -33,7 +33,7 @@ function NetworkCanvas({ sectionMouseRef }: { sectionMouseRef: RefObject<{ x: nu
   const nodesRef = useRef<Node[]>([]);
 
   const initNodes = useCallback(() => {
-    const count = 150;
+    const count = 80;
     const nodes: Node[] = [];
     for (let i = 0; i < count; i++) {
       // Fan upward: angles from -150° to -30° (upper hemisphere, wide spread)

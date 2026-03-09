@@ -3,16 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { lazy, Suspense } from "react";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import { BackToTop } from "./components/BackToTop";
 import { Footer } from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 import { SmoothScroll } from "./components/SmoothScroll";
-import { About } from "./pages/About";
-import { DPP } from "./pages/DPP";
 import { Home } from "./pages/Home";
-import { Platform } from "./pages/Platform";
-import { PricingPage } from "./pages/PricingPage";
+
+const Platform = lazy(() => import("./pages/Platform").then((m) => ({ default: m.Platform })));
+const DPP = lazy(() => import("./pages/DPP").then((m) => ({ default: m.DPP })));
+const PricingPage = lazy(() => import("./pages/PricingPage").then((m) => ({ default: m.PricingPage })));
+const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
 
 export function App() {
   return (
@@ -29,10 +31,38 @@ export function App() {
           <div id="main-content">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/platform" element={<Platform />} />
-              <Route path="/dpp" element={<DPP />} />
-              <Route path="/pricing" element={<PricingPage />} />
-              <Route path="/about" element={<About />} />
+              <Route
+                path="/platform"
+                element={
+                  <Suspense fallback={null}>
+                    <Platform />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/dpp"
+                element={
+                  <Suspense fallback={null}>
+                    <DPP />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/pricing"
+                element={
+                  <Suspense fallback={null}>
+                    <PricingPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/about"
+                element={
+                  <Suspense fallback={null}>
+                    <About />
+                  </Suspense>
+                }
+              />
             </Routes>
           </div>
           <Footer />
