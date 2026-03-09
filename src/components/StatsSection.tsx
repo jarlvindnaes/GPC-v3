@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { type RefObject, useCallback, useEffect, useRef } from "react";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
+import { useSectionMouse } from "../utilities/useSectionMouse";
 
 interface Node {
   baseX: number;
@@ -187,48 +188,14 @@ const STAT_GRADIENT =
 
 export function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0, active: false });
-  const statEls = useRef<Set<HTMLDivElement>>(new Set());
-  const addStatRef = useCallback((el: HTMLDivElement | null) => {
-    if (el) {
-      statEls.current.add(el);
-    }
-  }, []);
+  const { mouseRef, addCssTarget } = useSectionMouse(sectionRef);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) {
-      return;
-    }
-
-    const handleMouseMove = (event: MouseEvent) => {
-      const rect = section.getBoundingClientRect();
-      mouseRef.current = {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
-        active: true
-      };
-      for (const el of statEls.current) {
-        const elRect = el.getBoundingClientRect();
-        el.style.setProperty("--mouse-x", `${((event.clientX - elRect.left) / elRect.width) * 100}%`);
-        el.style.setProperty("--mouse-y", `${((event.clientY - elRect.top) / elRect.height) * 100}%`);
-      }
-    };
-    const handleMouseLeave = () => {
-      mouseRef.current.active = false;
-      for (const el of statEls.current) {
-        el.style.removeProperty("--mouse-x");
-        el.style.removeProperty("--mouse-y");
-      }
-    };
-
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseleave", handleMouseLeave);
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
+  const addStatRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      addCssTarget(el);
+    },
+    [addCssTarget]
+  );
 
   return (
     <section

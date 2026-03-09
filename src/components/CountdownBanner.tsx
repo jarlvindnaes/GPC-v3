@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
+import { useSectionMouse } from "../utilities/useSectionMouse";
 
 interface GridNode {
   baseX: number;
@@ -16,10 +17,9 @@ function readGridLineColor(): string {
 
 const GRID_SPACING = 48;
 
-export function InteractiveGrid() {
+export function InteractiveGrid({ mouseRef }: { mouseRef: RefObject<{ x: number; y: number; active: boolean }> }) {
   const canvasReference = useRef<HTMLCanvasElement>(null);
   const isNearViewport = useIsNearViewport(canvasReference);
-  const mouseReference = useRef({ x: 0, y: 0, active: false });
   const nodesReference = useRef<GridNode[]>([]);
   const gridColumnsReference = useRef(0);
   const dimensionsReference = useRef({ width: 0, height: 0 });
@@ -85,25 +85,6 @@ export function InteractiveGrid() {
     resize();
     window.addEventListener("resize", resize);
 
-    const section = canvas.closest("section");
-    if (!section) {
-      return;
-    }
-
-    const onMouseMove = (event: MouseEvent) => {
-      const rectangle = section.getBoundingClientRect();
-      mouseReference.current = {
-        x: event.clientX - rectangle.left,
-        y: event.clientY - rectangle.top,
-        active: true
-      };
-    };
-    const onMouseLeave = () => {
-      mouseReference.current.active = false;
-    };
-    section.addEventListener("mousemove", onMouseMove);
-    section.addEventListener("mouseleave", onMouseLeave);
-
     const pushRadius = 280;
     const growRadius = 550;
     const lerpSpeed = 0.1;
@@ -123,7 +104,7 @@ export function InteractiveGrid() {
 
       const nodes = nodesReference.current;
       const columns = gridColumnsReference.current;
-      const mouse = mouseReference.current;
+      const mouse = mouseRef.current;
 
       for (const node of nodes) {
         let targetBrighten = 0;
@@ -199,8 +180,6 @@ export function InteractiveGrid() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
-      section.removeEventListener("mousemove", onMouseMove);
-      section.removeEventListener("mouseleave", onMouseLeave);
     };
   }, []);
 
@@ -210,6 +189,8 @@ export function InteractiveGrid() {
 }
 
 export function CountdownBanner() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { mouseRef } = useSectionMouse(sectionRef);
   const targetDate = new Date("2027-01-01T00:00:00Z").getTime();
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -242,14 +223,17 @@ export function CountdownBanner() {
   );
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-brand-surface py-16 md:py-20">
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-gradient-to-b from-white to-brand-surface py-16 md:py-20"
+    >
       {/* Subtle top border accent */}
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
 
       {/* Interactive grid background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="pointer-events-auto h-full w-full">
-          <InteractiveGrid />
+          <InteractiveGrid mouseRef={mouseRef} />
         </div>
       </div>
 

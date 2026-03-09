@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
+import { useSectionMouse } from "../utilities/useSectionMouse";
 import { WebsiteButton } from "./WebsiteButton";
 
 interface NetworkNode {
@@ -254,38 +255,14 @@ function HeroNetwork({ mouseRef }: { mouseRef: React.RefObject<{ x: number; y: n
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0, active: false });
   const textRef = useRef<HTMLSpanElement>(null);
+  const { mouseRef, addCssTarget } = useSectionMouse(sectionRef);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const textEl = textRef.current;
-    if (!section || !textEl) {
-      return;
+    if (textRef.current) {
+      addCssTarget(textRef.current);
     }
-
-    const onMouseMove = (event: MouseEvent) => {
-      const rect = section.getBoundingClientRect();
-      mouseRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top, active: true };
-
-      const textRect = textEl.getBoundingClientRect();
-      textEl.style.setProperty("--mouse-x", `${((event.clientX - textRect.left) / textRect.width) * 100}%`);
-      textEl.style.setProperty("--mouse-y", `${((event.clientY - textRect.top) / textRect.height) * 100}%`);
-    };
-
-    const onMouseLeave = () => {
-      mouseRef.current.active = false;
-      textEl.style.removeProperty("--mouse-x");
-      textEl.style.removeProperty("--mouse-y");
-    };
-
-    section.addEventListener("mousemove", onMouseMove);
-    section.addEventListener("mouseleave", onMouseLeave);
-    return () => {
-      section.removeEventListener("mousemove", onMouseMove);
-      section.removeEventListener("mouseleave", onMouseLeave);
-    };
-  }, []);
+  }, [addCssTarget]);
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden bg-white">

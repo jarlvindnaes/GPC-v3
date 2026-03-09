@@ -1,7 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
-import { type ReactNode, useCallback, useRef } from "react";
+import { type ReactNode, useRef } from "react";
+import { useElementGradient } from "../utilities/useElementGradient";
 
 interface WebsiteCardProps {
   children: ReactNode;
@@ -39,27 +40,6 @@ const illustrationGradientClassNames: Record<string, string> = {
   blue: "bg-radial-green-sun-corner"
 };
 
-function useGradientAngle() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const onMouseMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current;
-    if (!el) {
-      return;
-    }
-    const rect = el.getBoundingClientRect();
-    el.style.setProperty("--mouse-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
-    el.style.setProperty("--mouse-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
-  }, []);
-
-  const onMouseLeave = useCallback(() => {
-    ref.current?.style.removeProperty("--mouse-x");
-    ref.current?.style.removeProperty("--mouse-y");
-  }, []);
-
-  return { ref, onMouseMove, onMouseLeave };
-}
-
 const dispatchResize = () => window.dispatchEvent(new Event("resize"));
 
 export function WebsiteCard({
@@ -78,7 +58,7 @@ export function WebsiteCard({
   fillVisual = false,
   fadeVisualOnResize = false
 }: WebsiteCardProps) {
-  const { ref, onMouseMove, onMouseLeave } = useGradientAngle();
+  const { ref, onMouseMove, onMouseLeave } = useElementGradient();
   const visualRef = useRef<HTMLDivElement>(null);
   const combinedClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
@@ -130,7 +110,7 @@ export function WebsiteCard({
   ) : null;
 
   const illustrationSection = illustration ? (
-    <div className="-mx-5 mt-auto -mb-5 mt-6 border-t border-slate-200 sm:-mx-6 sm:-mb-6">{illustrationInner}</div>
+    <div className="-mx-5 mt-6 mt-auto -mb-5 border-slate-200 border-t sm:-mx-6 sm:-mb-6">{illustrationInner}</div>
   ) : null;
 
   const content = (
