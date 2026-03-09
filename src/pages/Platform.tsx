@@ -93,7 +93,7 @@ export function Platform() {
               See it in action
             </h2>
             <p className="text-base text-brand-text sm:text-lg">
-              Explore the Product Connect interface — from 3D model ingestion to global supply chain mapping.
+              Explore the Product Connect interface - from 3D model ingestion to global supply chain mapping.
             </p>
           </div>
           <ScreenshotCarousel />

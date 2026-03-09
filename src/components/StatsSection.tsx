@@ -328,7 +328,7 @@ export function StatsSection() {
         </div>
       </div>
 
-      {/* Abstract circular visual — nodes gravitate toward mouse */}
+      {/* Abstract circular visual - nodes gravitate toward mouse */}
       <div className="pointer-events-auto absolute -bottom-[200px] left-1/2 z-0 h-[900px] w-[900px] -translate-x-1/2 opacity-25">
         <NetworkCanvas sectionMouseRef={mouseRef} />
       </div>

@@ -15,11 +15,11 @@ const visualGradientClassNames: Record<string, string> = {
 
 const checkIconClassNames: Record<string, string> = {
   slate: "text-slate-500",
-  emerald: "text-emerald-500",
-  indigo: "text-indigo-500",
-  cyan: "text-cyan-500",
-  rose: "text-rose-500",
-  blue: "text-blue-500"
+  emerald: "text-[var(--color-brand-emerald)]",
+  indigo: "text-[var(--color-brand-emerald)]",
+  cyan: "text-[var(--color-brand)]",
+  rose: "text-[var(--color-brand-violet)]",
+  blue: "text-[var(--color-brand-cyan)]"
 };
 
 interface WebsiteCardDialogProps {

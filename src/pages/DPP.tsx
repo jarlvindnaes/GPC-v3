@@ -365,7 +365,7 @@ export function DPP() {
                 icon: Users,
                 title: "Customer Segmentation",
                 description:
-                  "Understand who's scanning — first owners, second-hand buyers, retailers, or recyclers. Tailor your messaging."
+                  "Understand who's scanning - first owners, second-hand buyers, retailers, or recyclers. Tailor your messaging."
               },
               {
                 icon: ShoppingCart,
@@ -408,7 +408,7 @@ export function DPP() {
             </h2>
             <p className="text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
               Transform compliance into competitive advantage. Activate what you need, when you need it. Each module
-              plugs directly into your product graph — no separate tools, no data silos.
+              plugs directly into your product graph - no separate tools, no data silos.
             </p>
           </div>
 
@@ -418,7 +418,7 @@ export function DPP() {
                 icon: ShoppingCart,
                 title: "Spare Parts Webshop",
                 description:
-                  "Turn every Digital Product Passport into a sales channel. Customers scan, find the exact part, and order — directly from the DPP.",
+                  "Turn every Digital Product Passport into a sales channel. Customers scan, find the exact part, and order - directly from the DPP.",
                 price: "€99/mo + GMV commission",
                 plans: "Core, Pro & Enterprise",
                 iconWrapperClassName: "bg-brand-surface border-brand/20",
@@ -429,7 +429,7 @@ export function DPP() {
                 icon: FlaskConical,
                 title: "Impact Simulator",
                 description:
-                  "Swap suppliers, change materials, shift origin countries — simulate the environmental impact of design decisions before committing.",
+                  "Swap suppliers, change materials, shift origin countries - simulate the environmental impact of design decisions before committing.",
                 price: "Included",
                 plans: "Pro & Enterprise",
                 iconWrapperClassName: "bg-violet-50 border-violet-100",
@@ -462,7 +462,7 @@ export function DPP() {
                 icon: Store,
                 title: "Supplier Marketplace",
                 description:
-                  "Discover verified suppliers and alternative components. Find lower-impact materials, compare certifications, and source replacements — all pre-validated.",
+                  "Discover verified suppliers and alternative components. Find lower-impact materials, compare certifications, and source replacements - all pre-validated.",
                 price: "Included",
                 plans: "All paid plans",
                 iconWrapperClassName: "bg-blue-50 border-blue-100",
@@ -473,7 +473,7 @@ export function DPP() {
                 icon: BadgeCheck,
                 title: "Verification Concierge",
                 description:
-                  "Third-party verified EPDs and impact data. We manage the full certification process — you get the verified stamp. External fees billed to the verification body.",
+                  "Third-party verified EPDs and impact data. We manage the full certification process - you get the verified stamp. External fees billed to the verification body.",
                 price: "€2,000 / batch",
                 plans: "All paid plans",
                 iconWrapperClassName: "bg-rose-50 border-rose-100",

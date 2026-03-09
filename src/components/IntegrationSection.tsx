@@ -157,7 +157,7 @@ export function IntegrationSection() {
             </div>
           </div>
 
-          {/* Hub — explicit dimensions on ref so measurements are stable */}
+          {/* Hub - explicit dimensions on ref so measurements are stable */}
           <div
             ref={hubRef}
             className="absolute z-30 h-28 w-28 md:h-36 md:w-36 lg:h-44 lg:w-44"
@@ -188,7 +188,7 @@ export function IntegrationSection() {
             </motion.div>
           </div>
 
-          {/* QR — explicit dimensions on ref */}
+          {/* QR - explicit dimensions on ref */}
           <div
             ref={qrRef}
             className="absolute z-30 h-14 w-14 md:h-[72px] md:w-[72px] lg:h-20 lg:w-20"
@@ -263,7 +263,7 @@ export function IntegrationSection() {
             </div>
           </div>
 
-          {/* SVG lines — viewBox matches container pixels for 1:1 coordinate mapping */}
+          {/* SVG lines - viewBox matches container pixels for 1:1 coordinate mapping */}
           <svg className="pointer-events-none absolute inset-0 z-10 h-full w-full" viewBox={viewBox}>
             <title>Integration connection lines</title>
             <defs>

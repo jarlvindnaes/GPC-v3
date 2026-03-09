@@ -11,7 +11,7 @@ export function Footer() {
               <span className="font-semibold text-brand-dark">Product Connect</span>
             </div>
             <p className="mb-6 max-w-xs text-slate-500 text-sm">
-              The infrastructure platform for product manufacturers who want full visibility — from raw materials to
+              The infrastructure platform for product manufacturers who want full visibility - from raw materials to
               end-of-life.
             </p>
           </div>

@@ -2,7 +2,7 @@ import { Cpu } from "lucide-react";
 import { motion } from "motion/react";
 
 /**
- * Animated LCA Engine visualisation — concentric rotating rings, orbiting data
+ * Animated LCA Engine visualisation - concentric rotating rings, orbiting data
  * nodes, data-stream lines and floating metric labels around a pulsing core.
  *
  * Used in both StorytellingScroll (step 6) and the FeatureGrid "Calculate the
@@ -11,9 +11,9 @@ import { motion } from "motion/react";
 export function LcaEngineVisual() {
   return (
     <div className="relative flex aspect-square w-full max-w-[280px] items-center justify-center sm:max-w-[350px] md:max-w-[420px]">
-      {/* Outer ring — solid circle, rotation invisible so plain div with CSS hover */}
+      {/* Outer ring - solid circle, rotation invisible so plain div with CSS hover */}
       <div className="absolute inset-0 rounded-full border-2 border-white/20 transition-[border-color] duration-[400ms] hover:border-white" />
-      {/* Second ring — group wrapper handles hover, inner svg rotates */}
+      {/* Second ring - group wrapper handles hover, inner svg rotates */}
       <div className="group absolute inset-6 h-[calc(100%-3rem)] w-[calc(100%-3rem)]">
         <motion.svg
           animate={{ rotate: -360 }}
@@ -35,7 +35,7 @@ export function LcaEngineVisual() {
           <circle cx="50" cy="50" r="49" fill="none" stroke="white" strokeWidth="0.8" strokeDasharray="1.5 2.5" strokeLinecap="round" />
         </motion.svg>
       </div>
-      {/* Inner ring — solid circle, rotation invisible so plain div with CSS hover */}
+      {/* Inner ring - solid circle, rotation invisible so plain div with CSS hover */}
       <div className="absolute inset-24 rounded-full border-2 border-white/15 transition-[border-color] duration-[400ms] hover:border-white" />
 
       {/* Outer orbiting data nodes */}
@@ -83,7 +83,7 @@ export function LcaEngineVisual() {
         />
       ))}
 
-      {/* Data streams — lines flowing toward center */}
+      {/* Data streams - lines flowing toward center */}
       {[0, 60, 120, 180, 240, 300].map((deg) => (
         <motion.div
           key={`stream-${deg}`}
@@ -126,7 +126,7 @@ export function LcaEngineVisual() {
 
       {/* Floating metric labels */}
       <motion.div
-        className="absolute top-6 right-8 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute top-11 right-13 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, -6, 0], opacity: [0.7, 1, 0.7] }}
         whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -135,12 +135,12 @@ export function LcaEngineVisual() {
           <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-brand-emerald)]" />
           <div>
             <p className="font-semibold text-[10px] text-white uppercase tracking-wide">CO₂ Impact</p>
-            <p className="font-bold text-white text-sm">12.4 kg</p>
+            <p className="font-bold text-white text-sm">12.4 kg CO₂e</p>
           </div>
         </div>
       </motion.div>
       <motion.div
-        className="absolute bottom-12 left-4 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute bottom-17 left-9 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, 6, 0], opacity: [0.6, 1, 0.6] }}
         whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
@@ -154,7 +154,7 @@ export function LcaEngineVisual() {
         </div>
       </motion.div>
       <motion.div
-        className="absolute top-16 left-2 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute top-21 left-7 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
         whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
@@ -168,7 +168,7 @@ export function LcaEngineVisual() {
         </div>
       </motion.div>
       <motion.div
-        className="absolute right-2 bottom-6 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute right-7 bottom-11 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
         animate={{ y: [0, 5, 0], opacity: [0.6, 1, 0.6] }}
         whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
         transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 1.5 }}

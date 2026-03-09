@@ -263,7 +263,7 @@ export function CountdownBanner() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
             </span>
             <span className="text-center font-semibold text-slate-700 text-xs tracking-wide sm:text-sm">
-              EU DPP Legislation — ESPR Deadline
+              EU DPP Legislation - ESPR Deadline
             </span>
           </div>
 

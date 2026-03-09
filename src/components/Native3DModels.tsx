@@ -9,7 +9,7 @@ import { WebsiteButton } from "./WebsiteButton";
 /**
  * Drives rendering for a demand-mode Canvas. Uses its own rAF loop to call
  * invalidate() only when the canvas should be active. When inactive, nothing
- * calls invalidate, so the Canvas does zero GPU work — no useFrame callbacks
+ * calls invalidate, so the Canvas does zero GPU work - no useFrame callbacks
  * run, no scene renders, drei's Float/PresentationControls are fully paused.
  */
 function RenderController({ isActive }: { isActive: React.RefObject<boolean> }) {
@@ -354,7 +354,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
     <Float floatIntensity={0.8} rotationIntensity={0.03} speed={1.2}>
       <group position={[0, -1.0, 0]}>
         <primitive object={passportScene} scale={3.17} />
-        {/* QR tag on the seat — positioned in 3D space */}
+        {/* QR tag on the seat - positioned in 3D space */}
         <Html position={[0.0, 1.13, 0.35]} center={true}>
           <button
             type="button"
@@ -442,7 +442,7 @@ export function PassportChairCanvas() {
         <Environment files={STUDIO_HDR} />
       </Canvas>
 
-      {/* Intelligent Product panel — slides in on hover/tap */}
+      {/* Intelligent Product panel - slides in on hover/tap */}
       <div
         className={`absolute top-2 right-0 w-[min(240px,60vw)] overflow-hidden rounded-2xl border transition-all duration-500 ease-out sm:top-4 sm:w-60 ${hovered ? "translate-x-0 border-indigo-500/30 bg-brand-dark/95 opacity-100 shadow-2xl shadow-indigo-500/10" : "pointer-events-none translate-x-4 border-brand-dark/60 bg-brand-dark/95 opacity-0 shadow-none"} backdrop-blur-md`}
       >
@@ -521,7 +521,7 @@ export function PassportChairCanvas() {
         </div>
       </div>
 
-      {/* Hint label — fades out when hovered */}
+      {/* Hint label - fades out when hovered */}
       <div
         className={`pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300 ${hovered ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
       >
@@ -635,7 +635,7 @@ function IphoneModel({ screenImage, tooltips }: { screenImage: string; tooltips:
     screenTexture.flipY = true;
 
     // Hide the second phone copy (all 002 nodes).
-    // Keep Glass_over_display001 visible — it seals the speaker grille holes at the bottom.
+    // Keep Glass_over_display001 visible - it seals the speaker grille holes at the bottom.
     // Ensure all remaining materials are DoubleSide (matches original model's doubleSided: true).
     cloned.traverse((child) => {
       if (child.name.includes("002")) {
@@ -916,13 +916,13 @@ function buildQrTexture(): Three.CanvasTexture {
   const cy = size / 2;
   const r = size / 2;
 
-  // Circle background — semi-transparent white (like tooltip bg-white/20)
+  // Circle background - semi-transparent white (like tooltip bg-white/20)
   ctx.beginPath();
   ctx.arc(cx, cy, r - 2, 0, Math.PI * 2);
   ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
   ctx.fill();
 
-  // Circle border — (like tooltip border-white/30)
+  // Circle border - (like tooltip border-white/30)
   ctx.lineWidth = 3;
   ctx.strokeStyle = "rgba(255, 255, 255, 0.30)";
   ctx.stroke();

@@ -11,7 +11,7 @@ export function About() {
       </div>
       <div className="mx-auto max-w-3xl space-y-8 px-4 sm:px-6 lg:px-8">
         <p className="text-base text-brand-text leading-relaxed sm:text-lg">
-          Product Connect exists to give manufacturers complete visibility across their entire value chain — and in the
+          Product Connect exists to give manufacturers complete visibility across their entire value chain - and in the
           process, build lasting internal capability rather than expensive external dependency.
         </p>
         <h2 className="font-display font-semibold text-2xl text-brand-darkest tracking-tight sm:text-3xl">
@@ -19,7 +19,7 @@ export function About() {
         </h2>
         <p className="text-base text-brand-text leading-relaxed sm:text-lg">
           We don't profit from your dependency. We profit from your capability. Traditional consultants do the work for
-          you and keep you weak. Product Connect builds the system that lets you do it yourself — and get strong.
+          you and keep you weak. Product Connect builds the system that lets you do it yourself - and get strong.
         </p>
         <ul className="space-y-4 text-base text-brand-text leading-relaxed sm:text-lg">
           <li>
@@ -28,7 +28,7 @@ export function About() {
           </li>
           <li>
             <strong className="text-brand-dark">With Product Connect:</strong> Your team does the reps. They call
-            suppliers. They learn material flows. They understand impact. Twelve months in, they're not just compliant —
+            suppliers. They learn material flows. They understand impact. Twelve months in, they're not just compliant -
             they're competent.
           </li>
         </ul>

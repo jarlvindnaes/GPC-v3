@@ -77,10 +77,11 @@ const features = [
     title: "Calculate the impact",
     shortDescription: "Turn supply chain data into verified CO₂ numbers for the whole product and every component.",
     longDescription:
-      "Traditional Life Cycle Assessments are expensive and static. Our calculation engine uses your harvested supply chain data to dynamically generate EN 15804+A2 compliant LCAs. As your supply chain changes, your impact metrics update in real-time.",
+      "Traditional Life Cycle Assessments are expensive and static. Our calculation engine uses your harvested supply chain data to dynamically generate EN 15804+A2 compliant LCAs and verified EPDs. As your supply chain changes, your impact metrics update in real-time.",
     benefits: [
       "EN 15804+A2 / ISO 14025 / ISO 14040/44 · PEF-aligned",
       "Cradle-to-gate & cradle-to-grave analysis",
+      "Product Connect is end-to-end verified, meaning you will get verified EPDs in a matter of days rather than months",
       "Transport, energy & end-of-life modelled",
       "Output: PDF, JSON, machine-readable EPD"
     ],
@@ -92,11 +93,10 @@ const features = [
     title: "Supply Chain Mapping",
     shortDescription: "Visualize your entire global footprint and calculate exact transport distances.",
     longDescription:
-      "Gain unprecedented visibility into your physical supply chain. Product Connect maps every node from raw material extraction to final assembly, automatically calculating transport distances and identifying geographic risks.",
+      "Gain unprecedented visibility into your physical supply chain. Product Connect maps every node from raw material extraction to final assembly, automatically calculating transport distances.",
     benefits: [
       "Interactive global supply chain visualization",
       "Automatic transport distance calculation",
-      "Identify geographic bottlenecks and risks",
       "Verify trade routes and origins"
     ],
     color: "cyan",
@@ -113,7 +113,8 @@ const features = [
       "Full compliance with DPP, Right to Repair, CBAM",
       "Interactive 3D model viewer included",
       "Complete product history and impact data",
-      "Verification certificates and ECO Labels"
+      "Verification certificates and ECO Labels",
+      "The passport stays consistent with your brand and you are in full content control"
     ],
     color: "rose",
     fillVisual: true,

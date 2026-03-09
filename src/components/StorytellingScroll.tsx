@@ -21,7 +21,7 @@ export function StorytellingScroll() {
 
   const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
-  // Text opacities — 7 steps
+  // Text opacities - 7 steps
   const op1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
   const text1Y = useTransform(scrollYProgress, [0, 0.05], ["15vh", "0vh"]);
   const op2 = useTransform(scrollYProgress, [0.14, 0.19, 0.24, 0.29], [0, 1, 1, 0]);
@@ -66,7 +66,7 @@ export function StorytellingScroll() {
   const pView6 = useTransform(scrollYProgress, [0.7, 0.75, 0.85, 0.9], ["none", "auto", "auto", "none"]);
   const pView7 = useTransform(scrollYProgress, [0.85, 0.9, 1], ["none", "auto", "auto"]);
 
-  // Z-index — active visual must be on top so R3F canvases in inactive layers don't steal events
+  // Z-index - active visual must be on top so R3F canvases in inactive layers don't steal events
   const z1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [30, 30, 0]);
   const z2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], [0, 10, 10, 0]);
   const z3 = useTransform(scrollYProgress, [0.25, 0.3, 0.4, 0.45], [0, 10, 10, 0]);
@@ -118,43 +118,43 @@ export function StorytellingScroll() {
                   slideY: text1Y,
                   icon: <Box className="h-5 w-5" />,
                   title: "Ingest Your Model",
-                  body: "Start with your product. Upload your construction model — BIM, IFC, or 3D CAD — and we automatically create a digital twin, splitting it into every component and sub-assembly."
+                  body: "Start with your product. Upload your construction model - BIM, IFC, or 3D CAD - and we automatically create a digital twin, splitting it into all its components."
                 },
                 {
                   op: op2,
                   icon: <Layers className="h-5 w-5" />,
                   title: "Add Component Details",
-                  body: "Enrich each component with the data that matters. Materials, weights, manufacturing processes, supplier assignments — building a complete digital bill of materials."
+                  body: "Enrich each component with the data that matters. Materials, weights, manufacturing processes, supplier assignments - building a complete digital bill of materials."
                 },
                 {
                   op: op3,
                   icon: <Users className="h-5 w-5" />,
                   title: "Supplier Verification",
-                  body: "Your suppliers verify details and add context directly. A secure portal lets them confirm specs, upload certifications, and enrich data — no middlemen, no email chains."
+                  body: "Your suppliers verify details and add context directly. A secure portal lets them confirm specs, upload certifications, and enrich data - no middlemen, no email chains."
                 },
                 {
                   op: op4,
                   icon: <TreePine className="h-5 w-5" />,
                   title: "Raw Material Mapping",
-                  body: "Material flows are mapped all the way to the source. From the timber forest to the steel foundry — establishing full provenance for every input in your product."
+                  body: "Material flows are mapped all the way to the source. From the timber forest to the steel foundry - establishing full provenance for every input in your product."
                 },
                 {
                   op: op5,
                   icon: <Truck className="h-5 w-5" />,
                   title: "Transport Route Calculation",
-                  body: "Detailed transport routes are calculated automatically. Every logistics leg — distances, modes, and emissions — mapped from raw material origin to final assembly."
+                  body: "Detailed transport routes are calculated automatically. Every logistics leg - distances, modes, and emissions - mapped from raw material origin to final assembly."
                 },
                 {
                   op: op6,
                   icon: <Cpu className="h-5 w-5" />,
                   title: "Impact Calculation",
-                  body: "Our engine calculates precise environmental impact per component. PEF-aligned lifecycle assessment, automated and accurate — without the €15K consultant fee."
+                  body: "Our engine calculates precise environmental impact per component. PEF-aligned lifecycle assessment, automated and accurate - without the €15K consultant fee."
                 },
                 {
                   op: op7,
                   icon: <QrCode className="h-5 w-5" />,
                   title: "Passport & Certifications",
-                  body: "Generate a Digital Product Passport and certifications. A living, GS1-compliant document ready for ESPR 2026 — verifiable, scannable, and built to prove your claims."
+                  body: "Generate a Digital Product Passport and certifications. A living, GS1-compliant document ready for ESPR 2026 - verifiable, scannable, and built to prove your claims."
                 }
               ].map(({ op, slideY, icon, title, body }) => (
                 <motion.div
@@ -206,7 +206,7 @@ export function StorytellingScroll() {
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:block md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
-                      <p className="whitespace-nowrap font-semibold text-sm text-white">Steel Bolt — ISO 4762 M8×30</p>
+                      <p className="whitespace-nowrap font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
                       <div className="mt-1 flex items-center gap-3">
                         <span className="font-medium text-[10px] text-slate-500 uppercase tracking-wider">
                           Material
@@ -264,7 +264,7 @@ export function StorytellingScroll() {
                 <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
-                      <p className="font-semibold text-sm text-white">Iron Ore — Raw Material</p>
+                      <p className="font-semibold text-sm text-white">Iron Ore - Raw Material</p>
                       <div className="mt-1 flex items-center gap-3">
                         <span className="font-medium text-[10px] text-slate-500 uppercase tracking-wider">Origin</span>
                         <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
@@ -501,7 +501,7 @@ export function StorytellingScroll() {
 
       {/* ── Grand Finale: Your Intelligent Product ── */}
       <section className="relative overflow-hidden bg-brand-deep pt-4 pb-16 text-white sm:pt-8 sm:pb-32">
-        {/* Metro line continuation — fades from story section into the QR on the chair */}
+        {/* Metro line continuation - fades from story section into the QR on the chair */}
         <div className="absolute top-0 left-8 z-0 w-px md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
           <div className="h-full w-full bg-gradient-to-b from-violet-500 to-transparent" />
         </div>
@@ -531,7 +531,7 @@ export function StorytellingScroll() {
                 </h2>
               </div>
               <p className="mx-auto max-w-lg text-lg text-slate-400 leading-relaxed">
-                The journey is complete. Your product is now a living, intelligent asset — spare parts, documentation,
+                The journey is complete. Your product is now a living, intelligent asset - spare parts, documentation,
                 care guides, and verified claims, all accessible with a single scan.
               </p>
             </div>
