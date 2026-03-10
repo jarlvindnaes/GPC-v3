@@ -105,7 +105,7 @@ export function StorytellingScroll() {
 
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
-          <div className="absolute top-[45%] bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
+          <div className="absolute top-[45%] bottom-0 left-8 z-0 w-0.5 bg-brand-dark md:left-1/2 md:-translate-x-1/2">
             {/* Starting circle - scrolls away naturally */}
             <motion.div
               className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-accent"
@@ -297,9 +297,9 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"], zIndex: z5 }}
                 className="absolute inset-0 flex items-center justify-center md:pl-12"
               >
-                <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-96">
+                <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-white/30 bg-white/20 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-96">
                   {/* Header */}
-                  <div className="border-slate-700/50 border-b px-4 pt-4 pb-3 sm:px-5 sm:pt-5 sm:pb-4">
+                  <div className="border-white/20 border-b bg-[#152762] px-4 pt-4 pb-3 sm:px-5 sm:pt-5 sm:pb-4">
                     <div className="mb-1 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-indigo-500/20 bg-indigo-500/10">
@@ -363,7 +363,7 @@ export function StorytellingScroll() {
                       <div
                         key={leg.from}
                         data-hover-trigger=""
-                        className="flex gap-3 rounded-xl border border-brand-dark/15 bg-brand-deep/40 p-3"
+                        className="flex gap-3 rounded-xl border border-brand-dark/15 bg-brand-deep p-3"
                       >
                         {/* Icon + label */}
                         <div className="flex shrink-0 flex-col items-center">
@@ -513,12 +513,12 @@ export function StorytellingScroll() {
       {/* ── Grand Finale: Your Intelligent Product ── */}
       <section className="relative bg-brand-deep pt-6 pb-16 text-white sm:pt-8 sm:pb-32">
         {/* Metro line continuation - fades from story section into the QR on the chair */}
-        <div className="absolute top-0 left-8 z-0 w-px md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
+        <div className="absolute top-0 left-8 z-[5] w-0.5 md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
           <div className="h-full w-full bg-gradient-to-b from-violet-500 to-transparent" />
         </div>
 
         {/* Subtle radial glow behind the chair */}
-        <div className="pointer-events-none absolute top-[45%] left-1/2 h-[min(80vw,640px)] w-[min(80vw,640px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/[0.12] blur-3xl" />
+        <div className="pointer-events-none absolute top-[45%] left-1/2 h-[min(80vw,640px)] w-[min(80vw,640px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/[0.07] blur-3xl" />
 
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-4 sm:px-6 lg:px-8">
           <motion.div
