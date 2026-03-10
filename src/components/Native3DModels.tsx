@@ -462,8 +462,7 @@ export function PassportChairCanvas() {
 
       {/* 3D Phone with video - slides in on hover/tap, overlaps chair */}
       <div
-        className={`absolute top-1/2 right-[5%] z-20 -translate-y-1/2 cursor-grab transition-all duration-500 ease-out active:cursor-grabbing ${phoneVisible ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-16 opacity-0"}`}
-        style={{ width: "min(400px, 75vw)", height: "min(720px, 90vh)" }}
+        className={`absolute top-1/2 right-[5%] z-20 h-[min(380px,50vh)] w-[min(200px,54vw)] -translate-y-1/2 cursor-grab transition-all duration-500 ease-out active:cursor-grabbing sm:h-[min(720px,90vh)] sm:w-[min(400px,75vw)] ${phoneVisible ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-16 opacity-0"}`}
         onMouseEnter={cancelHide}
         onMouseLeave={scheduleHide}
       >
@@ -472,7 +471,7 @@ export function PassportChairCanvas() {
         <button
           type="button"
           aria-label="Close phone preview"
-          className={`absolute top-[8%] right-[calc(22%-20px)] flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30 ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
+          className={`absolute top-[8%] right-[calc(22%-20px)] flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30 sm:h-11 sm:w-11 ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
           onClick={() => {
             cancelHide();
             setLocked(false);

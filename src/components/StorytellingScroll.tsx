@@ -122,9 +122,9 @@ export function StorytellingScroll() {
             />
           </div>
 
-          <div className="relative z-10 mx-auto mt-20 flex w-full max-w-7xl flex-col items-center gap-4 px-4 sm:px-6 md:flex-row md:gap-12 lg:px-8">
+          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-20 pb-2 sm:px-6 md:mt-20 md:h-auto md:flex-row md:gap-12 md:py-0 lg:px-8">
             {/* ── Text panel (left) ── */}
-            <div className="relative flex min-h-[180px] w-full items-center pl-10 sm:pl-12 md:h-[420px] md:w-[44%] md:pr-12 md:pl-0">
+            <div className="relative flex h-[270px] w-full shrink-0 items-center pl-10 sm:pl-12 md:h-[420px] md:w-[44%] md:pr-12 md:pl-0">
               {[
                 {
                   op: op1,
@@ -175,19 +175,19 @@ export function StorytellingScroll() {
                   style={{ opacity: op, y: slideY }}
                   className="absolute inset-y-0 flex flex-col justify-center"
                 >
-                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark text-indigo-400 shadow-indigo-500/10 shadow-lg">
+                  <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark text-indigo-400 shadow-indigo-500/10 shadow-lg md:mb-6">
                     {icon}
                   </div>
-                  <h2 className="mb-4 font-bold text-2xl leading-[1.1] tracking-tight sm:text-4xl md:text-5xl">
+                  <h2 className="mb-2 font-bold text-2xl leading-[1.1] tracking-tight sm:text-4xl md:mb-4 md:text-5xl">
                     {title}
                   </h2>
-                  <p className="max-w-sm text-base text-slate-400 leading-relaxed md:text-lg">{body}</p>
+                  <p className="max-w-sm text-sm text-slate-400 leading-relaxed sm:text-base md:text-lg">{body}</p>
                 </motion.div>
               ))}
             </div>
 
             {/* ── Visual panel (right) ── */}
-            <div className="relative flex min-h-[250px] w-full flex-1 items-center justify-center sm:min-h-[350px] md:min-h-[700px]">
+            <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden md:min-h-[700px] md:overflow-visible">
               {/* Visual 1: Chair */}
               <motion.div
                 style={{ opacity: vOp1, pointerEvents: pView1 as MotionStyle["pointerEvents"], zIndex: z1, y: chairY }}
@@ -196,7 +196,7 @@ export function StorytellingScroll() {
                 <div className="relative h-full w-full touch-none">
                   <FinishedProductCanvas fieldOfView={55} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
                   <div className="flex flex-col">
                     <p className="whitespace-nowrap font-semibold text-sm text-white">West Elm Slope Leather Chair</p>
                     <p className="mt-0.5 text-[11px] text-slate-400">247 components • 18 suppliers</p>
@@ -213,17 +213,15 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"], zIndex: z2 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
+                <div className="aspect-square w-[min(100%,80vw)] md:w-[min(100%,85vh)]">
                   <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md sm:block md:bottom-6 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <p className="whitespace-nowrap font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
                       <div className="mt-1 flex items-center gap-3">
-                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">
-                          Material
-                        </span>
+                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Material</span>
                         <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
                         <span className="text-slate-700">·</span>
                         <span className="font-medium text-[10px] text-white uppercase tracking-wider">Weight</span>
@@ -271,10 +269,10 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"], zIndex: z4 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
+                <div className="aspect-square w-[min(100%,80vw)] md:w-[min(100%,85vh)]">
                   <RawMaterialCanvas isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md sm:flex md:bottom-6 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <p className="font-semibold text-sm text-white">Iron Ore - Raw Material</p>

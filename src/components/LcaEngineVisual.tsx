@@ -21,7 +21,16 @@ export function LcaEngineVisual() {
           className="h-full w-full opacity-40 transition-opacity duration-[400ms] group-hover:opacity-100"
           viewBox="0 0 100 100"
         >
-          <circle cx="50" cy="50" r="49" fill="none" stroke="white" strokeWidth="0.8" strokeDasharray="1.5 2.5" strokeLinecap="round" />
+          <circle
+            cx="50"
+            cy="50"
+            r="49"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.8"
+            strokeDasharray="1.5 2.5"
+            strokeLinecap="round"
+          />
         </motion.svg>
       </div>
       {/* Third ring */}
@@ -32,7 +41,16 @@ export function LcaEngineVisual() {
           className="h-full w-full opacity-35 transition-opacity duration-[400ms] group-hover:opacity-100"
           viewBox="0 0 100 100"
         >
-          <circle cx="50" cy="50" r="49" fill="none" stroke="white" strokeWidth="0.8" strokeDasharray="1.5 2.5" strokeLinecap="round" />
+          <circle
+            cx="50"
+            cy="50"
+            r="49"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.8"
+            strokeDasharray="1.5 2.5"
+            strokeLinecap="round"
+          />
         </motion.svg>
       </div>
       {/* Inner ring - solid circle, rotation invisible so plain div with CSS hover */}
@@ -126,7 +144,7 @@ export function LcaEngineVisual() {
 
       {/* Floating metric labels */}
       <motion.div
-        className="absolute top-11 right-13 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute -top-8 right-0 select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:top-11 sm:right-13"
         animate={{ y: [0, -6, 0] }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
       >
@@ -134,12 +152,12 @@ export function LcaEngineVisual() {
           <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-brand-emerald)]" />
           <div>
             <p className="font-semibold text-[10px] text-white uppercase tracking-wide">CO₂ Impact</p>
-            <p className="font-bold text-white text-sm">12.4 kg CO₂e</p>
+            <p className="font-bold text-sm text-white">12.4 kg CO₂e</p>
           </div>
         </div>
       </motion.div>
       <motion.div
-        className="absolute bottom-17 left-9 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute -bottom-8 left-0 select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:bottom-17 sm:left-9"
         animate={{ y: [0, 6, 0] }}
         transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
       >
@@ -147,12 +165,12 @@ export function LcaEngineVisual() {
           <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-brand-cyan)]" />
           <div>
             <p className="font-semibold text-[10px] text-white uppercase tracking-wide">PEF Score</p>
-            <p className="font-bold text-white text-sm">A+</p>
+            <p className="font-bold text-sm text-white">A+</p>
           </div>
         </div>
       </motion.div>
       <motion.div
-        className="absolute top-21 left-7 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute top-2 -left-4 select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:top-21 sm:left-7"
         animate={{ y: [0, -4, 0] }}
         transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
       >
@@ -165,7 +183,7 @@ export function LcaEngineVisual() {
         </div>
       </motion.div>
       <motion.div
-        className="absolute right-7 bottom-11 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
+        className="absolute -right-4 bottom-2 select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:right-7 sm:bottom-11"
         animate={{ y: [0, 5, 0] }}
         transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 1.5 }}
       >
