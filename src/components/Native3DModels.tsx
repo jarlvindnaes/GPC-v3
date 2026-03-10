@@ -430,71 +430,75 @@ export function PassportChairCanvas() {
   const phoneVisible = locked || qrHovered;
 
   return (
-    <div
-      ref={containerReference}
-      role="img"
-      aria-label="Interactive 3D chair with product passport"
-      className="relative mx-auto h-[min(80vw,600px)] w-[min(90vw,800px)]"
-    >
-      <Canvas
-        frameloop="demand"
-        camera={{ position: [0, 0.3, 5], fov: 42 }}
-        gl={{ alpha: true }}
-        style={{ background: "transparent" }}
-      >
-        <RenderController isActive={isNearReference} />
-        <ambientLight intensity={0.8} />
-        <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
-        <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
-        <PresentationControls
-          global={true}
-          snap={false}
-          rotation={[0.08, -Math.PI / 4, 0]}
-          polar={[-Math.PI / 6, Math.PI / 6]}
-          azimuth={[-Math.PI / 3, Math.PI / 3]}
-          config={{ mass: 6, tension: 80, friction: 50 }}
-        >
-          <PassportChairModel onHover={handleQrHover} onLock={() => setLocked(true)} />
-        </PresentationControls>
-        <ContactShadows position={[0, -1.1, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
-        <Environment files={STUDIO_HDR} />
-      </Canvas>
-
-      {/* 3D Phone with video - slides in on hover/tap, overlaps chair */}
+    <div className="relative">
       <div
-        className={`absolute top-1/2 right-[5%] z-20 h-[min(380px,50vh)] w-[min(200px,54vw)] -translate-y-1/2 cursor-grab transition-all duration-500 ease-out active:cursor-grabbing sm:h-[min(720px,90vh)] sm:w-[min(400px,75vw)] ${phoneVisible ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-16 opacity-0"}`}
-        onMouseEnter={cancelHide}
-        onMouseLeave={scheduleHide}
+        ref={containerReference}
+        role="img"
+        aria-label="Interactive 3D chair with product passport"
+        className="relative mx-auto h-[min(80vw,600px)] w-[min(90vw,800px)]"
       >
-        <PassportPhoneCanvas isPlaying={phoneVisible} />
-        {/* Close button - top right corner of phone */}
-        <button
-          type="button"
-          aria-label="Close phone preview"
-          className={`absolute top-[8%] right-[calc(22%-20px)] flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30 sm:h-11 sm:w-11 ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
-          onClick={() => {
-            cancelHide();
-            setLocked(false);
-            setQrHovered(false);
-          }}
+        <Canvas
+          frameloop="demand"
+          camera={{ position: [0, 0.3, 5], fov: 42 }}
+          gl={{ alpha: true }}
+          style={{ background: "transparent" }}
         >
-          <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <title>Close</title>
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
+          <RenderController isActive={isNearReference} />
+          <ambientLight intensity={0.8} />
+          <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
+          <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
+          <PresentationControls
+            global={true}
+            snap={false}
+            rotation={[0.08, -Math.PI / 4, 0]}
+            polar={[-Math.PI / 6, Math.PI / 6]}
+            azimuth={[-Math.PI / 3, Math.PI / 3]}
+            config={{ mass: 6, tension: 80, friction: 50 }}
+          >
+            <PassportChairModel onHover={handleQrHover} onLock={() => setLocked(true)} />
+          </PresentationControls>
+          <ContactShadows position={[0, -1.1, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
+          <Environment files={STUDIO_HDR} />
+        </Canvas>
+
+        {/* 3D Phone with video - slides in on hover/tap, overlaps chair */}
+        <div
+          className={`absolute top-[28%] z-50 h-[min(580px,72vh)] w-[min(320px,82vw)] cursor-grab transition-all duration-500 ease-out active:cursor-grabbing sm:top-1/2 sm:right-[5%] sm:h-[min(720px,90vh)] sm:w-[min(400px,75vw)] ${phoneVisible ? "left-1/2 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100 sm:left-auto sm:translate-x-0" : "pointer-events-none left-1/2 -translate-x-1/2 -translate-y-[40%] scale-95 opacity-0 sm:left-auto sm:-translate-y-1/2 sm:scale-100 sm:translate-x-16"}`}
+          onMouseEnter={cancelHide}
+          onMouseLeave={scheduleHide}
+        >
+          <PassportPhoneCanvas isPlaying={phoneVisible} />
+          {/* Close button - top right corner of phone */}
+          <button
+            type="button"
+            aria-label="Close phone preview"
+            className={`absolute top-[8%] right-[calc(22%-20px)] flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30 sm:h-11 sm:w-11 ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
+            onClick={() => {
+              cancelHide();
+              setLocked(false);
+              setQrHovered(false);
+            }}
+          >
+            <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <title>Close</title>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Hint label - fades out when phone is visible */}
-      <div
-        className={`pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300 ${phoneVisible ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
+      {/* Hint label - outside canvas container to avoid stacking issues, clickable on mobile */}
+      <button
+        type="button"
+        onClick={() => setLocked(true)}
+        className={`mx-auto block cursor-pointer border-none bg-transparent pt-1 transition-all duration-300 sm:pointer-events-none ${phoneVisible ? "pointer-events-none translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
       >
         <p className="whitespace-nowrap text-center text-slate-500 text-xs">
           <span className="hidden sm:inline">Hover</span>
           <span className="sm:hidden">Tap</span> the tag to explore
         </p>
-      </div>
+      </button>
     </div>
   );
 }

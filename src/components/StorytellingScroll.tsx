@@ -295,7 +295,7 @@ export function StorytellingScroll() {
               {/* Visual 5: Transport Routes Card */}
               <motion.div
                 style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"], zIndex: z5 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center md:pl-12"
               >
                 <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-96">
                   {/* Header */}
@@ -440,7 +440,7 @@ export function StorytellingScroll() {
               {/* Visual 6: LCA Engine */}
               <motion.div
                 style={{ opacity: vOp6, pointerEvents: pView6 as MotionStyle["pointerEvents"], zIndex: z6 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center md:pl-12"
               >
                 <LcaEngineVisual />
               </motion.div>
@@ -511,7 +511,7 @@ export function StorytellingScroll() {
       </section>
 
       {/* ── Grand Finale: Your Intelligent Product ── */}
-      <section className="relative overflow-hidden bg-brand-deep pt-4 pb-16 text-white sm:pt-8 sm:pb-32">
+      <section className="relative bg-brand-deep pt-6 pb-16 text-white sm:pt-8 sm:pb-32">
         {/* Metro line continuation - fades from story section into the QR on the chair */}
         <div className="absolute top-0 left-8 z-0 w-px md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
           <div className="h-full w-full bg-gradient-to-b from-violet-500 to-transparent" />
@@ -537,7 +537,7 @@ export function StorytellingScroll() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-dark/60 bg-brand-dark/80 text-indigo-400">
                   <Sparkles className="h-4.5 w-4.5" />
                 </div>
-                <h2 className="font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
+                <h2 className="font-display font-semibold text-2xl tracking-tight sm:text-4xl md:text-5xl">
                   Your Intelligent Product
                 </h2>
               </div>

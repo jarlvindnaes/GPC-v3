@@ -274,7 +274,7 @@ export function Hero() {
 
       <div className="pointer-events-none absolute inset-0 z-[1] bg-white [mask-image:radial-gradient(ellipse_at_30%_50%,black_0%,black_40%,transparent_75%)]" />
 
-      <div className="relative z-[2] mx-auto max-w-7xl px-4 pt-32 pb-20 sm:px-6 md:pt-48 md:pb-32 lg:px-8">
+      <div className="relative z-[2] mx-auto max-w-7xl px-4 pt-32 pb-32 sm:px-6 md:pt-48 md:pb-32 lg:px-8">
         <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
