@@ -1,6 +1,6 @@
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF, useTexture } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { BookOpen, ClipboardList, Globe, Recycle, ShoppingCart, Wrench } from "lucide-react";
+import { BookOpen, Globe, QrCode, Recycle, Wrench } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as Three from "three";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
@@ -37,6 +37,7 @@ const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (
 const EMERALD_MODEL = `${import.meta.env.BASE_URL}models/emerald_in_quartz__for_games.glb`;
 const IPHONE_MODEL = `${import.meta.env.BASE_URL}models/iphone_17_pro_max.glb`;
 const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
+const PASSPORT_PHONE_VIDEO = `${import.meta.env.BASE_URL}videos/passport-demo.mp4`;
 
 function CustomRockModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
   const { scene } = useGLTF(EMERALD_MODEL);
@@ -268,7 +269,7 @@ function WireframeChairModel({ isActiveReference }: { isActiveReference: React.R
         <primitive object={wireScene} scale={2.6} />
         {chairLabels.map((item) => (
           <Html key={item.label} position={item.position} center={true} zIndexRange={[0, 10]}>
-            <div className="pointer-events-none" style={{ transform: `scale(${tooltipScale})` }}>
+            <div className="pointer-events-none select-none" style={{ transform: `scale(${tooltipScale})` }}>
               <div className="flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md">
                 <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.dotColor }} />
                 <span className="whitespace-nowrap font-semibold text-[13px] text-white">{item.label}</span>
@@ -347,7 +348,10 @@ export function FinishedProductCanvas({
   );
 }
 
-function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }) {
+function PassportChairModel({
+  onHover,
+  onLock
+}: { onHover: (hovered: boolean) => void; onLock: () => void }) {
   const { scene } = useGLTF(CHAIR_MODEL);
   const passportScene = useMemo(() => scene.clone(), [scene]);
   return (
@@ -355,15 +359,15 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
       <group position={[0, -1.0, 0]}>
         <primitive object={passportScene} scale={3.17} />
         {/* QR tag on the seat - positioned in 3D space */}
-        <Html position={[0.0, 1.13, 0.35]} center={true}>
+        <Html position={[0.0, 1.13, 0.35]} center={true} zIndexRange={[10, 0]}>
           <button
             type="button"
             aria-label="View Digital Product Passport"
             className="relative cursor-pointer border-none bg-transparent p-0"
             onMouseEnter={() => onHover(true)}
             onMouseLeave={() => onHover(false)}
-            onClick={() => onHover(true)}
-            onTouchStart={() => onHover(true)}
+            onClick={() => onLock()}
+            onTouchStart={() => onLock()}
           >
             {/* Radiating rings */}
             <div className="absolute -inset-5 animate-[ping_3s_ease-in-out_infinite] rounded-full border border-indigo-400/25" />
@@ -372,19 +376,7 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
             <div className="absolute -inset-3 animate-pulse rounded-full bg-indigo-500/20 blur-md" />
             {/* Core QR icon */}
             <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_20px_rgba(99,102,241,0.6)] ring-2 ring-white/30">
-              <svg
-                className="h-6 w-6 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <title>QR code icon</title>
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-              </svg>
+              <QrCode className="h-6 w-6 text-white" />
             </div>
             {/* Floating particles */}
             {[0, 1, 2, 3].map((particleIndex) => (
@@ -407,9 +399,27 @@ function PassportChairModel({ onHover }: { onHover: (hovered: boolean) => void }
 }
 
 export function PassportChairCanvas() {
-  const [hovered, setHovered] = useState(false);
+  const [qrHovered, setQrHovered] = useState(false);
+  const [phoneHovered, setPhoneHovered] = useState(false);
+  const [locked, setLocked] = useState(false);
   const containerReference = useRef<HTMLDivElement>(null);
   const isNearReference = useIsNearViewport(containerReference);
+  const hideTimeout = useRef<ReturnType<typeof setTimeout>>(null);
+
+  // Debounced QR unhover — gives the mouse time to reach the phone
+  const handleQrHover = (value: boolean) => {
+    if (hideTimeout.current) {
+      clearTimeout(hideTimeout.current);
+      hideTimeout.current = null;
+    }
+    if (value) {
+      setQrHovered(true);
+    } else {
+      hideTimeout.current = setTimeout(() => setQrHovered(false), 200);
+    }
+  };
+
+  const phoneVisible = locked || qrHovered || phoneHovered;
 
   return (
     <div
@@ -436,94 +446,42 @@ export function PassportChairCanvas() {
           azimuth={[-Math.PI / 3, Math.PI / 3]}
           config={{ mass: 6, tension: 80, friction: 50 }}
         >
-          <PassportChairModel onHover={setHovered} />
+          <PassportChairModel onHover={handleQrHover} onLock={() => setLocked(true)} />
         </PresentationControls>
         <ContactShadows position={[0, -0.3, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
         <Environment files={STUDIO_HDR} />
       </Canvas>
 
-      {/* Intelligent Product panel - slides in on hover/tap */}
+      {/* 3D Phone with video - slides in on hover/tap, overlaps chair */}
       <div
-        className={`absolute top-2 right-0 w-[min(240px,60vw)] overflow-hidden rounded-2xl border transition-all duration-500 ease-out sm:top-4 sm:w-60 ${hovered ? "translate-x-0 border-indigo-500/30 bg-brand-dark/95 opacity-100 shadow-2xl shadow-indigo-500/10" : "pointer-events-none translate-x-4 border-brand-dark/60 bg-brand-dark/95 opacity-0 shadow-none"} backdrop-blur-md`}
+        className={`absolute top-1/2 right-[5%] z-20 -translate-y-1/2 cursor-grab transition-all duration-500 ease-out active:cursor-grabbing ${phoneVisible ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-16 opacity-0"}`}
+        style={{ width: "min(400px, 75vw)", height: "min(720px, 90vh)" }}
+        onMouseEnter={() => setPhoneHovered(true)}
+        onMouseLeave={() => setPhoneHovered(false)}
       >
-        <div className="border-brand-deep/50 border-b p-4">
-          <div className="mb-2 flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600">
-              <svg
-                className="h-3 w-3 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <title>QR code icon</title>
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-              </svg>
-            </div>
-            <span className="font-bold text-[10px] text-indigo-400 uppercase tracking-widest">Intelligent Product</span>
-          </div>
-          <p className="font-bold text-sm text-white leading-tight">West Elm Slope Leather Chair</p>
-        </div>
-        <div className="space-y-1.5 p-3">
-          {[
-            {
-              icon: <ClipboardList className="h-3.5 w-3.5" />,
-              label: "Product Passport",
-              description: "Full DPP & compliance docs"
-            },
-            {
-              icon: <Wrench className="h-3.5 w-3.5" />,
-              label: "Spare Parts",
-              description: "Order replacements directly"
-            },
-            {
-              icon: <BookOpen className="h-3.5 w-3.5" />,
-              label: "Care & Manuals",
-              description: "Maintenance guides & tips"
-            },
-            {
-              icon: <Recycle className="h-3.5 w-3.5" />,
-              label: "End of Life",
-              description: "Recycling & take-back info"
-            },
-            {
-              icon: <Globe className="h-3.5 w-3.5" />,
-              label: "Impact Data",
-              description: "CO₂, materials & certifications"
-            },
-            {
-              icon: <ShoppingCart className="h-3.5 w-3.5" />,
-              label: "Accessories",
-              description: "Compatible add-ons & upgrades"
-            }
-          ].map((item) => (
-            <div
-              key={item.label}
-              className="group flex cursor-pointer items-center gap-2.5 rounded-xl border border-brand-dark/30 bg-brand-deep/60 px-3 py-2 transition-colors hover:border-indigo-500/30 hover:bg-brand-deep"
-            >
-              <span className="text-indigo-400">{item.icon}</span>
-              <div className="min-w-0">
-                <p className="font-semibold text-[11px] text-white transition-colors group-hover:text-indigo-300">
-                  {item.label}
-                </p>
-                <p className="text-[9px] text-slate-500 leading-tight">{item.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="px-3 pb-3">
-          <div className="flex h-8 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 transition-colors hover:from-indigo-500 hover:to-violet-500">
-            <span className="font-semibold text-[11px] text-white">Scan or Share</span>
-          </div>
-        </div>
+        <PassportPhoneCanvas isPlaying={phoneVisible} />
+        {/* Close button - top right corner of phone */}
+        <button
+          type="button"
+          aria-label="Close phone preview"
+          className={`absolute top-[8%] right-[calc(22%-20px)] flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-brand-deep/80 text-slate-400 backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:text-white ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
+          onClick={() => {
+            setLocked(false);
+            setQrHovered(false);
+            setPhoneHovered(false);
+          }}
+        >
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <title>Close</title>
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
 
-      {/* Hint label - fades out when hovered */}
+      {/* Hint label - fades out when phone is visible */}
       <div
-        className={`pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300 ${hovered ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
+        className={`pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 transition-all duration-300 ${phoneVisible ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
       >
         <p className="whitespace-nowrap text-center text-slate-500 text-xs">
           <span className="hidden sm:inline">Hover</span>
@@ -811,6 +769,221 @@ export function IphoneCommerceCanvas() {
       cameraConfig={commerceCameraConfig}
       ariaLabel="3D iPhone with spare parts shop"
     />
+  );
+}
+
+// ── iPhone Video (Passport hover phone) ─────────────────────────────────────
+
+/** Creates a VideoTexture from a <video> element without Suspense.
+ *  If the video fails to load (404), the phone still renders with a black screen. */
+function useManualVideoTexture(src: string) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const textureRef = useRef<Three.VideoTexture | null>(null);
+
+  if (!videoRef.current) {
+    const video = document.createElement("video");
+    video.src = src;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.crossOrigin = "anonymous";
+    videoRef.current = video;
+
+    const tex = new Three.VideoTexture(video);
+    tex.colorSpace = Three.SRGBColorSpace;
+    tex.flipY = true;
+    textureRef.current = tex;
+  }
+
+  useEffect(() => {
+    return () => {
+      const video = videoRef.current;
+      if (video) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      }
+      textureRef.current?.dispose();
+    };
+  }, []);
+
+  return { video: videoRef.current, texture: textureRef.current as Three.VideoTexture };
+}
+
+function IphoneVideoModel({ videoSrc, isPlaying }: { videoSrc: string; isPlaying: boolean }) {
+  const { scene: originalScene } = useGLTF(IPHONE_MODEL);
+  const { video, texture: videoTexture } = useManualVideoTexture(videoSrc);
+
+  // Play / pause based on hover state
+  useEffect(() => {
+    if (isPlaying) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [isPlaying, video]);
+
+  const { scene, offset } = useMemo(() => {
+    const cloned = originalScene.clone(true);
+
+    // Hide the second phone copy (all 002 nodes).
+    cloned.traverse((child) => {
+      if (child.name.includes("002")) {
+        child.visible = false;
+      }
+      if ((child as Three.Mesh).isMesh) {
+        const mat = (child as Three.Mesh).material as Three.MeshStandardMaterial;
+        if (mat) {
+          mat.side = Three.DoubleSide;
+        }
+      }
+      // Glass overlay
+      if (child.name === "Glass_over_display001_Glass_0" && (child as Three.Mesh).isMesh) {
+        const mesh = child as Three.Mesh;
+        const mat = mesh.material as Three.MeshPhysicalMaterial;
+        mat.transmission = 0;
+        mat.transparent = false;
+        mat.opacity = 1;
+        mat.color = new Three.Color(0x000000);
+        mat.roughness = 0.3;
+        mat.metalness = 0;
+        mat.depthWrite = false;
+        mat.blending = Three.NormalBlending;
+        mesh.renderOrder = 1;
+      }
+      if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
+        (child as Three.Mesh).renderOrder = 2;
+      }
+    });
+
+    // Apply video texture to the display mesh, remapping UVs to span full [0,1].
+    cloned.traverse((child) => {
+      if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
+        const mesh = child as Three.Mesh;
+        const geo = (mesh.geometry as Three.BufferGeometry).clone();
+        mesh.geometry = geo;
+        const uv = geo.getAttribute("uv");
+        if (uv) {
+          let minU = Infinity;
+          let maxU = -Infinity;
+          let minV = Infinity;
+          let maxV = -Infinity;
+          for (let i = 0; i < uv.count; i++) {
+            minU = Math.min(minU, uv.getX(i));
+            maxU = Math.max(maxU, uv.getX(i));
+            minV = Math.min(minV, uv.getY(i));
+            maxV = Math.max(maxV, uv.getY(i));
+          }
+          const rangeU = maxU - minU || 1;
+          const rangeV = maxV - minV || 1;
+          for (let i = 0; i < uv.count; i++) {
+            uv.setX(i, 1.0 - (uv.getX(i) - minU) / rangeU);
+            uv.setY(i, (uv.getY(i) - minV) / rangeV);
+          }
+          uv.needsUpdate = true;
+        }
+        mesh.material = new Three.MeshPhysicalMaterial({
+          color: new Three.Color(0x000000),
+          emissive: new Three.Color(0xffffff),
+          emissiveMap: videoTexture,
+          emissiveIntensity: 1.0,
+          roughness: 1.0,
+          metalness: 0,
+          clearcoat: 0.15,
+          clearcoatRoughness: 0.1,
+          envMapIntensity: 0.0,
+          toneMapped: false
+        });
+      }
+    });
+
+    const visibleBox = new Three.Box3();
+    cloned.traverse((child) => {
+      if ((child as Three.Mesh).isMesh && child.visible) {
+        visibleBox.expandByObject(child);
+      }
+    });
+    const center = visibleBox.getCenter(new Three.Vector3());
+
+    return {
+      scene: cloned,
+      offset: [-center.x, -center.y, -center.z] as [number, number, number]
+    };
+  }, [originalScene, videoTexture]);
+
+  return (
+    <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
+      <group position={offset}>
+        <primitive object={scene} />
+      </group>
+    </Float>
+  );
+}
+
+// Camera position: front-on (end state)
+const PHONE_CAM_END: [number, number, number] = [0, 0, 1.8];
+// Camera position: orbited to the right (start state)
+const PHONE_CAM_START: [number, number, number] = [1.6, 0, 2.6];
+
+/** Smoothly lerps the camera from the orbited start position to the front end position. */
+function PassportPhoneCameraRig({ isPlaying }: { isPlaying: boolean }) {
+  const { camera, invalidate } = useThree();
+  const progress = useRef(0);
+  const target = useRef(isPlaying ? 1 : 0);
+  target.current = isPlaying ? 1 : 0;
+
+  useFrame(() => {
+    const prev = progress.current;
+    progress.current += (target.current - progress.current) * 0.06;
+
+    // Stop updating once settled
+    if (Math.abs(progress.current - prev) < 0.0001) {
+      return;
+    }
+
+    const t = progress.current;
+    camera.position.set(
+      PHONE_CAM_START[0] + (PHONE_CAM_END[0] - PHONE_CAM_START[0]) * t,
+      PHONE_CAM_START[1] + (PHONE_CAM_END[1] - PHONE_CAM_START[1]) * t,
+      PHONE_CAM_START[2] + (PHONE_CAM_END[2] - PHONE_CAM_START[2]) * t
+    );
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
+    invalidate();
+  });
+
+  return null;
+}
+
+function PassportPhoneCanvas({ isPlaying }: { isPlaying: boolean }) {
+  const isActiveRef = useRef(false);
+  isActiveRef.current = isPlaying;
+
+  return (
+    <Canvas
+      frameloop="demand"
+      camera={{ position: PHONE_CAM_START, fov: 34 }}
+      gl={{ alpha: true }}
+      style={{ background: "transparent" }}
+    >
+      <PassportPhoneCameraRig isPlaying={isPlaying} />
+      <RenderController isActive={isActiveRef as React.RefObject<boolean>} />
+      <ambientLight intensity={0.8} />
+      <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
+      <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
+      <PresentationControls
+        global={true}
+        snap={false}
+        rotation={[0.05, 0, 0]}
+        polar={[-Math.PI / 8, Math.PI / 8]}
+        azimuth={[-Math.PI / 6, Math.PI / 6]}
+        config={{ mass: 4, tension: 120, friction: 40 }}
+      >
+        <IphoneVideoModel videoSrc={PASSPORT_PHONE_VIDEO} isPlaying={isPlaying} />
+      </PresentationControls>
+      <Environment files={STUDIO_HDR} />
+    </Canvas>
   );
 }
 
