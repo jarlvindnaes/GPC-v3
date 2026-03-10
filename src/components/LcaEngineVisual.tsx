@@ -127,8 +127,7 @@ export function LcaEngineVisual() {
       {/* Floating metric labels */}
       <motion.div
         className="absolute top-11 right-13 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
-        animate={{ y: [0, -6, 0], opacity: [0.7, 1, 0.7] }}
-        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
+        animate={{ y: [0, -6, 0] }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
       >
         <div className="flex items-start gap-2">
@@ -141,8 +140,7 @@ export function LcaEngineVisual() {
       </motion.div>
       <motion.div
         className="absolute bottom-17 left-9 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
-        animate={{ y: [0, 6, 0], opacity: [0.6, 1, 0.6] }}
-        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
+        animate={{ y: [0, 6, 0] }}
         transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
       >
         <div className="flex items-start gap-2">
@@ -155,8 +153,7 @@ export function LcaEngineVisual() {
       </motion.div>
       <motion.div
         className="absolute top-21 left-7 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
-        animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
-        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
+        animate={{ y: [0, -4, 0] }}
         transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
       >
         <div className="flex items-start gap-2">
@@ -169,8 +166,7 @@ export function LcaEngineVisual() {
       </motion.div>
       <motion.div
         className="absolute right-7 bottom-11 hidden select-none rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md sm:block"
-        animate={{ y: [0, 5, 0], opacity: [0.6, 1, 0.6] }}
-        whileHover={{ opacity: 1, transition: { duration: 0.4 } }}
+        animate={{ y: [0, 5, 0] }}
         transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 1.5 }}
       >
         <div className="flex items-start gap-2">

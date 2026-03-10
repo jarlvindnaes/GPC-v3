@@ -602,7 +602,7 @@ const commerceTooltips: PhoneTooltip[] = [
 
 const commerceCameraConfig: PhoneCameraConfig = {
   small: { position: [0.15, -0.15, 0.5], lookAt: [0, -0.35, 0] },
-  large: { position: [-1.5, -0.55, 0.9], lookAt: [0, -0.05, 0] }
+  large: { position: [-0.9, -0.55, 1.2], lookAt: [-0.14, -0.12, 0] }
 };
 
 /** Adjusts camera zoom and vertical framing based on canvas size. */
@@ -841,7 +841,7 @@ const dppTooltips: PhoneTooltip[] = [
 
 const dppCameraConfig: PhoneCameraConfig = {
   small: { position: [0.15, 0.48, 0.5], lookAt: [0, 0.33, 0] },
-  large: { position: [-0.075, 0, 2.2], lookAt: [-0.075, -0.05, 0] }
+  large: { position: [1.1, 0, 2.0], lookAt: [-0.04, -0.05, 0] }
 };
 
 /** QR module layout on a 21×21 grid (finder patterns + decorative data). */

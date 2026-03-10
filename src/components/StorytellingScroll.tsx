@@ -21,6 +21,11 @@ export function StorytellingScroll() {
 
   const lineProgress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
+  // Dot scrolls away naturally (not sticky) — mirrors the header text above
+  const dotY = useTransform(scrollYProgress, [0, 1], ["0vh", "-600vh"]);
+  // Accent connector grows upward from track top to stay connected to the moving dot
+  const extensionHeight = useTransform(scrollYProgress, [0, 1], ["0vh", "600vh"]);
+
   // Text opacities - 7 steps
   const op1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
   const text1Y = useTransform(scrollYProgress, [0, 0.05], ["15vh", "0vh"]);
@@ -101,8 +106,16 @@ export function StorytellingScroll() {
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
           <div className="absolute top-[45%] bottom-0 left-8 z-0 w-px bg-brand-dark md:left-1/2 md:-translate-x-1/2">
-            {/* Starting circle */}
-            <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-accent" />
+            {/* Starting circle - scrolls away naturally */}
+            <motion.div
+              className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-accent"
+              style={{ y: dotY }}
+            />
+            {/* Accent connector extending up from track top toward the scrolling dot */}
+            <motion.div
+              className="absolute bottom-full left-0 w-full bg-brand-accent"
+              style={{ height: extensionHeight }}
+            />
             <motion.div
               className="absolute top-0 right-0 left-0 bg-gradient-to-b from-brand-accent to-violet-500"
               style={{ height: lineProgress }}
@@ -183,7 +196,7 @@ export function StorytellingScroll() {
                 <div className="relative h-full w-full touch-none">
                   <FinishedProductCanvas fieldOfView={55} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md sm:flex md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
                   <div className="flex flex-col">
                     <p className="whitespace-nowrap font-semibold text-sm text-white">West Elm Slope Leather Chair</p>
                     <p className="mt-0.5 text-[11px] text-slate-400">247 components • 18 suppliers</p>
@@ -203,17 +216,17 @@ export function StorytellingScroll() {
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
                   <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:block md:bottom-6 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md sm:block md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <p className="whitespace-nowrap font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
                       <div className="mt-1 flex items-center gap-3">
-                        <span className="font-medium text-[10px] text-slate-500 uppercase tracking-wider">
+                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">
                           Material
                         </span>
                         <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
                         <span className="text-slate-700">·</span>
-                        <span className="font-medium text-[10px] text-slate-500 uppercase tracking-wider">Weight</span>
+                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Weight</span>
                         <span className="text-[11px] text-slate-300">24g</span>
                       </div>
                     </div>
@@ -261,21 +274,21 @@ export function StorytellingScroll() {
                 <div className="aspect-square w-[min(100%,70vw)] md:w-[min(100%,85vh)]">
                   <RawMaterialCanvas isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex md:bottom-6 md:px-5 md:py-3.5">
+                <div className="pointer-events-none absolute bottom-2 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md sm:flex md:bottom-6 md:px-5 md:py-3.5">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <p className="font-semibold text-sm text-white">Iron Ore - Raw Material</p>
                       <div className="mt-1 flex items-center gap-3">
-                        <span className="font-medium text-[10px] text-slate-500 uppercase tracking-wider">Origin</span>
+                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Origin</span>
                         <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
                         <span className="text-slate-700">·</span>
-                        <span className="font-medium text-[10px] text-slate-500 uppercase tracking-wider">Grade</span>
+                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Grade</span>
                         <span className="text-[11px] text-slate-300">Fe 65%</span>
                       </div>
                     </div>
                     <div className="flex flex-col items-center border-slate-600/40 border-l pl-3">
                       <span className="font-bold text-emerald-400 text-xs">✓</span>
-                      <span className="text-[9px] text-slate-500 uppercase">Verified</span>
+                      <span className="text-[9px] text-white uppercase">Verified</span>
                     </div>
                   </div>
                 </div>
