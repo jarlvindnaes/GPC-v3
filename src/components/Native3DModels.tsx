@@ -400,26 +400,34 @@ function PassportChairModel({
 
 export function PassportChairCanvas() {
   const [qrHovered, setQrHovered] = useState(false);
-  const [phoneHovered, setPhoneHovered] = useState(false);
   const [locked, setLocked] = useState(false);
   const containerReference = useRef<HTMLDivElement>(null);
   const isNearReference = useIsNearViewport(containerReference);
   const hideTimeout = useRef<ReturnType<typeof setTimeout>>(null);
 
-  // Debounced QR unhover — gives the mouse time to reach the phone
-  const handleQrHover = (value: boolean) => {
+  const cancelHide = () => {
     if (hideTimeout.current) {
       clearTimeout(hideTimeout.current);
       hideTimeout.current = null;
     }
+  };
+
+  const scheduleHide = () => {
+    cancelHide();
+    hideTimeout.current = setTimeout(() => setQrHovered(false), 200);
+  };
+
+  // QR hover triggers the phone; leaving either QR or phone schedules dismissal
+  const handleQrHover = (value: boolean) => {
     if (value) {
+      cancelHide();
       setQrHovered(true);
     } else {
-      hideTimeout.current = setTimeout(() => setQrHovered(false), 200);
+      scheduleHide();
     }
   };
 
-  const phoneVisible = locked || qrHovered || phoneHovered;
+  const phoneVisible = locked || qrHovered;
 
   return (
     <div
@@ -430,7 +438,7 @@ export function PassportChairCanvas() {
     >
       <Canvas
         frameloop="demand"
-        camera={{ position: [0, 0.3, 5], fov: 38 }}
+        camera={{ position: [0, 0.3, 5], fov: 42 }}
         gl={{ alpha: true }}
         style={{ background: "transparent" }}
       >
@@ -448,7 +456,7 @@ export function PassportChairCanvas() {
         >
           <PassportChairModel onHover={handleQrHover} onLock={() => setLocked(true)} />
         </PresentationControls>
-        <ContactShadows position={[0, -0.3, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
+        <ContactShadows position={[0, -1.1, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
         <Environment files={STUDIO_HDR} />
       </Canvas>
 
@@ -456,22 +464,22 @@ export function PassportChairCanvas() {
       <div
         className={`absolute top-1/2 right-[5%] z-20 -translate-y-1/2 cursor-grab transition-all duration-500 ease-out active:cursor-grabbing ${phoneVisible ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-16 opacity-0"}`}
         style={{ width: "min(400px, 75vw)", height: "min(720px, 90vh)" }}
-        onMouseEnter={() => setPhoneHovered(true)}
-        onMouseLeave={() => setPhoneHovered(false)}
+        onMouseEnter={cancelHide}
+        onMouseLeave={scheduleHide}
       >
         <PassportPhoneCanvas isPlaying={phoneVisible} />
         {/* Close button - top right corner of phone */}
         <button
           type="button"
           aria-label="Close phone preview"
-          className={`absolute top-[8%] right-[calc(22%-20px)] flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-brand-deep/80 text-slate-400 backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:text-white ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
+          className={`absolute top-[8%] right-[calc(22%-20px)] flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30 ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
           onClick={() => {
+            cancelHide();
             setLocked(false);
             setQrHovered(false);
-            setPhoneHovered(false);
           }}
         >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <title>Close</title>
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />

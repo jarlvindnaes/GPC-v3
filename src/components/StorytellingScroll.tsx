@@ -520,7 +520,7 @@ export function StorytellingScroll() {
         </div>
 
         {/* Subtle radial glow behind the chair */}
-        <div className="pointer-events-none absolute top-1/3 left-1/2 h-[min(100vw,800px)] w-[min(100vw,800px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/[0.03] blur-3xl" />
+        <div className="pointer-events-none absolute top-[45%] left-1/2 h-[min(80vw,640px)] w-[min(80vw,640px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/[0.12] blur-3xl" />
 
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-4 sm:px-6 lg:px-8">
           <motion.div
