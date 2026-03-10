@@ -348,10 +348,7 @@ export function FinishedProductCanvas({
   );
 }
 
-function PassportChairModel({
-  onHover,
-  onLock
-}: { onHover: (hovered: boolean) => void; onLock: () => void }) {
+function PassportChairModel({ onHover, onLock }: { onHover: (hovered: boolean) => void; onLock: () => void }) {
   const { scene } = useGLTF(CHAIR_MODEL);
   const passportScene = useMemo(() => scene.clone(), [scene]);
   return (
@@ -395,6 +392,104 @@ function PassportChairModel({
         </Html>
       </group>
     </Float>
+  );
+}
+
+/** Placeholder DPP screen content rendered on the HTML phone. */
+function PassportPhoneScreen() {
+  return (
+    <div
+      style={{
+        width: PHONE_SCREEN_WIDTH,
+        height: PHONE_SCREEN_HEIGHT,
+        background: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        color: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        padding: 24,
+        boxSizing: "border-box",
+        gap: 16,
+        overflow: "hidden"
+      }}
+    >
+      {/* Status bar spacer */}
+      <div style={{ height: 44 }} />
+
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 4 }}>
+        <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#94a3b8", marginBottom: 6 }}>
+          Digital Product Passport
+        </div>
+        <div style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.2 }}>Aeron Office Chair</div>
+        <div style={{ fontSize: 13, color: "#64748b", marginTop: 4 }}>ID: DPP-2024-00847</div>
+      </div>
+
+      {/* Product image placeholder */}
+      <div
+        style={{
+          height: 140,
+          borderRadius: 16,
+          background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
+          border: "1px solid rgba(148, 163, 184, 0.15)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 48
+        }}
+      >
+        🪑
+      </div>
+
+      {/* Data rows */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <DataRow label="Manufacturer" value="Product Connect" />
+        <DataRow label="Material" value="89% Recycled Aluminum" />
+        <DataRow label="Carbon Footprint" value="42.3 kg CO₂e" />
+        <DataRow label="Recyclability" value="94% Recyclable" accent="#34d399" />
+        <DataRow label="Country of Origin" value="Denmark 🇩🇰" />
+        <DataRow label="ESPR Compliant" value="✓ Verified" accent="#34d399" />
+      </div>
+
+      {/* Footer */}
+      <div style={{ marginTop: "auto", textAlign: "center", paddingBottom: 16 }}>
+        <div
+          style={{
+            display: "inline-block",
+            padding: "10px 24px",
+            borderRadius: 12,
+            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            fontSize: 14,
+            fontWeight: 600,
+            letterSpacing: 0.3
+          }}
+        >
+          View Full Passport →
+        </div>
+        <div style={{ fontSize: 11, color: "#475569", marginTop: 10 }}>
+          Powered by Product Connect
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DataRow({ label, value, accent }: { label: string; value: string; accent?: string }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 14px",
+        borderRadius: 10,
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(148, 163, 184, 0.08)"
+      }}
+    >
+      <span style={{ fontSize: 13, color: "#94a3b8" }}>{label}</span>
+      <span style={{ fontSize: 13, fontWeight: 600, color: accent || "#e2e8f0" }}>{value}</span>
+    </div>
   );
 }
 
@@ -461,13 +556,15 @@ export function PassportChairCanvas() {
           <Environment files={STUDIO_HDR} />
         </Canvas>
 
-        {/* 3D Phone with video - slides in on hover/tap, overlaps chair */}
+        {/* 3D Phone with HTML content - slides in on hover/tap, overlaps chair */}
         <div
           className={`absolute top-[28%] z-50 h-[min(580px,72vh)] w-[min(320px,82vw)] cursor-grab transition-all duration-500 ease-out active:cursor-grabbing sm:top-1/2 sm:right-[5%] sm:h-[min(720px,90vh)] sm:w-[min(400px,75vw)] ${phoneVisible ? "left-1/2 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100 sm:left-auto sm:translate-x-0" : "pointer-events-none left-1/2 -translate-x-1/2 -translate-y-[40%] scale-95 opacity-0 sm:left-auto sm:-translate-y-1/2 sm:scale-100 sm:translate-x-16"}`}
           onMouseEnter={cancelHide}
           onMouseLeave={scheduleHide}
         >
-          <PassportPhoneCanvas isPlaying={phoneVisible} />
+          <HtmlPhoneCanvas isPlaying={phoneVisible}>
+            <PassportPhoneScreen />
+          </HtmlPhoneCanvas>
           {/* Close button - top right corner of phone */}
           <button
             type="button"
@@ -479,7 +576,14 @@ export function PassportChairCanvas() {
               setQrHovered(false);
             }}
           >
-            <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <svg
+              className="h-4.5 w-4.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
               <title>Close</title>
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -929,6 +1033,372 @@ function IphoneVideoModel({ videoSrc, isPlaying }: { videoSrc: string; isPlaying
         <primitive object={scene} />
       </group>
     </Float>
+  );
+}
+
+// ── iPhone HTML Screen ───────────────────────────────────────────────────────
+//
+// Renders live HTML/CSS/JS on the 3D phone screen using a manual screen-space
+// projection with a CSS matrix3d homography.  This avoids drei's CSS3D
+// preserve-3d chain which triggers a Chrome compositing bug that causes content
+// to render at incorrect positions at certain viewport sizes.
+//
+// How it works:
+//   1. Four 3D corners of the display mesh are projected to 2D screen coords
+//      every frame via THREE.js camera projection.
+//   2. A perspective homography matrix is computed that maps the 375×812 CSS
+//      content rectangle onto the projected quadrilateral.
+//   3. The homography is converted to a CSS matrix3d() and applied directly
+//      to an absolutely-positioned overlay div — no preserve-3d needed.
+
+const PHONE_SCREEN_WIDTH = 375;
+const PHONE_SCREEN_HEIGHT = 812;
+
+// Reusable vectors — avoid allocations inside the render loop
+const _v = new Three.Vector3();
+const _camPos = new Three.Vector3();
+const _camDir = new Three.Vector3();
+
+/**
+ * Compute a CSS matrix3d that maps a (0,0)→(w,h) rectangle to a screen-space
+ * quadrilateral defined by four projected corner points.
+ *
+ * Corner order: TL(x0,y0)  TR(x1,y1)  BR(x2,y2)  BL(x3,y3)
+ */
+function computeHomographyMatrix3d(
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  x3: number,
+  y3: number,
+  w: number,
+  h: number
+): string {
+  // Standard rectangle-to-quadrilateral homography derivation
+  const dx1 = x1 - x2;
+  const dx2 = x3 - x2;
+  const sx = x0 - x1 + x2 - x3;
+  const dy1 = y1 - y2;
+  const dy2 = y3 - y2;
+  const sy = y0 - y1 + y2 - y3;
+
+  const det = dx1 * dy2 - dx2 * dy1;
+  if (Math.abs(det) < 1e-10) {
+    // Near-degenerate quad — return identity
+    return "matrix3d(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1)";
+  }
+
+  const g = (sx * dy2 - dx2 * sy) / det;
+  const hh = (dx1 * sy - sx * dy1) / det;
+
+  // Homography for unit square → quad  (3×3)
+  const a = x1 - x0 + g * x1;
+  const b = x3 - x0 + hh * x3;
+  const c = x0;
+  const d = y1 - y0 + g * y1;
+  const e = y3 - y0 + hh * y3;
+  const f = y0;
+
+  // Scale from [0,w]×[0,h] → [0,1]×[0,1] by dividing row entries
+  const aw = a / w;
+  const bh = b / h;
+  const dw = d / w;
+  const eh = e / h;
+  const gw = g / w;
+  const hh2 = hh / h;
+
+  // Embed 3×3 homography into 4×4 (column-major for CSS matrix3d)
+  //   | aw  bh  0  c |        CSS column-major:
+  //   | dw  eh  0  f |        matrix3d(m00,m10,m20,m30, m01,m11,m21,m31, ...)
+  //   | 0   0   1  0 |
+  //   | gw  hh2 0  1 |
+  return `matrix3d(${aw},${dw},0,${gw}, ${bh},${eh},0,${hh2}, 0,0,1,0, ${c},${f},0,1)`;
+}
+
+/**
+ * Runs inside the R3F Canvas.  Every frame it projects the four corners of the
+ * phone display to screen coordinates, computes a perspective-correct CSS
+ * matrix3d, and applies it directly to the DOM overlay element.
+ */
+function ScreenProjector({
+  screenGroupRef,
+  overlayRef,
+  halfW,
+  halfH
+}: {
+  screenGroupRef: React.RefObject<Three.Group | null>;
+  overlayRef: React.RefObject<HTMLDivElement | null>;
+  /** Half-width of the display mesh in 3D units */
+  halfW: number;
+  /** Half-height of the display mesh in 3D units */
+  halfH: number;
+}) {
+  const { camera, size } = useThree();
+
+  // Local corner offsets (relative to the display centre group)
+  // Order: TL, TR, BR, BL  (Y+ = up in 3D, maps to top of screen)
+  const corners = useMemo(
+    () => [
+      new Three.Vector3(-halfW, +halfH, 0), // TL
+      new Three.Vector3(+halfW, +halfH, 0), // TR
+      new Three.Vector3(+halfW, -halfH, 0), // BR
+      new Three.Vector3(-halfW, -halfH, 0) // BL
+    ],
+    [halfW, halfH]
+  );
+
+  useFrame(() => {
+    const group = screenGroupRef.current;
+    const overlay = overlayRef.current;
+    if (!group || !overlay) {
+      return;
+    }
+
+    camera.updateMatrixWorld();
+    group.updateWorldMatrix(true, false);
+
+    // Check if display centre is behind the camera
+    _v.setFromMatrixPosition(group.matrixWorld);
+    _camPos.setFromMatrixPosition(camera.matrixWorld);
+    camera.getWorldDirection(_camDir);
+    const delta = _v.clone().sub(_camPos);
+    if (delta.dot(_camDir) <= 0) {
+      overlay.style.display = "none";
+      return;
+    }
+    overlay.style.display = "block";
+
+    // Project four corners to screen coordinates
+    const projected: [number, number][] = [];
+    for (const corner of corners) {
+      _v.copy(corner).applyMatrix4(group.matrixWorld);
+      _v.project(camera);
+      projected.push([(_v.x * 0.5 + 0.5) * size.width, (-_v.y * 0.5 + 0.5) * size.height]);
+    }
+
+    const [tl, tr, br, bl] = projected;
+
+    // Compute CSS matrix3d from content rect → projected quad
+    const matrix = computeHomographyMatrix3d(
+      tl[0],
+      tl[1],
+      tr[0],
+      tr[1],
+      br[0],
+      br[1],
+      bl[0],
+      bl[1],
+      PHONE_SCREEN_WIDTH,
+      PHONE_SCREEN_HEIGHT
+    );
+
+    overlay.style.transform = matrix;
+  });
+
+  return null;
+}
+
+// ── iPhone HTML (live React content on the phone screen) ─────────────────────
+
+function IphoneHtmlModel({ overlayRef }: { overlayRef: React.RefObject<HTMLDivElement | null> }) {
+  const { scene: originalScene } = useGLTF(IPHONE_MODEL);
+  const screenGroupRef = useRef<Three.Group>(null);
+
+  const { scene, offset, screenCenter, halfW, halfH } = useMemo(() => {
+    const cloned = originalScene.clone(true);
+
+    // Read display mesh centre and dimensions before modifying materials
+    const displayCenter = new Three.Vector3();
+    let displayW = 0.36; // fallback
+    let displayH = 0.787; // fallback
+    cloned.traverse((child) => {
+      if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
+        const box = new Three.Box3().setFromObject(child);
+        box.getCenter(displayCenter);
+        const sz = box.getSize(new Three.Vector3());
+        displayW = sz.x;
+        displayH = sz.y;
+      }
+    });
+
+    // Hide the second phone copy (all 002 nodes).
+    cloned.traverse((child) => {
+      if (child.name.includes("002")) {
+        child.visible = false;
+      }
+      if ((child as Three.Mesh).isMesh) {
+        const mat = (child as Three.Mesh).material as Three.MeshStandardMaterial;
+        if (mat) {
+          mat.side = Three.DoubleSide;
+        }
+      }
+      // Glass overlay — solid black, same treatment as IphoneVideoModel.
+      // The HTML overlay is a CSS layer on top of the canvas, so the glass
+      // doesn't block it. Keeping it opaque prevents see-through holes.
+      if (child.name === "Glass_over_display001_Glass_0" && (child as Three.Mesh).isMesh) {
+        const mesh = child as Three.Mesh;
+        const mat = mesh.material as Three.MeshPhysicalMaterial;
+        mat.transmission = 0;
+        mat.transparent = false;
+        mat.opacity = 1;
+        mat.color = new Three.Color(0x000000);
+        mat.roughness = 0.3;
+        mat.metalness = 0;
+        mat.depthWrite = false;
+        mat.blending = Three.NormalBlending;
+        mesh.renderOrder = 1;
+      }
+      // Display — black backing surface behind the HTML overlay
+      if (child.name === "Display001_display_0" && (child as Three.Mesh).isMesh) {
+        const mesh = child as Three.Mesh;
+        mesh.material = new Three.MeshPhysicalMaterial({
+          color: new Three.Color(0x000000),
+          roughness: 1.0,
+          metalness: 0,
+          envMapIntensity: 0.0
+        });
+      }
+    });
+
+    // Center the model
+    const visibleBox = new Three.Box3();
+    cloned.traverse((child) => {
+      if ((child as Three.Mesh).isMesh && child.visible) {
+        visibleBox.expandByObject(child);
+      }
+    });
+    const center = visibleBox.getCenter(new Three.Vector3());
+
+    return {
+      scene: cloned,
+      offset: [-center.x, -center.y, -center.z] as [number, number, number],
+      // Display centre, nudged forward (+Z) so HTML sits in front of backing
+      screenCenter: [displayCenter.x, displayCenter.y, displayCenter.z + 0.003] as [number, number, number],
+      halfW: displayW / 2,
+      halfH: displayH / 2
+    };
+  }, [originalScene]);
+
+  return (
+    <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
+      <group position={offset}>
+        <primitive object={scene} />
+        {/* Invisible group at display centre — ScreenProjector reads its
+             matrixWorld to project the four display corners each frame. */}
+        <group ref={screenGroupRef} position={screenCenter} />
+      </group>
+      <ScreenProjector screenGroupRef={screenGroupRef} overlayRef={overlayRef} halfW={halfW} halfH={halfH} />
+    </Float>
+  );
+}
+
+/**
+ * Renders a 3D iPhone with live HTML/CSS/JS content projected onto the screen
+ * via 4-corner homography (CSS matrix3d).  Pass any React tree as children and
+ * it will appear on the phone display, tracking rotation and perspective.
+ *
+ * When `isPlaying` is provided, the camera animates from an orbited position to
+ * front-on (reusing `PassportPhoneCameraRig`) and rendering is gated to that
+ * prop.  When omitted (e.g. on the test page) the phone renders immediately.
+ *
+ * Uses `frameloop="demand"` + `RenderController` (same pattern as every other
+ * canvas in this file) for StrictMode-safe rendering.
+ */
+export function HtmlPhoneCanvas({ children, isPlaying }: { children: React.ReactNode; isPlaying?: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const isNearRef = useIsNearViewport(containerRef);
+
+  // When isPlaying is provided, gate rendering on it; otherwise use viewport visibility
+  const hasPlayingProp = isPlaying !== undefined;
+  const isActiveRef = useRef(false);
+  isActiveRef.current = hasPlayingProp ? isPlaying : true;
+  const effectiveActiveRef = hasPlayingProp ? (isActiveRef as React.RefObject<boolean>) : isNearRef;
+
+  // Camera: start orbited when isPlaying is used, front-on otherwise
+  const cameraPosition = hasPlayingProp ? PHONE_CAM_START : PHONE_CAM_END;
+
+  return (
+    <div
+      ref={containerRef}
+      role="img"
+      aria-label="3D iPhone with interactive content"
+      className="relative h-full w-full cursor-grab active:cursor-grabbing"
+    >
+      <Canvas
+        frameloop="demand"
+        camera={{ position: cameraPosition, fov: 34 }}
+        gl={{ alpha: true }}
+        style={{ background: "transparent" }}
+      >
+        {hasPlayingProp && <PassportPhoneCameraRig isPlaying={isPlaying} />}
+        <RenderController isActive={effectiveActiveRef} />
+        <ambientLight intensity={0.8} />
+        <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
+        <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
+        <PresentationControls
+          global={true}
+          snap={false}
+          rotation={[0.05, 0, 0]}
+          polar={[-Math.PI / 6, Math.PI / 6]}
+          azimuth={[-Math.PI / 4, Math.PI / 4]}
+          config={{ mass: 4, tension: 120, friction: 40 }}
+        >
+          <IphoneHtmlModel overlayRef={overlayRef} />
+        </PresentationControls>
+        <Environment files={STUDIO_HDR} />
+      </Canvas>
+
+      {/* HTML overlay — positioned via 4-corner homography projection.
+           A CSS matrix3d maps the content rect onto the projected display
+           quadrilateral each frame.  No preserve-3d = no Chrome CSS3D bug. */}
+      <div
+        ref={overlayRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          transformOrigin: "0 0",
+          pointerEvents: "none",
+          display: "none"
+        }}
+      >
+        <div
+          style={{
+            width: PHONE_SCREEN_WIDTH,
+            height: PHONE_SCREEN_HEIGHT,
+            overflow: "hidden",
+            borderRadius: 62,
+            background: "#000",
+            pointerEvents: "auto",
+            userSelect: "none",
+            WebkitUserSelect: "none",
+            position: "relative"
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          {children}
+          {/* Dynamic Island — black pill at top center, rendered above content */}
+          <div
+            style={{
+              position: "absolute",
+              top: 13,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 126,
+              height: 37,
+              borderRadius: 19,
+              background: "#000",
+              zIndex: 10,
+              pointerEvents: "none"
+            }}
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 
