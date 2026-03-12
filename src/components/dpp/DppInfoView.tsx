@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { DppCollapsibleSection } from "./DppCollapsibleSection";
 import { brandConfig } from "./dppBrandConfig";
 import { uiIcons } from "./dppIcons";
-import { aivenTable } from "./dppProductData";
+import { slopeChair } from "./dppProductData";
 
-const data = aivenTable;
+const data = slopeChair;
 
 /** Simple inline divider */
 function Divider() {
@@ -15,9 +15,6 @@ const specifications = [
   { label: "Product Name", value: data.categorization.modelName },
   { label: "Category", value: `${data.categorization.category} / ${data.categorization.subCategory}` },
   { label: "Manufacturer", value: data.identity.brandName },
-  { label: "Facility", value: data.production.facilityName },
-  { label: "Manufacturing Location", value: data.production.manufacturingLocation },
-  { label: "Country of Origin", value: data.production.countryOfOrigin },
   {
     label: "Dimensions",
     lines: [
@@ -30,11 +27,7 @@ const specifications = [
     label: "Weight",
     value: `${data.materialsAndComponents.totalWeight.value} ${data.materialsAndComponents.totalWeight.unit}`
   },
-  { label: "Timber", value: data.materialsAndComponents.primaryMaterial },
-  { label: "Finish", value: data.materialsAndComponents.finish },
-  ...(data.categorization.color ? [{ label: "Colour", value: data.categorization.color }] : []),
-  { label: "Expected Lifetime", value: data.lifecycleAndMaintenance.expectedLifetime },
-  { label: "Warranty", value: data.lifecycleAndMaintenance.warranty }
+  ...(data.categorization.color ? [{ label: "Colour", value: data.categorization.color }] : [])
 ];
 
 interface DppInfoViewProps {
@@ -45,7 +38,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   const [specificationsOpen, setSpecificationsOpen] = useState(false);
-  const [benchmarkOpen, setBenchmarkOpen] = useState(false);
+  const [companyOpen, setCompanyOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(true);
 
   useEffect(() => {
@@ -57,10 +50,10 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
   return (
     <div className="relative w-full pb-[80px]">
       {/* Hero Image */}
-      <div className="aspect-[600/400] relative shrink-0 w-full" data-name="big 1">
+      <div className="shrink-0 w-full" data-name="big 1">
         <img
           alt={`${data.categorization.displayName} — ${data.categorization.category.toLowerCase()} by ${data.identity.brandName}`}
-          className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
+          className="w-full block pointer-events-none"
           src={data.commerce.photographs.hero}
         />
       </div>
@@ -70,7 +63,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         className="px-[16px] py-[24px] w-full font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[16px] text-[rgba(0,4,24,0.58)] text-nowrap whitespace-pre font-width-normal"
         data-name="Title"
       >
-        <h1 className="font-['SF_Pro:Medium',sans-serif] font-[510] mb-0 text-[rgba(0,7,19,0.62)] text-[16px] leading-[24px] font-width-normal">
+        <h1 className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 text-[rgba(0,7,19,0.62)] text-[16px] leading-[24px] font-width-normal">
           {data.categorization.displayName}
         </h1>
         <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -96,7 +89,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
                 key={index}
                 className="font-['SF_Pro:Medium',sans-serif] font-[510] h-[52px] relative shrink-0 text-nowrap w-full whitespace-pre"
               >
-                <p className="absolute leading-[24px] left-0 text-[16px] text-[rgba(0,7,19,0.62)] top-[6px] font-width-normal">
+                <p className="absolute font-['SF_Pro:Bold',sans-serif] font-bold leading-[24px] left-0 text-[16px] text-[rgba(0,7,19,0.62)] top-[6px] font-width-normal">
                   {event.title}
                 </p>
                 <time
@@ -104,8 +97,8 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
                   className="absolute leading-[20px] left-0 text-[14px] text-[rgba(0,4,24,0.58)] top-[28px] block font-width-normal"
                 >
                   {new Date(event.date).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
+                    day: "numeric",
+                    month: "long",
                     year: "numeric"
                   })}
                 </time>
@@ -197,10 +190,10 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={specificationsOpen}
         onToggle={() => setSpecificationsOpen(!specificationsOpen)}
       >
-        <dl className="font-['SF_Pro:Regular','Noto_Sans:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] m-0 font-width-normal">
+        <dl className="font-['SF_Pro:Regular','Noto_Sans:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] m-0 font-width-normal">
           {specifications.map((spec, index) => (
             <React.Fragment key={index}>
-              <dt className="font-['SF_Pro:Semibold','Noto_Sans:Regular',sans-serif] font-[590] mb-0 font-width-normal">
+              <dt className="font-['SF_Pro:Bold','Noto_Sans:Regular',sans-serif] font-bold mb-0 font-width-normal">
                 {spec.label}
               </dt>
               <dd className="mb-0 ml-0">
@@ -228,14 +221,14 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         onToggle={() => setDescriptionOpen(!descriptionOpen)}
       >
         <div className="flex flex-col gap-[24px] w-full pb-[20px]">
-          <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,5,9,0.89)] w-full whitespace-pre-wrap font-width-normal">
+          <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,5,9,0.89)] w-full whitespace-pre-wrap font-width-normal">
             {data.commerce.description}
           </p>
           {data.commerce.photographs.dimensionsDiagram && (
-            <figure className="aspect-[1757/709] relative shrink-0 w-full m-0" data-name="image_01 1">
+            <figure className="shrink-0 w-full m-0" data-name="image_01 1">
               <img
                 alt={`Dimensions diagram: H ${data.categorization.dimensions.height.value}${data.categorization.dimensions.height.unit} × W ${data.categorization.dimensions.width.value}${data.categorization.dimensions.width.unit} × D ${data.categorization.dimensions.depth.value}${data.categorization.dimensions.depth.unit}`}
-                className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
+                className="w-full block pointer-events-none"
                 src={data.commerce.photographs.dimensionsDiagram}
               />
             </figure>
@@ -245,13 +238,13 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       <Divider />
 
-      {/* Benchmark Section */}
+      {/* Company Section */}
       <DppCollapsibleSection
         title={data.company.contact.companyName}
-        isOpen={benchmarkOpen}
-        onToggle={() => setBenchmarkOpen(!benchmarkOpen)}
+        isOpen={companyOpen}
+        onToggle={() => setCompanyOpen(!companyOpen)}
       >
-        <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full whitespace-pre-wrap pb-[20px] font-width-normal">
+        <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full whitespace-pre-wrap pb-[20px] font-width-normal">
           {data.company.description}
         </p>
       </DppCollapsibleSection>
@@ -260,10 +253,10 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       {/* Image 1 */}
       {data.commerce.photographs.lifestyle && (
-        <div className="aspect-[577/384] relative shrink-0 w-full" data-name="image 1">
+        <div className="shrink-0 w-full" data-name="image 1">
           <img
             alt={`${data.categorization.displayName} in a lifestyle setting`}
-            className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
+            className="w-full block pointer-events-none"
             src={data.commerce.photographs.lifestyle}
           />
         </div>
@@ -273,7 +266,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       {/* Contact Us Section */}
       <DppCollapsibleSection title="Contact Us" isOpen={contactOpen} onToggle={() => setContactOpen(!contactOpen)}>
-        <address className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] not-italic font-width-normal">
+        <address className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] not-italic font-width-normal">
           <p className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 font-width-normal">{"Workshop & Offices: "}</p>
           <p className="mb-0">{`${data.company.contact.companyName} `}</p>
           {data.company.contact.addressLines.map((line, index) => (

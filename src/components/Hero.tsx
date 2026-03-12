@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { useSectionMouse } from "../utilities/useSectionMouse";
+import { ChairPhoneShowcase } from "./ChairPhoneShowcase";
 import { WebsiteButton } from "./WebsiteButton";
 
 interface NetworkNode {
@@ -275,43 +276,57 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 z-[1] bg-white [mask-image:radial-gradient(ellipse_at_30%_50%,black_0%,black_40%,transparent_75%)]" />
 
       <div className="relative z-[2] mx-auto max-w-7xl px-4 pt-32 pb-32 sm:px-6 md:pt-48 md:pb-32 lg:px-8">
-        <div className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-accent/20 bg-brand-accent/10 px-3 py-1 font-semibold text-brand-accent text-sm backdrop-blur-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-accent opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-accent"></span>
-              </span>
-              ESPR 2026 Ready
-            </div>
-            <h1 className="mb-8 font-bold font-display text-[1.7rem] text-brand-darkest leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
-              Revolutionize Furniture Manufacturing with{" "}
-              <span
-                ref={textRef}
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--color-brand-accent), var(--color-brand-violet))"
-                }}
-              >
-                Product Connect.
-              </span>
-            </h1>
-            <p className="mb-12 max-w-2xl font-medium text-brand-text text-lg leading-relaxed md:text-xl">
-              Streamline your supply chain, integrate data seamlessly, and track environmental impact. The
-              infrastructure that gives intelligence to physical products.
-            </p>
-            <div className="flex flex-col gap-5 sm:flex-row">
-              <WebsiteButton icon={ArrowRight}>Start Building</WebsiteButton>
-              <WebsiteButton variant="secondary" icon={PlayCircle} iconPosition="left">
-                Book a Demo
-              </WebsiteButton>
-            </div>
-          </motion.div>
+        <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:gap-12">
+          {/* Left column — text */}
+          <div className="max-w-4xl lg:w-1/2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-accent/20 bg-brand-accent/10 px-3 py-1 font-semibold text-brand-accent text-sm backdrop-blur-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-accent opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-accent"></span>
+                </span>
+                ESPR 2026 Ready
+              </div>
+              <h1 className="mb-8 font-bold font-display text-[1.7rem] text-brand-darkest leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
+                Revolutionize Furniture Manufacturing with{" "}
+                <span
+                  ref={textRef}
+                  className="bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--color-brand-accent), var(--color-brand-violet))"
+                  }}
+                >
+                  Product Connect.
+                </span>
+              </h1>
+              <p className="mb-12 max-w-2xl font-medium text-brand-text text-lg leading-relaxed md:text-xl">
+                Streamline your supply chain, integrate data seamlessly, and track environmental impact. The
+                infrastructure that gives intelligence to physical products.
+              </p>
+              <div className="flex flex-col gap-5 sm:flex-row">
+                <WebsiteButton icon={ArrowRight}>Start Building</WebsiteButton>
+                <WebsiteButton variant="secondary" icon={PlayCircle} iconPosition="left">
+                  Book a Demo
+                </WebsiteButton>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right column — interactive 3D chair with DPP phone */}
+          <div className="pointer-events-auto lg:w-1/2">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ChairPhoneShowcase buttonStyle="dark" />
+            </motion.div>
+          </div>
         </div>
 
         {/* Scroll Indicator */}

@@ -2,10 +2,10 @@ import { AnimatePresence, motion, useMotionValue, useTransform } from "motion/re
 import type React from "react";
 import { useEffect, useState } from "react";
 import { brandConfig } from "./dppBrandConfig";
-import { aivenTable } from "./dppProductData";
+import { slopeChair } from "./dppProductData";
 import type { PurchasablePart } from "./dppTypes";
 
-const data = aivenTable;
+const data = slopeChair;
 
 const parts: Record<string, PurchasablePart> = {};
 for (const part of data.materialsAndComponents.purchasableParts) {
@@ -77,10 +77,10 @@ export function DppProductView({ scrollRef }: DppProductViewProps) {
   return (
     <div className="relative bg-white w-full min-h-full">
       {/* Hero Product Image */}
-      <div className="aspect-[600/400] relative w-full">
+      <div className="w-full">
         <img
           alt={`${data.categorization.displayName} by ${data.identity.brandName}`}
-          className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
+          className="w-full block pointer-events-none"
           src={data.commerce.photographs.hero}
         />
       </div>
@@ -117,7 +117,7 @@ export function DppProductView({ scrollRef }: DppProductViewProps) {
                 <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] text-[11px] text-[rgba(0,7,19,0.58)] leading-[16px] mb-[4px] font-width-normal">
                   {p.weight} · {p.material}
                 </p>
-                <p className="font-['SF_Pro:Semibold',sans-serif] font-[590] text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px] font-width-normal">
+                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px] font-width-normal">
                   {p.price}
                 </p>
               </div>
@@ -211,7 +211,7 @@ export function DppProductView({ scrollRef }: DppProductViewProps) {
                     <p className="font-['SF_Pro:Regular',sans-serif] font-normal text-[14px] text-[rgba(0,4,29,0.58)] leading-[20px] mb-[4px] font-width-normal">
                       {part.weight} · {part.material}
                     </p>
-                    <p className="font-['SF_Pro:Semibold',sans-serif] font-[590] text-[18px] text-[rgba(0,7,19,0.72)] leading-[24px] font-width-normal">
+                    <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[18px] text-[rgba(0,7,19,0.72)] leading-[24px] font-width-normal">
                       {part.price}
                     </p>
                   </div>

@@ -13,7 +13,7 @@ import { WebsiteButton } from "./WebsiteButton";
  * calls invalidate, so the Canvas does zero GPU work - no useFrame callbacks
  * run, no scene renders, drei's Float/PresentationControls are fully paused.
  */
-function RenderController({ isActive }: { isActive: React.RefObject<boolean> }) {
+export function RenderController({ isActive }: { isActive: React.RefObject<boolean> }) {
   const invalidate = useThree((state) => state.invalidate);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: isActive is a stable ref read inside rAF
@@ -32,12 +32,12 @@ function RenderController({ isActive }: { isActive: React.RefObject<boolean> }) 
   return null;
 }
 
-const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
+export const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
 const CHAIR_WIREFRAME_MODEL = `${import.meta.env.BASE_URL}models/chair-wireframe.glb`;
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
 const EMERALD_MODEL = `${import.meta.env.BASE_URL}models/emerald_in_quartz__for_games.glb`;
 const IPHONE_MODEL = `${import.meta.env.BASE_URL}models/iphone_17_pro_max.glb`;
-const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
+export const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
 const PASSPORT_PHONE_VIDEO = `${import.meta.env.BASE_URL}videos/passport-demo.mp4`;
 
 function CustomRockModel({ isActiveReference }: { isActiveReference: React.RefObject<boolean> }) {
@@ -345,168 +345,6 @@ export function FinishedProductCanvas({
           <WireframeChairModel isActiveReference={effectiveReference} />
         </PresentationControls>
       </Canvas>
-    </div>
-  );
-}
-
-function PassportChairModel({ onHover, onLock }: { onHover: (hovered: boolean) => void; onLock: () => void }) {
-  const { scene } = useGLTF(CHAIR_MODEL);
-  const passportScene = useMemo(() => scene.clone(), [scene]);
-  return (
-    <Float floatIntensity={0.8} rotationIntensity={0.03} speed={1.2}>
-      <group position={[0, -1.0, 0]}>
-        <primitive object={passportScene} scale={3.17} />
-        {/* QR tag on the seat - positioned in 3D space */}
-        <Html position={[0.0, 1.13, 0.35]} center={true} zIndexRange={[10, 0]}>
-          <button
-            type="button"
-            aria-label="View Digital Product Passport"
-            className="relative cursor-pointer border-none bg-transparent p-0"
-            onMouseEnter={() => onHover(true)}
-            onMouseLeave={() => onHover(false)}
-            onClick={() => onLock()}
-            onTouchStart={() => onLock()}
-          >
-            {/* Radiating rings */}
-            <div className="absolute -inset-5 animate-[ping_3s_ease-in-out_infinite] rounded-full border border-indigo-400/25" />
-            <div className="absolute -inset-10 animate-[ping_3s_ease-in-out_0.5s_infinite] rounded-full border border-indigo-400/12" />
-            {/* Glow halo */}
-            <div className="absolute -inset-3 animate-pulse rounded-full bg-indigo-500/20 blur-md" />
-            {/* Core QR icon */}
-            <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_20px_rgba(99,102,241,0.6)] ring-2 ring-white/30">
-              <QrCode className="h-6 w-6 text-white" />
-            </div>
-            {/* Floating particles */}
-            {[0, 1, 2, 3].map((particleIndex) => (
-              <div
-                key={particleIndex}
-                className="absolute h-1.5 w-1.5 rounded-full bg-indigo-400"
-                style={{
-                  left: `${Math.cos((particleIndex * 90 * Math.PI) / 180) * 30 + 20}px`,
-                  top: `${Math.sin((particleIndex * 90 * Math.PI) / 180) * 30 + 20}px`,
-                  animation: `pulse 2s ease-in-out ${particleIndex * 0.4}s infinite`,
-                  opacity: 0.5
-                }}
-              />
-            ))}
-          </button>
-        </Html>
-      </group>
-    </Float>
-  );
-}
-
-
-export function PassportChairCanvas() {
-  const [qrHovered, setQrHovered] = useState(false);
-  const [locked, setLocked] = useState(false);
-  const containerReference = useRef<HTMLDivElement>(null);
-  const isNearReference = useIsNearViewport(containerReference);
-  const hideTimeout = useRef<ReturnType<typeof setTimeout>>(null);
-
-  const cancelHide = () => {
-    if (hideTimeout.current) {
-      clearTimeout(hideTimeout.current);
-      hideTimeout.current = null;
-    }
-  };
-
-  const scheduleHide = () => {
-    cancelHide();
-    hideTimeout.current = setTimeout(() => setQrHovered(false), 200);
-  };
-
-  // QR hover triggers the phone; leaving either QR or phone schedules dismissal
-  const handleQrHover = (value: boolean) => {
-    if (value) {
-      cancelHide();
-      setQrHovered(true);
-    } else {
-      scheduleHide();
-    }
-  };
-
-  const phoneVisible = locked || qrHovered;
-
-  return (
-    <div className="relative">
-      <div
-        ref={containerReference}
-        role="img"
-        aria-label="Interactive 3D chair with product passport"
-        className="relative mx-auto h-[min(80vw,600px)] w-[min(90vw,800px)]"
-      >
-        <Canvas
-          frameloop="demand"
-          camera={{ position: [0, 0.3, 5], fov: 42 }}
-          gl={{ alpha: true }}
-          style={{ background: "transparent" }}
-        >
-          <RenderController isActive={isNearReference} />
-          <ambientLight intensity={0.8} />
-          <spotLight position={[6, 10, 6]} angle={0.2} penumbra={1} intensity={3} color="#fff8f0" />
-          <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
-          <PresentationControls
-            global={true}
-            snap={false}
-            rotation={[0.08, -Math.PI / 4, 0]}
-            polar={[-Math.PI / 6, Math.PI / 6]}
-            azimuth={[-Math.PI / 3, Math.PI / 3]}
-            config={{ mass: 6, tension: 80, friction: 50 }}
-          >
-            <PassportChairModel onHover={handleQrHover} onLock={() => setLocked(true)} />
-          </PresentationControls>
-          <ContactShadows position={[0, -1.1, 0]} opacity={0.3} scale={14} blur={3} far={6} color="#000" />
-          <Environment files={STUDIO_HDR} />
-        </Canvas>
-
-        {/* 3D Phone with HTML content - slides in on hover/tap, overlaps chair */}
-        <div
-          className={`absolute top-[28%] z-50 h-[min(580px,72vh)] w-[min(320px,82vw)] cursor-grab transition-all duration-500 ease-out active:cursor-grabbing sm:top-1/2 sm:right-[5%] sm:h-[min(720px,90vh)] sm:w-[min(400px,75vw)] ${phoneVisible ? "left-1/2 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100 sm:left-auto sm:translate-x-0" : "pointer-events-none left-1/2 -translate-x-1/2 -translate-y-[40%] scale-95 opacity-0 sm:left-auto sm:-translate-y-1/2 sm:scale-100 sm:translate-x-16"}`}
-          onMouseEnter={cancelHide}
-          onMouseLeave={scheduleHide}
-        >
-          <HtmlPhoneCanvas isPlaying={phoneVisible} statusBarStyle="dark">
-            <DppApp />
-          </HtmlPhoneCanvas>
-          {/* Close button - top right corner of phone */}
-          <button
-            type="button"
-            aria-label="Close phone preview"
-            className={`absolute top-[8%] right-[calc(22%-20px)] flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30 sm:h-11 sm:w-11 ${locked ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"}`}
-            onClick={() => {
-              cancelHide();
-              setLocked(false);
-              setQrHovered(false);
-            }}
-          >
-            <svg
-              className="h-4.5 w-4.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            >
-              <title>Close</title>
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Hint label - outside canvas container to avoid stacking issues, clickable on mobile */}
-      <button
-        type="button"
-        onClick={() => setLocked(true)}
-        className={`mx-auto block cursor-pointer border-none bg-transparent pt-1 transition-all duration-300 sm:pointer-events-none ${phoneVisible ? "pointer-events-none translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
-      >
-        <p className="whitespace-nowrap text-center text-slate-500 text-xs">
-          <span className="hidden sm:inline">Hover</span>
-          <span className="sm:hidden">Tap</span> the tag to explore
-        </p>
-      </button>
     </div>
   );
 }
@@ -1329,11 +1167,21 @@ export function HtmlPhoneCanvas({
   children,
   isPlaying,
   statusBarStyle = "light",
+  noChrome = false,
+  resetKey = 0,
+  rotation = [0.05, 0, 0],
 }: {
   children: React.ReactNode;
   isPlaying?: boolean;
   /** "light" = white icons/clock (for dark backgrounds), "dark" = dark icons/clock (for light backgrounds) */
   statusBarStyle?: "light" | "dark";
+  /** When true, skip rendering the built-in status bar chrome (Dynamic Island, clock, icons).
+   *  Use this when children already include their own phone chrome (e.g. DppPhoneScreen). */
+  noChrome?: boolean;
+  /** Change this value to force-reset the 3D phone rotation back to default (remounts PresentationControls). */
+  resetKey?: number;
+  /** Default rotation for the 3D phone [x, y, z]. Use a Y value > 0 to show it from the side. */
+  rotation?: [number, number, number];
 }) {
   const statusBarColor = statusBarStyle === "light" ? "#E8E8E8" : "#1B1B1B";
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1349,16 +1197,39 @@ export function HtmlPhoneCanvas({
   // Camera: start orbited when isPlaying is used, front-on otherwise
   const cameraPosition = hasPlayingProp ? PHONE_CAM_START : PHONE_CAM_END;
 
+  // Trap wheel events inside the phone overlay so scroll never leaks to the main page.
+  // React's onWheel stopPropagation is not enough — the browser's native scroll chaining
+  // still fires when the inner scroll container hits a boundary. We need a native listener
+  // with { passive: false } so we can call preventDefault() at the boundary.
+  const phoneContentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = phoneContentRef.current;
+    if (!el) return;
+    const handleWheel = (e: WheelEvent) => {
+      e.stopPropagation();
+      // Find the scrollable child (DppApp scroll container)
+      const scroller = el.querySelector<HTMLElement>("[data-phone-scroll]") ?? el;
+      const { scrollTop, scrollHeight, clientHeight } = scroller;
+      const atTop = scrollTop <= 0 && e.deltaY < 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1 && e.deltaY > 0;
+      if (atTop || atBottom) {
+        e.preventDefault();
+      }
+    };
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, []);
+
   return (
     <div
       ref={containerRef}
       role="img"
       aria-label="3D iPhone with interactive content"
-      className="relative h-full w-full cursor-grab active:cursor-grabbing"
+      className="relative h-full w-full cursor-grab active:cursor-grabbing overflow-hidden"
     >
       <Canvas
         frameloop="demand"
-        camera={{ position: cameraPosition, fov: 34 }}
+        camera={{ position: cameraPosition, fov: 30 }}
         gl={{ alpha: true }}
         style={{ background: "transparent" }}
       >
@@ -1368,9 +1239,10 @@ export function HtmlPhoneCanvas({
         <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
         <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
         <PresentationControls
+          key={resetKey}
           global={true}
           snap={false}
-          rotation={[0.05, 0, 0]}
+          rotation={rotation}
           polar={[-Math.PI / 6, Math.PI / 6]}
           azimuth={[-Math.PI / 4, Math.PI / 4]}
           config={{ mass: 4, tension: 120, friction: 40 }}
@@ -1395,6 +1267,7 @@ export function HtmlPhoneCanvas({
         }}
       >
         <div
+          ref={phoneContentRef}
           style={{
             width: PHONE_SCREEN_WIDTH,
             height: PHONE_SCREEN_HEIGHT,
@@ -1407,26 +1280,32 @@ export function HtmlPhoneCanvas({
             position: "relative"
           }}
           onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
         >
           {children}
-          {/* iPhone status bar: Dynamic Island (always dark SVG) + colorable icons & clock */}
-          <img
-            src={`${import.meta.env.BASE_URL}images/top-chrome.svg`}
-            alt=""
-            draggable={false}
-            style={{
-              position: "absolute",
-              top: 10,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "88%",
-              height: "auto",
-              zIndex: 10,
-              pointerEvents: "none",
-            }}
-          />
-          <StatusBarIcons color={statusBarColor} />
-          <LiveClock color={statusBarColor} />
+          {!noChrome && (
+            <>
+              {/* iPhone status bar: Dynamic Island (always dark SVG) + colorable icons & clock */}
+              <img
+                src={`${import.meta.env.BASE_URL}images/top-chrome.svg`}
+                alt=""
+                draggable={false}
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "88%",
+                  height: "auto",
+                  zIndex: 10,
+                  pointerEvents: "none",
+                }}
+              />
+              <StatusBarIcons color={statusBarColor} />
+              <LiveClock color={statusBarColor} />
+            </>
+          )}
         </div>
       </div>
     </div>

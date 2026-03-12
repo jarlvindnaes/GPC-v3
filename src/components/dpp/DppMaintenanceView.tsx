@@ -2,9 +2,9 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { DppCollapsibleSection } from "./DppCollapsibleSection";
 import { certIcons } from "./dppIcons";
-import { aivenTable } from "./dppProductData";
+import { slopeChair } from "./dppProductData";
 
-const data = aivenTable;
+const data = slopeChair;
 
 /** Simple inline divider */
 function Divider() {
@@ -304,10 +304,10 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
   return (
     <div className="relative w-full pb-[80px]">
       {/* Hero Image */}
-      <div className="aspect-[238/159] relative shrink-0 w-full" data-name="hero image">
+      <div className="shrink-0 w-full" data-name="hero image">
         <img
           alt={`${data.categorization.displayName} — detail view`}
-          className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
+          className="w-full block pointer-events-none"
           src={data.commerce.photographs.detail}
         />
       </div>
@@ -320,7 +320,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
               <div className="flex flex-row items-center overflow-clip rounded-[inherit] size-full">
                 <div className="box-border content-stretch flex items-center px-[16px] py-[10px] relative w-full">
                   <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,4,24,0.58)] text-nowrap whitespace-pre font-width-normal">
-                    <h1 className="font-['SF_Pro:Medium',sans-serif] font-[510] mb-0 text-[rgba(0,7,19,0.62)] font-width-normal">
+                    <h1 className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 text-[rgba(0,7,19,0.62)] font-width-normal">
                       {data.categorization.displayName}
                     </h1>
                     <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -340,42 +340,37 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={lifespanWarrantyOpen}
         onToggle={() => setLifespanWarrantyOpen(!lifespanWarrantyOpen)}
       >
-        {/* Key metrics */}
-        {(data.lifecycleAndMaintenance.expectedLifetimeValue || data.lifecycleAndMaintenance.warrantyDuration) && (
-          <div className="flex gap-[12px] mb-[16px] px-[4px]">
-            {data.lifecycleAndMaintenance.expectedLifetimeValue && (
-              <div className="flex-1 bg-[rgba(173,245,209,0.18)] border border-[rgba(173,245,209,0.50)] rounded-[8px] p-[12px] text-center">
-                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[24px] text-[#2D7A4F] mb-0 leading-[28px] font-width-normal">
+        <div className="flex flex-col gap-[20px] pb-[20px]">
+          {data.lifecycleAndMaintenance.expectedLifetimeValue && (
+            <div>
+              <div className="flex items-baseline gap-[8px] mb-[6px]">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[28px] text-[rgba(0,7,19,0.72)] leading-[32px] font-width-normal">
                   {`${data.lifecycleAndMaintenance.expectedLifetimeValue.value}+`}
-                </p>
-                <p className="font-['SF_Pro:Regular',sans-serif] text-[12px] text-[rgba(0,7,19,0.58)] mb-0 leading-[16px] font-width-normal">
+                </span>
+                <span className="font-['SF_Pro:Regular',sans-serif] text-[16px] text-[rgba(0,7,19,0.50)] leading-[20px] font-width-normal">
                   {`${data.lifecycleAndMaintenance.expectedLifetimeValue.unit} expected lifetime`}
-                </p>
+                </span>
               </div>
-            )}
-            {data.lifecycleAndMaintenance.warrantyDuration && (
-              <div className="flex-1 bg-[rgba(182,212,252,0.22)] border border-[rgba(182,212,252,0.55)] rounded-[8px] p-[12px] text-center">
-                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[24px] text-[#3560A0] mb-0 leading-[28px] font-width-normal">
+              <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[16px] text-[rgba(0,7,19,0.62)] mb-0 font-width-normal">
+                With regular care. Leather cushions can be re-dyed or replaced, and the walnut frame can be sanded and re-oiled to extend functional life.
+              </p>
+            </div>
+          )}
+          {data.lifecycleAndMaintenance.warrantyDuration && (
+            <div>
+              <div className="flex items-baseline gap-[8px] mb-[6px]">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[28px] text-[rgba(0,7,19,0.72)] leading-[32px] font-width-normal">
                   {data.lifecycleAndMaintenance.warrantyDuration.value}
-                </p>
-                <p className="font-['SF_Pro:Regular',sans-serif] text-[12px] text-[rgba(0,7,19,0.58)] mb-0 leading-[16px] font-width-normal">
+                </span>
+                <span className="font-['SF_Pro:Regular',sans-serif] text-[16px] text-[rgba(0,7,19,0.50)] leading-[20px] font-width-normal">
                   {`${data.lifecycleAndMaintenance.warrantyDuration.unit} warranty`}
-                </p>
+                </span>
               </div>
-            )}
-          </div>
-        )}
-
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
-          {data.lifecycleAndMaintenance.lifespanDetails.map((detail, index) => (
-            <p
-              key={index}
-              className={index < data.lifecycleAndMaintenance.lifespanDetails.length - 1 ? "mb-4" : "mb-0"}
-            >
-              <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">{`${detail.label}:`}</span>
-              {` ${detail.text}`}
-            </p>
-          ))}
+              <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[16px] text-[rgba(0,7,19,0.62)] mb-0 font-width-normal">
+                Warranty against defective materials and workmanship. Lifetime Repair Promise ensures replacement parts remain available.
+              </p>
+            </div>
+          )}
         </div>
       </DppCollapsibleSection>
 
@@ -387,7 +382,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={maintenanceCareOpen}
         onToggle={() => setMaintenanceCareOpen(!maintenanceCareOpen)}
       >
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
           {data.lifecycleAndMaintenance.maintenanceInstructions.map((instruction, index) => (
             <p
               key={index}
@@ -407,7 +402,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={refurbishRepairOpen}
         onToggle={() => setRefurbishRepairOpen(!refurbishRepairOpen)}
       >
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
           {data.lifecycleAndMaintenance.refurbishAndRepair.map((text, index) => (
             <p
               key={index}
@@ -458,10 +453,10 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         </div>
 
         {/* Table */}
-        <div className="relative shrink-0 w-full h-[287px] overflow-hidden rounded-[6px]">
+        <div className="relative shrink-0 w-full h-[287px] overflow-hidden rounded-[8px] border border-[rgba(0,0,0,0.1)]">
           <div className="overflow-y-auto h-full max-h-[287px]">
             <table className="w-full border-collapse bg-white" data-name="Table">
-              <thead className="bg-[rgba(5,5,88,0.02)] sticky top-0 z-10">
+              <thead className="bg-[#f0f0f0] sticky top-0 z-10">
                 <tr className="border-b border-[rgba(1,1,46,0.13)]">
                   <th
                     scope="col"
@@ -539,7 +534,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
 
       {/* Reuse Section */}
       <DppCollapsibleSection title="Reuse" isOpen={reuseOpen} onToggle={() => setReuseOpen(!reuseOpen)}>
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
           <p className="mb-0">{data.lifecycleAndMaintenance.takeBackProgram}</p>
         </div>
       </DppCollapsibleSection>
@@ -552,16 +547,16 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={endOfLifeOpen}
         onToggle={() => setEndOfLifeOpen(!endOfLifeOpen)}
       >
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] font-width-normal">
           <p className="mb-0">{data.lifecycleAndMaintenance.endOfLife}</p>
         </div>
       </DppCollapsibleSection>
 
       {/* Image 3 */}
-      <div className="aspect-[289/192] relative shrink-0 w-full" data-name="image 3">
+      <div className="shrink-0 w-full" data-name="image 3">
         <img
           alt={`${data.materialsAndComponents.primaryMaterial} — material source`}
-          className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
+          className="w-full block pointer-events-none"
           src={data.commerce.photographs.materialSource}
         />
       </div>

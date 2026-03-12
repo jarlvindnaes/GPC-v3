@@ -1,7 +1,5 @@
 /**
- * Brand Configuration for the DPP phone screen
- *
- * Adapted from DPP-Benchmark's brandConfig.ts.
+ * Brand Configuration for the DPP phone screen.
  * Always uses "floating" style (the phone screen is a contained viewport).
  */
 
@@ -13,8 +11,8 @@ export const brandConfig = {
     textSecondary: "rgba(0,7,19,0.62)"
   },
 
-  name: "Benchmark",
-  website: "https://benchmarkfurniture.com/",
+  name: "Your Company",
+  website: "#",
 
   header: {
     borderColor: "#6C7254",

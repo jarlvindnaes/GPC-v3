@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DppHeader } from "./DppHeader";
 import DppImpactView from "./DppImpactView";
 import DppInfoView from "./DppInfoView";
@@ -8,10 +8,10 @@ import { DppProductView } from "./DppProductView";
 
 type TabId = "about" | "maintenance" | "impact" | "parts";
 
-/** Header: 44px status bar + ~46px header content + 9px border = ~99px; round to 90 for comfortable overlap */
-const HEADER_HEIGHT = 90;
+/** Header: 52px top pad + 1px border + 12px pad + 52px logo + 12px pad = 129px; plus 16px gap */
+const HEADER_HEIGHT = 145;
 /** Navigation bar height + Safari bottom chrome clearance */
-const NAV_HEIGHT = 134;
+const NAV_HEIGHT = 94;
 
 /**
  * DppApp -- Root component for the DPP phone screen shell.
@@ -23,6 +23,7 @@ const NAV_HEIGHT = 134;
  */
 export function DppApp() {
   const [activeTab, setActiveTab] = useState<TabId>("about");
+  const [isScrolled, setIsScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleTabChange = useCallback((tab: TabId) => {
@@ -31,6 +32,15 @@ export function DppApp() {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0;
     }
+    setIsScrolled(false);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const onScroll = () => setIsScrolled(el.scrollTop > 10);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   /**
@@ -52,11 +62,12 @@ export function DppApp() {
       }}
     >
       {/* Fixed header */}
-      <DppHeader />
+      <DppHeader isScrolled={isScrolled} />
 
       {/* Scrollable content area */}
       <div
         ref={scrollContainerRef}
+        data-phone-scroll
         onTouchMove={handleTouchMove}
         style={{
           position: "absolute",
@@ -65,7 +76,8 @@ export function DppApp() {
           overflowX: "hidden",
           paddingTop: HEADER_HEIGHT,
           paddingBottom: NAV_HEIGHT,
-          WebkitOverflowScrolling: "touch"
+          WebkitOverflowScrolling: "touch",
+          overscrollBehavior: "none"
         }}
         id="main-content"
         role="tabpanel"
@@ -88,7 +100,7 @@ export function DppApp() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: 160,
+          height: 60,
           background:
             "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
           pointerEvents: "none",

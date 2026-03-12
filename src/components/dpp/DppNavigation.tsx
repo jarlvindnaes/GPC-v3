@@ -67,25 +67,14 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
     <nav
       style={{
         position: "absolute",
-        bottom: 54,
+        bottom: 84,
         left: 0,
         right: 0,
         zIndex: 40
       }}
       aria-label="Product passport sections"
     >
-      <div style={{ position: "relative", padding: "0 8px" }}>
-      <div
-        style={{
-          overflow: "hidden",
-          position: "relative",
-          borderTop: "1px solid white",
-          borderLeft: "1px solid white",
-          borderRadius: "0.5rem 0.5rem 0 0",
-          boxShadow: "0 0px 4px rgba(0, 0, 0, 0.2)"
-        }}
-      >
-        {/* Tab buttons */}
+      <div style={{ position: "relative", padding: "0 16px" }}>
         <div
           style={{
             display: "flex",
@@ -94,6 +83,11 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
             justifyContent: "center",
             padding: "0 12px",
             position: "relative",
+            overflow: "hidden",
+            borderRadius: "1rem",
+            borderTop: "1px solid white",
+            borderLeft: "1px solid white",
+            boxShadow: "0 -2px 12px rgba(0, 0, 0, 0.15), 0 -4px 24px rgba(0, 0, 0, 0.1)",
             backdropFilter: "blur(4px)",
             WebkitBackdropFilter: "blur(4px)",
             backgroundColor: "rgba(255, 255, 255, 0.8)"
@@ -169,8 +163,6 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
               </button>
             );
           })}
-        </div>
-
         {/* Active tab indicator (animated colored line at bottom) */}
         <motion.div
           style={{
@@ -185,7 +177,7 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
           }}
           transition={{ type: "spring", stiffness: 400, damping: 35 }}
         />
-      </div>
+        </div>
       </div>
     </nav>
   );

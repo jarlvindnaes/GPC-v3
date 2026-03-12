@@ -8,7 +8,8 @@ import truckAnimation from "../animations/truck-animation.json";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { AnimatedIcon } from "./AnimatedIcon";
 import { LcaEngineVisual } from "./LcaEngineVisual";
-import { ComponentsCanvas, FinishedProductCanvas, PassportChairCanvas, RawMaterialCanvas } from "./Native3DModels";
+import { ChairPhoneShowcase } from "./ChairPhoneShowcase";
+import { ComponentsCanvas, FinishedProductCanvas, RawMaterialCanvas } from "./Native3DModels";
 
 export function StorytellingScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -529,7 +530,7 @@ export function StorytellingScroll() {
             className="flex flex-col items-center"
           >
             <div>
-              <PassportChairCanvas />
+              <ChairPhoneShowcase />
             </div>
 
             <div className="mt-8 text-center">

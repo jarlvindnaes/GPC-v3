@@ -2,9 +2,9 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { DppCollapsibleSection } from "./DppCollapsibleSection";
 import { certIcons, redListIcons } from "./dppIcons";
-import { aivenTable } from "./dppProductData";
+import { slopeChair } from "./dppProductData";
 
-const data = aivenTable;
+const data = slopeChair;
 
 /** Simple inline divider */
 function Divider() {
@@ -434,7 +434,16 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
   }, [scrollRef]);
 
   return (
-    <div className="relative w-full pb-[80px] pt-[50px]">
+    <div className="relative w-full pb-[80px]">
+      {/* Hero Image */}
+      <div className="shrink-0 w-full" data-name="hero image">
+        <img
+          alt={`${data.materialsAndComponents.primaryMaterial} — sustainably sourced material`}
+          className="w-full block pointer-events-none"
+          src={data.commerce.photographs.materialSource}
+        />
+      </div>
+
       {/* Title Section */}
       <div className="relative shrink-0 w-full">
         <div className="flex flex-row items-end overflow-clip rounded-[inherit] size-full">
@@ -443,7 +452,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
               <div className="flex flex-row items-center overflow-clip rounded-[inherit] size-full">
                 <div className="box-border content-stretch flex items-center px-[16px] py-[10px] relative w-full">
                   <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,4,24,0.58)] text-nowrap whitespace-pre font-width-normal">
-                    <h1 className="font-['SF_Pro:Medium',sans-serif] font-[510] mb-0 text-[rgba(0,7,19,0.62)] font-width-normal">
+                    <h1 className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 text-[rgba(0,7,19,0.62)] font-width-normal">
                       {data.categorization.displayName}
                     </h1>
                     <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -501,15 +510,15 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           data-name="Sub Info"
         >
           <p className="basis-0 font-['SF_Pro:Light',sans-serif] font-[274.315] grow leading-[24px] min-h-px min-w-px relative shrink-0 text-[0px] text-[14px] text-[rgba(0,7,19,0.62)] text-right whitespace-pre-wrap font-width-normal">
-            <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">{`${data.materialsAndComponents.totalWeight.value} `}</span>
+            <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">{`${data.materialsAndComponents.totalWeight.value} `}</span>
             <span>{" kilograms"}</span>
           </p>
         </div>
 
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
           {data.materialsAndComponents.materialDescriptions.map((mat) => (
             <p key={mat.material} className="mb-4">
-              <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">
+              <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">
                 {mat.description ? `${mat.material}:` : mat.material}
               </span>
               {mat.description && ` ${mat.description}`}
@@ -517,18 +526,18 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           ))}
           {data.materialsAndComponents.adhesive && (
             <p className="mb-4">
-              <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">Adhesive:</span>
+              <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">Adhesive:</span>
               {` ${data.materialsAndComponents.adhesive}`}
             </p>
           )}
           {data.materialsAndComponents.fasteners && (
             <p className="mb-4">
-              <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">Fasteners:</span>
+              <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">Fasteners:</span>
               {` ${data.materialsAndComponents.fasteners}`}
             </p>
           )}
           <p className="mb-4">
-            <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">Packaging:</span>
+            <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">Packaging:</span>
             {` ${data.materialsAndComponents.packaging.summary}`}
           </p>
           <p className="mb-4">{data.materialsAndComponents.packaging.domestic}</p>
@@ -585,7 +594,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           data-name="Sub Info"
         >
           <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] text-right font-width-normal">
-            <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] text-[14px] font-width-normal">
+            <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[14px] font-width-normal">
               {data.sustainabilityAndImpact.carbonFootprintTotal.value}
             </span>
             <span className="text-[14px]">{" kg CO"}</span>
@@ -605,13 +614,13 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
 
       {/* Toxicity Section */}
       <DppCollapsibleSection title="Toxicity" isOpen={toxicityOpen} onToggle={() => setToxicityOpen(!toxicityOpen)}>
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
           <p className="mb-4">
-            <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">VOC emissions:</span>
+            <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">VOC emissions:</span>
             {` ${data.sustainabilityAndImpact.vocData}`}
           </p>
           <p className="mb-0">
-            <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">Red List Free:</span>
+            <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">Red List Free:</span>
             {` ${data.sustainabilityAndImpact.redListFreeStatement}`}
           </p>
         </div>
@@ -625,7 +634,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
         isOpen={recyclabilityOpen}
         onToggle={() => setRecyclabilityOpen(!recyclabilityOpen)}
       >
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
           {/* Key circularity metrics */}
           <div className="flex gap-[12px] mb-6">
             {data.sustainabilityAndImpact.recyclableContentPercent != null && (
@@ -652,7 +661,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
 
           {data.sustainabilityAndImpact.substancesOfConcern && (
             <p className="mb-0">
-              <span className="font-['SF_Pro:Semibold',sans-serif] font-[590] font-width-normal">
+              <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">
                 Substances of concern (REACH):
               </span>
               {` ${data.sustainabilityAndImpact.substancesOfConcern}`}
@@ -671,7 +680,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
       >
         <div className="relative shrink-0 w-full pb-[16px] px-[16px]" data-name="content">
           {data.certificationsAndCompliance.buildingRatingContributions && (
-            <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[14px] text-[rgba(0,7,19,0.62)] mb-4 font-width-normal">
+            <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[16px] text-[rgba(0,7,19,0.62)] mb-4 font-width-normal">
               {data.certificationsAndCompliance.buildingRatingContributions}
             </p>
           )}
@@ -681,7 +690,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
                 key={cert.name}
                 className="bg-[rgba(0,0,0,0.02)] border border-[rgba(0,0,0,0.05)] rounded-[8px] p-[12px]"
               >
-                <p className="font-['SF_Pro:Semibold',sans-serif] font-[590] text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px] mb-[2px] font-width-normal">
+                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px] mb-[2px] font-width-normal">
                   {cert.name}
                 </p>
                 {cert.issuingBody && (
@@ -700,7 +709,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[22px] text-[13px] text-[rgba(0,7,19,0.58)] mt-[14px] font-width-normal">
             {data.sustainabilityAndImpact.epdReference && (
               <p className="mb-[6px]">
-                <span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[rgba(0,7,19,0.62)] font-width-normal">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[rgba(0,7,19,0.62)] font-width-normal">
                   EPD reference:{" "}
                 </span>
                 {data.sustainabilityAndImpact.epdReference}
@@ -711,7 +720,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             )}
             {data.certificationsAndCompliance.fireSafety && (
               <p className="mb-[6px]">
-                <span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[rgba(0,7,19,0.62)] font-width-normal">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[rgba(0,7,19,0.62)] font-width-normal">
                   Fire safety:{" "}
                 </span>
                 {data.certificationsAndCompliance.fireSafety}
@@ -719,7 +728,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             )}
             {data.certificationsAndCompliance.indoorAirQuality && (
               <p className="mb-0">
-                <span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[rgba(0,7,19,0.62)] font-width-normal">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[rgba(0,7,19,0.62)] font-width-normal">
                   Indoor air quality:{" "}
                 </span>
                 {data.certificationsAndCompliance.indoorAirQuality}
@@ -741,14 +750,6 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
         </div>
       </DppCollapsibleSection>
 
-      {/* Image 3 */}
-      <div className="aspect-[289/192] relative shrink-0 w-full" data-name="image 3">
-        <img
-          alt={`${data.materialsAndComponents.primaryMaterial} — sustainably sourced material`}
-          className="absolute inset-0 max-w-none object-center object-cover pointer-events-none size-full"
-          src={data.commerce.photographs.materialSource}
-        />
-      </div>
     </div>
   );
 }

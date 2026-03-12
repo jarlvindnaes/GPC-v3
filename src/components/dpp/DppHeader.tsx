@@ -7,7 +7,7 @@ function BrandLogo() {
       alt={brandConfig.name}
       draggable={false}
       style={{
-        height: 40,
+        height: 52,
         width: "auto",
         display: "block",
         flexShrink: 0,
@@ -16,7 +16,7 @@ function BrandLogo() {
   );
 }
 
-export function DppHeader() {
+export function DppHeader({ isScrolled = false }: { isScrolled?: boolean }) {
   return (
     <header
       style={{
@@ -36,7 +36,7 @@ export function DppHeader() {
           top: 0,
           left: 0,
           right: 0,
-          height: 160,
+          height: 60,
           background:
             "linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
           pointerEvents: "none",
@@ -45,35 +45,32 @@ export function DppHeader() {
       />
 
       {/* Header content with padding to clear status bar */}
-      <div style={{ position: "relative", padding: "44px 8px 0 8px" }}>
-        <a
+      <div style={{ position: "relative", padding: "52px 16px 0 16px" }}>
+        <div
           style={{
             display: "flex",
             boxSizing: "border-box",
             alignItems: "center",
             justifyContent: "center",
             gap: 12,
-            padding: "6px 12px",
+            padding: "12px 12px",
             position: "relative",
             overflow: "visible",
-            cursor: "pointer",
             backdropFilter: "blur(4px)",
             WebkitBackdropFilter: "blur(4px)",
             backgroundColor: brandConfig.header.backgroundColor,
-            borderTop: `9px solid ${brandConfig.header.borderColor}`,
-            borderLeft: "1px solid white",
-            borderRadius: "0.5rem",
-            boxShadow: "0 0px 4px rgba(0, 0, 0, 0.2)",
-            minHeight: 46,
-            textDecoration: "none",
+            border: "1px solid white",
+            borderRadius: "1rem",
+            boxShadow: isScrolled
+              ? "0 2px 12px rgba(0, 0, 0, 0.15), 0 4px 24px rgba(0, 0, 0, 0.1)"
+              : "0 2px 12px rgba(0, 0, 0, 0), 0 4px 24px rgba(0, 0, 0, 0)",
+            transition: "box-shadow 300ms ease",
+            minHeight: 58,
           }}
-          href={brandConfig.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${brandConfig.name} — visit website`}
+          aria-label={brandConfig.name}
         >
           <BrandLogo />
-        </a>
+        </div>
       </div>
     </header>
   );

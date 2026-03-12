@@ -4,7 +4,7 @@
 // Extended with classes 500-800 for sustainability, lifecycle, certifications,
 // and data carrier information.
 //
-// Copied from DPP-Benchmark project — canonical type definitions for DPP data.
+// Canonical type definitions for DPP data.
 // ============================================================================
 
 export type AccessLevel = "public" | "authorized" | "regulatory";
