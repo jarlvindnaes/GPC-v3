@@ -20,9 +20,9 @@ const lifestyleImage = `${base}chair-detail.jpg`;
 const dimensionsDiagram = `${base}chair-dimensions.jpg`;
 const detailImage = `${base}chair-lifestyle.jpg`;
 const materialSourceImage = `${base}chair-material-source.jpg`;
-const seatCushionImage = `${base}table-top-component.png`;
+const seatCushionImage = `${base}chair-seat-component.jpg`;
 const armrestImage = `${base}table-bar-component.png`;
-const legImage = `${base}table-leg-component.png`;
+const legImage = `${base}chair-legs-component.jpg`;
 
 export const slopeChair: ProductPassport = {
   granularityLevel: "model",
@@ -105,7 +105,7 @@ export const slopeChair: ProductPassport = {
       },
       {
         id: "leg",
-        name: "Leg",
+        name: "Legs",
         weight: "0.7 kg",
         weightValue: { value: 0.7, unit: "kg" },
         material: "Walnut",

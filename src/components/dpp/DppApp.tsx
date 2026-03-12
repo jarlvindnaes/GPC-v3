@@ -25,6 +25,7 @@ export function DppApp() {
   const [activeTab, setActiveTab] = useState<TabId>("about");
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const handleTabChange = useCallback((tab: TabId) => {
     setActiveTab(tab);
@@ -58,6 +59,7 @@ export function DppApp() {
         height: 812,
         position: "relative",
         overflow: "hidden",
+        borderRadius: 62,
         background: "#fff"
       }}
     >
@@ -86,8 +88,21 @@ export function DppApp() {
         {activeTab === "about" && <DppInfoView scrollRef={scrollContainerRef} />}
         {activeTab === "maintenance" && <DppMaintenanceView scrollRef={scrollContainerRef} />}
         {activeTab === "impact" && <DppImpactView scrollRef={scrollContainerRef} />}
-        {activeTab === "parts" && <DppProductView scrollRef={scrollContainerRef} />}
+        {activeTab === "parts" && <DppProductView scrollRef={scrollContainerRef} overlayRef={overlayRef} />}
       </div>
+
+      {/* Overlay container for bottom sheets — sits outside the scroll
+           container so content isn't clipped by overflow:auto.
+           z-index 50 sits above header (40) and nav (40). */}
+      <div
+        ref={overlayRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          zIndex: 50,
+        }}
+      />
 
       {/* Fixed bottom navigation */}
       <DppNavigation activeTab={activeTab} onTabChange={handleTabChange} />
