@@ -423,6 +423,7 @@ export function DppProductView({ scrollRef, overlayRef, onAddToCart }: DppProduc
 
 	const handleClose = useCallback(() => {
 		setSheetOpen(false);
+		setSelectedPartId(null);
 	}, []);
 
 	// Imperative Three.js scene

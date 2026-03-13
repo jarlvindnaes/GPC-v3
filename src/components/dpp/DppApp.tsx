@@ -132,39 +132,51 @@ export function DppApp() {
       {/* Checkout button — lives in overlay so it persists across tabs */}
       <AnimatePresence>
         {cartCount > 0 && !checkoutOpen && (
-          <motion.button
+          <motion.div
             key={cartCount}
-            type="button"
-            onClick={() => setCheckoutOpen(true)}
-            className="absolute flex items-center gap-[16px] rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.18)] pointer-events-auto cursor-pointer h-[40px] px-[12px]"
-            style={{
-              top: 161,
-              right: 16,
-              zIndex: 51,
-              backgroundColor: brandConfig.colors.primary,
-            }}
+            className="absolute pointer-events-auto"
+            style={{ top: 161, right: 16, zIndex: 51 }}
             initial={{ x: 120, opacity: 0, scale: 0.8 }}
             animate={{ x: 0, opacity: 1, scale: 1 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
           >
-            <div className="relative shrink-0">
-              <BasketIcon size={24} />
-              <div
-                className="absolute -top-[6px] -right-[8px] flex items-center justify-center min-w-[16px] h-[16px] rounded-full bg-white px-[3px]"
-                style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
-              >
-                <span
-                  className="font-['SF_Pro:Bold',sans-serif] font-bold text-[9px] leading-[10px]"
-                  style={{ color: brandConfig.colors.primary }}
+            {/* Pulse ring */}
+            <motion.div
+              className="absolute inset-0 rounded-[10px]"
+              style={{ backgroundColor: "#fff" }}
+              animate={{ scale: [1, 1.35], opacity: [0.35, 0] }}
+              transition={{
+                duration: 1,
+                ease: "easeOut",
+                repeat: Infinity,
+                repeatDelay: 4,
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setCheckoutOpen(true)}
+              className="relative flex items-center gap-[16px] rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.18)] cursor-pointer h-[40px] px-[12px]"
+              style={{ backgroundColor: brandConfig.colors.primary }}
+            >
+              <div className="relative shrink-0">
+                <BasketIcon size={24} />
+                <div
+                  className="absolute -top-[6px] -right-[8px] flex items-center justify-center min-w-[16px] h-[16px] rounded-full bg-white px-[3px]"
+                  style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
                 >
-                  {cartCount}
-                </span>
+                  <span
+                    className="font-['SF_Pro:Bold',sans-serif] font-bold text-[9px] leading-[10px]"
+                    style={{ color: brandConfig.colors.primary }}
+                  >
+                    {cartCount}
+                  </span>
+                </div>
               </div>
-            </div>
-            <span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[13px] text-white leading-[16px]">
-              Checkout
-            </span>
-          </motion.button>
+              <span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[13px] text-white leading-[16px]">
+                Checkout
+              </span>
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
 
