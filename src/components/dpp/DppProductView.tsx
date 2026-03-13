@@ -6,13 +6,12 @@ import * as THREE from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { brandConfig } from "./dppBrandConfig";
-import { DppCheckoutOverlay } from "./DppCheckoutOverlay";
 import { slopeChair } from "./dppProductData";
-import type { CartItem, PurchasablePart } from "./dppTypes";
+import type { PurchasablePart } from "./dppTypes";
 
 const data = slopeChair;
 
-const parts: Record<string, PurchasablePart> = {};
+export const parts: Record<string, PurchasablePart> = {};
 for (const part of data.materialsAndComponents.purchasableParts) {
 	parts[part.id] = part;
 }
@@ -57,6 +56,7 @@ function useChairCanvas(
 	// Pre-loaded texture variants keyed by part id (null = default)
 	const texturesRef = useRef<Map<string | null, THREE.Texture>>(new Map());
 	const chairMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
+	const [texturesReady, setTexturesReady] = useState(false);
 
 	// Stable callback ref so the effect doesn't re-run when onPartClick changes
 	const onPartClickRef = useRef(onPartClick);
@@ -132,6 +132,7 @@ function useChairCanvas(
 						["seat-cushion", TEX_SEAT],
 						["leg", TEX_LEGS],
 					];
+					let loaded = 0;
 					for (const [key, url] of variants) {
 						texLoader.load(url, (tex) => {
 							// Match encoding & settings from the original
@@ -140,6 +141,10 @@ function useChairCanvas(
 							tex.wrapS = mat.map?.wrapS ?? THREE.RepeatWrapping;
 							tex.wrapT = mat.map?.wrapT ?? THREE.RepeatWrapping;
 							texturesRef.current.set(key, tex);
+							loaded++;
+							if (loaded === variants.length) {
+								setTexturesReady(true);
+							}
 						});
 					}
 				}
@@ -310,7 +315,7 @@ function useChairCanvas(
 		};
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Swap base-color texture when selection changes
+	// Swap base-color texture when selection changes (or when textures finish loading)
 	useEffect(() => {
 		const mat = chairMaterialRef.current;
 		if (!mat) return;
@@ -319,14 +324,50 @@ function useChairCanvas(
 			mat.map = tex;
 			mat.needsUpdate = true;
 		}
-	}, [selectedPartId]);
+	}, [selectedPartId, texturesReady]);
 }
 
 /* ------------------------------------------------------------------ */
-/*  Add-to-basket icon                                                */
+/*  Icons                                                              */
 /* ------------------------------------------------------------------ */
 
-function BasketIcon({ size = 18, color = "white" }: { size?: number; color?: string }) {
+/** Cart icon with a + sign — used on the "Add to cart" button */
+function AddToBasketIcon({ size = 16, color = "white" }: { size?: number; color?: string }) {
+	return (
+		<svg
+			className="block shrink-0"
+			width={size}
+			height={size}
+			viewBox="0 0 16 16"
+			fill="none"
+			aria-hidden="true"
+		>
+			<path
+				d="M0.5 2.5C0.5 2.22386 0.723858 2 1 2H3.5C3.72324 2 3.91943 2.14799 3.98076 2.36264L5.87715 9H13.1096L14.3596 4H13C12.7239 4 12.5 3.77614 12.5 3.5C12.5 3.22386 12.7239 3 13 3H15C15.154 3 15.2993 3.07094 15.3941 3.19229C15.4889 3.31365 15.5224 3.4719 15.4851 3.62127L13.9851 9.62127C13.9294 9.84385 13.7294 10 13.5 10H5.5C5.27676 10 5.08057 9.85201 5.01924 9.63736L3.12285 3H1C0.723858 3 0.5 2.77614 0.5 2.5Z"
+				fill={color}
+			/>
+			<path
+				d="M9.5 3.5C9.77614 3.5 10 3.72386 10 4V5H11C11.2761 5 11.5 5.22386 11.5 5.5C11.5 5.77614 11.2761 6 11 6H10V7C10 7.27614 9.77614 7.5 9.5 7.5C9.22386 7.5 9 7.27614 9 7V6H8C7.72386 6 7.5 5.77614 7.5 5.5C7.5 5.22386 7.72386 5 8 5H9V4C9 3.72386 9.22386 3.5 9.5 3.5Z"
+				fill={color}
+			/>
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M7 15C8.10457 15 9 14.1046 9 13C9 11.8954 8.10457 11 7 11C5.89543 11 5 11.8954 5 13C5 14.1046 5.89543 15 7 15ZM7 14C7.55228 14 8 13.5523 8 13C8 12.4477 7.55228 12 7 12C6.44772 12 6 12.4477 6 13C6 13.5523 6.44772 14 7 14Z"
+				fill={color}
+			/>
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M14 13C14 14.1046 13.1046 15 12 15C10.8954 15 10 14.1046 10 13C10 11.8954 10.8954 11 12 11C13.1046 11 14 11.8954 14 13ZM13 13C13 13.5523 12.5523 14 12 14C11.4477 14 11 13.5523 11 13C11 12.4477 11.4477 12 12 12C12.5523 12 13 12.4477 13 13Z"
+				fill={color}
+			/>
+		</svg>
+	);
+}
+
+/** Plain cart icon — used on the checkout button */
+export function BasketIcon({ size = 18, color = "white" }: { size?: number; color?: string }) {
 	return (
 		<svg
 			className="block shrink-0"
@@ -351,17 +392,14 @@ function BasketIcon({ size = 18, color = "white" }: { size?: number; color?: str
 interface DppProductViewProps {
 	scrollRef?: React.RefObject<HTMLDivElement | null>;
 	overlayRef?: React.RefObject<HTMLDivElement | null>;
+	onAddToCart?: (partId: string, quantity: number) => void;
 }
 
-export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
+export function DppProductView({ scrollRef, overlayRef, onAddToCart }: DppProductViewProps) {
 	const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
 	const [sheetOpen, setSheetOpen] = useState(false);
 	const [hasInteracted, setHasInteracted] = useState(false);
 	const [quantity, setQuantity] = useState(1);
-	const [cartItems, setCartItems] = useState<CartItem[]>([]);
-	const [checkoutOpen, setCheckoutOpen] = useState(false);
-
-	const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
 
 	const canvasContainerRef = useRef<HTMLDivElement>(null);
 
@@ -574,16 +612,7 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 										<button
 											type="button"
 											onClick={() => {
-												const pid = selectedPartId!;
-												setCartItems((prev) => {
-													const idx = prev.findIndex((i) => i.partId === pid);
-													if (idx >= 0) {
-														const next = [...prev];
-														next[idx] = { ...next[idx], quantity: next[idx].quantity + quantity };
-														return next;
-													}
-													return [...prev, { partId: pid, quantity }];
-												});
+												onAddToCart?.(selectedPartId!, quantity);
 												handleClose();
 											}}
 											className="flex-1 h-[44px] rounded-[8px] cursor-pointer hover:opacity-100 transition-opacity opacity-[0.92]"
@@ -594,7 +623,7 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 												<span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[16px] text-white leading-[24px] font-width-normal">
 													Add to cart
 												</span>
-												<BasketIcon size={16} />
+												<AddToBasketIcon size={24} />
 											</div>
 										</button>
 									</div>
@@ -606,65 +635,6 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 				overlayRef.current
 			)}
 
-			{/* Checkout button — portalled to overlay so it's not clipped */}
-			{overlayRef?.current && createPortal(
-				<AnimatePresence>
-					{cartCount > 0 && !checkoutOpen && (
-						<motion.button
-							key={cartCount}
-							type="button"
-							onClick={() => setCheckoutOpen(true)}
-							className="absolute flex items-center gap-[8px] rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.18)] pointer-events-auto cursor-pointer h-[40px] px-[12px]"
-							style={{
-								top: 161, // HEADER_HEIGHT (145) + 16px gap
-								right: 16,
-								backgroundColor: brandConfig.colors.primary,
-							}}
-							initial={{ x: 120, opacity: 0, scale: 0.8 }}
-							animate={{ x: 0, opacity: 1, scale: 1 }}
-							transition={{ type: "spring", damping: 20, stiffness: 300 }}
-						>
-							{/* Basket icon with count badge */}
-							<div className="relative shrink-0">
-								<BasketIcon size={20} />
-								<div
-									className="absolute -top-[6px] -right-[8px] flex items-center justify-center min-w-[16px] h-[16px] rounded-full bg-white px-[3px]"
-									style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
-								>
-									<span
-										className="font-['SF_Pro:Bold',sans-serif] font-bold text-[9px] leading-[10px]"
-										style={{ color: brandConfig.colors.primary }}
-									>
-										{cartCount}
-									</span>
-								</div>
-							</div>
-							<span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[13px] text-white leading-[16px]">
-								Checkout
-							</span>
-						</motion.button>
-					)}
-				</AnimatePresence>,
-				overlayRef.current,
-			)}
-
-			{/* Checkout overlay — portalled to overlay */}
-			{overlayRef?.current && createPortal(
-				<AnimatePresence>
-					{checkoutOpen && (
-						<DppCheckoutOverlay
-							cartItems={cartItems}
-							parts={parts}
-							onClose={() => setCheckoutOpen(false)}
-							onOrderPlaced={() => {
-								setCartItems([]);
-								setCheckoutOpen(false);
-							}}
-						/>
-					)}
-				</AnimatePresence>,
-				overlayRef.current,
-			)}
 		</div>
 	);
 }

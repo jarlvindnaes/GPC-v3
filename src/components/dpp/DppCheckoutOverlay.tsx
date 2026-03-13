@@ -12,6 +12,7 @@ interface DppCheckoutOverlayProps {
 	parts: Record<string, PurchasablePart>;
 	onClose: () => void;
 	onOrderPlaced: () => void;
+	onRemoveItem: (partId: string) => void;
 }
 
 /* ------------------------------------------------------------------ */
@@ -71,17 +72,55 @@ function StepIndicator({ step }: { step: number }) {
 /*  Step 1 — Basket preview                                           */
 /* ------------------------------------------------------------------ */
 
+function AddToBasketIcon({ size = 16, color = "currentColor" }: { size?: number; color?: string }) {
+	return (
+		<svg
+			className="block shrink-0"
+			width={size}
+			height={size}
+			viewBox="0 0 16 16"
+			fill="none"
+			aria-hidden="true"
+		>
+			<path
+				d="M0.5 2.5C0.5 2.22386 0.723858 2 1 2H3.5C3.72324 2 3.91943 2.14799 3.98076 2.36264L5.87715 9H13.1096L14.3596 4H13C12.7239 4 12.5 3.77614 12.5 3.5C12.5 3.22386 12.7239 3 13 3H15C15.154 3 15.2993 3.07094 15.3941 3.19229C15.4889 3.31365 15.5224 3.4719 15.4851 3.62127L13.9851 9.62127C13.9294 9.84385 13.7294 10 13.5 10H5.5C5.27676 10 5.08057 9.85201 5.01924 9.63736L3.12285 3H1C0.723858 3 0.5 2.77614 0.5 2.5Z"
+				fill={color}
+			/>
+			<path
+				d="M9.5 3.5C9.77614 3.5 10 3.72386 10 4V5H11C11.2761 5 11.5 5.22386 11.5 5.5C11.5 5.77614 11.2761 6 11 6H10V7C10 7.27614 9.77614 7.5 9.5 7.5C9.22386 7.5 9 7.27614 9 7V6H8C7.72386 6 7.5 5.77614 7.5 5.5C7.5 5.22386 7.72386 5 8 5H9V4C9 3.72386 9.22386 3.5 9.5 3.5Z"
+				fill={color}
+			/>
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M7 15C8.10457 15 9 14.1046 9 13C9 11.8954 8.10457 11 7 11C5.89543 11 5 11.8954 5 13C5 14.1046 5.89543 15 7 15ZM7 14C7.55228 14 8 13.5523 8 13C8 12.4477 7.55228 12 7 12C6.44772 12 6 12.4477 6 13C6 13.5523 6.44772 14 7 14Z"
+				fill={color}
+			/>
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M14 13C14 14.1046 13.1046 15 12 15C10.8954 15 10 14.1046 10 13C10 11.8954 10.8954 11 12 11C13.1046 11 14 11.8954 14 13ZM13 13C13 13.5523 12.5523 14 12 14C11.4477 14 11 13.5523 11 13C11 12.4477 11.4477 12 12 12C12.5523 12 13 12.4477 13 13Z"
+				fill={color}
+			/>
+		</svg>
+	);
+}
+
 function StepBasket({
 	cartItems,
 	parts,
 	total,
 	onContinue,
+	onRemoveItem,
 }: {
 	cartItems: CartItem[];
 	parts: Record<string, PurchasablePart>;
 	total: number;
 	onContinue: () => void;
+	onRemoveItem: (partId: string) => void;
 }) {
+	const isEmpty = cartItems.length === 0;
+
 	return (
 		<div className="flex flex-col h-full">
 			<div className="flex-1 overflow-y-auto px-[16px] pb-[8px]">
@@ -92,85 +131,124 @@ function StepBasket({
 					Your Basket
 				</h2>
 
-				<div className="flex flex-col gap-[12px]">
-					{cartItems.map((item) => {
-						const part = parts[item.partId];
-						if (!part) return null;
-						const lineTotal = (part.priceValue?.value ?? 0) * item.quantity;
-						return (
-							<div key={item.partId} className="flex gap-[12px] items-center">
-								<div className="shrink-0 size-[60px] rounded-[8px] border border-[rgba(1,6,47,0.12)] p-[3px]">
-									<img
-										src={part.image}
-										alt={part.name}
-										className="size-full object-contain rounded-[6px]"
-									/>
-								</div>
-								<div className="flex-1 min-w-0">
-									<p
-										className="font-['SF_Pro:Bold',sans-serif] font-bold text-[15px] leading-[20px] truncate"
-										style={{ color: "rgba(0,7,19,0.72)" }}
-									>
-										{part.name}
-									</p>
-									<p
-										className="text-[13px] leading-[18px]"
-										style={{ color: "rgba(0,4,29,0.58)" }}
-									>
-										{part.material}
-									</p>
-								</div>
-								<div className="text-right shrink-0">
-									<p
-										className="font-['SF_Pro:Bold',sans-serif] font-bold text-[15px] leading-[20px]"
-										style={{ color: "rgba(0,7,19,0.72)" }}
-									>
-										{formatEur(lineTotal)}
-									</p>
-									{item.quantity > 1 && (
-										<p
-											className="text-[12px] leading-[16px]"
-											style={{ color: "rgba(0,4,29,0.58)" }}
-										>
-											{item.quantity} × {part.price}
-										</p>
-									)}
-								</div>
-							</div>
-						);
-					})}
-				</div>
-
-				<div className="mt-[16px] pt-[12px] border-t border-[rgba(0,8,47,0.1)]">
-					<div className="flex justify-between items-center">
-						<span
-							className="font-['SF_Pro:Bold',sans-serif] font-bold text-[17px] leading-[22px]"
-							style={{ color: brandConfig.colors.textPrimary }}
-						>
-							Total
-						</span>
-						<span
-							className="font-['SF_Pro:Bold',sans-serif] font-bold text-[17px] leading-[22px]"
-							style={{ color: brandConfig.colors.textPrimary }}
-						>
-							{formatEur(total)}
-						</span>
+				{isEmpty ? (
+					<div className="flex flex-col items-center justify-center gap-[12px] pt-[60px]">
+						<AddToBasketIcon size={48} color="rgba(0,8,47,0.2)" />
+						<div className="text-center">
+							<p
+								className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[15px] leading-[20px]"
+								style={{ color: "rgba(0,4,29,0.38)" }}
+							>
+								Your cart is empty
+							</p>
+							<p
+								className="text-[13px] leading-[18px] mt-[4px] max-w-[200px] mx-auto"
+								style={{ color: "rgba(0,4,29,0.38)" }}
+							>
+								Select parts in the product model on the 'parts' page to order
+							</p>
+						</div>
 					</div>
-				</div>
+				) : (
+					<>
+						<div className="flex flex-col gap-[12px]">
+							{cartItems.map((item) => {
+								const part = parts[item.partId];
+								if (!part) return null;
+								const lineTotal = (part.priceValue?.value ?? 0) * item.quantity;
+								return (
+									<div key={item.partId} className="flex gap-[12px] items-center">
+										<div className="shrink-0 size-[60px] rounded-[8px] border border-[rgba(1,6,47,0.12)] p-[3px]">
+											<img
+												src={part.image}
+												alt={part.name}
+												className="size-full object-contain rounded-[6px]"
+											/>
+										</div>
+										<div className="flex-1 min-w-0">
+											<p
+												className="font-['SF_Pro:Bold',sans-serif] font-bold text-[15px] leading-[20px] truncate"
+												style={{ color: "rgba(0,7,19,0.72)" }}
+											>
+												{part.name}
+											</p>
+											<p
+												className="text-[13px] leading-[18px]"
+												style={{ color: "rgba(0,4,29,0.58)" }}
+											>
+												{part.material}
+											</p>
+										</div>
+										<div className="text-right shrink-0">
+											<p
+												className="font-['SF_Pro:Bold',sans-serif] font-bold text-[15px] leading-[20px]"
+												style={{ color: "rgba(0,7,19,0.72)" }}
+											>
+												{formatEur(lineTotal)}
+											</p>
+											{item.quantity > 1 && (
+												<p
+													className="text-[12px] leading-[16px]"
+													style={{ color: "rgba(0,4,29,0.58)" }}
+												>
+													{item.quantity} × {part.price}
+												</p>
+											)}
+										</div>
+										<button
+											type="button"
+											onClick={() => onRemoveItem(item.partId)}
+											className="shrink-0 flex items-center justify-center size-[28px] rounded-full cursor-pointer hover:bg-[rgba(0,0,0,0.05)] transition-colors"
+											aria-label={`Remove ${parts[item.partId]?.name ?? "item"} from cart`}
+										>
+											<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+												<path
+													d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5"
+													stroke="rgba(0,7,19,0.4)"
+													strokeWidth="1.5"
+													strokeLinecap="round"
+												/>
+											</svg>
+										</button>
+									</div>
+								);
+							})}
+						</div>
+
+						<div className="mt-[16px] pt-[12px] border-t border-[rgba(0,8,47,0.1)]">
+							<div className="flex justify-between items-center">
+								<span
+									className="font-['SF_Pro:Bold',sans-serif] font-bold text-[17px] leading-[22px]"
+									style={{ color: brandConfig.colors.textPrimary }}
+								>
+									Total
+								</span>
+								<span
+									className="font-['SF_Pro:Bold',sans-serif] font-bold text-[17px] leading-[22px]"
+									style={{ color: brandConfig.colors.textPrimary }}
+								>
+									{formatEur(total)}
+								</span>
+							</div>
+						</div>
+					</>
+				)}
 			</div>
 
-			<div className="px-[16px] pb-[16px] pt-[8px]">
-				<button
-					type="button"
-					onClick={onContinue}
-					className="w-full h-[44px] rounded-[8px] cursor-pointer hover:opacity-90 transition-opacity"
-					style={{ backgroundColor: brandConfig.colors.primary }}
-				>
-					<span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[16px] text-white leading-[24px]">
-						Continue
-					</span>
-				</button>
-			</div>
+			{!isEmpty && (
+				<div className="px-[16px] pb-[16px] pt-[8px]">
+					<button
+						type="button"
+						onClick={onContinue}
+						className="w-full h-[44px] rounded-[8px] cursor-pointer hover:opacity-90 transition-opacity"
+						style={{ backgroundColor: brandConfig.colors.primary }}
+					>
+						<span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[16px] text-white leading-[24px]">
+							Continue
+						</span>
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }
@@ -520,6 +598,7 @@ export function DppCheckoutOverlay({
 	parts,
 	onClose,
 	onOrderPlaced,
+	onRemoveItem,
 }: DppCheckoutOverlayProps) {
 	const [step, setStep] = useState(1);
 	const [direction, setDirection] = useState(1);
@@ -655,6 +734,7 @@ export function DppCheckoutOverlay({
 										parts={parts}
 										total={subtotal}
 										onContinue={goForward}
+										onRemoveItem={onRemoveItem}
 									/>
 								)}
 								{step === 2 && (
