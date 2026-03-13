@@ -6,8 +6,9 @@ import * as THREE from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { brandConfig } from "./dppBrandConfig";
+import { DppCheckoutOverlay } from "./DppCheckoutOverlay";
 import { slopeChair } from "./dppProductData";
-import type { PurchasablePart } from "./dppTypes";
+import type { CartItem, PurchasablePart } from "./dppTypes";
 
 const data = slopeChair;
 
@@ -18,6 +19,11 @@ for (const part of data.materialsAndComponents.purchasableParts) {
 
 const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
 const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
+
+// Pre-baked texture variants: default, seat highlighted, legs highlighted
+const TEX_DEFAULT = `${import.meta.env.BASE_URL}models/chair_default.jpg`;
+const TEX_SEAT = `${import.meta.env.BASE_URL}models/chair_seat_selected.jpg`;
+const TEX_LEGS = `${import.meta.env.BASE_URL}models/chair_legs_selected.jpg`;
 
 /**
  * World-space Y threshold for splitting the chair into upper (seat) and
@@ -34,6 +40,7 @@ const CHAIR_Y_MIDPOINT = 0.35;
 function useChairCanvas(
 	containerRef: React.RefObject<HTMLDivElement | null>,
 	onPartClick: (partId: string) => void,
+	selectedPartId: string | null,
 ) {
 	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 	const sceneRef = useRef<THREE.Scene | null>(null);
@@ -46,6 +53,10 @@ function useChairCanvas(
 	const prevPointerRef = useRef({ x: 0, y: 0 });
 	const animFrameRef = useRef(0);
 	const floatTimeRef = useRef(0);
+
+	// Pre-loaded texture variants keyed by part id (null = default)
+	const texturesRef = useRef<Map<string | null, THREE.Texture>>(new Map());
+	const chairMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
 
 	// Stable callback ref so the effect doesn't re-run when onPartClick changes
 	const onPartClickRef = useRef(onPartClick);
@@ -64,7 +75,7 @@ function useChairCanvas(
 
 		// ── Camera ──
 		const camera = new THREE.PerspectiveCamera(48, width / height, 0.1, 100);
-		camera.position.set(0, 0.5, 5.0);
+		camera.position.set(0, 0.03, 5.0);
 		cameraRef.current = camera;
 
 		// ── Renderer ──
@@ -106,6 +117,33 @@ function useChairCanvas(
 			model.scale.setScalar(3.0);
 			model.position.set(0, -0.5, 0);
 			chairGroup.add(model);
+
+			// Grab the material for texture swapping
+			model.traverse((child) => {
+				if ((child as THREE.Mesh).isMesh) {
+					const mesh = child as THREE.Mesh;
+					const mat = mesh.material as THREE.MeshStandardMaterial;
+					chairMaterialRef.current = mat;
+
+					// Preload texture variants
+					const texLoader = new THREE.TextureLoader();
+					const variants: [string | null, string][] = [
+						[null, TEX_DEFAULT],
+						["seat-cushion", TEX_SEAT],
+						["leg", TEX_LEGS],
+					];
+					for (const [key, url] of variants) {
+						texLoader.load(url, (tex) => {
+							// Match encoding & settings from the original
+							tex.colorSpace = THREE.SRGBColorSpace;
+							tex.flipY = mat.map?.flipY ?? false;
+							tex.wrapS = mat.map?.wrapS ?? THREE.RepeatWrapping;
+							tex.wrapT = mat.map?.wrapT ?? THREE.RepeatWrapping;
+							texturesRef.current.set(key, tex);
+						});
+					}
+				}
+			});
 		});
 
 		// ── Load HDR environment ──
@@ -159,13 +197,23 @@ function useChairCanvas(
 		// ── Pointer interaction (drag to rotate + click to select) ──
 		const canvas = renderer.domElement;
 		canvas.style.cursor = "grab";
+		canvas.style.touchAction = "none"; // Prevent browser touch gestures
 
 		// Ignore clicks that arrive right after mount (e.g. the "Parts" tab click)
 		const mountTime = Date.now();
 		const MOUNT_GUARD_MS = 400;
 
+		// Drag detection: require both distance (>6px) and time (>80ms) to
+		// distinguish an intentional drag from a slightly messy tap/click.
+		const DRAG_DEAD_ZONE = 6; // px
+		const DRAG_TIME_MS = 80; // ms after pointerdown before drag can start
+		let pointerDownTime = 0;
+		let pointerDownPos = { x: 0, y: 0 };
+
 		const onPointerDown = (e: PointerEvent) => {
 			isDraggingRef.current = false;
+			pointerDownTime = Date.now();
+			pointerDownPos = { x: e.clientX, y: e.clientY };
 			prevPointerRef.current = { x: e.clientX, y: e.clientY };
 			canvas.style.cursor = "grabbing";
 		};
@@ -177,13 +225,17 @@ function useChairCanvas(
 			const dy = e.clientY - prevPointerRef.current.y;
 
 			if (!isDraggingRef.current) {
-				if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+				const totalDx = e.clientX - pointerDownPos.x;
+				const totalDy = e.clientY - pointerDownPos.y;
+				const dist = Math.sqrt(totalDx * totalDx + totalDy * totalDy);
+				const elapsed = Date.now() - pointerDownTime;
+
+				if (dist > DRAG_DEAD_ZONE && elapsed > DRAG_TIME_MS) {
 					isDraggingRef.current = true;
 					// Reset to current position so the first rotation delta is zero
 					prevPointerRef.current = { x: e.clientX, y: e.clientY };
-					return;
 				}
-				return; // Still within dead-zone
+				return; // Not yet dragging
 			}
 
 			rotationRef.current.y += dx * 0.008;
@@ -257,23 +309,38 @@ function useChairCanvas(
 			}
 		};
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Swap base-color texture when selection changes
+	useEffect(() => {
+		const mat = chairMaterialRef.current;
+		if (!mat) return;
+		const tex = texturesRef.current.get(selectedPartId);
+		if (tex && mat.map !== tex) {
+			mat.map = tex;
+			mat.needsUpdate = true;
+		}
+	}, [selectedPartId]);
 }
 
 /* ------------------------------------------------------------------ */
 /*  Add-to-basket icon                                                */
 /* ------------------------------------------------------------------ */
 
-function AddToBasketIcon() {
+function BasketIcon({ size = 18, color = "white" }: { size?: number; color?: string }) {
 	return (
-		<div className="relative shrink-0 size-[18px]">
-			<svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 18 18" aria-hidden="true">
-				<rect fill="white" fillOpacity="0.01" height="18" width="18" />
-				<path
-					d="M7.875 12.375C9.11764 12.375 10.125 13.3824 10.125 14.625C10.125 15.8676 9.11764 16.875 7.875 16.875C6.63236 16.875 5.625 15.8676 5.625 14.625C5.625 13.3824 6.63236 12.375 7.875 12.375ZM13.5 12.375C14.7426 12.375 15.75 13.3824 15.75 14.625C15.75 15.8676 14.7426 16.875 13.5 16.875C12.2574 16.875 11.25 15.8676 11.25 14.625C11.25 13.3824 12.2574 12.375 13.5 12.375ZM7.875 13.5C7.25368 13.5 6.75 14.0037 6.75 14.625C6.75 15.2463 7.25368 15.75 7.875 15.75C8.49632 15.75 9 15.2463 9 14.625C9 14.0037 8.49632 13.5 7.875 13.5ZM13.5 13.5C12.8787 13.5 12.375 14.0037 12.375 14.625C12.375 15.2463 12.8787 15.75 13.5 15.75C14.1213 15.75 14.625 15.2463 14.625 14.625C14.625 14.0037 14.1213 13.5 13.5 13.5ZM3.9375 2.25C4.18865 2.25 4.40952 2.41672 4.47852 2.6582L6.61133 10.125H14.748L16.1543 4.5H14.625C14.3143 4.5 14.0625 4.24816 14.0625 3.9375C14.0625 3.62684 14.3143 3.375 14.625 3.375H16.875C17.0482 3.375 17.2118 3.45527 17.3184 3.5918C17.4248 3.72829 17.4629 3.90629 17.4209 4.07422L15.7334 10.8242C15.6707 11.0745 15.4455 11.25 15.1875 11.25H6.1875C5.93635 11.25 5.71548 11.0833 5.64648 10.8418L3.51367 3.375H1.125C0.81434 3.375 0.5625 3.12316 0.5625 2.8125C0.5625 2.50184 0.81434 2.25 1.125 2.25H3.9375ZM10.6875 3.9375C10.9982 3.9375 11.25 4.18934 11.25 4.5V5.625H12.375C12.6857 5.625 12.9375 5.87684 12.9375 6.1875C12.9375 6.49816 12.6857 6.75 12.375 6.75H11.25V7.875C11.25 8.18566 10.9982 8.4375 10.6875 8.4375C10.3768 8.4375 10.125 8.18566 10.125 7.875V6.75H9C8.68934 6.75 8.4375 6.49816 8.4375 6.1875C8.4375 5.87684 8.68934 5.625 9 5.625H10.125V4.5C10.125 4.18934 10.3768 3.9375 10.6875 3.9375Z"
-					fill="white"
-				/>
-			</svg>
-		</div>
+		<svg
+			className="block shrink-0"
+			width={size}
+			height={size}
+			viewBox="0 0 16 16"
+			fill="none"
+			aria-hidden="true"
+		>
+			<path
+				d="M7 11C8.10457 11 9 11.8954 9 13C9 14.1046 8.10457 15 7 15C5.89543 15 5 14.1046 5 13C5 11.8954 5.89543 11 7 11ZM12 11C13.1046 11 14 11.8954 14 13C14 14.1046 13.1046 15 12 15C10.8954 15 10 14.1046 10 13C10 11.8954 10.8954 11 12 11ZM7 12C6.44772 12 6 12.4477 6 13C6 13.5523 6.44772 14 7 14C7.55228 14 8 13.5523 8 13C8 12.4477 7.55228 12 7 12ZM12 12C11.4477 12 11 12.4477 11 13C11 13.5523 11.4477 14 12 14C12.5523 14 13 13.5523 13 13C13 12.4477 12.5523 12 12 12ZM3.5 2C3.72311 2 3.91901 2.14786 3.98047 2.3623L5.87695 9H13.1094L14.3594 4H7C6.72386 4 6.5 3.77614 6.5 3.5C6.5 3.22386 6.72386 3 7 3H15C15.154 3 15.2998 3.07102 15.3945 3.19238C15.4891 3.31364 15.5226 3.4719 15.4854 3.62109L13.9854 9.62109C13.9297 9.84368 13.7294 10 13.5 10H5.5C5.27689 10 5.08099 9.85214 5.01953 9.6377L3.12305 3H1C0.723858 3 0.5 2.77614 0.5 2.5C0.5 2.22386 0.723858 2 1 2H3.5Z"
+				fill={color}
+			/>
+		</svg>
 	);
 }
 
@@ -288,8 +355,13 @@ interface DppProductViewProps {
 
 export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 	const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
+	const [sheetOpen, setSheetOpen] = useState(false);
 	const [hasInteracted, setHasInteracted] = useState(false);
 	const [quantity, setQuantity] = useState(1);
+	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+	const [checkoutOpen, setCheckoutOpen] = useState(false);
+
+	const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
 
 	const canvasContainerRef = useRef<HTMLDivElement>(null);
 
@@ -299,33 +371,34 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 	const sheetScale = useTransform(dragYMotion, [0, 200], [1, 0.95]);
 	const sheetOpacity = useTransform(dragYMotion, [0, 200], [1, 0]);
 
-	// Reset drag value when part changes
+	// Reset drag value when sheet opens
 	useEffect(() => {
 		dragYMotion.set(0);
-	}, [selectedPartId, dragYMotion]);
+	}, [sheetOpen, dragYMotion]);
 
 	const handlePartClick = useCallback((partId: string) => {
 		setSelectedPartId(partId);
+		setSheetOpen(true);
 		setQuantity(1);
 		setHasInteracted(true);
 	}, []);
 
 	const handleClose = useCallback(() => {
-		setSelectedPartId(null);
+		setSheetOpen(false);
 	}, []);
 
 	// Imperative Three.js scene
-	useChairCanvas(canvasContainerRef, handlePartClick);
+	useChairCanvas(canvasContainerRef, handlePartClick, selectedPartId);
 
 	// Close on Escape
 	useEffect(() => {
-		if (!selectedPartId) return;
+		if (!sheetOpen) return;
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "Escape") handleClose();
 		};
 		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [selectedPartId, handleClose]);
+	}, [sheetOpen, handleClose]);
 
 	const part = selectedPartId ? parts[selectedPartId] : null;
 
@@ -360,31 +433,43 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 				)}
 			</AnimatePresence>
 
-			{/* Onboarding Hint */}
-			<AnimatePresence>
-				{!selectedPartId && !hasInteracted && (
-					<motion.div
-						className="absolute left-[16px] right-[16px] z-20"
-						style={{ bottom: 16 }}
-						initial={{ opacity: 0, y: 10 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{ opacity: 0, y: 10 }}
-						transition={{ duration: 0.3, ease: "easeOut" }}
-					>
-						<div className="backdrop-blur-lg bg-black/30 rounded-[10px] overflow-hidden">
-							<p className="font-['SF_Pro:Regular',sans-serif] text-[13px] text-white tracking-[-0.02px] px-[16px] py-[12px] leading-[18px] text-center">
-								Tap a part of the chair to explore spare parts
-							</p>
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+			{/* Onboarding Hint — portalled to overlay so it's not clipped by scroll overflow */}
+			{overlayRef?.current && createPortal(
+				<AnimatePresence>
+					{!selectedPartId && (
+						<motion.div
+							className="absolute left-[20px] right-[20px]"
+							style={{ bottom: 168, pointerEvents: "auto" }}
+							initial={{ opacity: 0, scale: 0.95 }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: 0.95 }}
+							transition={{ duration: 0.2, ease: "easeOut" }}
+						>
+							<div className="backdrop-blur-lg bg-black/30 rounded-[10px] overflow-hidden relative">
+								<p className="font-['SF_Pro:Regular',sans-serif] text-[13px] text-white tracking-[-0.02px] px-[16px] py-[12px] pr-[70px] leading-[18px]">
+									Use touch gestures to navigate the model and select the individual parts
+								</p>
+								<div className="absolute top-0 bottom-0 right-[8px] w-[55px] pointer-events-none">
+									<iframe
+										src={`${import.meta.env.BASE_URL}TouchGestureAnimationMobile.svg`}
+										className="w-full h-full border-none bg-transparent"
+										title="Touch gesture animation"
+										tabIndex={-1}
+										aria-hidden="true"
+									/>
+								</div>
+							</div>
+						</motion.div>
+					)}
+				</AnimatePresence>,
+				overlayRef.current,
+			)}
 
 			{/* Bottom Sheet Overlay — portalled to the phone's overlay container
 			   so it isn't clipped by the scroll area's overflow:auto */}
 			{overlayRef?.current && createPortal(
 				<AnimatePresence>
-					{selectedPartId && part && (
+					{sheetOpen && part && (
 						<>
 							{/* Backdrop — tapping outside the card closes it */}
 							<motion.div
@@ -488,7 +573,19 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 										{/* Add to Cart Button */}
 										<button
 											type="button"
-											onClick={() => handleClose()}
+											onClick={() => {
+												const pid = selectedPartId!;
+												setCartItems((prev) => {
+													const idx = prev.findIndex((i) => i.partId === pid);
+													if (idx >= 0) {
+														const next = [...prev];
+														next[idx] = { ...next[idx], quantity: next[idx].quantity + quantity };
+														return next;
+													}
+													return [...prev, { partId: pid, quantity }];
+												});
+												handleClose();
+											}}
 											className="flex-1 h-[44px] rounded-[8px] cursor-pointer hover:opacity-100 transition-opacity opacity-[0.92]"
 											style={{ backgroundColor: brandConfig.colors.primary }}
 											aria-label={`Add ${part.name} to cart`}
@@ -497,7 +594,7 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 												<span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[16px] text-white leading-[24px] font-width-normal">
 													Add to cart
 												</span>
-												<AddToBasketIcon />
+												<BasketIcon size={16} />
 											</div>
 										</button>
 									</div>
@@ -507,6 +604,66 @@ export function DppProductView({ scrollRef, overlayRef }: DppProductViewProps) {
 					)}
 				</AnimatePresence>,
 				overlayRef.current
+			)}
+
+			{/* Checkout button — portalled to overlay so it's not clipped */}
+			{overlayRef?.current && createPortal(
+				<AnimatePresence>
+					{cartCount > 0 && !checkoutOpen && (
+						<motion.button
+							key={cartCount}
+							type="button"
+							onClick={() => setCheckoutOpen(true)}
+							className="absolute flex items-center gap-[8px] rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.18)] pointer-events-auto cursor-pointer h-[40px] px-[12px]"
+							style={{
+								top: 161, // HEADER_HEIGHT (145) + 16px gap
+								right: 16,
+								backgroundColor: brandConfig.colors.primary,
+							}}
+							initial={{ x: 120, opacity: 0, scale: 0.8 }}
+							animate={{ x: 0, opacity: 1, scale: 1 }}
+							transition={{ type: "spring", damping: 20, stiffness: 300 }}
+						>
+							{/* Basket icon with count badge */}
+							<div className="relative shrink-0">
+								<BasketIcon size={20} />
+								<div
+									className="absolute -top-[6px] -right-[8px] flex items-center justify-center min-w-[16px] h-[16px] rounded-full bg-white px-[3px]"
+									style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
+								>
+									<span
+										className="font-['SF_Pro:Bold',sans-serif] font-bold text-[9px] leading-[10px]"
+										style={{ color: brandConfig.colors.primary }}
+									>
+										{cartCount}
+									</span>
+								</div>
+							</div>
+							<span className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[13px] text-white leading-[16px]">
+								Checkout
+							</span>
+						</motion.button>
+					)}
+				</AnimatePresence>,
+				overlayRef.current,
+			)}
+
+			{/* Checkout overlay — portalled to overlay */}
+			{overlayRef?.current && createPortal(
+				<AnimatePresence>
+					{checkoutOpen && (
+						<DppCheckoutOverlay
+							cartItems={cartItems}
+							parts={parts}
+							onClose={() => setCheckoutOpen(false)}
+							onOrderPlaced={() => {
+								setCartItems([]);
+								setCheckoutOpen(false);
+							}}
+						/>
+					)}
+				</AnimatePresence>,
+				overlayRef.current,
 			)}
 		</div>
 	);

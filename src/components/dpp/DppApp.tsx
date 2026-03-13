@@ -54,6 +54,7 @@ export function DppApp() {
 
   return (
     <div
+      className="dpp-phone"
       style={{
         width: 375,
         height: 812,

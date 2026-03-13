@@ -5,8 +5,8 @@
 
 export const brandConfig = {
   colors: {
-    primary: "#6C7254",
-    primaryRGB: "108,114,84",
+    primary: "#105c7a",
+    primaryRGB: "16,92,122",
     textPrimary: "rgba(0,7,19,0.89)",
     textSecondary: "rgba(0,7,19,0.62)"
   },
@@ -15,7 +15,7 @@ export const brandConfig = {
   website: "#",
 
   header: {
-    borderColor: "#6C7254",
+    borderColor: "#105c7a",
     backgroundColor: "rgba(255, 255, 255, 0.8)"
   }
 };

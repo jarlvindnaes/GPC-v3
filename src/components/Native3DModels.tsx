@@ -1263,7 +1263,8 @@ export function HtmlPhoneCanvas({
           left: 0,
           transformOrigin: "0 0",
           pointerEvents: "none",
-          display: "none"
+          display: "none",
+          willChange: "transform",
         }}
       >
         <div

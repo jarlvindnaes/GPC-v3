@@ -99,6 +99,11 @@ export interface Component {
   partNumber?: string;
 }
 
+export interface CartItem {
+  partId: string;
+  quantity: number;
+}
+
 export interface PurchasablePart {
   id: string;
   name: string;
