@@ -315,11 +315,12 @@ function useChairCanvas(
 		};
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Swap base-color texture when selection changes (or when textures finish loading)
+	// Swap base-color texture when selection changes (or when textures finish loading).
+	// When selectedPartId is null (deselected), revert to the default texture.
 	useEffect(() => {
 		const mat = chairMaterialRef.current;
 		if (!mat) return;
-		const tex = texturesRef.current.get(selectedPartId);
+		const tex = texturesRef.current.get(selectedPartId) ?? texturesRef.current.get(null);
 		if (tex && mat.map !== tex) {
 			mat.map = tex;
 			mat.needsUpdate = true;

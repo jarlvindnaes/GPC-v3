@@ -88,10 +88,12 @@ export function DppHeader({ isScrolled = false }: { isScrolled?: boolean }) {
               transition: "box-shadow 300ms ease",
             }}
           />
-          {/* Logo — sits outside the compositing layer for crisp SVG rendering */}
+          {/* Logo — sits outside the compositing layer for crisp SVG rendering.
+              Explicit zIndex needed because matrix3d homography flattens stacking contexts. */}
           <div
             style={{
               position: "relative",
+              zIndex: 1,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

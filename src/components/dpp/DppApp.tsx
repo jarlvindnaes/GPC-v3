@@ -85,7 +85,8 @@ export function DppApp() {
         position: "relative",
         overflow: "hidden",
         borderRadius: 62,
-        background: "#fff"
+        background: "#fff",
+        color: "#000",
       }}
     >
       {/* Fixed header */}
