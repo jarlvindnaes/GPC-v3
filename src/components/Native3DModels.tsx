@@ -394,6 +394,22 @@ export interface PhoneCameraConfig {
   large: { position: [number, number, number]; lookAt: [number, number, number] };
 }
 
+/** Glassmorphic tooltip bubble used by all phone canvas variants. */
+function TooltipBubble({ tooltip, scale = 1 }: { tooltip: PhoneTooltip; scale?: number }) {
+  return (
+    <div className="pointer-events-none select-none" style={{ transform: `scale(${scale})` }}>
+      <div
+        className={`flex items-start gap-2 rounded-2xl border border-white/30 bg-white/20 px-3.5 py-2.5 backdrop-blur-md ${tooltip.side === "left" ? "flex-row-reverse" : ""}`}
+      >
+        <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: tooltip.dotColor }} />
+        <span className="min-w-[7rem] max-w-[16rem] font-semibold text-[13px] text-white leading-tight">
+          {tooltip.label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 const commerceTooltips: PhoneTooltip[] = [
   {
     label: "Directly linked to ERP system",
@@ -1386,19 +1402,19 @@ const DPP_SCREEN_IMAGE = `${import.meta.env.BASE_URL}images/DPP-screen01.jpg`;
 const dppTooltips: PhoneTooltip[] = [
   {
     label: "ESPR-compliant digital passport",
-    position: [-0.6, 0.6, 0],
+    position: [-0.6, 0.85, 0],
     dotColor: "var(--color-brand-cyan)",
     side: "left"
   },
   {
     label: "Full lifecycle impact data",
-    position: [-0.6, 0.4, 0],
+    position: [-0.6, 0.65, 0],
     dotColor: "var(--color-brand-emerald)",
     side: "left"
   },
   {
     label: "Matches your brand",
-    position: [-0.22, -0.08, 0],
+    position: [-0.22, 0.2, 0],
     dotColor: "var(--color-brand-amber)",
     side: "right"
   }

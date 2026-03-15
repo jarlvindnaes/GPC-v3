@@ -16,6 +16,7 @@ const DPP = lazy(() => import("./pages/DPP").then((m) => ({ default: m.DPP })));
 const PricingPage = lazy(() => import("./pages/PricingPage").then((m) => ({ default: m.PricingPage })));
 const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
 const DppTest = lazy(() => import("./pages/DppTest").then((m) => ({ default: m.DppTest })));
+const HtmlPhoneTest = lazy(() => import("./pages/HtmlPhoneTest").then((m) => ({ default: m.HtmlPhoneTest })));
 
 /** Main site layout with navbar, footer, and smooth scroll. */
 function SiteLayout() {
@@ -83,6 +84,15 @@ export function App() {
           element={
             <Suspense fallback={null}>
               <DppTest />
+            </Suspense>
+          }
+        />
+        {/* Experimental: Html transform occlude approach */}
+        <Route
+          path="/html-phone-test"
+          element={
+            <Suspense fallback={null}>
+              <HtmlPhoneTest />
             </Suspense>
           }
         />
