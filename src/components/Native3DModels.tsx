@@ -1414,7 +1414,7 @@ const dppTooltips: PhoneTooltip[] = [
   },
   {
     label: "Matches your brand",
-    position: [0.15, -0.15, 0],
+    position: [-0.1, -0.1, 0],
     dotColor: "var(--color-brand-amber)",
     side: "right"
   }
