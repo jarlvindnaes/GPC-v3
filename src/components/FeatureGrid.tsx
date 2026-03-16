@@ -38,7 +38,8 @@ const features = [
       "Track grid mix, trade routes & raw material origins"
     ],
     color: "emerald",
-    visual: <SupplierDataEntryVisual />
+    visual: <SupplierDataEntryVisual />,
+    fillVisual: true
   },
   {
     id: "lca",

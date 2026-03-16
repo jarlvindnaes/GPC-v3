@@ -62,6 +62,7 @@ export function SupplierDataEntryVisual() {
   }, [phase, charIndex, fieldIndex, reset]);
 
   return (
+    <div className="flex h-full w-full items-start justify-center overflow-hidden px-4 pt-4">
     <div className="w-full max-w-[340px] sm:max-w-[400px]">
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
@@ -114,6 +115,7 @@ export function SupplierDataEntryVisual() {
           <span className="text-sm font-semibold text-white">Submit & Verify</span>
         </div>
       </div>
+    </div>
     </div>
   );
 }
