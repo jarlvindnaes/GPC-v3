@@ -62,7 +62,15 @@ export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boole
   }, [phase, charIndex, fieldIndex, reset]);
 
   return (
-    <div className={`flex h-full w-full justify-center overflow-hidden px-4 pt-4 ${alignTop ? "items-start" : "items-center"}`}>
+    <div className="h-full w-full" style={alignTop ? { containerType: "size" } : undefined}>
+    <div className={`supplier-entry-inner flex h-full w-full justify-center overflow-hidden px-4 pt-4 ${alignTop ? "items-start" : "items-center"}`}>
+    {alignTop && (
+      <style>{`
+        @container (min-height: 360px) {
+          .supplier-entry-inner { align-items: center; }
+        }
+      `}</style>
+    )}
     <div className="w-full max-w-[340px] sm:max-w-[400px]">
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
@@ -115,6 +123,7 @@ export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boole
           <span className="text-sm font-semibold text-white">Submit & Verify</span>
         </div>
       </div>
+    </div>
     </div>
     </div>
   );
