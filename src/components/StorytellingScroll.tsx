@@ -1,7 +1,7 @@
 import { Box, Cpu, Layers, MapPin, QrCode, Sparkles, TreePine, Truck, Users } from "lucide-react";
 import type { MotionStyle } from "motion/react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import shipAnimation from "../animations/ship-animation.json";
 import trainAnimation from "../animations/train-animation.json";
 import truckAnimation from "../animations/truck-animation.json";
@@ -10,6 +10,123 @@ import { AnimatedIcon } from "./AnimatedIcon";
 import { LcaEngineVisual } from "./LcaEngineVisual";
 import { ChairPhoneShowcase } from "./ChairPhoneShowcase";
 import { ComponentsCanvas, FinishedProductCanvas, RawMaterialCanvas } from "./Native3DModels";
+
+/* ── Supplier Data Entry with typewriter animation ── */
+
+const TYPED_FIELDS = [
+  { label: "Material Composition", value: "FSC oak · 94%" },
+  { label: "Manufacturing Origin", value: "Gdańsk, Poland" },
+] as const;
+
+const CALCULATED_FIELD = { label: "CO₂ per unit", value: "12.4 kg CO₂e" };
+
+const TYPE_SPEED = 55;          // ms per character
+const PAUSE_BETWEEN = 600;      // ms pause between fields
+const PAUSE_BEFORE_CALC = 500;  // ms before CO₂ fades in
+const HOLD_DURATION = 2400;     // ms to hold final state before restart
+
+function SupplierDataEntryVisual() {
+  const [fieldIndex, setFieldIndex] = useState(0);   // which field is typing (0 or 1)
+  const [charIndex, setCharIndex] = useState(0);      // chars revealed in current field
+  const [showCalc, setShowCalc] = useState(false);    // CO₂ faded in?
+  const [phase, setPhase] = useState<"typing" | "pause" | "calc" | "hold">("typing");
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const reset = useCallback(() => {
+    setFieldIndex(0);
+    setCharIndex(0);
+    setShowCalc(false);
+    setPhase("typing");
+  }, []);
+
+  useEffect(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    if (phase === "typing") {
+      const fullText = TYPED_FIELDS[fieldIndex].value;
+      if (charIndex < fullText.length) {
+        timerRef.current = setTimeout(() => setCharIndex((c) => c + 1), TYPE_SPEED);
+      } else if (fieldIndex < TYPED_FIELDS.length - 1) {
+        // Move to next field after pause
+        setPhase("pause");
+      } else {
+        // Both fields done → show calculated value
+        setPhase("calc");
+      }
+    } else if (phase === "pause") {
+      timerRef.current = setTimeout(() => {
+        setFieldIndex((i) => i + 1);
+        setCharIndex(0);
+        setPhase("typing");
+      }, PAUSE_BETWEEN);
+    } else if (phase === "calc") {
+      timerRef.current = setTimeout(() => {
+        setShowCalc(true);
+        setPhase("hold");
+      }, PAUSE_BEFORE_CALC);
+    } else if (phase === "hold") {
+      timerRef.current = setTimeout(reset, HOLD_DURATION);
+    }
+
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [phase, charIndex, fieldIndex, reset]);
+
+  return (
+    <div className="w-full max-w-[340px] sm:max-w-[400px]">
+      {/* Header */}
+      <div className="mb-3 flex items-center justify-between">
+        <span className="text-lg font-bold text-white">Supplier Data Entry</span>
+        <span className="rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-400">
+          Live
+        </span>
+      </div>
+      {/* Typed fields */}
+      <div className="space-y-3">
+        {TYPED_FIELDS.map((f, i) => {
+          const isActive = i === fieldIndex && phase === "typing";
+          const isDone = i < fieldIndex || (i === fieldIndex && phase !== "typing") || phase === "calc" || phase === "hold";
+          const revealed = i === fieldIndex ? f.value.slice(0, charIndex) : isDone ? f.value : "";
+
+          return (
+            <div key={f.label} className="rounded-2xl border border-white/30 bg-white/20 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-md">
+              <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                {f.label}
+              </p>
+              <p className="text-sm font-medium text-white">
+                {revealed}
+                {isActive && (
+                  <span className="ml-px inline-block w-[2px] animate-pulse bg-white" style={{ height: "1em", verticalAlign: "text-bottom" }} />
+                )}
+                {!isDone && !isActive && (
+                  <span className="ml-px inline-block w-[2px] bg-white/30" style={{ height: "1em", verticalAlign: "text-bottom" }} />
+                )}
+              </p>
+            </div>
+          );
+        })}
+
+        {/* Calculated field — fades in */}
+        <motion.div
+          className="rounded-2xl border border-white/30 bg-white/20 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-md"
+          animate={{ opacity: showCalc ? 1 : 0.3 }}
+          transition={{ duration: 0.6 }}
+        >
+          <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+            {CALCULATED_FIELD.label}
+          </p>
+          <p className="text-sm font-medium text-white">
+            {showCalc ? CALCULATED_FIELD.value : ""}
+          </p>
+        </motion.div>
+
+        {/* Submit button */}
+        <div className="flex h-11 cursor-pointer items-center justify-center rounded-2xl border border-white/10 bg-indigo-600/80 transition-colors hover:bg-indigo-500/80">
+          <span className="text-sm font-semibold text-white">Submit & Verify</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function StorytellingScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -192,7 +309,7 @@ export function StorytellingScroll() {
               {/* Visual 1: Chair */}
               <motion.div
                 style={{ opacity: vOp1, pointerEvents: pView1 as MotionStyle["pointerEvents"], zIndex: z1, y: chairY }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
               >
                 <div className="relative h-full w-full touch-none">
                   <FinishedProductCanvas fieldOfView={55} isActiveReference={canvasActive} />
@@ -212,7 +329,7 @@ export function StorytellingScroll() {
               {/* Visual 2: Components - 3D Model */}
               <motion.div
                 style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"], zIndex: z2 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
               >
                 <div className="aspect-square w-[min(100%,80vw)] md:w-[min(100%,85vh)]">
                   <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvasActive} />
@@ -236,39 +353,15 @@ export function StorytellingScroll() {
               {/* Visual 3: Supplier portal card */}
               <motion.div
                 style={{ opacity: vOp3, x: vX3, pointerEvents: pView3 as MotionStyle["pointerEvents"], zIndex: z3 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
               >
-                <div className="w-full max-w-80 rounded-2xl border border-brand-dark/20 bg-brand-dark/20 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-6">
-                  <div className="mb-5 flex items-center justify-between">
-                    <p className="font-semibold text-sm text-white">Supplier Data Entry</p>
-                    <span className="rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2 py-0.5 font-bold text-[10px] text-emerald-400">
-                      Live
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      { label: "Material Composition", value: "FSC oak · 94%" },
-                      { label: "Manufacturing Origin", value: "Gdańsk, Poland" },
-                      { label: "CO₂ per unit", value: "12.4 kg CO₂e" }
-                    ].map((f) => (
-                      <div key={f.label} className="rounded-xl border border-brand-dark/20 bg-brand-deep/50 px-4 py-3">
-                        <p className="mb-0.5 font-medium text-[10px] text-slate-500 uppercase tracking-wide">
-                          {f.label}
-                        </p>
-                        <p className="font-medium text-slate-200 text-sm">{f.value}</p>
-                      </div>
-                    ))}
-                    <div className="flex h-10 cursor-pointer items-center justify-center rounded-xl bg-indigo-600/80 transition-colors hover:bg-indigo-500/80">
-                      <span className="font-semibold text-sm text-white">Submit & Verify</span>
-                    </div>
-                  </div>
-                </div>
+                <SupplierDataEntryVisual />
               </motion.div>
 
               {/* Visual 4: Raw Material (3D rock) */}
               <motion.div
                 style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"], zIndex: z4 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
               >
                 <div className="aspect-square w-[min(100%,80vw)] md:w-[min(100%,85vh)]">
                   <RawMaterialCanvas isActiveReference={canvasActive} />
@@ -296,27 +389,18 @@ export function StorytellingScroll() {
               {/* Visual 5: Transport Routes Card */}
               <motion.div
                 style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"], zIndex: z5 }}
-                className="absolute inset-0 flex items-center justify-center md:pl-12"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0 md:pl-12"
               >
-                <div className="w-full max-w-[320px] overflow-hidden rounded-2xl border border-white/30 bg-white/20 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-96">
+                <div className="w-full max-w-[340px] sm:max-w-[400px]">
                   {/* Header */}
-                  <div className="border-white/20 border-b bg-[#152762] px-4 pt-4 pb-3 sm:px-5 sm:pt-5 sm:pb-4">
-                    <div className="mb-1 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-indigo-500/20 bg-indigo-500/10">
-                          <MapPin className="h-3.5 w-3.5 text-indigo-400" />
-                        </div>
-                        <span className="font-semibold text-sm text-white">Supply Chain Routes</span>
-                      </div>
-                      <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-bold text-[10px] text-indigo-400">
-                        3 legs
-                      </span>
-                    </div>
-                    <p className="ml-9 text-[10px] text-slate-500">Calculated distances · Real-time tracking</p>
+                  <div className="mb-4 flex items-center gap-2.5 px-1">
+                    <MapPin className="h-5 w-5 text-indigo-400" />
+                    <span className="font-bold text-lg text-white">Supply Chain Routes</span>
+                    <span className="ml-auto font-bold text-xs text-slate-400">3 legs</span>
                   </div>
 
                   {/* Route legs */}
-                  <div className="space-y-3 p-4">
+                  <div className="space-y-3">
                     {[
                       {
                         from: "Kuopio, Finland",
@@ -327,7 +411,7 @@ export function StorytellingScroll() {
                         co2: "4.2 kg",
                         time: "3 days",
                         pct: 100,
-                        colorClassName: "bg-cyan-500/10 text-cyan-400",
+                        colorClassName: "border-cyan-400/30 bg-cyan-500/10 text-cyan-400",
                         barClassName: "bg-gradient-to-r from-cyan-500 to-cyan-400",
                         dotClassName: "bg-cyan-400",
                         modeColorClassName: "text-cyan-400"
@@ -341,7 +425,7 @@ export function StorytellingScroll() {
                         co2: "1.1 kg",
                         time: "8 hrs",
                         pct: 65,
-                        colorClassName: "bg-amber-500/10 text-amber-400",
+                        colorClassName: "border-amber-400/30 bg-amber-500/10 text-amber-400",
                         barClassName: "bg-gradient-to-r from-amber-500 to-amber-400",
                         dotClassName: "bg-amber-400",
                         modeColorClassName: "text-amber-400"
@@ -355,7 +439,7 @@ export function StorytellingScroll() {
                         co2: "3.8 kg",
                         time: "6 hrs",
                         pct: 30,
-                        colorClassName: "bg-violet-500/10 text-violet-400",
+                        colorClassName: "border-violet-400/30 bg-violet-500/10 text-violet-400",
                         barClassName: "bg-gradient-to-r from-violet-500 to-violet-400",
                         dotClassName: "bg-violet-400",
                         modeColorClassName: "text-violet-400"
@@ -364,16 +448,16 @@ export function StorytellingScroll() {
                       <div
                         key={leg.from}
                         data-hover-trigger=""
-                        className="flex gap-3 rounded-xl border border-brand-dark/15 bg-brand-deep p-3"
+                        className="flex gap-3.5 rounded-2xl border border-white/30 bg-white/20 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-md"
                       >
                         {/* Icon + label */}
                         <div className="flex shrink-0 flex-col items-center">
                           <div
-                            className={`flex h-10 w-10 items-center justify-center rounded-lg ${leg.colorClassName}`}
+                            className={`flex h-11 w-11 items-center justify-center rounded-xl border ${leg.colorClassName}`}
                           >
                             {leg.icon}
                           </div>
-                          <span className={`mt-1 text-[9px] uppercase tracking-wide ${leg.modeColorClassName}`}>
+                          <span className={`mt-1 text-[10px] font-medium uppercase tracking-wide ${leg.modeColorClassName}`}>
                             {leg.mode}
                           </span>
                         </div>
@@ -381,22 +465,22 @@ export function StorytellingScroll() {
                         <div className="flex min-w-0 flex-1 flex-col">
                           <div className="mb-2 flex items-center justify-between">
                             <div>
-                              <p className="text-[10px] text-slate-400 leading-tight">{leg.from}</p>
-                              <p className="font-medium text-[10px] text-white leading-tight">{leg.to}</p>
+                              <p className="text-xs text-slate-300">{leg.from}</p>
+                              <p className="font-medium text-xs text-white">{leg.to}</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-semibold text-[10px] text-white">{leg.dist}</p>
-                              <p className="text-[9px] text-slate-500">{leg.time}</p>
+                              <p className="font-semibold text-xs text-white">{leg.dist}</p>
+                              <p className="text-[11px] text-slate-400">{leg.time}</p>
                             </div>
                           </div>
                           {/* Progress bar */}
-                          <div className="relative h-1 overflow-hidden rounded-full bg-brand-dark">
+                          <div className="relative h-1.5 overflow-hidden rounded-full bg-brand-dark">
                             <motion.div
                               className={`absolute top-0 left-0 h-full rounded-full ${leg.barClassName}`}
                               style={{ width: `${leg.pct}%` }}
                             />
                             <motion.div
-                              className="absolute top-1/2 flex h-3.5 w-3.5 -translate-y-1/2 items-center justify-center rounded-full border border-slate-500 bg-slate-700 shadow-md"
+                              className="absolute top-1/2 flex h-4 w-4 -translate-y-1/2 items-center justify-center rounded-full border border-slate-500 bg-slate-700 shadow-md"
                               animate={{ left: ["0%", `${leg.pct - 3}%`] }}
                               transition={{
                                 repeat: Infinity,
@@ -405,11 +489,11 @@ export function StorytellingScroll() {
                                 delay: legIndex * 0.6
                               }}
                             >
-                              <div className={`h-1.5 w-1.5 rounded-full ${leg.dotClassName}`} />
+                              <div className={`h-2 w-2 rounded-full ${leg.dotClassName}`} />
                             </motion.div>
                           </div>
                           <div className="mt-1.5 flex justify-end">
-                            <span className="text-[9px] text-slate-500">{leg.co2} CO₂e</span>
+                            <span className="text-[11px] text-slate-400">{leg.co2} CO₂e</span>
                           </div>
                         </div>
                       </div>
@@ -417,22 +501,20 @@ export function StorytellingScroll() {
                   </div>
 
                   {/* Summary footer */}
-                  <div className="px-4 pb-4">
-                    <div className="flex items-center justify-between rounded-xl border border-indigo-500/10 bg-indigo-500/5 p-3">
-                      <div>
-                        <p className="font-medium text-[10px] text-slate-500 uppercase tracking-wide">Total Route</p>
-                        <p className="font-bold text-sm text-white">3,042 km</p>
-                      </div>
-                      <div className="h-8 w-px bg-slate-700" />
-                      <div>
-                        <p className="font-medium text-[10px] text-slate-500 uppercase tracking-wide">Transport CO₂</p>
-                        <p className="font-bold text-indigo-400 text-sm">9.1 kg</p>
-                      </div>
-                      <div className="h-8 w-px bg-slate-700" />
-                      <div>
-                        <p className="font-medium text-[10px] text-slate-500 uppercase tracking-wide">Transit Time</p>
-                        <p className="font-bold text-sm text-white">~4 days</p>
-                      </div>
+                  <div className="mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-brand-darkest px-4 py-3">
+                    <div>
+                      <p className="font-medium text-[11px] text-slate-500 uppercase tracking-wide">Total Route</p>
+                      <p className="font-bold text-sm text-white">3,042 km</p>
+                    </div>
+                    <div className="h-8 w-px bg-slate-700" />
+                    <div>
+                      <p className="font-medium text-[11px] text-slate-500 uppercase tracking-wide">Transport CO₂</p>
+                      <p className="font-bold text-indigo-400 text-sm">9.1 kg</p>
+                    </div>
+                    <div className="h-8 w-px bg-slate-700" />
+                    <div>
+                      <p className="font-medium text-[11px] text-slate-500 uppercase tracking-wide">Transit Time</p>
+                      <p className="font-bold text-sm text-white">~4 days</p>
                     </div>
                   </div>
                 </div>
@@ -441,7 +523,7 @@ export function StorytellingScroll() {
               {/* Visual 6: LCA Engine */}
               <motion.div
                 style={{ opacity: vOp6, pointerEvents: pView6 as MotionStyle["pointerEvents"], zIndex: z6 }}
-                className="absolute inset-0 flex items-center justify-center md:pl-12"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0 md:pl-12"
               >
                 <LcaEngineVisual />
               </motion.div>
@@ -449,59 +531,58 @@ export function StorytellingScroll() {
               {/* Visual 7: DPP mini-card */}
               <motion.div
                 style={{ opacity: vOp7, pointerEvents: pView7 as MotionStyle["pointerEvents"], zIndex: z7 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
               >
-                <div className="w-full max-w-[260px] overflow-hidden rounded-3xl border border-brand-dark/20 bg-brand-dark/20 shadow-2xl shadow-black/20 backdrop-blur-xl sm:max-w-72">
-                  <div className="border-slate-700/40 border-b bg-gradient-to-br from-brand-dark/30 to-brand-dark/20 p-5">
-                    <div className="mb-3 flex items-center justify-between">
-                      <span className="font-bold text-[10px] text-indigo-400 uppercase tracking-widest">
-                        Digital Product Passport
-                      </span>
-                      <span className="rounded-lg bg-brand-deep/50 px-2 py-0.5 font-bold text-[10px] text-white">
-                        ESPR 2026
-                      </span>
-                    </div>
-                    <p className="font-bold text-base text-white leading-tight">
-                      West Elm Slope
-                      <br />
-                      Leather Chair
-                    </p>
-                    <p className="mt-1 font-mono text-[10px] text-slate-400">DPP-2024-WE-SL-0042</p>
+                <div className="w-full max-w-[340px] sm:max-w-[400px]">
+                  {/* Header */}
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="text-lg font-bold text-white">Digital Product Passport</span>
+                    <span className="rounded-lg bg-indigo-500/20 px-2.5 py-1 text-xs font-bold text-indigo-300">
+                      ESPR 2026
+                    </span>
                   </div>
-                  <div className="space-y-4 p-5">
+                  {/* Product info card */}
+                  <div className="rounded-2xl border border-white/30 bg-white/20 px-4 py-3.5 shadow-2xl shadow-black/20 backdrop-blur-md">
+                    <p className="text-base font-bold leading-tight text-white">
+                      West Elm Slope Leather Chair
+                    </p>
+                    <p className="mt-1 font-mono text-xs text-slate-400">DPP-2024-WE-SL-0042</p>
+                  </div>
+                  {/* Sustainability bar */}
+                  <div className="mt-3 rounded-2xl border border-white/30 bg-white/20 px-4 py-3.5 shadow-2xl shadow-black/20 backdrop-blur-md">
+                    <div className="mb-2 flex justify-between">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">Sustainability</span>
+                      <span className="text-sm font-bold text-emerald-400">94 / 100</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-slate-700">
+                      <motion.div
+                        className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
+                        style={{ width: scoreBarWidth }}
+                      />
+                    </div>
+                  </div>
+                  {/* Metric pills */}
+                  <div className="mt-3 flex gap-3">
+                    {[
+                      { label: "CO₂", value: "12kg" },
+                      { label: "Repair", value: "9/10" },
+                      { label: "Lifecycle", value: "25yr" }
+                    ].map((s) => (
+                      <div
+                        key={s.label}
+                        className="flex-1 rounded-2xl border border-white/30 bg-white/20 py-3 text-center shadow-2xl shadow-black/20 backdrop-blur-md"
+                      >
+                        <p className="text-base font-bold text-white">{s.value}</p>
+                        <p className="mt-0.5 text-[11px] text-slate-400">{s.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {/* QR footer */}
+                  <div className="mt-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-brand-darkest px-4 py-3">
+                    <QrCode className="h-9 w-9 shrink-0 text-white" />
                     <div>
-                      <div className="mb-1.5 flex justify-between text-[11px]">
-                        <span className="font-medium text-slate-400 uppercase tracking-wide">Sustainability</span>
-                        <span className="font-bold text-emerald-400">94 / 100</span>
-                      </div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-slate-700">
-                        <motion.div
-                          className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
-                          style={{ width: scoreBarWidth }}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      {[
-                        { label: "CO₂", value: "12kg" },
-                        { label: "Repair", value: "9/10" },
-                        { label: "Lifecycle", value: "25yr" }
-                      ].map((s) => (
-                        <div
-                          key={s.label}
-                          className="flex-1 rounded-xl border border-brand-dark/20 bg-brand-deep/40 p-2.5 text-center"
-                        >
-                          <p className="font-bold text-base text-white">{s.value}</p>
-                          <p className="mt-0.5 text-[10px] text-slate-500">{s.label}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-3 rounded-xl border border-brand-dark/20 bg-brand-deep/40 p-3">
-                      <QrCode className="h-10 w-10 shrink-0 text-white" />
-                      <div>
-                        <p className="font-semibold text-[11px] text-white">Scan to verify</p>
-                        <p className="text-[10px] text-slate-500">GS1-compliant · Verified</p>
-                      </div>
+                      <p className="text-sm font-semibold text-white">Scan to verify</p>
+                      <p className="text-xs text-slate-400">GS1-compliant · Verified</p>
                     </div>
                   </div>
                 </div>
