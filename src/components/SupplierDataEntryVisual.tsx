@@ -15,7 +15,7 @@ const PAUSE_BETWEEN = 600;      // ms pause between fields
 const PAUSE_BEFORE_CALC = 500;  // ms before CO₂ fades in
 const HOLD_DURATION = 2400;     // ms to hold final state before restart
 
-export function SupplierDataEntryVisual() {
+export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boolean } = {}) {
   const [fieldIndex, setFieldIndex] = useState(0);   // which field is typing (0 or 1)
   const [charIndex, setCharIndex] = useState(0);      // chars revealed in current field
   const [showCalc, setShowCalc] = useState(false);    // CO₂ faded in?
@@ -62,7 +62,7 @@ export function SupplierDataEntryVisual() {
   }, [phase, charIndex, fieldIndex, reset]);
 
   return (
-    <div className="flex h-full w-full items-start justify-center overflow-hidden px-4 pt-4">
+    <div className={`flex h-full w-full justify-center overflow-hidden px-4 pt-4 ${alignTop ? "items-start" : "items-center"}`}>
     <div className="w-full max-w-[340px] sm:max-w-[400px]">
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
