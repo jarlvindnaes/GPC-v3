@@ -12,11 +12,11 @@ export function Home() {
     <main>
       <Hero />
       <TrustLogos />
-      <StatsSection />
-      <CountdownBanner />
       <FeatureGrid variant="compact" />
+      <CountdownBanner />
       <StorytellingScroll />
       <Testimonials />
+      <StatsSection />
       <Pricing />
     </main>
   );

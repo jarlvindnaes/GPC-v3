@@ -93,7 +93,7 @@ function LoadingOverlay({ variant }: { variant: "light" | "dark" }) {
 	);
 }
 
-export function ChairPhoneShowcase({ buttonStyle = "light" }: { /** "light" = white glassmorphic buttons (for dark backgrounds), "dark" = grey buttons (for light backgrounds). Only affects the small phone; expanded always uses light. */ buttonStyle?: "light" | "dark" } = {}) {
+export function ChairPhoneShowcase({ buttonStyle = "light", hideHint = false, className }: { /** "light" = white glassmorphic buttons (for dark backgrounds), "dark" = grey buttons (for light backgrounds). Only affects the small phone; expanded always uses light. */ buttonStyle?: "light" | "dark"; /** Hide the built-in hint label (useful when rendering it externally). */ hideHint?: boolean; /** Additional CSS classes for the canvas container. */ className?: string } = {}) {
 	const btnClass = buttonStyle === "dark"
 		? "border-slate-400/40 bg-slate-500/30 text-slate-700 backdrop-blur-md hover:bg-slate-500/40"
 		: "border-white/30 bg-white/20 text-white backdrop-blur-md hover:bg-white/30";
@@ -145,7 +145,7 @@ export function ChairPhoneShowcase({ buttonStyle = "light" }: { /** "light" = wh
 				ref={containerReference}
 				role="img"
 				aria-label="Interactive 3D chair with product passport"
-				className="relative mx-auto h-[min(80vw,600px)] w-[min(90vw,800px)]"
+				className={`relative mx-auto h-[min(80vw,600px)] w-[min(90vw,800px,100%)] ${className ?? ""}`}
 			>
 				<Canvas
 					frameloop="demand"
@@ -257,17 +257,19 @@ export function ChairPhoneShowcase({ buttonStyle = "light" }: { /** "light" = wh
 				)}
 			</div>
 
-			{/* Hint label - outside canvas container to avoid stacking issues, clickable on mobile */}
-			<button
-				type="button"
-				onClick={() => setLocked(true)}
-				className={`mx-auto block cursor-pointer border-none bg-transparent pt-1 transition-all duration-300 sm:pointer-events-none ${phoneVisible ? "pointer-events-none translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
-			>
-				<p className="whitespace-nowrap text-center text-slate-500 text-xs">
-					<span className="hidden sm:inline">Hover</span>
-					<span className="sm:hidden">Tap</span> the tag to explore
-				</p>
-			</button>
+			{/* Hint label - positioned below the canvas container */}
+			{!hideHint && (
+				<button
+					type="button"
+					onClick={() => setLocked(true)}
+					className={`pointer-events-auto mx-auto -mt-6 block cursor-pointer border-none bg-transparent transition-all duration-300 lg:pointer-events-none ${phoneVisible ? "pointer-events-none translate-y-2 opacity-0" : "translate-y-0 opacity-100"}`}
+				>
+					<p className={`animate-[hint-wiggle_4s_ease-in-out_infinite] text-center font-semibold text-base tracking-wide ${buttonStyle === "dark" ? "text-brand-text" : "text-slate-300"}`}>
+						<span className="hidden lg:inline">Hover</span>
+						<span className="lg:hidden">Tap</span> the tag to explore
+					</p>
+				</button>
+			)}
 		</div>
 	);
 }

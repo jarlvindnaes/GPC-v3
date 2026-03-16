@@ -2,10 +2,10 @@ export function About() {
   return (
     <main className="pt-32 pb-24">
       <div className="mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-5xl md:text-6xl">
           About Product Connect
         </h1>
-        <p className="max-w-3xl text-base text-brand-text sm:text-lg md:text-xl">
+        <p className="max-w-3xl text-pretty text-base text-brand-text sm:text-lg md:text-xl">
           We are building the infrastructure that gives intelligence to physical products.
         </p>
       </div>
@@ -14,7 +14,7 @@ export function About() {
           Product Connect exists to give manufacturers complete visibility across their entire value chain - and in the
           process, build lasting internal capability rather than expensive external dependency.
         </p>
-        <h2 className="font-display font-semibold text-2xl text-brand-darkest tracking-tight sm:text-3xl">
+        <h2 className="font-display font-semibold text-2xl text-balance text-brand-darkest tracking-tight sm:text-3xl">
           The Key Differentiator
         </h2>
         <p className="text-base text-brand-text leading-relaxed sm:text-lg">

@@ -86,7 +86,7 @@ export function RawMaterialCanvas({ isActiveReference }: { isActiveReference?: R
       ref={containerReference}
       role="img"
       aria-label="3D raw material model viewer"
-      className="h-full w-full cursor-grab active:cursor-grabbing"
+      className="h-full w-full touch-pan-y cursor-grab active:cursor-grabbing lg:touch-auto"
     >
       <Canvas
         frameloop="demand"
@@ -153,7 +153,7 @@ export function ComponentsCanvas({
       ref={containerReference}
       role="img"
       aria-label="3D component model viewer"
-      className="h-full w-full cursor-grab active:cursor-grabbing"
+      className="h-full w-full touch-pan-y cursor-grab active:cursor-grabbing lg:touch-auto"
     >
       <Canvas
         frameloop="demand"
@@ -307,7 +307,7 @@ export function FinishedProductCanvas({
       ref={containerReference}
       role="img"
       aria-label="3D finished product model viewer"
-      className="absolute inset-0 cursor-grab active:cursor-grabbing"
+      className="absolute inset-0 touch-pan-y cursor-grab active:cursor-grabbing lg:touch-auto"
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         mouseRef.current.set(
@@ -1642,7 +1642,7 @@ export function DppInteractiveProduct() {
               <p className="mb-1.5 font-semibold text-brand text-xs uppercase tracking-widest">
                 Digital Product Passport
               </p>
-              <h2 className="font-bold text-2xl text-brand-darkest leading-snug">
+              <h2 className="font-bold text-2xl text-balance text-brand-darkest leading-snug">
                 West Elm Slope
                 <br />
                 Leather Chair

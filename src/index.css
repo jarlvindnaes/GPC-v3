@@ -60,6 +60,13 @@
   --color-brand-emerald: #00D08E;
 }
 
+@keyframes hint-wiggle {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  92% { transform: rotate(-3deg) scale(1.04); }
+  95% { transform: rotate(3deg) scale(1.04); }
+  97% { transform: rotate(-2deg); }
+}
+
 @utility bg-radial-dark-sun {
   background: radial-gradient(ellipse at 50% 125%, color-mix(in srgb, var(--color-brand) 50%, var(--color-brand-deep)) 0%, var(--color-brand-deep) 50%);
 }
@@ -81,7 +88,7 @@
 }
 
 @utility bg-linear-bright {
-  background: linear-gradient(to top left, var(--color-brand-surface), var(--color-brand-light));
+  background: linear-gradient(to top left, var(--color-brand-surface), color-mix(in srgb, var(--color-brand-light) 12%, white));
 }
 
 @utility hover-gradient-border {

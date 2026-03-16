@@ -94,10 +94,10 @@ export function StorytellingScroll() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="mb-6 font-display font-semibold text-3xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+              <h2 className="mb-6 font-display font-semibold text-3xl text-balance tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 How it works
               </h2>
-              <p className="mx-auto max-w-4xl text-base text-slate-400 leading-relaxed sm:text-lg md:text-xl">
+              <p className="mx-auto max-w-4xl text-pretty text-base text-slate-400 leading-relaxed sm:text-lg md:text-xl">
                 From construction model to certified Digital Product Passport in seven steps. Scroll to see how Product
                 Connect digitises your product into a verified digital twin.
               </p>
@@ -107,7 +107,7 @@ export function StorytellingScroll() {
 
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
-          <div className="absolute top-[45%] bottom-0 left-8 z-0 w-0.5 bg-brand-dark md:left-1/2 md:-translate-x-1/2">
+          <div className="absolute top-[45%] bottom-0 left-8 z-0 w-0.5 bg-brand-dark lg:left-1/2 lg:-translate-x-1/2">
             {/* Starting circle - scrolls away naturally */}
             <motion.div
               className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-accent"
@@ -124,9 +124,9 @@ export function StorytellingScroll() {
             />
           </div>
 
-          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-20 pb-2 sm:px-6 md:mt-20 md:h-auto md:flex-row md:gap-12 md:py-0 lg:px-8">
+          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-20 pb-2 sm:px-6 lg:mt-20 lg:h-auto lg:flex-row lg:gap-12 lg:px-8 lg:py-0">
             {/* ── Text panel (left) ── */}
-            <div className="relative flex h-[270px] w-full shrink-0 items-center pl-10 sm:pl-12 md:h-[420px] md:w-[44%] md:pr-12 md:pl-0">
+            <div className="relative flex h-[270px] w-full shrink-0 items-center pl-10 sm:pl-12 lg:h-[420px] lg:w-[44%] lg:pr-12 lg:pl-0">
               {[
                 {
                   op: op1,
@@ -180,32 +180,36 @@ export function StorytellingScroll() {
                   <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark text-indigo-400 shadow-indigo-500/10 shadow-lg md:mb-6">
                     {icon}
                   </div>
-                  <h2 className="mb-2 font-bold text-2xl leading-[1.1] tracking-tight sm:text-4xl md:mb-4 md:text-5xl">
+                  <h2 className="mb-2 font-bold text-2xl text-balance leading-[1.1] tracking-tight sm:text-4xl md:mb-4 md:text-5xl">
                     {title}
                   </h2>
-                  <p className="max-w-sm text-sm text-slate-400 leading-relaxed sm:text-base md:text-lg">{body}</p>
+                  <p className="max-w-sm text-pretty text-sm text-slate-400 leading-relaxed sm:text-base md:text-lg">{body}</p>
                 </motion.div>
               ))}
             </div>
 
             {/* ── Visual panel (right) ── */}
-            <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden md:min-h-[700px] md:overflow-visible">
+            <div className="relative flex min-h-0 w-full flex-1 items-center justify-center lg:min-h-[700px]">
               {/* Visual 1: Chair */}
               <motion.div
                 style={{ opacity: vOp1, pointerEvents: pView1 as MotionStyle["pointerEvents"], zIndex: z1, y: chairY }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
+                className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
-                <div className="relative h-full w-full touch-none">
+                <div className="relative h-full w-full">
                   <FinishedProductCanvas fieldOfView={55} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md md:bottom-6 md:gap-4 md:px-5 md:py-3.5">
-                  <div className="flex flex-col">
-                    <p className="whitespace-nowrap font-semibold text-sm text-white">West Elm Slope Leather Chair</p>
-                    <p className="mt-0.5 text-[11px] text-slate-400">247 components • 18 suppliers</p>
-                  </div>
-                  <div className="flex items-center gap-1.5 border-slate-600/40 border-l pl-3">
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                    <span className="font-bold text-[10px] text-emerald-400 uppercase tracking-wider">Ready</span>
+                <div className="pointer-events-none absolute bottom-2 left-6 right-4 flex justify-center sm:left-8 sm:right-6 md:bottom-6 lg:left-0 lg:right-0">
+                  <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <p className="whitespace-nowrap font-semibold text-sm text-white">West Elm Slope Leather Chair</p>
+                        <p className="mt-0.5 text-[11px] text-slate-400">247 components • 18 suppliers</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 border-slate-600/40 border-l pl-3">
+                        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                        <span className="font-bold text-[10px] text-emerald-400 uppercase tracking-wider">Ready</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -213,22 +217,20 @@ export function StorytellingScroll() {
               {/* Visual 2: Components - 3D Model */}
               <motion.div
                 style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"], zIndex: z2 }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
+                className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
-                <div className="aspect-square w-[min(100%,80vw)] md:w-[min(100%,85vh)]">
+                <div className="aspect-square w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
                   <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md md:bottom-6 md:px-5 md:py-3.5">
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col">
-                      <p className="whitespace-nowrap font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
-                      <div className="mt-1 flex items-center gap-3">
-                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Material</span>
-                        <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
-                        <span className="text-slate-700">·</span>
-                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Weight</span>
-                        <span className="text-[11px] text-slate-300">24g</span>
-                      </div>
+                <div className="pointer-events-none absolute bottom-2 left-6 right-4 flex justify-center sm:left-8 sm:right-6 md:bottom-6 lg:left-0 lg:right-0">
+                  <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
+                    <p className="font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
+                    <div className="mt-1.5 flex items-center gap-3">
+                      <span className="font-medium text-[10px] text-white uppercase tracking-wider">Material</span>
+                      <span className="text-[11px] text-slate-300">Grade 8.8 Steel</span>
+                      <span className="text-slate-700">·</span>
+                      <span className="font-medium text-[10px] text-white uppercase tracking-wider">Weight</span>
+                      <span className="text-[11px] text-slate-300">24g</span>
                     </div>
                   </div>
                 </div>
@@ -237,7 +239,7 @@ export function StorytellingScroll() {
               {/* Visual 3: Supplier portal card */}
               <motion.div
                 style={{ opacity: vOp3, x: vX3, pointerEvents: pView3 as MotionStyle["pointerEvents"], zIndex: z3 }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
+                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <SupplierDataEntryVisual />
               </motion.div>
@@ -245,26 +247,28 @@ export function StorytellingScroll() {
               {/* Visual 4: Raw Material (3D rock) */}
               <motion.div
                 style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"], zIndex: z4 }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
+                className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
-                <div className="aspect-square w-[min(100%,80vw)] md:w-[min(100%,85vh)]">
+                <div className="aspect-square w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
                   <RawMaterialCanvas isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 rounded-2xl border border-white/30 bg-white/20 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-md md:bottom-6 md:px-5 md:py-3.5">
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col">
-                      <p className="font-semibold text-sm text-white">Iron Ore - Raw Material</p>
-                      <div className="mt-1 flex items-center gap-3">
-                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Origin</span>
-                        <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
-                        <span className="text-slate-700">·</span>
-                        <span className="font-medium text-[10px] text-white uppercase tracking-wider">Grade</span>
-                        <span className="text-[11px] text-slate-300">Fe 65%</span>
+                <div className="pointer-events-none absolute bottom-2 left-6 right-4 flex justify-center sm:left-8 sm:right-6 md:bottom-6 lg:left-0 lg:right-0">
+                  <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <p className="font-semibold text-sm text-white">Iron Ore - Raw Material</p>
+                        <div className="mt-1.5 flex items-center gap-3">
+                          <span className="font-medium text-[10px] text-white uppercase tracking-wider">Origin</span>
+                          <span className="text-[11px] text-slate-300">Kiruna, Sweden</span>
+                          <span className="text-slate-700">·</span>
+                          <span className="font-medium text-[10px] text-white uppercase tracking-wider">Grade</span>
+                          <span className="text-[11px] text-slate-300">Fe 65%</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex flex-col items-center border-slate-600/40 border-l pl-3">
-                      <span className="font-bold text-emerald-400 text-xs">✓</span>
-                      <span className="text-[9px] text-white uppercase">Verified</span>
+                      <div className="flex flex-col items-center border-slate-600/40 border-l pl-3">
+                        <span className="font-bold text-emerald-400 text-xs">✓</span>
+                        <span className="text-[9px] text-white uppercase">Verified</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -273,7 +277,7 @@ export function StorytellingScroll() {
               {/* Visual 5: Transport Routes Card */}
               <motion.div
                 style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"], zIndex: z5 }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0 md:pl-12"
+                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <div className="w-full max-w-[340px] sm:max-w-[400px]">
                   {/* Header */}
@@ -407,7 +411,7 @@ export function StorytellingScroll() {
               {/* Visual 6: LCA Engine */}
               <motion.div
                 style={{ opacity: vOp6, pointerEvents: pView6 as MotionStyle["pointerEvents"], zIndex: z6 }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0 md:pl-12"
+                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <LcaEngineVisual />
               </motion.div>
@@ -415,7 +419,7 @@ export function StorytellingScroll() {
               {/* Visual 7: DPP mini-card */}
               <motion.div
                 style={{ opacity: vOp7, pointerEvents: pView7 as MotionStyle["pointerEvents"], zIndex: z7 }}
-                className="absolute inset-y-0 left-7 right-0 flex items-center justify-center md:inset-0"
+                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <div className="w-full max-w-[340px] sm:max-w-[400px]">
                   {/* Header */}
@@ -479,7 +483,7 @@ export function StorytellingScroll() {
       {/* ── Grand Finale: Your Intelligent Product ── */}
       <section className="relative bg-brand-deep pt-6 pb-16 text-white sm:pt-8 sm:pb-32">
         {/* Metro line continuation - fades from story section into the QR on the chair */}
-        <div className="absolute top-0 left-8 z-[5] w-0.5 md:left-1/2 md:-translate-x-1/2" style={{ height: "45%" }}>
+        <div className="absolute top-0 left-8 z-[5] w-0.5 lg:left-1/2 lg:-translate-x-1/2" style={{ height: "45%" }}>
           <div className="h-full w-full bg-gradient-to-b from-violet-500 to-transparent" />
         </div>
 
@@ -494,7 +498,7 @@ export function StorytellingScroll() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center"
           >
-            <div>
+            <div className="w-full">
               <ChairPhoneShowcase />
             </div>
 
@@ -503,11 +507,11 @@ export function StorytellingScroll() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-dark/60 bg-brand-dark/80 text-indigo-400">
                   <Sparkles className="h-4.5 w-4.5" />
                 </div>
-                <h2 className="font-display font-semibold text-2xl tracking-tight sm:text-4xl md:text-5xl">
+                <h2 className="font-display font-semibold text-2xl text-balance tracking-tight sm:text-4xl md:text-5xl">
                   Your Intelligent Product
                 </h2>
               </div>
-              <p className="mx-auto max-w-lg text-lg text-slate-400 leading-relaxed">
+              <p className="mx-auto max-w-lg text-pretty text-lg text-slate-400 leading-relaxed">
                 The journey is complete. Your product is now a living, intelligent asset - spare parts, documentation,
                 care guides, and verified claims, all accessible with a single scan.
               </p>

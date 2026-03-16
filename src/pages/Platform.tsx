@@ -7,10 +7,10 @@ export function Platform() {
   return (
     <main className="pt-32 pb-24">
       <div className="mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-5xl md:text-6xl">
           The Product Connect Platform
         </h1>
-        <p className="max-w-3xl text-base text-brand-text sm:text-lg md:text-xl">
+        <p className="max-w-3xl text-pretty text-base text-brand-text sm:text-lg md:text-xl">
           A comprehensive suite of tools designed to trace, prove, and monetize your physical products. From raw
           materials to the end consumer.
         </p>
@@ -19,8 +19,8 @@ export function Platform() {
       <section className="mb-24 bg-brand-deep py-24 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-16 max-w-3xl text-center">
-            <h2 className="mb-4 font-display font-semibold text-3xl tracking-tight md:text-4xl">How it works</h2>
-            <p className="text-lg text-slate-400">
+            <h2 className="mb-4 font-display font-semibold text-3xl text-balance tracking-tight md:text-4xl">How it works</h2>
+            <p className="text-pretty text-lg text-slate-400">
               A seamless flow from your existing CAD files to a consumer-facing Digital Product Passport.
             </p>
           </div>
@@ -36,7 +36,7 @@ export function Platform() {
               </div>
               <div className="mb-2 font-bold text-indigo-400 text-sm uppercase tracking-widest">Step 01</div>
               <h3 className="mb-3 font-semibold text-xl">Ingest 3D Model</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-pretty text-slate-400 text-sm leading-relaxed">
                 Import STEP, SolidWorks, or Rhino files. We auto-detect components, analyze volume, and classify
                 materials.
               </p>
@@ -49,7 +49,7 @@ export function Platform() {
               </div>
               <div className="mb-2 font-bold text-emerald-400 text-sm uppercase tracking-widest">Step 02</div>
               <h3 className="mb-3 font-semibold text-xl">Harvest Data</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-pretty text-slate-400 text-sm leading-relaxed">
                 Suppliers validate specs via web or mobile app. Capture material weight, origin, and certifications
                 instantly.
               </p>
@@ -62,7 +62,7 @@ export function Platform() {
               </div>
               <div className="mb-2 font-bold text-cyan-400 text-sm uppercase tracking-widest">Step 03</div>
               <h3 className="mb-3 font-semibold text-xl">Calculate Impact</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-pretty text-slate-400 text-sm leading-relaxed">
                 Turn supply chain data into verified CO₂ numbers. EN 15804 compliant, cradle-to-grave analysis.
               </p>
             </div>
@@ -74,7 +74,7 @@ export function Platform() {
               </div>
               <div className="mb-2 font-bold text-rose-400 text-sm uppercase tracking-widest">Step 04</div>
               <h3 className="mb-3 font-semibold text-xl">Generate DPP</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-pretty text-slate-400 text-sm leading-relaxed">
                 Publish a verified, living document accessible to consumers. Ready for ESPR, Right to Repair, and
                 commerce.
               </p>
@@ -89,10 +89,10 @@ export function Platform() {
       <section className="py-16 sm:py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
-            <h2 className="mb-4 font-display font-semibold text-3xl text-brand-darkest tracking-tight md:text-4xl">
+            <h2 className="mb-4 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight md:text-4xl">
               See it in action
             </h2>
-            <p className="text-base text-brand-text sm:text-lg">
+            <p className="text-pretty text-base text-brand-text sm:text-lg">
               Explore the Product Connect interface - from 3D model ingestion to global supply chain mapping.
             </p>
           </div>

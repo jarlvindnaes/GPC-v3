@@ -7,10 +7,10 @@ export function Pricing() {
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="mb-4 font-display font-semibold text-3xl text-brand-darkest tracking-tight md:text-4xl">
+          <h2 className="mb-4 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight md:text-4xl">
             Component-based pricing
           </h2>
-          <p className="text-brand-text text-lg">
+          <p className="text-pretty text-brand-text text-lg">
             Pricing scales with actual product complexity, not arbitrary product counts.
           </p>
         </div>
@@ -21,7 +21,7 @@ export function Pricing() {
             <div className="mb-4">
               <span className="font-bold text-3xl text-brand-darkest">€0</span>
             </div>
-            <p className="mb-6 text-slate-500 text-sm">Perfect for testing the platform.</p>
+            <p className="mb-6 text-pretty text-slate-500 text-sm">Perfect for testing the platform.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />3 hosted products
@@ -42,7 +42,7 @@ export function Pricing() {
               <span className="font-bold text-3xl text-brand-darkest">€199</span>
               <span className="text-slate-500">/mo</span>
             </div>
-            <p className="mb-6 text-slate-500 text-sm">For small manufacturers starting out.</p>
+            <p className="mb-6 text-pretty text-slate-500 text-sm">For small manufacturers starting out.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
@@ -71,7 +71,7 @@ export function Pricing() {
               <span className="font-bold text-3xl text-white">€799</span>
               <span className="text-slate-400">/mo</span>
             </div>
-            <p className="mb-6 text-slate-400 text-sm">For growing brands with complex supply chains.</p>
+            <p className="mb-6 text-pretty text-slate-400 text-sm">For growing brands with complex supply chains.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-slate-300 text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-light" />
@@ -101,7 +101,7 @@ export function Pricing() {
               <span className="font-bold text-3xl text-brand-darkest">€2,499</span>
               <span className="text-slate-500">/mo</span>
             </div>
-            <p className="mb-6 text-slate-500 text-sm">For large manufacturers with extensive catalogs.</p>
+            <p className="mb-6 text-pretty text-slate-500 text-sm">For large manufacturers with extensive catalogs.</p>
             <ul className="mb-8 flex-1 space-y-3">
               <li className="flex items-start gap-2 text-brand-text text-sm">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />

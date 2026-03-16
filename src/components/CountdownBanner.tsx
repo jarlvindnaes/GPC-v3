@@ -262,7 +262,7 @@ export function CountdownBanner() {
           </div>
 
           {/* Sub-text */}
-          <p className="max-w-lg text-center text-base text-slate-500 leading-relaxed">
+          <p className="max-w-lg text-pretty text-center text-base text-slate-500 leading-relaxed">
             Non-compliance risks market exclusion across the EU.{" "}
             <span className="font-medium text-brand-dark">Is your product passport strategy ready?</span>
           </p>

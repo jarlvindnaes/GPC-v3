@@ -10,7 +10,7 @@ export function Footer() {
               </div>
               <span className="font-semibold text-brand-dark">Product Connect</span>
             </div>
-            <p className="mb-6 max-w-xs text-slate-500 text-sm">
+            <p className="mb-6 max-w-xs text-pretty text-slate-500 text-sm">
               The infrastructure platform for product manufacturers who want full visibility - from raw materials to
               end-of-life.
             </p>
@@ -96,7 +96,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-4 border-slate-100 border-t pt-8 md:flex-row">
-          <p className="text-slate-400 text-sm">&copy; 2026 Product Connect. All rights reserved.</p>
+          <p className="text-pretty text-slate-400 text-sm">&copy; 2026 Product Connect. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="https://example.com" className="text-slate-400 text-sm hover:text-brand-dark">
               Privacy Policy

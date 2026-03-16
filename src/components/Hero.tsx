@@ -266,7 +266,7 @@ export function Hero() {
   }, [addCssTarget]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-white">
+    <section ref={sectionRef} className="relative overflow-x-clip bg-white">
       <div className="pointer-events-none absolute inset-0 z-[1]">
         <div className="pointer-events-auto h-full w-full">
           <HeroNetwork mouseRef={mouseRef} />
@@ -291,7 +291,7 @@ export function Hero() {
                 </span>
                 ESPR 2026 Ready
               </div>
-              <h1 className="mb-8 font-bold font-display text-[1.7rem] text-brand-darkest leading-[1.05] tracking-tight sm:text-4xl md:text-[5rem]">
+              <h1 className="mb-8 font-bold font-display text-[1.7rem] text-brand-darkest leading-[1.05] tracking-tight sm:text-4xl md:text-5xl lg:text-[3.2rem]">
                 Revolutionize Furniture Manufacturing with{" "}
                 <span
                   ref={textRef}
@@ -304,7 +304,7 @@ export function Hero() {
                   Product Connect.
                 </span>
               </h1>
-              <p className="mb-12 max-w-2xl font-medium text-brand-text text-lg leading-relaxed md:text-xl">
+              <p className="mb-12 max-w-2xl text-pretty font-medium text-brand-text text-lg leading-relaxed md:text-xl">
                 Streamline your supply chain, integrate data seamlessly, and track environmental impact. The
                 infrastructure that gives intelligence to physical products.
               </p>
@@ -318,13 +318,13 @@ export function Hero() {
           </div>
 
           {/* Right column — interactive 3D chair with DPP phone */}
-          <div className="pointer-events-auto lg:w-1/2">
+          <div className="pointer-events-auto w-full lg:w-1/2">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              <ChairPhoneShowcase buttonStyle="dark" />
+              <ChairPhoneShowcase buttonStyle="dark" className="lg:h-[min(55vw,480px)]" />
             </motion.div>
           </div>
         </div>

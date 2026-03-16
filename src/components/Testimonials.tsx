@@ -30,10 +30,10 @@ export function Testimonials() {
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 md:mb-20">
-          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight text-balance sm:text-4xl md:text-5xl">
             Trusted by the next generation of makers.
           </h2>
-          <p className="text-base text-brand-text sm:text-lg md:text-xl">
+          <p className="text-pretty text-base text-brand-text sm:text-lg md:text-xl">
             Don't just take our word for it. See how leading furniture manufacturers are using Product Connect to take
             control of their data.
           </p>
@@ -54,7 +54,7 @@ export function Testimonials() {
                   <title>Quote icon</title>
                   <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
                 </svg>
-                <p className="font-medium text-base text-slate-700 leading-relaxed sm:text-lg">
+                <p className="text-pretty font-medium text-base text-slate-700 leading-relaxed sm:text-lg">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
               </blockquote>

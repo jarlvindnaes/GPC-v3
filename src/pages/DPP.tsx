@@ -36,10 +36,10 @@ export function DPP() {
             <QrCode className="h-4 w-4" />
             Digital Product Passports
           </div>
-          <h1 className="mb-6 font-display font-semibold text-3xl text-brand-darkest leading-[1.1] tracking-tight sm:text-5xl md:text-7xl">
+          <h1 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest leading-[1.1] tracking-tight sm:text-5xl md:text-7xl">
             The secure link to your end user.
           </h1>
-          <p className="mb-10 max-w-2xl text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
+          <p className="mb-10 max-w-2xl text-pretty text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
             A living, GS1-compliant passport. Ready for ESPR 2026. Monetize spare parts and prove your claims to the
             world directly through a secure, scannable interface.
           </p>
@@ -57,26 +57,26 @@ export function DPP() {
         <div className="grid gap-8 md:grid-cols-3">
           <WebsiteCard>
             <WebsiteCardIcon icon={ShieldCheck} />
-            <h3 className="mb-4 font-display font-semibold text-brand-darkest text-xl sm:text-2xl">ESPR Compliant</h3>
-            <p className="text-brand-text">
+            <h3 className="mb-4 font-display font-semibold text-balance text-brand-darkest text-xl sm:text-2xl">ESPR Compliant</h3>
+            <p className="text-pretty text-brand-text">
               Built from the ground up to meet the strict requirements of the Ecodesign for Sustainable Products
               Regulation coming in 2026.
             </p>
           </WebsiteCard>
           <WebsiteCard>
             <WebsiteCardIcon icon={Smartphone} />
-            <h3 className="mb-4 font-display font-semibold text-brand-darkest text-xl sm:text-2xl">Consumer Facing</h3>
-            <p className="text-brand-text">
+            <h3 className="mb-4 font-display font-semibold text-balance text-brand-darkest text-xl sm:text-2xl">Consumer Facing</h3>
+            <p className="text-pretty text-brand-text">
               A beautiful, mobile-optimized experience that tells your product's story, shows its impact, and builds
               brand trust.
             </p>
           </WebsiteCard>
           <WebsiteCard>
             <WebsiteCardIcon icon={Link2} />
-            <h3 className="mb-4 font-display font-semibold text-brand-darkest text-xl sm:text-2xl">
+            <h3 className="mb-4 font-display font-semibold text-balance text-brand-darkest text-xl sm:text-2xl">
               Direct Connection
             </h3>
-            <p className="text-brand-text">
+            <p className="text-pretty text-brand-text">
               Bypass retailers and connect directly with the end user. Offer spare parts, care instructions, and
               upgrades instantly.
             </p>
@@ -87,10 +87,10 @@ export function DPP() {
       <section className="bg-brand-deep py-32 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-20 max-w-3xl text-center">
-            <h2 className="mb-6 font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-display font-semibold text-3xl text-balance tracking-tight sm:text-4xl md:text-5xl">
               Value for everyone in the chain.
             </h2>
-            <p className="text-base text-slate-400 sm:text-lg md:text-xl">
+            <p className="text-pretty text-base text-slate-400 sm:text-lg md:text-xl">
               The Digital Product Passport isn't just a compliance tool. It's a new medium for customer relationship and
               circular economy.
             </p>
@@ -109,7 +109,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Convert unknown owners</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Turn anonymous secondary-market buyers into life-long customers through direct registration.
                     </p>
                   </div>
@@ -120,7 +120,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Embed a web-shop in every product</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Sell spare parts and product upgrades using your existing infrastructure, directly from the
                       passport.
                     </p>
@@ -132,7 +132,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Improve via usage data</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Gather actual usage data and feedback to inform your next generation of product design.
                     </p>
                   </div>
@@ -143,7 +143,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Full regulatory compliance</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Ready for DPP, "Right to repair", LEAN, CBAM, and ECO Label requirements.
                     </p>
                   </div>
@@ -163,7 +163,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Convenient repair & upgrade</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Instantly find the exact spare parts, manuals, and service providers for your specific product.
                     </p>
                   </div>
@@ -174,7 +174,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Extend product life span</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Access care instructions and official upgrades to keep the product in circulation longer.
                     </p>
                   </div>
@@ -185,7 +185,7 @@ export function DPP() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-xl">Save resources</h4>
-                    <p className="text-slate-400 leading-relaxed">
+                    <p className="text-pretty text-slate-400 leading-relaxed">
                       Make the sustainable choice by repairing instead of replacing, backed by verified environmental
                       data.
                     </p>
@@ -205,10 +205,10 @@ export function DPP() {
               <BarChart3 className="h-4 w-4" />
               DPP Analytics
             </div>
-            <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
               Intelligence from every scan.
             </h2>
-            <p className="text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
+            <p className="text-pretty text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
               Every time a consumer, retailer, or recycler interacts with your product passport, you gain insight. Turn
               passive QR codes into an active feedback loop.
             </p>
@@ -389,7 +389,7 @@ export function DPP() {
               <WebsiteCard key={feature.title} entranceDelay={featureIndex * 0.08}>
                 <WebsiteCardIcon icon={feature.icon} />
                 <h4 className="mb-2 font-semibold text-brand-darkest text-lg">{feature.title}</h4>
-                <p className="text-brand-text text-sm leading-relaxed">{feature.description}</p>
+                <p className="text-pretty text-brand-text text-sm leading-relaxed">{feature.description}</p>
               </WebsiteCard>
             ))}
           </div>
@@ -403,10 +403,10 @@ export function DPP() {
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-surface px-3 py-1 font-medium text-brand text-sm">
               Extend Your Platform
             </div>
-            <h2 className="mb-6 font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
               Extend with powerful modules.
             </h2>
-            <p className="text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
+            <p className="text-pretty text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
               Transform compliance into competitive advantage. Activate what you need, when you need it. Each module
               plugs directly into your product graph - no separate tools, no data silos.
             </p>
@@ -505,7 +505,7 @@ export function DPP() {
                 <h3 className="mb-2 font-display font-semibold text-brand-darkest text-lg sm:text-xl">
                   {platformModule.title}
                 </h3>
-                <p className="mb-6 flex-1 text-brand-text text-sm leading-relaxed">{platformModule.description}</p>
+                <p className="mb-6 flex-1 text-pretty text-brand-text text-sm leading-relaxed">{platformModule.description}</p>
               </WebsiteCard>
             ))}
           </div>
@@ -517,7 +517,7 @@ export function DPP() {
             viewport={{ once: true }}
             className="mt-16 text-center"
           >
-            <p className="mb-6 text-brand-text">Need a custom module or integration?</p>
+            <p className="mb-6 text-pretty text-brand-text">Need a custom module or integration?</p>
             <WebsiteButton icon={ArrowRight}>Talk to sales</WebsiteButton>
           </motion.div>
         </div>
