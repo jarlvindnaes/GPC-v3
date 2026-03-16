@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { LcaEngineVisual } from "./LcaEngineVisual";
 import { FinishedProductCanvas, IphoneCommerceCanvas, IphoneDppCanvas } from "./Native3DModels";
+import { SupplierDataEntryVisual } from "./SupplierDataEntryVisual";
 import { SupplyChainGlobe } from "./SupplyChainGlobe";
 import { WebsiteCard } from "./WebsiteCard";
 import { WebsiteCardDialog } from "./WebsiteCardDialog";
@@ -37,19 +38,7 @@ const features = [
       "Track grid mix, trade routes & raw material origins"
     ],
     color: "emerald",
-    visual: (
-      <div className="relative mx-auto flex h-48 w-32 flex-col overflow-hidden rounded-2xl border-4 border-brand-dark bg-brand-deep">
-        <div className="flex h-6 items-center justify-center border-brand-dark border-b">
-          <div className="h-1.5 w-12 rounded-full bg-brand-dark"></div>
-        </div>
-        <div className="flex flex-1 flex-col gap-2 p-3">
-          <div className="mb-2 h-16 w-full rounded-lg bg-brand-dark"></div>
-          <div className="h-2 w-3/4 rounded bg-brand-dark/60"></div>
-          <div className="h-2 w-1/2 rounded bg-brand-dark/60"></div>
-          <div className="mt-auto h-6 w-full rounded-md bg-emerald-500"></div>
-        </div>
-      </div>
-    )
+    visual: <SupplierDataEntryVisual />
   },
   {
     id: "lca",
