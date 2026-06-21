@@ -1,12 +1,60 @@
 import { ChevronRight, Menu, X } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
+function useScrollDirection() {
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const anchor = useRef(0);
+  const direction = useRef<"up" | "down">("down");
+  const ticking = useRef(false);
+
+  const update = useCallback(() => {
+    const y = window.scrollY;
+    const newDir = y > lastY.current ? "down" : "up";
+
+    // When direction changes, set an anchor point
+    if (newDir !== direction.current) {
+      anchor.current = y;
+      direction.current = newDir;
+    }
+
+    if (y <= 64) {
+      setHidden(false);
+    } else if (newDir === "down" && y - anchor.current > 10) {
+      setHidden(true);
+    } else if (newDir === "up" && anchor.current - y > 40) {
+      // Require 40px of deliberate upward scrolling to reappear
+      setHidden(false);
+    }
+
+    lastY.current = y;
+    ticking.current = false;
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (!ticking.current) {
+        ticking.current = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [update]);
+
+  return hidden;
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const hidden = useScrollDirection();
+
   return (
-    <nav className="fixed top-0 right-0 left-0 z-50 border-slate-200/50 border-b bg-white/70 backdrop-blur-xl transition-all duration-300">
+    <nav
+      className={`fixed top-0 right-0 left-0 z-50 border-slate-200/50 border-b bg-white/70 backdrop-blur-xl transition-transform duration-300 ${hidden && !isOpen ? "-translate-y-full" : "translate-y-0"}`}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="group flex items-center gap-2">
