@@ -1,0 +1,29 @@
+---
+import { CountdownBanner } from "../components/CountdownBanner";
+import { FeatureGrid } from "../components/FeatureGrid";
+import { Hero } from "../components/Hero";
+import { Pricing } from "../components/Pricing";
+import { StatsSection } from "../components/StatsSection";
+import { StorytellingScroll } from "../components/StorytellingScroll";
+import { Testimonials } from "../components/Testimonials";
+import { TrustLogos } from "../components/TrustLogos";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout>
+  <main>
+    <!-- Hero is above the fold: hydrate immediately so it is interactive on load -->
+    <Hero client:load />
+    <TrustLogos client:visible />
+    <!-- 3D content (R3F + SupplyChainGlobe): reads getComputedStyle at render, so it
+         cannot be server-rendered — mount browser-only -->
+    <FeatureGrid variant="compact" client:only="react" />
+    <CountdownBanner client:visible />
+    <!-- 3D scroll story (R3F canvases): browser-only for the same reason -->
+    <StorytellingScroll client:only="react" />
+    <Testimonials client:visible />
+    <StatsSection client:visible />
+    <!-- Pricing is static content: no client directive → rendered to HTML, zero JS -->
+    <Pricing />
+  </main>
+</SiteLayout>
