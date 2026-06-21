@@ -28,9 +28,12 @@ export function StorytellingScroll() {
   // Accent connector grows upward from track top to stay connected to the moving dot
   const extensionHeight = useTransform(scrollYProgress, [0, 1], ["0vh", "600vh"]);
 
+  // Header fades out as the first step scrolls in
+  const headerOp = useTransform(scrollYProgress, [0, 0.03], [1, 0]);
+
   // Text opacities - 7 steps
-  const op1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
-  const text1Y = useTransform(scrollYProgress, [0, 0.05], ["15vh", "0vh"]);
+  const op1 = useTransform(scrollYProgress, [0.02, 0.05, 0.1, 0.15], [0, 1, 1, 0]);
+  const text1Y = useTransform(scrollYProgress, [0.02, 0.07], ["15vh", "0vh"]);
   const op2 = useTransform(scrollYProgress, [0.14, 0.19, 0.24, 0.29], [0, 1, 1, 0]);
   const op3 = useTransform(scrollYProgress, [0.28, 0.33, 0.38, 0.43], [0, 1, 1, 0]);
   const op4 = useTransform(scrollYProgress, [0.42, 0.47, 0.52, 0.57], [0, 1, 1, 0]);
@@ -39,10 +42,10 @@ export function StorytellingScroll() {
   const op7 = useTransform(scrollYProgress, [0.85, 0.9, 0.95, 1], [0, 1, 1, 1]);
 
   // Chair rises into position then fades out with the rest
-  const chairY = useTransform(scrollYProgress, [0, 0.05], ["15vh", "0vh"]);
+  const chairY = useTransform(scrollYProgress, [0.02, 0.07], ["15vh", "0vh"]);
 
   // Visual opacities
-  const vOp1 = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
+  const vOp1 = useTransform(scrollYProgress, [0.02, 0.05, 0.1, 0.15], [0, 1, 1, 0]);
   const vOp2 = useTransform(scrollYProgress, [0.1, 0.15, 0.25, 0.3], [0, 1, 1, 0]);
 
   // Bolt camera distance: far away (small) → normal (close) as it fades in
@@ -85,8 +88,8 @@ export function StorytellingScroll() {
   return (
     <>
       <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-deep text-white">
-        {/* Header section */}
-        <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
+        {/* Header section — fades out as sticky content scrolls in */}
+        <motion.div style={{ opacity: headerOp }} className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -103,7 +106,7 @@ export function StorytellingScroll() {
               </p>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="sticky top-0 flex h-screen items-center overflow-hidden">
           {/* Metro Line */}
@@ -124,9 +127,9 @@ export function StorytellingScroll() {
             />
           </div>
 
-          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-20 pb-2 sm:px-6 lg:mt-20 lg:h-auto lg:flex-row lg:gap-12 lg:px-8 lg:py-0">
+          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-14 pb-2 sm:pt-20 sm:px-6 lg:mt-20 lg:h-auto lg:flex-row lg:gap-12 lg:px-8 lg:py-0">
             {/* ── Text panel (left) ── */}
-            <div className="relative flex h-[270px] w-full shrink-0 items-center pl-10 sm:pl-12 lg:h-[420px] lg:w-[44%] lg:pr-12 lg:pl-0">
+            <div className="relative flex h-[200px] w-full shrink-0 items-center pl-10 sm:h-[270px] sm:pl-12 lg:h-[420px] lg:w-[44%] lg:pr-12 lg:pl-0">
               {[
                 {
                   op: op1,
@@ -198,7 +201,7 @@ export function StorytellingScroll() {
                 <div className="relative h-full w-full">
                   <FinishedProductCanvas fieldOfView={55} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-6 right-4 flex justify-center sm:left-8 sm:right-6 md:bottom-6 lg:left-0 lg:right-0">
+                <div className="pointer-events-none absolute bottom-4 left-6 right-4 flex justify-center sm:left-8 sm:right-6 sm:bottom-6 lg:left-0 lg:right-0">
                   <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
@@ -219,10 +222,10 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"], zIndex: z2 }}
                 className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
-                <div className="aspect-square w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
+                <div className="aspect-square w-[min(100%,65vw)] sm:w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
                   <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-6 right-4 flex justify-center sm:left-8 sm:right-6 md:bottom-6 lg:left-0 lg:right-0">
+                <div className="pointer-events-none absolute bottom-4 left-6 right-4 flex justify-center sm:left-8 sm:right-6 sm:bottom-6 lg:left-0 lg:right-0">
                   <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
                     <p className="font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
                     <div className="mt-1.5 flex items-center gap-3">
@@ -249,10 +252,10 @@ export function StorytellingScroll() {
                 style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"], zIndex: z4 }}
                 className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
-                <div className="aspect-square w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
+                <div className="aspect-square w-[min(100%,65vw)] sm:w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
                   <RawMaterialCanvas isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-6 right-4 flex justify-center sm:left-8 sm:right-6 md:bottom-6 lg:left-0 lg:right-0">
+                <div className="pointer-events-none absolute bottom-4 left-6 right-4 flex justify-center sm:left-8 sm:right-6 sm:bottom-6 lg:left-0 lg:right-0">
                   <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
