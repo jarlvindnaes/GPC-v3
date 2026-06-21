@@ -18,6 +18,7 @@ The site is designed to showcase these capabilities through interactive 3D model
 - **Tailwind CSS 4** (utility-first, no separate CSS files)
 - Deployed to **GitHub Pages** at `jarlvindnaes.github.io/GPC-v3/`
 - Deploy command: `npm run deploy` (builds + pushes `dist/` to `gh-pages` branch)
+- **Production deploy** to xBuild: follow `.claude/deploy.md` — when user says "deploy", run the full deployment workflow automatically and post the PR link when done
 - Base URL: `/GPC-v3/` (configured in `vite.config.ts`)
 
 ### Key Libraries
