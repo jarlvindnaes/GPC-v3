@@ -1,0 +1,36 @@
+---
+import { BackToTop } from "../components/BackToTop";
+import { Footer } from "../components/Footer";
+import { Navbar } from "../components/Navbar";
+import { SmoothScroll } from "../components/SmoothScroll";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <!-- Global smooth-scroll (Lenis) — renders nothing, hydrates immediately -->
+  <SmoothScroll client:load />
+
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-medium focus:text-slate-900 focus:shadow-lg"
+  >
+    Skip to main content
+  </a>
+
+  <div class="min-h-screen bg-white">
+    <Navbar client:load />
+    <div id="main-content">
+      <slot />
+    </div>
+    <!-- Footer is static content: no client directive → rendered to HTML, zero JS -->
+    <Footer />
+    <BackToTop client:load />
+  </div>
+</BaseLayout>

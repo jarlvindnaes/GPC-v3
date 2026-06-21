@@ -1,3 +1,5 @@
+import { withBase } from "../utilities/withBase";
+
 export function Footer() {
   return (
     <footer className="border-slate-200 border-t bg-white pt-16 pb-8">
@@ -20,22 +22,22 @@ export function Footer() {
             <h4 className="mb-4 font-semibold text-brand-darkest text-sm">Platform</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#/dpp" className="text-slate-500 text-sm hover:text-brand-dark">
+                <a href={withBase("/dpp")} className="text-slate-500 text-sm hover:text-brand-dark">
                   Digital Product Passports
                 </a>
               </li>
               <li>
-                <a href="#/platform" className="text-slate-500 text-sm hover:text-brand-dark">
+                <a href={withBase("/platform")} className="text-slate-500 text-sm hover:text-brand-dark">
                   LCA Engine
                 </a>
               </li>
               <li>
-                <a href="#/platform" className="text-slate-500 text-sm hover:text-brand-dark">
+                <a href={withBase("/platform")} className="text-slate-500 text-sm hover:text-brand-dark">
                   Supplier Portal
                 </a>
               </li>
               <li>
-                <a href="#/platform" className="text-slate-500 text-sm hover:text-brand-dark">
+                <a href={withBase("/platform")} className="text-slate-500 text-sm hover:text-brand-dark">
                   Spare Parts Commerce
                 </a>
               </li>
@@ -72,7 +74,7 @@ export function Footer() {
             <h4 className="mb-4 font-semibold text-brand-darkest text-sm">Company</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#/about" className="text-slate-500 text-sm hover:text-brand-dark">
+                <a href={withBase("/about")} className="text-slate-500 text-sm hover:text-brand-dark">
                   About
                 </a>
               </li>

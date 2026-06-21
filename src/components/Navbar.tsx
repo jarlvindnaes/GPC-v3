@@ -1,7 +1,7 @@
 import { ChevronRight, Menu, X } from "lucide-react";
 import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { withBase } from "../utilities/withBase";
 
 function useScrollDirection() {
   const [hidden, setHidden] = useState(false);
@@ -57,54 +57,54 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="group flex items-center gap-2">
+          <a href={withBase("/")} className="group flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-deep transition-colors duration-300 group-hover:bg-brand">
               <span className="font-bold text-sm text-white">PC</span>
             </div>
             <span className="font-semibold text-brand-dark text-lg tracking-tight transition-colors duration-300 group-hover:text-brand">
               Product Connect
             </span>
-          </Link>
+          </a>
           <div className="hidden items-center gap-8 md:flex">
-            <Link
-              to="/platform"
+            <a
+              href={withBase("/platform")}
               className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               Platform
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
-            </Link>
-            <Link
-              to="/dpp"
+            </a>
+            <a
+              href={withBase("/dpp")}
               className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               DPP
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
-            </Link>
-            <Link
-              to="/pricing"
+            </a>
+            <a
+              href={withBase("/pricing")}
               className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               Pricing
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
-            </Link>
-            <Link
-              to="/about"
+            </a>
+            <a
+              href={withBase("/about")}
               className="group relative font-medium text-brand-text text-sm transition-colors hover:text-brand"
             >
               About
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand transition-all group-hover:w-full"></span>
-            </Link>
+            </a>
           </div>
           <div className="hidden items-center gap-4 md:flex">
-            <Link to="/login" className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark">
+            <a href={withBase("/login")} className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark">
               Sign in
-            </Link>
-            <Link
-              to="/contact"
+            </a>
+            <a
+              href={withBase("/contact")}
               className="flex items-center gap-1 rounded-full bg-brand-deep px-5 py-2.5 font-medium text-sm text-white shadow-sm transition-all hover:scale-105 hover:bg-brand-dark hover:shadow-md active:scale-95"
             >
               Start now <ChevronRight className="h-4 w-4" />
-            </Link>
+            </a>
           </div>
           <div className="flex items-center md:hidden">
             <button
@@ -125,45 +125,45 @@ export function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col gap-4 border-slate-200 border-b bg-white px-4 py-6 shadow-xl md:hidden"
         >
-          <Link
-            to="/platform"
+          <a
+            href={withBase("/platform")}
             onClick={() => setIsOpen(false)}
             className="font-medium text-brand-text text-lg hover:text-brand"
           >
             Platform
-          </Link>
-          <Link
-            to="/dpp"
+          </a>
+          <a
+            href={withBase("/dpp")}
             onClick={() => setIsOpen(false)}
             className="font-medium text-brand-text text-lg hover:text-brand"
           >
             DPP
-          </Link>
-          <Link
-            to="/pricing"
+          </a>
+          <a
+            href={withBase("/pricing")}
             onClick={() => setIsOpen(false)}
             className="font-medium text-brand-text text-lg hover:text-brand"
           >
             Pricing
-          </Link>
-          <Link
-            to="/about"
+          </a>
+          <a
+            href={withBase("/about")}
             onClick={() => setIsOpen(false)}
             className="font-medium text-brand-text text-lg hover:text-brand"
           >
             About
-          </Link>
+          </a>
           <hr className="my-2 border-slate-100" />
-          <Link to="/login" onClick={() => setIsOpen(false)} className="font-medium text-brand-text text-lg">
+          <a href={withBase("/login")} onClick={() => setIsOpen(false)} className="font-medium text-brand-text text-lg">
             Sign in
-          </Link>
-          <Link
-            to="/contact"
+          </a>
+          <a
+            href={withBase("/contact")}
             onClick={() => setIsOpen(false)}
             className="rounded-2xl bg-brand-deep px-4 py-4 text-center font-medium text-lg text-white shadow-lg active:scale-[0.98]"
           >
             Get Started
-          </Link>
+          </a>
         </motion.div>
       )}
     </nav>

@@ -1,19 +1,27 @@
 import Lenis from "lenis";
 import { cancelFrame, frame } from "motion/react";
-import { createContext, useContext, useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-const LenisContext = createContext<Lenis | null>(null);
-
-export function useLenisInstance(): Lenis | null {
-  return useContext(LenisContext);
+declare global {
+  interface Window {
+    __lenis?: Lenis | null;
+  }
 }
 
-export function SmoothScroll({ children }: { children: React.ReactNode }) {
-  const lenisReference = useRef<Lenis | null>(null);
-
+/**
+ * Global smooth-scroll island.
+ *
+ * Initializes Lenis once and exposes the instance on `window.__lenis` so other
+ * islands (e.g. BackToTop) can reach it. In the previous SPA this was shared via
+ * React context, but context cannot cross Astro island boundaries — each island
+ * is its own React root — so a window singleton is the portable equivalent.
+ *
+ * Renders nothing; mount once per page via `client:load`.
+ */
+export function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({ autoRaf: false });
-    lenisReference.current = lenis;
+    window.__lenis = lenis;
 
     function update(data: { timestamp: number }) {
       lenis.raf(data.timestamp);
@@ -23,9 +31,9 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => {
       cancelFrame(update);
       lenis.destroy();
-      lenisReference.current = null;
+      window.__lenis = null;
     };
   }, []);
 
-  return <LenisContext.Provider value={lenisReference.current}>{children}</LenisContext.Provider>;
+  return null;
 }

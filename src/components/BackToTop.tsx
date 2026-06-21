@@ -1,11 +1,9 @@
 import { ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { useLenisInstance } from "./SmoothScroll";
 
 export function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
-  const lenis = useLenisInstance();
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -17,6 +15,7 @@ export function BackToTop() {
   }, []);
 
   const scrollToTop = () => {
+    const lenis = window.__lenis;
     if (lenis) {
       lenis.scrollTo(0, { duration: 1.2 });
     } else {
