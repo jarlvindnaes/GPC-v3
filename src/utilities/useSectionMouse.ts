@@ -6,6 +6,9 @@ interface MousePosition {
   active: boolean;
 }
 
+const isTouchDevice =
+  typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+
 /**
  * RAF-throttled mouse tracking for a section element.
  *
@@ -14,6 +17,8 @@ interface MousePosition {
  * - CSS variable targets: elements registered via addCssTarget receive
  *   --mouse-x / --mouse-y updates batched into a single RAF callback.
  * - Section and target rects are cached and refreshed on scroll/resize only.
+ *
+ * On touch devices, no listeners are attached and mouseRef.active stays false.
  */
 export function useSectionMouse(sectionRef: React.RefObject<HTMLElement | null>) {
   const mouseRef = useRef<MousePosition>({ x: 0, y: 0, active: false });
@@ -24,6 +29,7 @@ export function useSectionMouse(sectionRef: React.RefObject<HTMLElement | null>)
   const targetRects = useRef<Map<HTMLElement, DOMRect>>(new Map());
 
   const refreshRects = useCallback(() => {
+    if (isTouchDevice) return;
     const section = sectionRef.current;
     if (section) {
       sectionRect.current = section.getBoundingClientRect();
@@ -34,7 +40,7 @@ export function useSectionMouse(sectionRef: React.RefObject<HTMLElement | null>)
   }, [sectionRef]);
 
   const addCssTarget = useCallback((el: HTMLElement | null) => {
-    if (!el) {
+    if (!el || isTouchDevice) {
       return;
     }
     cssTargets.current.add(el);
@@ -47,6 +53,9 @@ export function useSectionMouse(sectionRef: React.RefObject<HTMLElement | null>)
   }, []);
 
   useEffect(() => {
+    // Skip all mouse tracking on touch devices
+    if (isTouchDevice) return;
+
     const section = sectionRef.current;
     if (!section) {
       return;

@@ -85,7 +85,8 @@ function HeroNetwork({ mouseRef }: { mouseRef: React.RefObject<{ x: number; y: n
       if (w === 0 || h === 0) {
         return;
       }
-      const count = Math.min(55, Math.floor((w * h) / 15000));
+      const isMobile = window.matchMedia("(pointer: coarse)").matches;
+      const count = Math.min(isMobile ? 25 : 55, Math.floor((w * h) / (isMobile ? 25000 : 15000)));
       const nodes: NetworkNode[] = [];
 
       for (let i = 0; i < count; i++) {

@@ -90,6 +90,8 @@ export function InteractiveGrid({ mouseRef }: { mouseRef: RefObject<{ x: number;
     const lerpSpeed = 0.1;
     const springSpeed = 0.08;
 
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+
     const draw = () => {
       animationId = requestAnimationFrame(draw);
       if (!isNearViewport.current) {
@@ -106,32 +108,35 @@ export function InteractiveGrid({ mouseRef }: { mouseRef: RefObject<{ x: number;
       const columns = gridColumnsReference.current;
       const mouse = mouseRef.current;
 
-      for (const node of nodes) {
-        let targetBrighten = 0;
-        let pushX = 0;
-        let pushY = 0;
+      // Skip per-node mouse physics on touch devices
+      if (!isMobile) {
+        for (const node of nodes) {
+          let targetBrighten = 0;
+          let pushX = 0;
+          let pushY = 0;
 
-        if (mouse.active) {
-          const dx = mouse.x - node.baseX;
-          const dy = mouse.y - node.baseY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (mouse.active) {
+            const dx = mouse.x - node.baseX;
+            const dy = mouse.y - node.baseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < pushRadius && dist > 0.1) {
-            const push = (1 - dist / pushRadius) * 14;
-            pushX = -(dx / dist) * push;
-            pushY = -(dy / dist) * push;
+            if (dist < pushRadius && dist > 0.1) {
+              const push = (1 - dist / pushRadius) * 14;
+              pushX = -(dx / dist) * push;
+              pushY = -(dy / dist) * push;
+            }
+
+            if (dist < growRadius) {
+              targetBrighten = 1 - dist / growRadius;
+            }
           }
 
-          if (dist < growRadius) {
-            targetBrighten = 1 - dist / growRadius;
-          }
+          const targetX = node.baseX + pushX;
+          const targetY = node.baseY + pushY;
+          node.x += (targetX - node.x) * springSpeed;
+          node.y += (targetY - node.y) * springSpeed;
+          node.brighten += (targetBrighten - node.brighten) * lerpSpeed;
         }
-
-        const targetX = node.baseX + pushX;
-        const targetY = node.baseY + pushY;
-        node.x += (targetX - node.x) * springSpeed;
-        node.y += (targetY - node.y) * springSpeed;
-        node.brighten += (targetBrighten - node.brighten) * lerpSpeed;
       }
 
       for (let i = 0; i < nodes.length; i++) {
