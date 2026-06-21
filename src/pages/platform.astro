@@ -1,0 +1,106 @@
+---
+import { Box, Calculator, QrCode, Smartphone } from "lucide-react";
+import { FeatureGrid } from "../components/FeatureGrid";
+import { IntegrationSection } from "../components/IntegrationSection";
+import { ScreenshotCarousel } from "../components/ScreenshotCarousel";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Platform | Product Connect">
+  <main class="pt-32 pb-24">
+    <div class="mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h1
+        class="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-5xl md:text-6xl"
+      >
+        The Product Connect Platform
+      </h1>
+      <p class="max-w-3xl text-pretty text-base text-brand-text sm:text-lg md:text-xl">
+        A comprehensive suite of tools designed to trace, prove, and monetize your physical products. From raw
+        materials to the end consumer.
+      </p>
+    </div>
+
+    <!-- Static "how it works" — pure HTML, zero JS -->
+    <section class="mb-24 bg-brand-deep py-24 text-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto mb-16 max-w-3xl text-center">
+          <h2 class="mb-4 font-display font-semibold text-3xl text-balance tracking-tight md:text-4xl">How it works</h2>
+          <p class="text-pretty text-lg text-slate-400">
+            A seamless flow from your existing CAD files to a consumer-facing Digital Product Passport.
+          </p>
+        </div>
+
+        <div class="relative grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+          <div class="absolute top-12 right-[12.5%] left-[12.5%] z-0 hidden h-0.5 bg-brand-dark md:block"></div>
+
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
+              <Box className="h-10 w-10 text-indigo-400" />
+            </div>
+            <div class="mb-2 font-bold text-indigo-400 text-sm uppercase tracking-widest">Step 01</div>
+            <h3 class="mb-3 font-semibold text-xl">Ingest 3D Model</h3>
+            <p class="text-pretty text-slate-400 text-sm leading-relaxed">
+              Import STEP, SolidWorks, or Rhino files. We auto-detect components, analyze volume, and classify
+              materials.
+            </p>
+          </div>
+
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
+              <Smartphone className="h-10 w-10 text-emerald-400" />
+            </div>
+            <div class="mb-2 font-bold text-emerald-400 text-sm uppercase tracking-widest">Step 02</div>
+            <h3 class="mb-3 font-semibold text-xl">Harvest Data</h3>
+            <p class="text-pretty text-slate-400 text-sm leading-relaxed">
+              Suppliers validate specs via web or mobile app. Capture material weight, origin, and certifications
+              instantly.
+            </p>
+          </div>
+
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
+              <Calculator className="h-10 w-10 text-cyan-400" />
+            </div>
+            <div class="mb-2 font-bold text-cyan-400 text-sm uppercase tracking-widest">Step 03</div>
+            <h3 class="mb-3 font-semibold text-xl">Calculate Impact</h3>
+            <p class="text-pretty text-slate-400 text-sm leading-relaxed">
+              Turn supply chain data into verified CO₂ numbers. EN 15804 compliant, cradle-to-grave analysis.
+            </p>
+          </div>
+
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark shadow-xl">
+              <QrCode className="h-10 w-10 text-rose-400" />
+            </div>
+            <div class="mb-2 font-bold text-rose-400 text-sm uppercase tracking-widest">Step 04</div>
+            <h3 class="mb-3 font-semibold text-xl">Generate DPP</h3>
+            <p class="text-pretty text-slate-400 text-sm leading-relaxed">
+              Publish a verified, living document accessible to consumers. Ready for ESPR, Right to Repair, and
+              commerce.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FeatureGrid renders SupplyChainGlobe (R3F): browser-only -->
+    <FeatureGrid client:only="react" />
+    <IntegrationSection client:visible />
+
+    <section class="py-16 sm:py-24 md:py-32">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+          <h2
+            class="mb-4 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight md:text-4xl"
+          >
+            See it in action
+          </h2>
+          <p class="text-pretty text-base text-brand-text sm:text-lg">
+            Explore the Product Connect interface - from 3D model ingestion to global supply chain mapping.
+          </p>
+        </div>
+        <ScreenshotCarousel client:visible />
+      </div>
+    </section>
+  </main>
+</SiteLayout>

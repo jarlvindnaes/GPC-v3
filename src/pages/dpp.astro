@@ -1,0 +1,14 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { DPP } from "../views/DppPage";
+---
+
+<SiteLayout
+  title="Digital Product Passports | Product Connect"
+  description="A living, GS1-compliant Digital Product Passport. Ready for ESPR. Monetize spare parts and prove your claims through a secure, scannable interface."
+>
+  <!-- This page interleaves static text, motion sections, and an R3F 3D model.
+       Mounted as a single browser-only island for a faithful port; a future pass
+       can decompose the static sections to SSR HTML for better SEO. -->
+  <DPP client:only="react" />
+</SiteLayout>

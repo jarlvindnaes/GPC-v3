@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { HtmlPhoneTest } from "../views/HtmlPhoneTest";
+---
+
+<BaseLayout title="HTML Phone Test | Product Connect">
+  <!-- Experimental: Html transform/occlude approach. R3F canvas → browser-only.
+       Visit /GPC-v3/html-phone-test -->
+  <HtmlPhoneTest client:only="react" />
+</BaseLayout>
