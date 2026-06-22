@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Connect — Digital Product Passports for Furniture Manufacturers</title>
+<meta name="description" content="Product Connect is a digital product passport platform for furniture manufacturers, helping them meet EU ESPR requirements without the headache. Paste your URL, see your catalogue in 60 seconds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0F;
+    --bg-raised: #12121A;
+    --bg-card: #15151F;
+    --border: rgba(255,255,255,0.08);
+    --teal: #0D9488;
+    --teal-bright: #14B8A6;
+    --teal-dim: rgba(13,148,136,0.12);
+    --text: #F4F4F6;
+    --text-dim: rgba(244,244,246,0.62);
+    --text-faint: rgba(244,244,246,0.40);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Inter',-apple-system,sans-serif;
+    background:var(--bg); color:var(--text);
+    -webkit-font-smoothing:antialiased; line-height:1.6;
+  }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 24px; }
+  section { padding:96px 0; }
+  h2 { font-size:34px; font-weight:700; letter-spacing:-0.02em; line-height:1.2; }
+  .kicker {
+    display:inline-block; font-size:12px; font-weight:600; letter-spacing:2px;
+    text-transform:uppercase; color:var(--teal-bright); margin-bottom:16px;
+  }
+  .sub { color:var(--text-dim); font-size:17px; max-width:560px; margin-top:16px; }
+  .btn {
+    display:inline-block; padding:14px 28px; border-radius:8px; font-weight:600;
+    font-size:15px; text-decoration:none; transition:all .15s ease;
+  }
+  .btn-primary { background:var(--teal); color:#fff; }
+  .btn-primary:hover { background:var(--teal-bright); transform:translateY(-1px); }
+  .btn-ghost { color:var(--text); border:1px solid var(--border); }
+  .btn-ghost:hover { border-color:var(--teal); color:var(--teal-bright); }
+
+  /* NAV */
+  nav {
+    position:sticky; top:0; z-index:50; background:rgba(10,10,15,0.85);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
+  }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .logo { font-weight:800; font-size:16px; letter-spacing:-0.01em; color:var(--text); text-decoration:none; }
+  .logo span { color:var(--teal-bright); }
+  .nav-links { display:flex; gap:28px; align-items:center; }
+  .nav-links a { color:var(--text-dim); text-decoration:none; font-size:14px; font-weight:500; }
+  .nav-links a:hover { color:var(--text); }
+  .nav-links .btn { padding:9px 18px; font-size:14px; }
+
+  /* HERO */
+  .hero { padding:110px 0 80px; position:relative; overflow:hidden; }
+  .hero::before {
+    content:''; position:absolute; top:-200px; right:-150px; width:600px; height:600px;
+    background:radial-gradient(circle, rgba(13,148,136,0.14) 0%, transparent 65%); pointer-events:none;
+  }
+  .hero h1 { font-size:52px; font-weight:800; letter-spacing:-0.03em; line-height:1.1; max-width:760px; }
+  .hero h1 em { font-style:normal; color:var(--teal-bright); }
+  .hero .oneliner {
+    margin-top:24px; font-size:19px; color:var(--text-dim); max-width:640px; line-height:1.6;
+  }
+  .hero .oneliner strong { color:var(--text); font-weight:600; }
+  .hero-ctas { margin-top:36px; display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-note { margin-top:14px; font-size:13px; color:var(--text-faint); }
+
+  /* CO2 DIALOGUE (Jan's concept) */
+  .dialogue { background:var(--bg-raised); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .dialogue-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:stretch; }
+  .chat-card {
+    background:var(--bg-card); border:1px solid var(--border); border-radius:16px;
+    padding:36px; position:relative; display:flex; flex-direction:column; gap:18px;
+  }
+  .chat-card .label {
+    font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  }
+  .chat-card.before .label { color:var(--text-faint); }
+  .chat-card.after .label { color:var(--teal-bright); }
+  .bubble {
+    padding:14px 20px; border-radius:14px; font-size:16px; max-width:85%; line-height:1.5;
+  }
+  .bubble.q { background:rgba(255,255,255,0.06); border:1px solid var(--border); align-self:flex-start; border-bottom-left-radius:4px; }
+  .bubble.a { align-self:flex-end; border-bottom-right-radius:4px; }
+  .chat-card.before .bubble.a { background:rgba(255,255,255,0.03); color:var(--text-faint); border:1px dashed var(--border); }
+  .chat-card.after .bubble.a { background:var(--teal-dim); border:1px solid rgba(20,184,166,0.35); color:var(--text); }
+  .chat-card .who { font-size:12px; color:var(--text-faint); margin-top:auto; padding-top:12px; }
+  .dialogue-footer { margin-top:40px; text-align:center; }
+  .dialogue-footer p { font-size:20px; font-weight:600; letter-spacing:-0.01em; }
+  .dialogue-footer p span { color:var(--teal-bright); }
+  .dialogue-footer .small { font-size:15px; font-weight:400; color:var(--text-dim); margin-top:10px; max-width:620px; margin-left:auto; margin-right:auto; }
+
+  /* WHO IT'S FOR */
+  .audience-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; }
+  .aud-card { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:28px; }
+  .aud-card h3 { font-size:17px; font-weight:700; margin-bottom:10px; }
+  .aud-card p { font-size:14.5px; color:var(--text-dim); }
+  .aud-card .tag { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--teal-bright); display:block; margin-bottom:14px; }
+
+  /* HOW IT WORKS */
+  .steps { margin-top:56px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .step { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:32px 28px; position:relative; }
+  .step .num {
+    width:34px; height:34px; border-radius:10px; background:var(--teal-dim); color:var(--teal-bright);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; margin-bottom:20px;
+  }
+  .step h3 { font-size:18px; font-weight:700; margin-bottom:10px; }
+  .step p { font-size:14.5px; color:var(--text-dim); }
+  .scan-demo {
+    margin-top:28px; background:var(--bg-card); border:1px solid var(--border); border-radius:14px;
+    padding:22px 28px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .scan-demo .url-pill {
+    background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px;
+    padding:10px 18px; font-family:ui-monospace,monospace; font-size:14px; color:var(--text-dim); flex:1; min-width:220px;
+  }
+  .scan-demo .arrow { color:var(--teal-bright); font-size:18px; }
+  .scan-demo .result { font-size:14px; color:var(--text-dim); }
+  .scan-demo .result strong { color:var(--text); }
+
+  /* VALUE */
+  .value-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; }
+  .value-card { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:30px 28px; }
+  .value-card .icon {
+    width:40px; height:40px; border-radius:11px; background:var(--teal-dim); color:var(--teal-bright);
+    display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:18px;
+  }
+  .value-card h3 { font-size:17px; font-weight:700; margin-bottom:10px; }
+  .value-card p { font-size:14.5px; color:var(--text-dim); }
+  .vision {
+    margin-top:20px; border:1px dashed rgba(20,184,166,0.4); border-radius:14px; padding:30px 28px;
+    background:rgba(13,148,136,0.05);
+  }
+  .vision .tag { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--teal-bright); }
+  .vision h3 { font-size:17px; font-weight:700; margin:12px 0 8px; }
+  .vision p { font-size:14.5px; color:var(--text-dim); max-width:720px; }
+
+  /* TIMELINE */
+  .timeline { margin-top:56px; display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .tl-col { padding:34px 30px; background:var(--bg-card); border-right:1px solid var(--border); }
+  .tl-col:last-child { border-right:none; }
+  .tl-col .when { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--teal-bright); margin-bottom:14px; }
+  .tl-col h3 { font-size:17px; font-weight:700; margin-bottom:10px; }
+  .tl-col p { font-size:14px; color:var(--text-dim); }
+
+  /* PRICING */
+  .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; align-items:stretch; }
+  .price-card { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:34px 30px; display:flex; flex-direction:column; }
+  .price-card.featured { border-color:var(--teal); position:relative; }
+  .price-card.featured::before {
+    content:'Most popular'; position:absolute; top:-12px; left:30px; background:var(--teal); color:#fff;
+    font-size:11px; font-weight:700; letter-spacing:0.5px; padding:4px 12px; border-radius:99px;
+  }
+  .price-card h3 { font-size:16px; font-weight:700; }
+  .price-card .price { font-size:40px; font-weight:800; letter-spacing:-0.02em; margin:14px 0 2px; }
+  .price-card .price small { font-size:15px; font-weight:500; color:var(--text-faint); }
+  .price-card .cap { font-size:13.5px; color:var(--text-dim); margin-bottom:22px; }
+  .price-card ul { list-style:none; margin-bottom:28px; }
+  .price-card li { font-size:14px; color:var(--text-dim); padding:7px 0 7px 26px; position:relative; }
+  .price-card li::before { content:'✓'; position:absolute; left:0; color:var(--teal-bright); font-weight:700; }
+  .price-card .btn { margin-top:auto; text-align:center; }
+  .pricing-note { margin-top:22px; font-size:13.5px; color:var(--text-faint); text-align:center; }
+  .pricing-note a { color:var(--teal-bright); text-decoration:none; }
+
+  /* ENTERPRISE BANNER */
+  .ent-banner {
+    background:linear-gradient(135deg, rgba(13,148,136,0.12), rgba(13,148,136,0.03));
+    border:1px solid rgba(20,184,166,0.25); border-radius:18px; padding:48px;
+    display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap;
+  }
+  .ent-banner h3 { font-size:24px; font-weight:700; letter-spacing:-0.01em; margin-bottom:8px; }
+  .ent-banner p { color:var(--text-dim); font-size:15px; max-width:520px; }
+
+  /* FOOTER */
+  footer { border-top:1px solid var(--border); padding:48px 0; }
+  .foot-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  footer p { font-size:13px; color:var(--text-faint); }
+  .foot-links { display:flex; gap:24px; }
+  .foot-links a { font-size:13px; color:var(--text-dim); text-decoration:none; }
+  .foot-links a:hover { color:var(--text); }
+
+  @media (max-width:860px) {
+    .hero h1 { font-size:36px; }
+    h2 { font-size:28px; }
+    section { padding:64px 0; }
+    .dialogue-grid, .steps, .value-grid, .audience-grid, .pricing-grid, .timeline { grid-template-columns:1fr; }
+    .tl-col { border-right:none; border-bottom:1px solid var(--border); }
+    .tl-col:last-child { border-bottom:none; }
+    .nav-links a:not(.btn) { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="#">Product<span>Connect</span></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#value">Value</a>
+      <a href="#pricing">Pricing</a>
+      <a href="enterprise.html">Enterprise</a>
+      <a class="btn btn-primary" href="#pricing">Start now</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">EU-compliant Digital Product Passports</span>
+    <h1>Meet the EU's product rules <em>without the headache.</em></h1>
+    <p class="oneliner">
+      <strong>Product Connect is a digital product passport platform for furniture manufacturers</strong>,
+      helping them document CO2 footprints, generate EPDs, and comply with ESPR — at a price built for
+      small and mid-sized companies.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#pricing">Get started — from €399/mo</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <p class="hero-note">Self-service signup · No consultants required · Cancel anytime</p>
+  </div>
+</header>
+
+<!-- JAN'S CO2 DIALOGUE -->
+<section class="dialogue">
+  <div class="wrap">
+    <div class="dialogue-grid">
+      <div class="chat-card before">
+        <span class="label">Today</span>
+        <div class="bubble q">What's your CO2 footprint?</div>
+        <div class="bubble a">Uhh.....</div>
+        <span class="who">— Every piece of furniture, when the EU comes asking</span>
+      </div>
+      <div class="chat-card after">
+        <span class="label">With Product Connect</span>
+        <div class="bubble q">What's your CO2 footprint?</div>
+        <div class="bubble a">32.3 kg. Precisely.<br>Want it broken down by component?</div>
+        <span class="who">— Your furniture, smarter than you think</span>
+      </div>
+    </div>
+    <div class="dialogue-footer">
+      <p>Your furniture is <span>smarter than you think.</span></p>
+      <p class="small">
+        The EU is introducing legal requirements for documenting furniture's CO2 footprint.
+        Your products can answer for themselves — we just give them the data.
+        We call it a product passport. It's faster and cheaper than the alternatives, and we're happy to prove it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section>
+  <div class="wrap">
+    <span class="kicker">Who it's for</span>
+    <h2>Built for the people who make, sell, and answer for products.</h2>
+    <div class="audience-grid">
+      <div class="aud-card">
+        <span class="tag">Manufacturers</span>
+        <h3>Document once, comply everywhere</h3>
+        <p>Component-level CO2 data, EPDs, and DPPs generated from the product data you already have. No LCA expertise needed.</p>
+      </div>
+      <div class="aud-card">
+        <span class="tag">Retailers & brands</span>
+        <h3>Answer your customers' questions</h3>
+        <p>Customer-facing product pages with QR codes. Every product can show its footprint, materials, and origin story.</p>
+      </div>
+      <div class="aud-card">
+        <span class="tag">Compliance & ESG</span>
+        <h3>Audit-ready by default</h3>
+        <p>Every data point carries its source — extracted, estimated, authored, or supplier-verified. A built-in audit trail for ESPR.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background:var(--bg-raised); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <span class="kicker">How it works</span>
+    <h2>From your website to a working catalogue in 60 seconds.</h2>
+    <p class="sub">No imports, no spreadsheets, no months of setup. You start with a real, structured catalogue and increase the resolution from there.</p>
+
+    <div class="scan-demo">
+      <span class="url-pill">https://yourcompany.com</span>
+      <span class="arrow">→</span>
+      <span class="result"><strong>13 products, 4 suppliers, estimated BOMs</strong> — scanned, structured, and ready to refine.</span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Paste your URL</h3>
+        <p>We scan your website and build your catalogue automatically — products, variants, materials, and the suppliers we find in your own content. Nothing is mocked: every field is tagged with its source.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Deepen the data</h3>
+        <p>Replace estimates with real data, in place. Invite suppliers to verify their components. Upload 3D files. The structure you saw on day 1 is the same structure that carries real passports later.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Publish passports</h3>
+        <p>Generate EPDs and ESPR-compliant Digital Product Passports. Each product gets a customer-facing page with a QR code — CO2 footprint, materials, and spare parts included.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section id="value">
+  <div class="wrap">
+    <span class="kicker">What you get</span>
+    <h2>Value for everyone in the chain.</h2>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="icon">✓</div>
+        <h3>Compliance, handled</h3>
+        <p>ESPR-ready Digital Product Passports and EPDs, generated from component-level data. When the law lands in 2027, you're already done.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">⊙</div>
+        <h3>One source of truth</h3>
+        <p>A complete data layer for your products — BOMs, materials, suppliers, CO2 — that feeds your sales material, your website, and your reporting.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">↗</div>
+        <h3>Products that sell themselves</h3>
+        <p>QR-coded product pages with 3D twins turn compliance data into a customer experience — and open a channel for spare parts and services.</p>
+      </div>
+    </div>
+    <div class="vision">
+      <span class="tag">Where this is going</span>
+      <h3>Every product, connected for life</h3>
+      <p>As your suppliers verify their components on the platform, your data sharpens with every product you add. The long-term goal: every product you've ever made, traceable and serviceable for its entire life.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ONBOARDING TIMELINE -->
+<section style="background:var(--bg-raised); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <span class="kicker">What happens when</span>
+    <h2>No black box. Here's the timeline.</h2>
+    <div class="timeline">
+      <div class="tl-col">
+        <span class="when">Week 1</span>
+        <h3>Your catalogue, live</h3>
+        <p>Sign up, paste your URL, and see your structured catalogue the same day. We help you prioritise which products to deepen first.</p>
+      </div>
+      <div class="tl-col">
+        <span class="when">Month 1</span>
+        <h3>Real data flowing</h3>
+        <p>Estimates replaced with real BOMs on your key products. First suppliers invited and verifying. First CO2 calculations running.</p>
+      </div>
+      <div class="tl-col">
+        <span class="when">Month 3</span>
+        <h3>Passports published</h3>
+        <p>EPDs generated, QR-coded product pages live, and an audit-ready data trail behind every claim. Compliance becomes routine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap">
+    <span class="kicker">Pricing</span>
+    <h2>Simple tiers. All features in every plan.</h2>
+    <p class="sub">Priced by components hosted — the legs, seats, fabrics, and screws that make up your products. A typical product has 10–50 components.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Starter</h3>
+        <div class="price">€399<small>/mo</small></div>
+        <p class="cap">Up to 250 components — about 25 simple products</p>
+        <ul>
+          <li>All platform features</li>
+          <li>Website scan onboarding</li>
+          <li>Digital Product Passports</li>
+          <li>CO2 calculation per component</li>
+          <li>Self-service signup</li>
+        </ul>
+        <a class="btn btn-primary" href="#signup">Start now</a>
+      </div>
+      <div class="price-card featured">
+        <h3>Growth</h3>
+        <div class="price">€999<small>/mo</small></div>
+        <p class="cap">Up to 1,000 components — full catalogues with complex BOMs</p>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>4× component capacity</li>
+          <li>Supplier verification at scale</li>
+          <li>EPD add-ons available</li>
+          <li>Priority support</li>
+        </ul>
+        <a class="btn btn-primary" href="#signup">Start now</a>
+      </div>
+      <div class="price-card">
+        <h3>Enterprise</h3>
+        <div class="price">€1,999<small>/mo</small></div>
+        <p class="cap">Up to 10,000 components — large or complex portfolios</p>
+        <ul>
+          <li>Everything in Growth</li>
+          <li>10,000 component capacity</li>
+          <li>ERP integration & DPP minting</li>
+          <li>Dedicated onboarding</li>
+          <li>Expert-level support</li>
+        </ul>
+        <a class="btn btn-ghost" href="enterprise.html">Talk to us</a>
+      </div>
+    </div>
+    <p class="pricing-note">Annual billing: 2 months free. Verified EPDs available as add-ons. Larger portfolio? <a href="enterprise.html">See the Enterprise page →</a></p>
+  </div>
+</section>
+
+<!-- ENTERPRISE BANNER -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="ent-banner">
+      <div>
+        <h3>Running a larger operation?</h3>
+        <p>ERP-integrated passport minting, component-level LCA across thousands of SKUs, and a team that speaks fluent compliance. Built for enterprise product data.</p>
+      </div>
+      <a class="btn btn-primary" href="enterprise.html">Explore Enterprise →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <p>© 2026 Product Connect · Copenhagen, Denmark</p>
+    <div class="foot-links">
+      <a href="enterprise.html">Enterprise</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="mailto:hello@getproductconnect.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

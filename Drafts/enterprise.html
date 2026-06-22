@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Connect Enterprise — A Complete Data Layer for Your Products</title>
+<meta name="description" content="Component-level LCA, ERP-minted Digital Product Passports, and supplier-verified product data at enterprise scale. Product Connect Enterprise for furniture manufacturers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0F;
+    --bg-raised: #12121A;
+    --bg-card: #15151F;
+    --border: rgba(255,255,255,0.08);
+    --teal: #0D9488;
+    --teal-bright: #14B8A6;
+    --teal-dim: rgba(13,148,136,0.12);
+    --text: #F4F4F6;
+    --text-dim: rgba(244,244,246,0.62);
+    --text-faint: rgba(244,244,246,0.40);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Inter',-apple-system,sans-serif;
+    background:var(--bg); color:var(--text);
+    -webkit-font-smoothing:antialiased; line-height:1.6;
+  }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 24px; }
+  section { padding:96px 0; }
+  h2 { font-size:34px; font-weight:700; letter-spacing:-0.02em; line-height:1.2; }
+  .kicker {
+    display:inline-block; font-size:12px; font-weight:600; letter-spacing:2px;
+    text-transform:uppercase; color:var(--teal-bright); margin-bottom:16px;
+  }
+  .sub { color:var(--text-dim); font-size:17px; max-width:600px; margin-top:16px; }
+  .btn {
+    display:inline-block; padding:14px 28px; border-radius:8px; font-weight:600;
+    font-size:15px; text-decoration:none; transition:all .15s ease;
+  }
+  .btn-primary { background:var(--teal); color:#fff; }
+  .btn-primary:hover { background:var(--teal-bright); transform:translateY(-1px); }
+  .btn-ghost { color:var(--text); border:1px solid var(--border); }
+  .btn-ghost:hover { border-color:var(--teal); color:var(--teal-bright); }
+
+  nav {
+    position:sticky; top:0; z-index:50; background:rgba(10,10,15,0.85);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
+  }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .logo { font-weight:800; font-size:16px; color:var(--text); text-decoration:none; }
+  .logo span { color:var(--teal-bright); }
+  .logo .ent { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-faint); margin-left:10px; }
+  .nav-links { display:flex; gap:28px; align-items:center; }
+  .nav-links a { color:var(--text-dim); text-decoration:none; font-size:14px; font-weight:500; }
+  .nav-links a:hover { color:var(--text); }
+  .nav-links .btn { padding:9px 18px; font-size:14px; color:#fff; }
+
+  /* HERO */
+  .hero { padding:110px 0 80px; position:relative; overflow:hidden; }
+  .hero::before {
+    content:''; position:absolute; top:-200px; left:-150px; width:600px; height:600px;
+    background:radial-gradient(circle, rgba(13,148,136,0.12) 0%, transparent 65%); pointer-events:none;
+  }
+  .hero h1 { font-size:50px; font-weight:800; letter-spacing:-0.03em; line-height:1.12; max-width:780px; }
+  .hero h1 em { font-style:normal; color:var(--teal-bright); }
+  .hero .oneliner { margin-top:24px; font-size:19px; color:var(--text-dim); max-width:660px; }
+  .hero-ctas { margin-top:36px; display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-note { margin-top:14px; font-size:13px; color:var(--text-faint); }
+
+  /* DATA LAYER DIAGRAM */
+  .layer-box {
+    margin-top:56px; border:1px solid var(--border); border-radius:16px; overflow:hidden;
+  }
+  .layer-row { display:grid; grid-template-columns:200px 1fr; border-bottom:1px solid var(--border); }
+  .layer-row:last-child { border-bottom:none; }
+  .layer-row .name {
+    padding:24px 28px; background:var(--bg-card); font-weight:700; font-size:14px;
+    border-right:1px solid var(--border); display:flex; align-items:center;
+  }
+  .layer-row .desc { padding:24px 28px; font-size:14.5px; color:var(--text-dim); }
+  .layer-row .desc strong { color:var(--text); font-weight:600; }
+
+  /* CAPABILITIES */
+  .cap-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:48px; }
+  .cap-card { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:32px; }
+  .cap-card .icon {
+    width:40px; height:40px; border-radius:11px; background:var(--teal-dim); color:var(--teal-bright);
+    display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:18px; font-weight:700;
+  }
+  .cap-card h3 { font-size:18px; font-weight:700; margin-bottom:10px; }
+  .cap-card p { font-size:14.5px; color:var(--text-dim); }
+
+  /* ARCHITECTURE / TRUST */
+  .trust-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:48px; }
+  .trust-card { background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:24px; }
+  .trust-card code {
+    font-family:ui-monospace,monospace; font-size:12px; color:var(--teal-bright);
+    background:var(--teal-dim); padding:3px 8px; border-radius:6px;
+  }
+  .trust-card p { font-size:13.5px; color:var(--text-dim); margin-top:14px; }
+
+  /* COMPARISON */
+  .compare { margin-top:48px; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  th, td { padding:16px 20px; text-align:left; font-size:14px; border-bottom:1px solid var(--border); }
+  th { background:var(--bg-card); font-weight:700; font-size:13px; }
+  td { color:var(--text-dim); }
+  td.yes { color:var(--teal-bright); font-weight:600; }
+  td.no { color:var(--text-faint); }
+  tr:last-child td { border-bottom:none; }
+  .first-col { color:var(--text); font-weight:600; }
+
+  /* ENGAGEMENT */
+  .engage { margin-top:56px; display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .eng-col { padding:34px 30px; background:var(--bg-card); border-right:1px solid var(--border); }
+  .eng-col:last-child { border-right:none; }
+  .eng-col .when { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--teal-bright); margin-bottom:14px; }
+  .eng-col h3 { font-size:17px; font-weight:700; margin-bottom:10px; }
+  .eng-col p { font-size:14px; color:var(--text-dim); }
+
+  /* CTA */
+  .cta-box {
+    background:linear-gradient(135deg, rgba(13,148,136,0.14), rgba(13,148,136,0.04));
+    border:1px solid rgba(20,184,166,0.25); border-radius:20px; padding:64px 48px; text-align:center;
+  }
+  .cta-box h2 { max-width:640px; margin:0 auto; }
+  .cta-box p { color:var(--text-dim); margin:18px auto 32px; max-width:540px; font-size:16px; }
+
+  footer { border-top:1px solid var(--border); padding:48px 0; }
+  .foot-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  footer p { font-size:13px; color:var(--text-faint); }
+  .foot-links { display:flex; gap:24px; }
+  .foot-links a { font-size:13px; color:var(--text-dim); text-decoration:none; }
+  .foot-links a:hover { color:var(--text); }
+
+  @media (max-width:860px) {
+    .hero h1 { font-size:34px; }
+    h2 { font-size:28px; }
+    section { padding:64px 0; }
+    .cap-grid, .trust-grid, .engage { grid-template-columns:1fr; }
+    .layer-row { grid-template-columns:1fr; }
+    .layer-row .name { border-right:none; border-bottom:1px solid var(--border); }
+    .eng-col { border-right:none; border-bottom:1px solid var(--border); }
+    .eng-col:last-child { border-bottom:none; }
+    .nav-links a:not(.btn) { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="index.html">Product<span>Connect</span><span class="ent">Enterprise</span></a>
+    <div class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#engagement">Engagement</a>
+      <a href="index.html">For SMBs</a>
+      <a class="btn btn-primary" href="#contact">Book a meeting</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">Enterprise product infrastructure</span>
+    <h1>A complete data layer over <em>every product you make.</em></h1>
+    <p class="oneliner">
+      Component-level lifecycle data, supplier-verified inputs, and Digital Product Passports minted
+      directly from your ERP sales orders. Built for portfolios where "a product" means thousands of
+      components, dozens of suppliers, and a compliance team that needs every claim to hold up.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#contact">Book a meeting</a>
+      <a class="btn btn-ghost" href="#platform">See the architecture</a>
+    </div>
+    <p class="hero-note">Direct line to the founding team · Dedicated onboarding · Danish/EU data residency</p>
+  </div>
+</header>
+
+<!-- THE DATA LAYER -->
+<section id="platform" style="background:var(--bg-raised); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <span class="kicker">The platform</span>
+    <h2>One data model, from raw material to point of sale.</h2>
+    <p class="sub">Components are the authored unit — products are how humans group them. Passports are minted per unit, from real sales orders. That architecture is the difference between a filing system and a living data layer.</p>
+    <div class="layer-box">
+      <div class="layer-row">
+        <div class="name">Components</div>
+        <div class="desc"><strong>The atomic unit.</strong> Legs, seats, fabrics, fittings, packaging — each with material data, origin, supplier, and CO2 contribution. LCA runs at this level, so every footprint is decomposable and defensible.</div>
+      </div>
+      <div class="layer-row">
+        <div class="name">Products</div>
+        <div class="desc"><strong>Structured families, not flat SKU lists.</strong> One product family, axes of variation visible (frame finish × upholstery × armrest). 3D digital twins per family member — ~13 models for a full catalogue, not 300.</div>
+      </div>
+      <div class="layer-row">
+        <div class="name">Passports</div>
+        <div class="desc"><strong>Minted per unit, from your ERP.</strong> When a sales order ships, a Digital Product Passport is created for that physical unit — ESPR-compliant, QR-addressable, and tied to the exact component data it was built from.</div>
+      </div>
+      <div class="layer-row">
+        <div class="name">Outputs</div>
+        <div class="desc"><strong>EPDs, ESG reporting, customer-facing pages.</strong> Verified EPDs (third-party or GPC-verified), heat maps and Sankey diagrams for hotspot analysis, and product pages that turn compliance data into customer experience.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities">
+  <div class="wrap">
+    <span class="kicker">Enterprise capabilities</span>
+    <h2>Everything compliance needs. Everything the business wants.</h2>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="icon">∑</div>
+        <h3>Component-level LCA & EPD engine</h3>
+        <p>Lifecycle calculation built in — not exported to consultants. Generate EPDs at a fraction of the traditional €17–55K per-product cost, with third-party verification available where the market demands it.</p>
+      </div>
+      <div class="cap-card">
+        <div class="icon">⇄</div>
+        <h3>ERP integration & DPP minting</h3>
+        <p>Passports are created from actual sales orders, not manually maintained pages. Your ERP stays the system of record; Product Connect becomes the product data and compliance surface on top.</p>
+      </div>
+      <div class="cap-card">
+        <div class="icon">✓</div>
+        <h3>Supplier verification network</h3>
+        <p>Invite suppliers to author and sign their own component data. Verified inputs propagate to every product that uses them — and the audit trail writes itself.</p>
+      </div>
+      <div class="cap-card">
+        <div class="icon">◈</div>
+        <h3>3D digital twins & commerce</h3>
+        <p>Every product family carries a 3D model and a customer-facing page. Spare parts, upgrades, and fleet management open service revenue on products you've already sold.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCE TAGS / TRUST -->
+<section style="background:var(--bg-raised); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <span class="kicker">The trust layer</span>
+    <h2>Every field knows where it came from.</h2>
+    <p class="sub">Four source tags on every data point. Your auditors see provenance, your team sees what still needs work, and nothing visible is ever fabricated.</p>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <code>extracted_from_web</code>
+        <p>Pulled from your own published content during onboarding.</p>
+      </div>
+      <div class="trust-card">
+        <code>estimated_from_archetype</code>
+        <p>Grounded engineering estimates, clearly marked until replaced.</p>
+      </div>
+      <div class="trust-card">
+        <code>authored_by_client</code>
+        <p>Entered by your team — designers, engineers, ESG managers.</p>
+      </div>
+      <div class="trust-card">
+        <code>verified_by_supplier</code>
+        <p>Filled and signed by a named supplier. The gold standard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOT THE ALTERNATIVES -->
+<section>
+  <div class="wrap">
+    <span class="kicker">The landscape</span>
+    <h2>LCA tools stop at analysis. DPP tools stop at compliance.</h2>
+    <p class="sub">Product Connect is the only platform combining lifecycle calculation, passport delivery, 3D product experience, and a commerce layer — in one system.</p>
+    <div class="compare">
+      <table>
+        <thead>
+          <tr><th></th><th>Component LCA</th><th>EPD generation</th><th>Digital Product Passports</th><th>3D twins</th><th>Commerce layer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="first-col">Product Connect</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes — per unit</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td class="first-col">Enterprise LCA platforms</td><td class="yes">Yes</td><td>Some</td><td class="no">No</td><td class="no">Internal only</td><td class="no">No</td></tr>
+          <tr><td class="first-col">DPP/traceability platforms</td><td class="no">No</td><td class="no">No</td><td>Compliance-only</td><td class="no">No</td><td class="no">No</td></tr>
+          <tr><td class="first-col">Product data platforms</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ENGAGEMENT MODEL -->
+<section id="engagement" style="background:var(--bg-raised); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <span class="kicker">Working with us</span>
+    <h2>A structured engagement, not a software licence and a goodbye.</h2>
+    <div class="engage">
+      <div class="eng-col">
+        <span class="when">Phase 1 · Scaffold</span>
+        <h3>Your portfolio, structured</h3>
+        <p>We scan your catalogue and build the full component structure — product families, variation axes, estimated BOMs, real suppliers. You review a working model in the first session, not a slide deck.</p>
+      </div>
+      <div class="eng-col">
+        <span class="when">Phase 2 · Deepen</span>
+        <h3>Real data, supplier by supplier</h3>
+        <p>Your team and your suppliers replace estimates in place. ERP integration wired up. First EPDs calculated and verified. Nothing built in phase 1 is thrown away.</p>
+      </div>
+      <div class="eng-col">
+        <span class="when">Phase 3 · Operate</span>
+        <h3>Passports minting on every sale</h3>
+        <p>DPPs created automatically from sales orders. Compliance reporting on tap. Customer-facing pages live, spare-parts channel open. The platform becomes infrastructure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact">
+  <div class="wrap">
+    <div class="cta-box">
+      <span class="kicker">Next step</span>
+      <h2>Bring us your hardest product. We'll show you its passport.</h2>
+      <p>A 45-minute working session with the founding team. We'll scan your catalogue live and walk through what compliance looks like for your specific portfolio — no slideware.</p>
+      <a class="btn btn-primary" href="mailto:hello@getproductconnect.com?subject=Enterprise%20meeting%20request">Book a meeting</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <p>© 2026 Product Connect · Copenhagen, Denmark</p>
+    <div class="foot-links">
+      <a href="index.html">For SMBs</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="mailto:hello@getproductconnect.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
