@@ -16,7 +16,7 @@ python3 -m http.server 8777
 ## Interactions
 - **Orbit** — drag to rotate, scroll to zoom (auto-rotates until you interact).
 - **Select** — click a part → blue **outline** (OutlinePass) + blue **overlay tint** + the part name. Parts are the named Blender meshes: `seat · Back · Cross · leg-front/back-left/right · fastners`.
-- **Explode** — slider separates the parts along Y (proportional to height from centre).
+- **Explode** — slider separates the parts radially in all directions (each part moves outward along the offset of its centre from the chair's centre).
 
 ## The look — recipe (carry this into the production R3F build)
 - **Model:** `cross-chair-03.glb` — named meshes, embedded oak base-color + (seat/back) normal & roughness maps. *(Still TODO from Blender: tangents on export, normal/roughness on the legs material, Opaque blend mode + JPG color maps.)*

@@ -165,13 +165,13 @@ loader.load('./cross-chair-03.glb', (gltf) => {
   pickRoot = model;
   blob.scale.set(size.x * 1.5, size.z * 1.7, 1);   // size the contact shadow to the chair footprint
 
-  // Capture each part's base Y + an explode direction (how far its centre sits above/below the chair's centre)
+  // Capture each part's base position + a 3D explode direction (offset of its centre from the chair's centre, all axes)
   const mBox = new THREE.Box3().setFromObject(model);
-  const mCenterY = (mBox.min.y + mBox.max.y) / 2;
+  const mCenter = mBox.getCenter(new THREE.Vector3());
   model.traverse((o) => {
     if (o.isMesh) {
-      o.userData.baseY = o.position.y;
-      o.userData.dirY = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).y - mCenterY;
+      o.userData.basePos = o.position.clone();
+      o.userData.dir = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).sub(mCenter);
       parts.push(o);
     }
   });
@@ -245,11 +245,14 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   down = null;
 });
 
-// ---------- Explode slider: separate parts along Y ----------
+// ---------- Explode slider: separate parts radially (all directions) ----------
 const explodeSlider = document.getElementById('explode');
 explodeSlider.addEventListener('input', () => {
   const t = parseFloat(explodeSlider.value);
-  for (const o of parts) o.position.y = o.userData.baseY + o.userData.dirY * 2.2 * t;
+  for (const o of parts) {
+    const b = o.userData.basePos, d = o.userData.dir, k = 2.2 * t;
+    o.position.set(b.x + d.x * k, b.y + d.y * k, b.z + d.z * k);
+  }
 });
 
 renderer.setAnimationLoop(() => { controls.update(); composer.render(); });
