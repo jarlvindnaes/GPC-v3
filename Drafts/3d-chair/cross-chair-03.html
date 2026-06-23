@@ -7,10 +7,9 @@
 <style>
   html, body { margin: 0; height: 100%; background: #f7f5f2; font-family: system-ui, sans-serif; }
   #app { position: fixed; inset: 0; }
-  #hint { position: fixed; left: 0; right: 0; bottom: 22px; text-align: center; color: #5d6373; font-size: 13px; letter-spacing: 0.04em; pointer-events: none; }
   #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #5d6373; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
   #part { position: fixed; top: 16px; left: 18px; color: #3e63dd; font-size: 15px; font-weight: 600; }
-  #explodeWrap { position: fixed; left: 50%; transform: translateX(-50%); bottom: 54px; display: flex;
+  #explodeWrap { position: fixed; right: 24px; bottom: 24px; display: flex;
     align-items: center; gap: 10px; background: rgba(255,255,255,0.72); border: 1px solid #e7e2db;
     border-radius: 999px; padding: 8px 16px; font-size: 13px; color: #5d6373; backdrop-filter: blur(6px); }
   #explodeWrap input { width: 180px; accent-color: #3e63dd; }
@@ -19,7 +18,6 @@
 <body>
 <div id="app"></div>
 <div id="loading">Loading chair…</div>
-<div id="hint">Blender GLB · drag to turn it around · click a part to select</div>
 <div id="part"></div>
 <div id="explodeWrap"><label for="explode">Explode</label><input id="explode" type="range" min="0" max="1" step="0.01" value="0" /></div>
 
