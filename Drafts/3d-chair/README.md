@@ -2,15 +2,15 @@
 
 A standalone Three.js viewer for the **TAKT Cross Chair (oak, matt lacquer)** — the realism + interaction spike before wiring it into the site. Reference: https://taktcph.com/products/cross-chair/#/oak-matt-lacquer/none
 
-**Final files:** `cross-chair-03.html` (viewer) · `cross-chair-03.glb` (model, from Blender) · `studio.hdr` (lighting).
-(Earlier iterations — the `.dae` viewer, `cross-chair-01/02` — and the raw TAKT downloads in `~/Desktop/TAKT 3D` are left out of the repo.)
+**Current files:** `cross-chair-04.html` (viewer) · `cross-chair-04.glb` (model — adds all the screws, from Blender) · `studio.hdr` (lighting).
+(`cross-chair-03.html` / `.glb` is the previous version, kept for reference. Earlier iterations — the `.dae` viewer, `cross-chair-01/02` — and the raw TAKT downloads in `~/Desktop/TAKT 3D` are left out of the repo. `04.html` is an exact copy of `03.html` with the same transparency / lighting / texture settings, pointed at the new model.)
 
 ## Run it
 Needs a local server + internet (Three.js loads from a CDN):
 ```
 cd Drafts/3d-chair
 python3 -m http.server 8777
-# open http://localhost:8777/cross-chair-03.html
+# open http://localhost:8777/cross-chair-04.html
 ```
 
 ## Interactions

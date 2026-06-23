@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TAKT Cross Chair - GLB v3</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #f7f5f2; font-family: system-ui, sans-serif; }
+  #app { position: fixed; inset: 0; }
+  #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #5d6373; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+  #part { position: fixed; top: 16px; left: 18px; color: #3e63dd; font-size: 15px; font-weight: 600; }
+  #explodeWrap { position: fixed; right: 24px; bottom: 24px; display: flex;
+    align-items: center; gap: 10px; background: rgba(255,255,255,0.72); border: 1px solid #e7e2db;
+    border-radius: 999px; padding: 8px 16px; font-size: 13px; color: #5d6373; backdrop-filter: blur(6px); }
+  #explodeWrap input { width: 180px; accent-color: #3e63dd; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="loading">Loading chair…</div>
+<div id="part"></div>
+<div id="explodeWrap"><label for="explode">Explode</label><input id="explode" type="range" min="0" max="1" step="0.01" value="0" /></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
+
+const app = document.getElementById('app');
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.65;         // brighter / airier to match the manufacturer studio shot
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+app.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+renderer.setClearColor(0x000000, 0);   // transparent canvas so the page's off-white shows (kept through the composer)
+
+// Same studio HDRI the leather chair uses - real graded light, not the flat procedural room
+const pmrem = new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+new RGBELoader().load('./studio.hdr', (hdr) => {
+  hdr.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = pmrem.fromEquirectangular(hdr).texture;
+  hdr.dispose();
+});
+
+const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.01, 1000);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.enablePan = false;
+controls.minDistance = 0.4;
+controls.maxDistance = 8;
+controls.maxPolarAngle = Math.PI / 1.9;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.8;
+
+// High-key studio fill: strong ambient floods the crevices (under the seat, the cross), softened key keeps it near-shadowless
+scene.add(new THREE.AmbientLight(0xffffff, 0.78));
+const key = new THREE.DirectionalLight(0xfff8f0, 0.18);   // warm key, eased back so the chair isn't directionally shaded
+key.position.set(5, 3.5, 4);   // lower / more grazing, so it doesn't flood the flat seat top
+key.castShadow = false;   // no long directional drop shadow - using a soft contact blob instead
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.near = 0.5;
+key.shadow.camera.far = 20;
+key.shadow.camera.left = key.shadow.camera.bottom = -3;
+key.shadow.camera.right = key.shadow.camera.top = 3;
+key.shadow.bias = -0.0002;
+key.shadow.normalBias = 0.03;
+key.shadow.radius = 6;          // softer shadow edge (closer to the diffuse studio shadow)
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffe9d5, 0.35);  // soft warm fill, lifted to wash out the remaining shadow side
+fill.position.set(-4, 6, -4);
+scene.add(fill);
+
+// Soft contact "blob" shadow under the chair (a radial-gradient plane - no long directional drop)
+function makeShadowTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 256;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(128, 128, 8, 128, 128, 128);
+  g.addColorStop(0, 'rgba(60,58,56,0.5)');     // neutral grey, soft centre
+  g.addColorStop(0.55, 'rgba(60,58,56,0.16)');
+  g.addColorStop(1, 'rgba(60,58,56,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 256, 256);
+  return new THREE.CanvasTexture(c);
+}
+const blob = new THREE.Mesh(
+  new THREE.PlaneGeometry(1, 1),
+  new THREE.MeshBasicMaterial({ map: makeShadowTexture(), transparent: true, depthWrite: false })
+);
+blob.rotation.x = -Math.PI / 2;
+blob.position.y = 0.002;
+// scene.add(blob);   // floor shadow off for now - "maybe we don't need it"
+
+let pickRoot = null;   // the loaded model, for raycasting
+const parts = [];      // meshes + their base Y / explode direction
+
+// ---------- Load the Blender GLB (materials/UVs as authored) ----------
+const draco = new DRACOLoader().setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
+const loader = new GLTFLoader().setDRACOLoader(draco);
+loader.setMeshoptDecoder(MeshoptDecoder);
+
+loader.load('./cross-chair-04.glb', (gltf) => {
+  const model = gltf.scene;
+
+  // Keep the authored materials; let the chair cast/receive shadows.
+  // DoubleSide = band-aid for inverted normals (proper fix: recalc normals in Blender).
+  model.traverse((o) => {
+    if (o.isMesh) {
+      o.castShadow = true;
+      o.receiveShadow = false;   // cast onto the floor, but don't self-shadow (kills acne when rotating)
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      mats.forEach((m) => {
+        if (!m) return;
+        m.transparent = false;
+        m.depthWrite = true;
+        m.alphaTest = 0;
+        m.side = THREE.DoubleSide;
+        if (m.normalMap) m.normalScale.set(0.4, 0.4);  // dialled back - relief was too strong
+        m.envMapIntensity = 0.32;  // dialled back too - the HDRI's bright/dark variation was adding shading
+        // matt lacquer: a uniform matte roughness so the smooth spots stop mirroring the
+        // bright studio light (the "seat goes white from the front" reflection sweep)
+        if (m.map) { m.roughnessMap = null; m.roughness = 0.85; m.color = new THREE.Color(0xffe6c6); }  // warm honey tint
+        m.needsUpdate = true;
+      });
+    }
+  });
+
+  // Center on floor and frame it
+  const box = new THREE.Box3().setFromObject(model);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  model.position.x -= center.x;
+  model.position.z -= center.z;
+  model.position.y -= box.min.y;
+  scene.add(model);
+  pickRoot = model;
+  blob.scale.set(size.x * 1.5, size.z * 1.7, 1);   // size the contact shadow to the chair footprint
+
+  // Capture each part's base position + a 3D explode direction (offset of its centre from the chair's centre, all axes)
+  const mBox = new THREE.Box3().setFromObject(model);
+  const mCenter = mBox.getCenter(new THREE.Vector3());
+  model.traverse((o) => {
+    if (o.isMesh) {
+      o.userData.basePos = o.position.clone();
+      o.userData.dir = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).sub(mCenter);
+      // The middle cross sits dead-centre (near-zero offset), so it wouldn't move - push it straight down on explode.
+      if (o.name === "Cross") o.userData.dir.set(0, -0.3, 0);
+      parts.push(o);
+    }
+  });
+
+  const h = size.y;
+  controls.target.set(0, h * 0.45, 0);
+  const dist = Math.max(size.x, size.y, size.z) * 2.1;
+  camera.position.set(dist * 0.55, h * 0.7, dist);
+  controls.update();
+
+  document.getElementById('loading').remove();
+}, undefined, (err) => {
+  document.getElementById('loading').textContent = 'Failed to load cross-chair-04.glb - see console';
+  console.error(err);
+});
+
+// ---------- Blue selection outline (postprocessing) ----------
+// Multisampled (MSAA) HDR render target so geometry edges are hardware-antialiased through the composer
+const rtSize = renderer.getDrawingBufferSize(new THREE.Vector2());
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(rtSize.x, rtSize.y, { samples: 8, type: THREE.HalfFloatType }));
+composer.addPass(new RenderPass(scene, camera));
+const outline = new OutlinePass(new THREE.Vector2(innerWidth, innerHeight), scene, camera);
+outline.visibleEdgeColor.set('#3e63dd');   // brand blue
+outline.hiddenEdgeColor.set('#27408b');    // dimmer blue where the edge is occluded
+outline.edgeStrength = 6;
+outline.edgeThickness = 1.5;
+outline.edgeGlow = 0.3;
+composer.addPass(outline);
+composer.addPass(new SMAAPass(innerWidth * Math.min(devicePixelRatio, 2), innerHeight * Math.min(devicePixelRatio, 2)));  // anti-alias the composited image (the composer bypasses the renderer's MSAA)
+composer.addPass(new OutputPass());
+
+// ---------- Click a part to select it (proves the named meshes carry over) ----------
+const ray = new THREE.Raycaster();
+const ptr = new THREE.Vector2();
+const partLabel = document.getElementById('part');
+let down = null;
+let selected = null;
+
+function pick(ev) {
+  if (!pickRoot) return;
+  ptr.x = (ev.clientX / innerWidth) * 2 - 1;
+  ptr.y = -(ev.clientY / innerHeight) * 2 + 1;
+  ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObject(pickRoot, true).find((h) => h.object.isMesh);
+
+  // clear previous overlay (parts share materials, so clone per-mesh to tint just one)
+  if (selected) { selected.material = selected.userData._origMat; selected = null; }
+
+  if (hit) {
+    const mesh = hit.object;
+    if (!mesh.userData._origMat) mesh.userData._origMat = mesh.material;
+    const hl = mesh.userData._origMat.clone();
+    hl.emissive = new THREE.Color(0x3e63dd);
+    hl.emissiveIntensity = 0.65;        // blue overlay tint (stronger so it reads over the bright fill lighting)
+    mesh.material = hl;
+    selected = mesh;
+    outline.selectedObjects = [mesh];   // + blue silhouette outline
+    partLabel.textContent = 'Selected: ' + (mesh.name || 'part');
+  } else {
+    outline.selectedObjects = [];
+    partLabel.textContent = '';
+  }
+}
+
+renderer.domElement.addEventListener('pointerdown', (e) => {
+  controls.autoRotate = false;   // stop spinning once the user interacts
+  down = { x: e.clientX, y: e.clientY };
+});
+renderer.domElement.addEventListener('pointerup', (e) => {
+  if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 5) pick(e);  // click, not drag
+  down = null;
+});
+
+// ---------- Explode slider: separate parts radially (all directions) ----------
+const explodeSlider = document.getElementById('explode');
+explodeSlider.addEventListener('input', () => {
+  const t = parseFloat(explodeSlider.value);
+  for (const o of parts) {
+    const b = o.userData.basePos, d = o.userData.dir, k = 2.2 * t;
+    o.position.set(b.x + d.x * k, b.y + d.y * k, b.z + d.z * k);
+  }
+});
+
+renderer.setAnimationLoop(() => { controls.update(); composer.render(); });
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  outline.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
