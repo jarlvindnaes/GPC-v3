@@ -42,7 +42,7 @@ Open `index.html` (SMV) and `enterprise.html` in a browser. Shared styles in `wi
 1. Hero scope: CO₂-led front door vs. whole-platform promise?
 2. Tagline: "Your furniture is smarter than you think" - keep?
 3. Is the zebra rhythm right, or too many dark sections?
-4. SMV pricing shown publicly (€399/€999) - keep on the page or gate behind a demo?
+4. SMV pricing shown publicly (€499/€999) - keep on the page or gate behind a demo?
 5. Where exactly should the phone live - hero or a dedicated section (currently `#passport`)?
 6. Exploded-assembly scroll-video: produce a generic hero piece now, or generate per-client from their 3D model?
 7. Scannability split: the "data in → out" chart and the component-reuse chart now live on **Enterprise** only (SMV stays outcome-led). OK, or should SMV keep a simplified version of either?
