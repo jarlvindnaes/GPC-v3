@@ -81,9 +81,9 @@ controls.maxPolarAngle = Math.PI / 1.9;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.8;
 
-// Match the leather chair: ambient + warm key + cool fill (the HDRI does most of the work)
-scene.add(new THREE.AmbientLight(0xffffff, 0.1));
-const key = new THREE.DirectionalLight(0xfff8f0, 0.5);   // warm key, softened
+// High-key studio fill: strong ambient floods the crevices (under the seat, the cross), softened key keeps it near-shadowless
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const key = new THREE.DirectionalLight(0xfff8f0, 0.32);   // warm key, eased back so the chair isn't directionally shaded
 key.position.set(5, 3.5, 4);   // lower / more grazing, so it doesn't flood the flat seat top
 key.castShadow = false;   // no long directional drop shadow - using a soft contact blob instead
 key.shadow.mapSize.set(2048, 2048);
@@ -95,7 +95,7 @@ key.shadow.bias = -0.0002;
 key.shadow.normalBias = 0.03;
 key.shadow.radius = 6;          // softer shadow edge (closer to the diffuse studio shadow)
 scene.add(key);
-const fill = new THREE.DirectionalLight(0xffe9d5, 0.25);  // soft warm fill (was cool blue, which made the oak look green)
+const fill = new THREE.DirectionalLight(0xffe9d5, 0.35);  // soft warm fill, lifted to wash out the remaining shadow side
 fill.position.set(-4, 6, -4);
 scene.add(fill);
 

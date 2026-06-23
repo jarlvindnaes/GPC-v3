@@ -20,7 +20,7 @@ python3 -m http.server 8777
 
 ## The look — recipe (carry this into the production R3F build)
 - **Model:** `cross-chair-03.glb` — named meshes, embedded oak base-color + (seat/back) normal & roughness maps. *(Still TODO from Blender: tangents on export, normal/roughness on the legs material, Opaque blend mode + JPG color maps.)*
-- **Lighting:** HDRI `studio_small_03_1k.hdr` (same as the leather chair) · exposure **0.65** · oak `envMapIntensity` **0.4** · warm key `#fff8f0` (0.5) + warm fill `#ffe9d5` (0.25), no cool light.
+- **Lighting:** HDRI `studio_small_03_1k.hdr` (same as the leather chair) · exposure **0.65** · oak `envMapIntensity` **0.4** · high ambient (0.5) to flood the crevices + softened warm key `#fff8f0` (0.32) + warm fill `#ffe9d5` (0.35), no cool light — near-shadowless, matching the manufacturer studio shot.
 - **Material:** matte (roughness **0.85**) + warm honey tint **`#ffe6c6`** (corrects a green/cool cast; the matte stops the seat mirroring the bright studio).
 - **Shadow:** soft neutral-grey contact "blob" (radial-gradient plane) — **currently off** (`scene.add(blob)` commented). No long directional drop.
 - **Anti-aliasing:** MSAA **8×** multisampled render target + **SMAA** pass (the EffectComposer bypasses the renderer's built-in AA).
