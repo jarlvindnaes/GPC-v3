@@ -172,6 +172,8 @@ loader.load('./cross-chair-03.glb', (gltf) => {
     if (o.isMesh) {
       o.userData.basePos = o.position.clone();
       o.userData.dir = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).sub(mCenter);
+      // The middle cross sits dead-centre (near-zero offset), so it wouldn't move - push it straight down on explode.
+      if (o.name === "Cross") o.userData.dir.set(0, -0.3, 0);
       parts.push(o);
     }
   });
