@@ -80,8 +80,8 @@ controls.autoRotate = true;
 controls.autoRotateSpeed = 0.8;
 
 // High-key studio fill: strong ambient floods the crevices (under the seat, the cross), softened key keeps it near-shadowless
-scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-const key = new THREE.DirectionalLight(0xfff8f0, 0.25);   // warm key, eased back so the chair isn't directionally shaded
+scene.add(new THREE.AmbientLight(0xffffff, 0.78));
+const key = new THREE.DirectionalLight(0xfff8f0, 0.18);   // warm key, eased back so the chair isn't directionally shaded
 key.position.set(5, 3.5, 4);   // lower / more grazing, so it doesn't flood the flat seat top
 key.castShadow = false;   // no long directional drop shadow - using a soft contact blob instead
 key.shadow.mapSize.set(2048, 2048);
@@ -143,7 +143,7 @@ loader.load('./cross-chair-03.glb', (gltf) => {
         m.alphaTest = 0;
         m.side = THREE.DoubleSide;
         if (m.normalMap) m.normalScale.set(0.4, 0.4);  // dialled back - relief was too strong
-        m.envMapIntensity = 0.4;  // soft image-based light does most of the work (matte now, so no seat blowout)
+        m.envMapIntensity = 0.32;  // dialled back too - the HDRI's bright/dark variation was adding shading
         // matt lacquer: a uniform matte roughness so the smooth spots stop mirroring the
         // bright studio light (the "seat goes white from the front" reflection sweep)
         if (m.map) { m.roughnessMap = null; m.roughness = 0.85; m.color = new THREE.Color(0xffe6c6); }  // warm honey tint
