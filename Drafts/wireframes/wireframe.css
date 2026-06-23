@@ -252,7 +252,7 @@ td.no { color: var(--ink-soft); }
   gap: 2px; line-height: 1.2; font-size: 14px; font-weight: 600; color: #dfe4f5;
   border-right: 1px solid rgba(255,255,255,0.12); overflow: hidden; padding: 0 6px; }
 .cmp-seg__price { color: #fff; font-weight: 700; font-size: 15px; }
-.cmp-seg__label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.55);
+.cmp-seg__label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.82);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .cmp-seg:first-child { border-radius: 6px 0 0 6px; }
 .cmp-seg:last-child { border-right: none; border-radius: 0 6px 6px 0; }
