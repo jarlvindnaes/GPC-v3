@@ -150,8 +150,6 @@ loader.load('./cross-chair-04.glb', (gltf) => {
         // Screws: the authored metal blew out white (near-mirror reflecting the bright HDRI). Make it gray satin metal.
         if (o.name.startsWith('Metal_Screw')) { m.color = new THREE.Color(0xa0a3a8); m.metalness = 0.8; m.roughness = 0.42; m.metalnessMap = null; m.roughnessMap = null; }
         else if (o.name.startsWith('Hex_Socket')) { m.color = new THREE.Color(0x202022); m.metalness = 0.8; m.roughness = 0.45; m.metalnessMap = null; m.roughnessMap = null; }  // black socket cap
-        // "fastners" = the two backrest hole plugs; authored with a broken mirror material (metalness 95, roughness 0.05) that blew out white. Make them dark holes.
-        else if (o.name === 'fastners') { m.color = new THREE.Color(0x1b1c1e); m.metalness = 0.7; m.roughness = 0.5; m.metalnessMap = null; m.roughnessMap = null; }
         m.needsUpdate = true;
       });
     }
