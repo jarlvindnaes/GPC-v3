@@ -83,10 +83,11 @@
       <div class="engine__col">
         <h4>Data in</h4>
         <ul class="engine__list">
-          <li>ERP / PLM systems</li>
+          <li>ERP / PLM / PIM systems</li>
           <li>3D / CAD across product lines</li>
           <li>Multi-tier supplier data</li>
           <li>Bills of materials &amp; routings</li>
+          <li>Material &amp; substance data</li>
           <li>Certificates &amp; test reports</li>
         </ul>
       </div>
@@ -102,10 +103,11 @@
         <h4>Value out</h4>
         <ul class="engine__list">
           <li>Component-level LCA at scale</li>
+          <li>GHG accounting &amp; ESG reporting</li>
           <li>ERP-minted, verified EPDs</li>
           <li>Digital Product Passports</li>
           <li>Spare-parts commerce</li>
-          <li>ESG, CBAM &amp; customs reporting</li>
+          <li>CBAM &amp; customs reporting</li>
         </ul>
       </div>
     </div>
@@ -178,8 +180,8 @@
     </div>
     <div class="grid grid--3">
       <div class="card"><div class="ic">⊞</div><h3>Component-level LCA &amp; reuse</h3><p>Impact calculated per component and reused across every product that shares it - measure once, never re-key. Upload a 3D model and shared components are detected automatically. EN 15804-aligned.</p></div>
-      <div class="card"><div class="ic">⟐</div><h3>ERP integration &amp; DPP minting</h3><p>Mint Digital Product Passports straight from your ERP/PLM. Data stays in sync, not in spreadsheets.</p></div>
-      <div class="card"><div class="ic">◍</div><h3>Supplier verification at scale</h3><p>Invite multi-tier suppliers to verify their own components - first-hand, primary data straight from the source. Provenance tracked on every value, so data quality is provable, not asserted.</p></div>
+      <div class="card"><div class="ic">⟐</div><h3>ERP &amp; PIM integration</h3><p>Two-way sync with the systems you already run - Microsoft Dynamics 365 Business Central, SAP, and your PIM - over a documented API. Mint Digital Product Passports straight from your ERP. Data stays in sync, not in spreadsheets.</p></div>
+      <div class="card"><div class="ic">◍</div><h3>Supplier verification at scale</h3><p>Invite multi-tier suppliers to verify their own components through guided surveys - no LCA expertise needed on their side. Automated reminders chase missing data, so your team does less admin than a spreadsheet, not more. Provenance is tracked on every value: data quality is provable, not asserted.</p></div>
       <div class="card"><div class="ic">⚗</div><h3>Impact simulator</h3><p>Swap suppliers, materials, or origins and see the environmental impact before you commit.</p></div>
       <div class="card"><div class="ic">▤</div><h3>Supply-chain analytics</h3><p>Concentration risk, geopolitical exposure, and alerts when a route or material gets vulnerable.</p></div>
       <div class="card"><div class="ic">⇄</div><h3>Customs &amp; cross-border</h3><p>Auto-generate HS codes, origin certificates, and duty calculations from your product graph.</p></div>
@@ -197,6 +199,8 @@
         Suppliers verify their own components directly in the platform - first-hand, primary data that no
         consultant can match. Every value carries its provenance: extracted, estimated, authored, or supplier-verified.
         Our verification concierge then takes EPDs all the way to third-party sign-off - in batches, at portfolio scale.
+        The calculation methodology and the platform itself are independently audited, and every result traces back to
+        its inputs - so your LCAs are auditable end to end, not a black box.
       </p>
       <div class="chips">
         <span class="chip">EN 15804</span>
@@ -213,6 +217,22 @@
         <div class="ph__title">Provenance + audit-trail visual</div>
         <div class="ph__desc">Every claim traceable to its source; path to verified EPD.</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAY COMPLIANT (light) - the platform keeps pace with regulation ============ -->
+<section class="section" id="compliance">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">Always current</span>
+      <h2>We keep pace with the regulation - so you don't have to.</h2>
+      <p class="sub">ESPR, CBAM and the EN standards keep moving. Product Connect maintains the Product Category Rules and calculation methodologies for you, and rolls updates across your catalogue - so your data stays compliant without re-work, and you're never building for a single deadline.</p>
+    </div>
+    <div class="grid grid--3">
+      <div class="card"><div class="ic">§</div><h3>Maintained PCRs &amp; methods</h3><p>We own the upkeep of Product Category Rules and LCA methodology, kept aligned to EN 15804 and ISO 14040 / 14044 as they evolve.</p></div>
+      <div class="card"><div class="ic">◈</div><h3>Regulation tracking</h3><p>ESPR, CBAM and DPP requirements are tracked centrally. When the rules change, the platform changes with them.</p></div>
+      <div class="card"><div class="ic">↻</div><h3>Updated in place</h3><p>Methodology updates apply across your existing products, so coverage stays current without re-keying or re-buying.</p></div>
     </div>
   </div>
 </section>
@@ -240,9 +260,38 @@
           <tr><td>Component-level LCA at scale</td><td class="no">Manual</td><td class="no">Partial</td><td class="yes">Yes</td></tr>
           <tr><td>ERP-minted DPPs</td><td class="no">No</td><td class="no">Rare</td><td class="yes">Yes</td></tr>
           <tr><td>Supplier-verified provenance</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+          <tr><td>Your data stays portable / exportable</td><td class="no">No</td><td class="no">Partial</td><td class="yes">Yes</td></tr>
+          <tr><td>Keeps pace with new regulation</td><td class="no">Project-based</td><td class="no">Varies</td><td class="yes">Yes</td></tr>
           <tr><td>You own the capability after</td><td class="no">No</td><td class="no">Partial</td><td class="yes">Yes</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DATA OWNERSHIP & PORTABILITY (DARK) - lock-in / longevity reassurance ============ -->
+<section class="section section--dark" id="ownership">
+  <div class="container split">
+    <div>
+      <span class="kicker">Your data, your asset</span>
+      <h2>Your data stays yours - and portable.</h2>
+      <p class="sub">
+        Product Connect builds an asset you own, not a dependency you rent. Everything is exportable at any time,
+        in open standards - so the work holds its value even if you ever move on, and your team is never locked in.
+      </p>
+      <ul class="ticks" style="margin-top:20px">
+        <li>Full export on demand - product graph, LCAs and BOMs in open formats</li>
+        <li>Built on open standards: EN 15804 datasets, GS1, W3C did:web credentials</li>
+        <li>No proprietary lock-in - your verified EPDs and DPPs stay valid outside the platform</li>
+        <li>A long-term partner, built for the regulatory horizon - not a single deadline</li>
+      </ul>
+    </div>
+    <div>
+      <div class="ph" style="min-height:260px">
+        <span class="ph__tag">Placeholder</span>
+        <div class="ph__title">Open-standards / export visual</div>
+        <div class="ph__desc">Data flowing out in EN 15804, GS1 and did:web formats - your asset, portable.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -254,11 +303,11 @@
       <span class="kicker">How we engage</span>
       <h2>From kickoff to portfolio coverage.</h2>
     </div>
-    <div class="timeline">
+    <div class="timeline timeline--4">
       <div>
         <div class="when">Phase 1 · Connect</div>
         <h3>Integrate &amp; map</h3>
-        <p style="color:var(--ink-soft); font-size:15px; margin-top:8px">Connect ERP/PLM, map your product structure, and stand up the product graph with your real catalogue.</p>
+        <p style="color:var(--ink-soft); font-size:15px; margin-top:8px">Connect ERP/PLM/PIM, map your product structure, and stand up the product graph with your real catalogue.</p>
       </div>
       <div>
         <div class="when">Phase 2 · Verify</div>
@@ -270,6 +319,27 @@
         <h3>Mint &amp; report</h3>
         <p style="color:var(--ink-soft); font-size:15px; margin-top:8px">Mint DPPs from ERP, publish verified EPDs, automate ESG &amp; compliance reporting at scale.</p>
       </div>
+      <div>
+        <div class="when">Ongoing · Partner</div>
+        <h3>Support &amp; adopt</h3>
+        <p style="color:var(--ink-soft); font-size:15px; margin-top:8px">A dedicated success partner, team training, and adoption support - so the platform sticks and admin stays low across the organisation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECURITY & DATA INTEGRITY (light, tight strip) ============ -->
+<section class="section section--tight" id="security">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">Security &amp; integrity</span>
+      <h2>Secure, backed up, and tamper-evident by design.</h2>
+    </div>
+    <div class="grid grid--4" style="margin-top:32px">
+      <div class="card"><div class="ic">⊕</div><h3>EU-hosted</h3><p>Data stored and processed in the EU, GDPR-aligned.</p></div>
+      <div class="card"><div class="ic">⛁</div><h3>Encrypted &amp; backed up</h3><p>Encryption in transit and at rest, with automated backups.</p></div>
+      <div class="card"><div class="ic">✶</div><h3>Tamper-evident</h3><p>DPPs issued as cryptographically signed did:web credentials, independently verifiable.</p></div>
+      <div class="card"><div class="ic">⊟</div><h3>Role-based access</h3><p>Granular permissions across your team and your suppliers.</p></div>
     </div>
   </div>
 </section>
@@ -299,6 +369,7 @@
     <div class="footer__links">
       <a href="#layer">The data layer</a>
       <a href="#capabilities">Capabilities</a>
+      <a href="#compliance">Stay compliant</a>
       <a href="#compare">Why us</a>
       <a href="index.html">For SMEs</a>
       <a href="#">Contact</a>
