@@ -230,7 +230,7 @@ td.no { color: var(--ink-soft); }
 .barcol { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
 .barcol .time { font-size: 13px; font-weight: 700; margin-bottom: 8px; white-space: nowrap; }
 .bar { width: 100%; max-width: 84px; border-radius: 6px 6px 0 0; }
-.bar--first { background: #aab2cf; }          /* first product - builds library (neutral slate = baseline) */
+.bar--first { background: #515d8a; }          /* first product - builds library (navy-slate baseline, matches the cost chart) */
 .bar--reuse { background: var(--emerald); }   /* later products - reuse (emerald = the win) */
 .barchart__labels { display: flex; gap: 18px; margin-top: 10px; }
 .barchart__labels > div { flex: 1; text-align: center; font-weight: 600; font-size: 14px; }
