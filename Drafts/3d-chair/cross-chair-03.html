@@ -82,8 +82,8 @@ controls.autoRotate = true;
 controls.autoRotateSpeed = 0.8;
 
 // High-key studio fill: strong ambient floods the crevices (under the seat, the cross), softened key keeps it near-shadowless
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-const key = new THREE.DirectionalLight(0xfff8f0, 0.32);   // warm key, eased back so the chair isn't directionally shaded
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const key = new THREE.DirectionalLight(0xfff8f0, 0.25);   // warm key, eased back so the chair isn't directionally shaded
 key.position.set(5, 3.5, 4);   // lower / more grazing, so it doesn't flood the flat seat top
 key.castShadow = false;   // no long directional drop shadow - using a soft contact blob instead
 key.shadow.mapSize.set(2048, 2048);
