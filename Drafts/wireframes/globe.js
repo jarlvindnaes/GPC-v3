@@ -404,7 +404,9 @@ function initGlobe(container) {
   renderer.domElement.style.display = "block";
   container.appendChild(renderer.domElement);
 
-  const globeScale = Math.min(width, height) / (GLOBE_RADIUS * 1.6);
+  // Fit the whole globe inside the container (diameter = 0.86 * smaller side) instead of letting it bleed past the edges.
+  const GLOBE_FIT = 0.86;
+  let globeScale = (Math.min(width, height) * GLOBE_FIT) / (GLOBE_RADIUS * 2);
   const globeGroup = new Three.Group();
   globeGroup.scale.setScalar(globeScale);
   globeGroup.rotation.y = -Math.PI * 0.57;
@@ -655,6 +657,9 @@ function initGlobe(container) {
       camera.top = newHeight / 2;
       camera.bottom = -newHeight / 2;
       camera.updateProjectionMatrix();
+      globeScale = (Math.min(newWidth, newHeight) * GLOBE_FIT) / (GLOBE_RADIUS * 2);
+      globeGroup.scale.setScalar(globeScale);
+      backdropMesh.scale.setScalar(globeScale);
       if (particleData) {
         for (const line of particleData.flightPaths) line.material.resolution.set(newWidth, newHeight);
       }
