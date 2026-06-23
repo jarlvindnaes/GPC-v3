@@ -171,6 +171,8 @@ loader.load('./cross-chair-04.glb', (gltf) => {
   const mCenter = mBox.getCenter(new THREE.Vector3());
   model.traverse((o) => {
     if (o.isMesh) {
+      // "fastners" is leftover boolean-cutter geometry (the two holes in the backrest) - hidden in Blender; hide it here too.
+      if (o.name === "fastners") { o.visible = false; return; }
       o.userData.basePos = o.position.clone();
       o.userData.dir = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).sub(mCenter);
       // The middle cross sits dead-centre (near-zero offset), so it wouldn't move - push it straight down on explode.
@@ -218,7 +220,7 @@ function pick(ev) {
   ptr.x = (ev.clientX / innerWidth) * 2 - 1;
   ptr.y = -(ev.clientY / innerHeight) * 2 + 1;
   ray.setFromCamera(ptr, camera);
-  const hit = ray.intersectObject(pickRoot, true).find((h) => h.object.isMesh);
+  const hit = ray.intersectObject(pickRoot, true).find((h) => h.object.isMesh && h.object.visible);
 
   // clear previous overlay (parts share materials, so clone per-mesh to tint just one)
   if (selected) { selected.material = selected.userData._origMat; selected = null; }
