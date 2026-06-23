@@ -227,7 +227,7 @@ function pick(ev) {
     if (!mesh.userData._origMat) mesh.userData._origMat = mesh.material;
     const hl = mesh.userData._origMat.clone();
     hl.emissive = new THREE.Color(0x3e63dd);
-    hl.emissiveIntensity = 0.3;         // blue overlay tint
+    hl.emissiveIntensity = 0.65;        // blue overlay tint (stronger so it reads over the bright fill lighting)
     mesh.material = hl;
     selected = mesh;
     outline.selectedObjects = [mesh];   // + blue silhouette outline
