@@ -147,6 +147,9 @@ loader.load('./cross-chair-04.glb', (gltf) => {
         // matt lacquer: a uniform matte roughness so the smooth spots stop mirroring the
         // bright studio light (the "seat goes white from the front" reflection sweep)
         if (m.map) { m.roughnessMap = null; m.roughness = 0.85; m.color = new THREE.Color(0xffe6c6); }  // warm honey tint
+        // Screws: the authored metal blew out white (near-mirror reflecting the bright HDRI). Make it gray satin metal.
+        if (o.name.startsWith('Metal_Screw')) { m.color = new THREE.Color(0xa0a3a8); m.metalness = 0.8; m.roughness = 0.42; m.metalnessMap = null; m.roughnessMap = null; }
+        else if (o.name.startsWith('Hex_Socket')) { m.color = new THREE.Color(0x202022); m.metalness = 0.8; m.roughness = 0.45; m.metalnessMap = null; m.roughnessMap = null; }  // black socket cap
         m.needsUpdate = true;
       });
     }
