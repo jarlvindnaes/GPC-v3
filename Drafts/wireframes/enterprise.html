@@ -161,11 +161,7 @@
       </ul>
     </div>
     <div>
-      <div class="ph" style="min-height:340px">
-        <span class="ph__tag">Placeholder</span>
-        <div class="ph__title">Interactive globe - supply chain + scan map</div>
-        <div class="ph__desc">Re-used from the current site. One visual for this section: upstream nodes &amp; transport routes, plus downstream scan/tap geography.</div>
-      </div>
+      <div id="globe" style="position:relative; width:100%; height:420px; min-height:340px"></div>
     </div>
   </div>
 </section>
@@ -376,6 +372,17 @@
     </div>
   </div>
 </footer>
+
+<!-- Supply-chain globe (ported from the live site) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="globe.js"></script>
 
 </body>
 </html>

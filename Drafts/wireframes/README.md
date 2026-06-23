@@ -34,7 +34,7 @@ Open `index.html` (SMV) and `enterprise.html` in a browser. Shared styles in `wi
 
 ## Reused current-site assets (placeholders for now)
 - DPP inside the 3D phone → `#passport` on SMV (now the only visual in that section).
-- Interactive globe → `#supply-chain` on **Enterprise** (supply-chain nodes + transport routes + downstream scan/tap geography). Moved off the SMV passport so each section has one visual.
+- Interactive globe → `#supply-chain` on **Enterprise** — **now wired in** (not a placeholder): `globe.js` is a vanilla-JS port of the live site's `SupplyChainGlobe.tsx`, loading Three.js from a CDN and `world-map.png` locally. Supply-chain nodes + transport routes + downstream scan/tap geography. Moved off the SMV passport so each section has one visual.
 - Data-flow / engine diagram → `#layer` on **Enterprise** (removed from SMV).
 - **NEW asset to produce:** exploded-assembly **scroll-scrubbed video** (Apple-style - furniture explodes into components, reassembles on scroll) → `#components` on SMV. Can be generated from a client's own 3D model. Shared brand asset - also usable on Enterprise.
 
