@@ -137,7 +137,9 @@ function initChair(container) {
   // Stay fully exploded until the trigger enters view, then assemble as it scrolls up.
   // Desktop and mobile stack differently, so each has its own trigger element.
   const triggerDesktop = document.querySelector("[data-chair-trigger]") || container;
-  const triggerMobile = document.querySelector("[data-chair-trigger-mobile]") || triggerDesktop;
+  // On mobile the chair stacks ABOVE the copy, so drive the assembly off the chair's own position
+  // (otherwise it only finishes after the chair has scrolled off the top).
+  const triggerMobile = container;
   const nav = document.querySelector(".nav");
   function explodeAmount() {
     const trigger = matchMedia("(max-width: 820px)").matches ? triggerMobile : triggerDesktop;
