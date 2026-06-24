@@ -11,7 +11,7 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
 const EXPLODE_START = 0.3;   // 30% exploded when the section first appears
 const EXPLODE_FACTOR = 2.2;  // matches the chair viewer's slider mapping
-const ASSEMBLED_AT_TOP = 10;  // px from the top of the viewport where the chair is fully assembled
+const ASSEMBLED_GAP = 10;  // px below the sticky nav where the chair is fully assembled
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
@@ -138,12 +138,14 @@ function initChair(container) {
   // Desktop and mobile stack differently, so each has its own trigger element.
   const triggerDesktop = document.querySelector("[data-chair-trigger]") || container;
   const triggerMobile = document.querySelector("[data-chair-trigger-mobile]") || triggerDesktop;
+  const nav = document.querySelector(".nav");
   function explodeAmount() {
     const trigger = matchMedia("(max-width: 820px)").matches ? triggerMobile : triggerDesktop;
     const rect = trigger.getBoundingClientRect();
     const vh = window.innerHeight || 1;
-    // 0 (exploded) when the trigger enters from the bottom, 1 (assembled) when it's 10px from the top
-    const p = clamp((vh - rect.top) / (vh - ASSEMBLED_AT_TOP), 0, 1);
+    const assembledAt = (nav ? nav.offsetHeight : 0) + ASSEMBLED_GAP;   // just below the sticky nav
+    // 0 (exploded) when the trigger enters from the bottom, 1 (assembled) when it's `assembledAt` from the top
+    const p = clamp((vh - rect.top) / (vh - assembledAt), 0, 1);
     return EXPLODE_START * (1 - p);
   }
 
