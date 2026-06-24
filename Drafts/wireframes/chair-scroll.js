@@ -65,15 +65,18 @@ function initChair(container) {
   const VIEW_DIR = new THREE.Vector3(0.55, 0.28, 1).normalize();
   function frameModel() {
     if (!modelRef) return;
-    const k = EXPLODE_FACTOR * EXPLODE_START;   // worst case = max explode
+    // Radius from the fully-exploded extent so it never clips during the animation...
+    const k = EXPLODE_FACTOR * EXPLODE_START;
     for (const o of parts) { const b = o.userData.basePos, d = o.userData.dir; o.position.set(b.x + d.x * k, b.y + d.y * k, b.z + d.z * k); }
-    const sph = new THREE.Box3().setFromObject(modelRef).getBoundingSphere(new THREE.Sphere());
-    const R = sph.radius * FRAME_PAD;
+    const R = new THREE.Box3().setFromObject(modelRef).getBoundingSphere(new THREE.Sphere()).radius * FRAME_PAD;
+    // ...but aim at the ASSEMBLED chair's centre, so the splayed legs / dropped cross don't drag the chair low in frame.
+    for (const o of parts) o.position.copy(o.userData.basePos);
+    const center = new THREE.Box3().setFromObject(modelRef).getBoundingSphere(new THREE.Sphere()).center;
     const fovV = THREE.MathUtils.degToRad(camera.fov);
     const fovH = 2 * Math.atan(Math.tan(fovV / 2) * camera.aspect);
-    const dist = R / Math.sin(Math.min(fovV, fovH) / 2);   // fit the tighter of the two axes
-    controls.target.copy(sph.center);
-    camera.position.copy(sph.center).addScaledVector(VIEW_DIR, dist);
+    const dist = R / Math.sin(Math.min(fovV, fovH) / 2);
+    controls.target.copy(center);
+    camera.position.copy(center).addScaledVector(VIEW_DIR, dist);
     controls.update();
   }
 
