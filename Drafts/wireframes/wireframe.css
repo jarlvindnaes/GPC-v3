@@ -129,9 +129,9 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
   align-items: center; justify-content: center; color: var(--ink-soft); font-size: 14px; letter-spacing: 0.04em; }
 @media (min-width: 821px) {
   #components { position: relative; isolation: isolate; overflow: hidden; }
-  /* big chair contained to the upper-left area, just under the heading/lead (red-box placement) */
-  #components .split { position: relative; align-items: start; min-height: 480px; }
-  #chair-explode { position: absolute; top: -30px; bottom: 0; left: 0; width: 64%; height: auto; z-index: 0; }
+  /* big chair (~720px) pulled up and to the left, behind the heading/copy */
+  #components .split { position: relative; align-items: start; min-height: 560px; }
+  #chair-explode { position: absolute; top: 0; left: 0; width: 720px; height: 720px; margin-top: -100px; margin-left: -90px; z-index: 0; }
   #components .section__head,
   #components .split > div:last-child { position: relative; z-index: 1; }   /* heading + copy sit above the chair */
 }
