@@ -74,7 +74,10 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .nav { position: sticky; top: 0; z-index: 50; background: rgba(247,245,242,0.85);
   backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 66px; }
-.logo { font-weight: 800; letter-spacing: 0.04em; font-size: 16px; text-decoration: none; }
+.logo { font-weight: 800; letter-spacing: 0.04em; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; }
+/* Logo mark: monochrome SVG recolored via CSS mask, so it inherits the text colour (dark on light, white on dark) */
+.brand-mark { display: inline-block; width: 1.4em; height: 1.4em; margin-right: 9px; flex: none;
+  background-color: currentColor; -webkit-mask: url(logo.svg) center / contain no-repeat; mask: url(logo.svg) center / contain no-repeat; }
 .logo .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--clay); border: 1px solid var(--clay); border-radius: 6px; padding: 2px 6px; margin-left: 8px; }
 .nav__links { display: flex; gap: 26px; align-items: center; }
