@@ -129,9 +129,9 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
   align-items: center; justify-content: center; color: var(--ink-soft); font-size: 14px; letter-spacing: 0.04em; }
 @media (min-width: 821px) {
   #components { position: relative; isolation: isolate; overflow: hidden; }
-  /* give the split area extra height and anchor the chair to it, so the chair sits BELOW the heading (never collides) and fills the free space */
-  #components .split { position: relative; align-items: start; min-height: 520px; }
-  #chair-explode { position: absolute; top: 0; bottom: -80px; left: 0; width: 64%; height: auto; z-index: 0; }
+  /* big chair, anchored to the split, pulled up to sit just under the heading (slight tuck behind it via z-index) */
+  #components .split { position: relative; align-items: start; min-height: 560px; }
+  #chair-explode { position: absolute; top: -70px; bottom: 10px; left: 0; width: 66%; height: auto; z-index: 0; }
   #components .section__head,
   #components .split > div:last-child { position: relative; z-index: 1; }   /* heading + copy sit above the chair */
 }
