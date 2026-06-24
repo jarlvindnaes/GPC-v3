@@ -211,6 +211,8 @@ th, td { padding: 15px 18px; text-align: left; font-size: 14px; border-bottom: 1
 th { background: var(--paper-2); font-weight: 700; }
 td.yes { color: var(--emerald); font-weight: 700; }
 td.no { color: var(--ink-soft); }
+/* mobile: tighten cells so all four columns fit without the table running off the side */
+@media (max-width: 600px) { .table-wrap th, .table-wrap td { padding: 10px 7px; font-size: 11.5px; } }
 
 /* ---------- Logos strip ---------- */
 .logos { display: flex; flex-wrap: wrap; gap: 16px 40px; align-items: center; margin-top: 22px; opacity: 0.7; }
