@@ -122,7 +122,7 @@ function initChair(container) {
       o.userData.dir = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).sub(mCenter);
       // Explode directions tuned to how the chair actually comes apart:
       if (o.name === "Cross") o.userData.dir.set(0, -0.3, 0);                                            // centre cross drops straight down
-      else if (o.name.startsWith("Metal_Screw")) o.userData.dir.set(0, -0.5, 0);                          // underframe screws drop down, past the cross
+      else if (o.name.startsWith("Metal_Screw")) o.userData.dir.set(0, -0.72, 0);                         // underframe screws drop just clear below the chair's feet (still in frame)
       else if (o.name.startsWith("Hex_Socket")) o.userData.dir.set(0, 0.05, 0.8);   // backrest screws pull forward, out in front of the chair (+Z)
       parts.push(o);
     });
