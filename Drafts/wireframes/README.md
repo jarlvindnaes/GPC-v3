@@ -15,7 +15,7 @@ Open `index.html` (SMV) and `enterprise.html` in a browser. Shared styles in `wi
 - **Light by default** (warm, Studio 9-inspired), with our indigo kept as the brand accent.
 - **"Under the hood" sections are dark** → zebra-stripe rhythm down the page:
   - SMV: Hero (L) · How it works (D) · Component-level (L) · Value (L) · Data quality & verified (D) · Passport (L) · Timeline (L) · Time & cost (D) · Pricing (L) · CTA (L)
-  - Enterprise: Hero (L) · Data layer (D) · Reuse at scale (L) · Supply chain mapping (D) · Capabilities (L) · Data quality & verified (D) · Why-us (L) · Timeline (L) · CTA (L)
+  - Enterprise (after the density pass - 9 bands): Hero (L) · Trust logos (L) · Data layer (D) · Capabilities (L) · Supply chain mapping + globe (D) · Why-us (L) · Trust & compliance (D) · Timeline (L) · CTA (L)
 - **No heavy JS yet.** Dashed placeholder boxes mark where assets land (DPP phone, globe, data-flow chart).
 
 ## Message decisions baked in (from our research)
@@ -30,7 +30,7 @@ Open `index.html` (SMV) and `enterprise.html` in a browser. Shared styles in `wi
 - **Studio 9-style "data in → us → value out"** chart lives on **Enterprise** (`#layer`) - it's the architecture/data-layer story, which is an enterprise concern. Removed from SMV to keep that page outcome-led and scannable. To be animated/interactive later.
 - **Less time, less money** - two real (pure HTML/CSS) charts from `Desktop/Graphs/`:
   - Time/cost comparison vs a traditional consultant-led EPD (≈ €28k / ≈ 5 months → ≈ €1,000/EPD + €499/mo / ≈ 1 week) → `#cost` (dark) on **SMV** (the SME cost argument).
-  - Component-reuse bar chart (data-gathering time per product drops as the shared library grows) → `#reuse` on **Enterprise** (the scale argument - strongest across a big portfolio).
+  - Component-reuse bar chart (data-gathering time per product drops as the shared library grows): built, but **folded into the Data layer + Capabilities copy** during the density pass rather than given its own band. The `.barchart` CSS remains if we want to reinstate it as a single band.
 
 ## Reused current-site assets (placeholders for now)
 - DPP inside the 3D phone → `#passport` on SMV (now the only visual in that section).
