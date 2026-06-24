@@ -121,6 +121,12 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
 @media (max-width: 820px){ .split { grid-template-columns: 1fr; gap: 32px; } }
 /* passport phone: beside the text on desktop, but moved up under the lead on mobile */
+/* loading state for the live 3D chair container */
+#chair-explode { cursor: grab; }
+#chair-explode:active { cursor: grabbing; }
+#chair-explode[data-loading]::before { content: attr(data-loading); position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center; color: var(--ink-soft); font-size: 14px; letter-spacing: 0.04em; }
+
 .passport-phone-m { display: none; }
 @media (max-width: 820px){ .passport-phone-m { display: flex; } .passport-phone-d { display: none; } }
 

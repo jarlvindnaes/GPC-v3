@@ -38,7 +38,7 @@ Run with `python3 serve.py` (serves this folder on :8123 with **no-cache headers
 - DPP inside the 3D phone → `#passport` on SMV (now the only visual in that section).
 - Interactive globe → `#supply-chain` on **Enterprise** — **now wired in** (not a placeholder): `globe.js` is a vanilla-JS port of the live site's `SupplyChainGlobe.tsx`, loading Three.js from a CDN and `world-map.png` locally. Supply-chain nodes + transport routes + downstream scan/tap geography. Moved off the SMV passport so each section has one visual.
 - Data-flow / engine diagram → `#layer` on **Enterprise** (removed from SMV).
-- **NEW asset to produce:** exploded-assembly **scroll-scrubbed video** (Apple-style - furniture explodes into components, reassembles on scroll) → `#components` on SMV. Can be generated from a client's own 3D model. Shared brand asset - also usable on Enterprise.
+- Exploded-assembly **scroll-scrubbed assembly** → `#components` on SMV - **now live** (not a video): `chair-scroll.js` mounts the real `cross-chair-04.glb` (same look as the 3D-chair viewer). Starts ~30% exploded, assembles as you scroll down, re-explodes scrolling up, auto-rotates, draggable to orbit (no explode slider, wheel-zoom disabled so the page still scrolls). Needs `cross-chair-04.glb` + `studio.hdr` in this folder and Three.js from the CDN.
 
 ## Open questions for the team
 1. Hero scope: CO₂-led front door vs. whole-platform promise?

@@ -117,12 +117,8 @@
 
     <div class="split" style="margin-top:44px">
       <div>
-        <!-- Apple-style scroll-scrubbed video (placeholder) -->
-        <div class="ph" style="min-height:440px">
-          <span class="ph__tag">Placeholder · scroll video</span>
-          <div class="ph__title">Furniture explodes into components - and reassembles as you scroll</div>
-          <div class="ph__desc">Apple-style scroll-scrubbed video. Shows that every product is a set of components we understand individually. (Can be built from the client's own 3D model.)</div>
-        </div>
+        <!-- Live scroll-scrubbed exploded assembly (real 3D model) -->
+        <div id="chair-explode" data-loading="Loading chair…" style="position:relative; width:100%; height:460px"></div>
       </div>
       <div>
         <h3 style="margin-bottom:6px">No re-typing. No re-calculating. No starting over.</h3>
@@ -430,6 +426,17 @@
     </div>
   </div>
 </footer>
+
+<!-- Scroll-driven exploded chair assembly (#components) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="chair-scroll.js"></script>
 
 </body>
 </html>
