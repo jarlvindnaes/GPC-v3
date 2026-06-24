@@ -120,7 +120,11 @@ function initChair(container) {
       if (!o.isMesh) return;
       o.userData.basePos = o.position.clone();
       o.userData.dir = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()).sub(mCenter);
-      if (o.name === "Cross") o.userData.dir.set(0, -0.3, 0);   // dead-centre part: send it straight down
+      // Explode directions tuned to how the chair actually comes apart:
+      if (o.name === "Cross") o.userData.dir.set(0, -0.3, 0);                                            // centre cross drops straight down
+      else if (o.name.startsWith("Metal_Screw")) o.userData.dir.set(0, -0.5, 0);                          // underframe screws drop down, past the cross
+      else if (o.name.startsWith("Hex_Socket") && o.name.includes("left")) o.userData.dir.set(-0.5, 0.05, 0);   // backrest screws pull outward (left)
+      else if (o.name.startsWith("Hex_Socket") && o.name.includes("right")) o.userData.dir.set(0.5, 0.05, 0);   // backrest screws pull outward (right)
       parts.push(o);
     });
 
