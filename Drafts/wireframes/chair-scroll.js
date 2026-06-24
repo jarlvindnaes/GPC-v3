@@ -58,6 +58,24 @@ function initChair(container) {
 
   const parts = [];
   let ready = false;
+  let modelRef = null;
+
+  // Frame the camera so the *fully exploded* chair fits with margin at any rotation (bounding-sphere fit -> never clips the sides).
+  const FRAME_PAD = 1.18;
+  const VIEW_DIR = new THREE.Vector3(0.55, 0.28, 1).normalize();
+  function frameModel() {
+    if (!modelRef) return;
+    const k = EXPLODE_FACTOR * EXPLODE_START;   // worst case = max explode
+    for (const o of parts) { const b = o.userData.basePos, d = o.userData.dir; o.position.set(b.x + d.x * k, b.y + d.y * k, b.z + d.z * k); }
+    const sph = new THREE.Box3().setFromObject(modelRef).getBoundingSphere(new THREE.Sphere());
+    const R = sph.radius * FRAME_PAD;
+    const fovV = THREE.MathUtils.degToRad(camera.fov);
+    const fovH = 2 * Math.atan(Math.tan(fovV / 2) * camera.aspect);
+    const dist = R / Math.sin(Math.min(fovV, fovH) / 2);   // fit the tighter of the two axes
+    controls.target.copy(sph.center);
+    camera.position.copy(sph.center).addScaledVector(VIEW_DIR, dist);
+    controls.update();
+  }
 
   const draco = new DRACOLoader().setDecoderPath("https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/");
   const loader = new GLTFLoader().setDRACOLoader(draco);
@@ -86,7 +104,6 @@ function initChair(container) {
 
     // Center on floor and frame it
     const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
     model.position.x -= center.x;
     model.position.z -= center.z;
@@ -104,11 +121,8 @@ function initChair(container) {
       parts.push(o);
     });
 
-    const h = size.y;
-    controls.target.set(0, h * 0.45, 0);
-    const dist = Math.max(size.x, size.y, size.z) * 2.1;
-    camera.position.set(dist * 0.55, h * 0.7, dist);
-    controls.update();
+    modelRef = model;
+    frameModel();
 
     container.removeAttribute("data-loading");
     ready = true;
@@ -153,6 +167,7 @@ function initChair(container) {
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    frameModel();   // re-fit for the new aspect (narrow widths need the camera further back)
   }).observe(container);
 }
 
