@@ -61,7 +61,7 @@ function initChair(container) {
   let modelRef = null;
 
   // Frame the camera so the *fully exploded* chair fits with margin at any rotation (bounding-sphere fit -> never clips the sides).
-  const FRAME_PAD = 1.18;
+  const FRAME_PAD = 1.08;
   const VIEW_DIR = new THREE.Vector3(0.55, 0.28, 1).normalize();
   function frameModel() {
     if (!modelRef) return;
