@@ -117,9 +117,10 @@ function initChair(container) {
     console.error(err);
   });
 
-  // Scroll progress -> explode amount (0.3 exploded at the bottom of the viewport, 0 assembled as it scrolls up)
+  // Stay fully exploded until the trigger bullet enters view, then assemble as it scrolls up.
+  const trigger = document.querySelector("[data-chair-trigger]") || container;
   function explodeAmount() {
-    const rect = container.getBoundingClientRect();
+    const rect = trigger.getBoundingClientRect();
     const vh = window.innerHeight || 1;
     const p = clamp((vh - rect.top) / (vh * SCROLL_SPAN), 0, 1);
     return EXPLODE_START * (1 - p);
