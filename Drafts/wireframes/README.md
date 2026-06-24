@@ -5,6 +5,8 @@ These are deliberately plain. Visuals (3D phone, globe, animated data-flow chart
 
 Open `index.html` (SMV) and `enterprise.html` in a browser. Shared styles in `wireframe.css`.
 
+Run with `python3 serve.py` (serves this folder on :8123 with **no-cache headers**, so CSS/JS edits show on a normal reload). Plain `python -m http.server` sends no `Cache-Control`, which makes browsers serve a stale `wireframe.css` after edits - the cause of "I don't see my change" until a hard refresh. The globe needs internet (Three.js loads from a CDN).
+
 ## The two pages
 - **`index.html` - SMV** (the primary landing / beachhead audience). Self-serve, price-sensitive.
 - **`enterprise.html` - Enterprise.** Scale, ERP, complete data layer; "Talk to us".
