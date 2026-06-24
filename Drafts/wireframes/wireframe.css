@@ -316,6 +316,33 @@ td.no { color: var(--ink-soft); }
   .ladder__tag { flex-basis: 100%; }
 }
 
+/* ---- Product-graph illustration (#how, dark): product -> components, each field tagged with its source ---- */
+.pg { margin-top: 40px; background: var(--dark-2); border: 1px solid var(--dark-line); border-radius: var(--radius);
+  padding: 22px 24px; max-width: 760px; }
+.pg__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pg__head b { color: var(--dark-ink); font-size: 16px; }
+.pg__chip { font-size: 10px; font-weight: 800; letter-spacing: 0.12em; padding: 4px 9px; border-radius: 6px;
+  background: rgba(157,180,255,0.16); color: var(--indigo-soft); }
+.pg__sku { font-size: 12.5px; color: var(--dark-soft); font-variant-numeric: tabular-nums; }
+.pg__tree { list-style: none; margin: 16px 0 0 9px; padding-left: 20px; border-left: 1px solid var(--dark-line); }
+.pg__row { position: relative; display: flex; align-items: center; gap: 12px; padding: 11px 14px; margin-top: 10px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--dark-line); border-radius: 10px; }
+.pg__row:first-child { margin-top: 0; }
+.pg__row::before { content: ""; position: absolute; left: -20px; top: 50%; width: 20px; height: 1px; background: var(--dark-line); }
+.pg__part { font-weight: 700; font-size: 14px; min-width: 96px; color: var(--dark-ink); }
+.pg__attrs { display: flex; flex-wrap: wrap; gap: 4px 14px; flex: 1; font-size: 12.5px; color: var(--dark-soft); }
+.pg__src { font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 10px;
+  border-radius: 999px; white-space: nowrap; }
+.pg__src--verified  { color: var(--emerald); background: rgba(0,178,126,0.12); border: 1px solid rgba(0,178,126,0.40); }
+.pg__src--extracted { color: #74c7e6; background: rgba(116,199,230,0.12); border: 1px solid rgba(116,199,230,0.38); }
+.pg__src--estimated { color: #e6b878; background: rgba(230,184,120,0.12); border: 1px solid rgba(230,184,120,0.38); }
+.pg__foot { margin-top: 16px; font-size: 13px; color: var(--dark-soft); }
+@media (max-width: 600px) {
+  .pg__row { flex-wrap: wrap; gap: 6px 10px; }
+  .pg__part { min-width: 0; width: 100%; }
+  .pg__src { order: 2; }
+}
+
 /* ---- Verified-credentials proof card (light) - echoes the live EECC check ---- */
 .verify-card { margin-top: 20px; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--paper-2); }
 .verify-card .vc-head { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }

@@ -81,10 +81,36 @@
       <p class="sub">No black boxes. Start from your real products, raise the resolution over time, and end with passports you can stand behind.</p>
     </div>
 
-    <div class="ph" style="margin-top:40px; min-height:200px">
-      <span class="ph__tag">Placeholder</span>
-      <div class="ph__title">Catalogue / product-graph visual</div>
-      <div class="ph__desc">Products structured into the graph, each field tagged with its source.</div>
+    <!-- Product-graph illustration: a product branches into components, each field tagged with its source -->
+    <div class="pg">
+      <div class="pg__head">
+        <span class="pg__chip">PRODUCT</span>
+        <b>Cross Chair</b>
+        <span class="pg__sku">SKU 0215 687 140</span>
+      </div>
+      <ul class="pg__tree">
+        <li class="pg__row">
+          <span class="pg__part">Seat</span>
+          <span class="pg__attrs"><span>Oak veneer</span><span>2.1 kg CO₂e</span></span>
+          <span class="pg__src pg__src--verified">Supplier-verified</span>
+        </li>
+        <li class="pg__row">
+          <span class="pg__part">Backrest</span>
+          <span class="pg__attrs"><span>Oak veneer</span><span>1.8 kg CO₂e</span></span>
+          <span class="pg__src pg__src--verified">Supplier-verified</span>
+        </li>
+        <li class="pg__row">
+          <span class="pg__part">Front legs ×2</span>
+          <span class="pg__attrs"><span>Solid oak</span><span>0.6 kg CO₂e</span></span>
+          <span class="pg__src pg__src--extracted">Extracted from 3D</span>
+        </li>
+        <li class="pg__row">
+          <span class="pg__part">Bolts M8 ×6</span>
+          <span class="pg__attrs"><span>Steel</span><span>0.1 kg CO₂e</span></span>
+          <span class="pg__src pg__src--estimated">Estimated</span>
+        </li>
+      </ul>
+      <div class="pg__foot">Every field carries its source — they roll up into one verified product footprint.</div>
     </div>
 
     <div class="grid grid--3">
