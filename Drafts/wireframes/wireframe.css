@@ -248,6 +248,7 @@ td.no { color: var(--ink-soft); }
 /* ---- Time/cost comparison timeline (works on dark) ---- */
 .cmp-axis { position: relative; height: 16px; margin-bottom: 8px; margin-left: 168px; }
 .cmp-axis span { position: absolute; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: #fff; }
+.cmp-axis .cmp-weeks { left: 0; transform: translateX(-100%); padding-right: 12px; }  /* unit label, sits in the left gutter */
 .cmp-row { display: flex; align-items: center; margin: 14px 0; }
 .cmp-row__label { width: 168px; flex: none; }
 .cmp-row__label b { display: block; font-size: 14px; }
@@ -274,6 +275,7 @@ td.no { color: var(--ink-soft); }
 .legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
 @media (max-width: 640px) {
   .cmp-axis { margin-left: 0; }
+  .cmp-axis .cmp-weeks { display: none; }   /* gutter is gone on mobile - would be cut off the left edge */
   .cmp-row { flex-direction: column; align-items: stretch; }
   .cmp-row__label { width: auto; margin-bottom: 8px; }
 }
