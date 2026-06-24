@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product Connect - Enterprise (Stripe-pass wireframe)</title>
+<link rel="stylesheet" href="wireframe.css" />
+<style>
+  /* progressive-disclosure link, shared look */
+  .more { display:inline-block; margin-top:14px; font-weight:600; font-size:14px; text-decoration:none; color:var(--indigo); }
+  .section--dark .more { color:var(--indigo-soft); }
+  .card .more { margin-top:10px; font-size:13.5px; }
+</style>
+</head>
+<body>
+
+<div class="wf-ribbon">
+  <b>WIREFRAME · ENTERPRISE (LITE)</b> · Stripe-pass: fewer bands, one line each, drill-in links. &nbsp;·&nbsp; <a href="enterprise.html">← Compare with full version</a>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="container nav__inner">
+    <a class="logo" href="enterprise-lite.html">PRODUCT&nbsp;CONNECT <span class="badge">Enterprise</span></a>
+    <div class="nav__links">
+      <a href="#layer">Platform</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#trust">Trust</a>
+      <a href="#compare">Why us</a>
+      <a class="btn btn--primary" href="#cta">Talk to us</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="section hero">
+  <div class="container split">
+    <div>
+      <span class="kicker">For large &amp; complex portfolios</span>
+      <h1>A complete data layer for <span class="hl">every product you make.</span></h1>
+      <p class="sub">Component-level LCA, ERP-minted passports, and supplier-verified data - across thousands of SKUs, in one source of truth.</p>
+      <div class="btns">
+        <a class="btn btn--primary" href="#cta">Talk to us</a>
+        <a class="btn btn--ghost" href="#layer">See the platform</a>
+      </div>
+      <p class="note">One platform · Concept to delivery · Replaces a stack of point tools and spreadsheets.</p>
+    </div>
+    <div>
+      <div class="ph" style="min-height:320px">
+        <span class="ph__tag">Placeholder</span>
+        <div class="ph__title">Hero visual - product graph / SKU constellation</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ TRUST (tight) ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <span class="kicker" style="margin-bottom:6px">Trusted with product data by</span>
+    <div class="logos">
+      <span class="lg">LOGO</span><span class="lg">LOGO</span><span class="lg">LOGO</span>
+      <span class="lg">LOGO</span><span class="lg">LOGO</span><span class="lg">LOGO</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE DATA LAYER (DARK) ============ -->
+<section class="section section--dark" id="layer">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">The data layer</span>
+      <h2>One data layer. Not ten point tools.</h2>
+      <p class="sub">Enter a fact once - it feeds every report, EPD, and passport. Calculate a component once; every product that shares it reuses the result.</p>
+    </div>
+    <div class="engine">
+      <div class="engine__col">
+        <h4>Data in</h4>
+        <ul class="engine__list">
+          <li>ERP / PLM / PIM</li>
+          <li>3D / CAD &amp; BOMs</li>
+          <li>Multi-tier supplier data</li>
+          <li>Materials &amp; certificates</li>
+        </ul>
+      </div>
+      <div class="engine__hub">
+        <div class="engine__arrow">→</div>
+        <div class="core"><b>PRODUCT CONNECT</b><span>one product graph, every SKU</span></div>
+        <div class="engine__arrow">→</div>
+      </div>
+      <div class="engine__col">
+        <h4>Value out</h4>
+        <ul class="engine__list">
+          <li>Component-level LCA</li>
+          <li>GHG &amp; ESG reporting</li>
+          <li>Verified EPDs &amp; DPPs</li>
+          <li>Spare parts &amp; customs</li>
+        </ul>
+      </div>
+    </div>
+    <a class="more" href="#">See how the data flows →</a>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES (light) ============ -->
+<section class="section" id="capabilities">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">Capabilities</span>
+      <h2>Everything the floor needs - nothing siloed.</h2>
+      <p class="sub">Each plugs into the same product graph. No separate tools, no re-keying.</p>
+    </div>
+    <div class="grid grid--3">
+      <div class="card"><div class="ic">⊞</div><h3>Component-level LCA &amp; reuse</h3><p>Impact per component, reused across every product that shares it. EN 15804-aligned.</p></div>
+      <div class="card"><div class="ic">⟐</div><h3>ERP &amp; PIM integration</h3><p>Two-way sync with Business Central, SAP, your PIM. Mint DPPs from your ERP.</p></div>
+      <div class="card"><div class="ic">◍</div><h3>Supplier verification</h3><p>Multi-tier suppliers verify their own components - first-hand, provable data.</p></div>
+      <div class="card"><div class="ic">⚗</div><h3>Impact simulator</h3><p>Swap suppliers or materials and see the impact before you commit.</p></div>
+      <div class="card"><div class="ic">▤</div><h3>Supply-chain analytics</h3><p>Concentration risk, exposure, and alerts when a route gets vulnerable.</p></div>
+      <div class="card"><div class="ic">⇄</div><h3>Customs &amp; cross-border</h3><p>HS codes, origin certificates, and duty calcs from your product graph.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUPPLY CHAIN (DARK) - globe ============ -->
+<section class="section section--dark" id="supply-chain">
+  <div class="container split">
+    <div>
+      <span class="kicker">Supply chain mapping</span>
+      <h2>From raw material to living room - on one map.</h2>
+      <p class="sub">Every node from extraction to assembly, transport distances calculated automatically - plus every scan once products ship.</p>
+      <a class="more" href="#">Explore the map →</a>
+    </div>
+    <div>
+      <div id="globe" style="position:relative; width:100%; height:420px; min-height:340px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY US / COMPARISON (light) ============ -->
+<section class="section" id="compare">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">Why Product Connect</span>
+      <h2>One platform vs. the alternatives.</h2>
+      <p class="sub">Consultants rent you expertise. Point tools fragment your data. We build capability you keep.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>&nbsp;</th><th>Consultants</th><th>Point tools</th><th>Product Connect</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>One connected data layer</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+          <tr><td>Component-level LCA at scale</td><td class="no">Manual</td><td class="no">Partial</td><td class="yes">Yes</td></tr>
+          <tr><td>Supplier-verified provenance</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+          <tr><td>Keeps pace with regulation</td><td class="no">Project-based</td><td class="no">Varies</td><td class="yes">Yes</td></tr>
+          <tr><td>You own the capability after</td><td class="no">No</td><td class="no">Partial</td><td class="yes">Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST & COMPLIANCE (DARK) - the four reassurance bands, consolidated ============ -->
+<section class="section section--dark" id="trust">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">Trust &amp; compliance</span>
+      <h2>Audit-ready, current, portable, and secure.</h2>
+      <p class="sub">The reassurance procurement asks for - without the spreadsheet risk.</p>
+    </div>
+    <div class="grid grid--4">
+      <div class="card"><h3>Verified, not estimated</h3><p>Supplier-verified provenance on every value; EPDs taken to third-party sign-off.</p><a class="more" href="#">How verification works →</a></div>
+      <div class="card"><h3>Keeps pace with regulation</h3><p>We maintain the PCRs and methods; ESPR &amp; CBAM updates roll across your catalogue.</p><a class="more" href="#">Our compliance promise →</a></div>
+      <div class="card"><h3>Your data stays yours</h3><p>Export anytime in open standards - EN 15804, GS1, did:web. No lock-in.</p><a class="more" href="#">Data &amp; portability →</a></div>
+      <div class="card"><h3>Secure by design</h3><p>EU-hosted, encrypted, backed up, tamper-evident credentials.</p><a class="more" href="#">Security overview →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ENGAGEMENT TIMELINE (light) ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <span class="kicker">How we engage</span>
+      <h2>From kickoff to portfolio coverage.</h2>
+    </div>
+    <div class="timeline timeline--4">
+      <div><div class="when">Phase 1 · Connect</div><h3>Integrate &amp; map</h3></div>
+      <div><div class="when">Phase 2 · Verify</div><h3>Onboard suppliers &amp; verify</h3></div>
+      <div><div class="when">Phase 3 · Operate</div><h3>Mint DPPs &amp; report</h3></div>
+      <div><div class="when">Ongoing · Partner</div><h3>Support &amp; adoption</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA (light) ============ -->
+<section class="section" id="cta">
+  <div class="container">
+    <div class="cta-band">
+      <h2>Let's map your portfolio.</h2>
+      <p class="sub">A short call - bring your product structure, and we'll show you what a connected data layer looks like for your catalogue.</p>
+      <div class="btns">
+        <a class="btn btn--primary" href="#">Talk to us</a>
+        <a class="btn btn--ghost" href="#">Download overview</a>
+      </div>
+    </div>
+    <p class="crosssell">Smaller catalogue, self-service? <a href="index.html">Product Connect for SMEs →</a></p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div>
+      <div class="logo" style="color:#fff">PRODUCT&nbsp;CONNECT <span class="badge">Enterprise</span></div>
+      <p style="margin-top:10px; max-width:36ch; font-size:14px">The product-data platform for furniture manufacturers. Copenhagen, Denmark.</p>
+    </div>
+    <div class="footer__links">
+      <a href="#layer">Platform</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#trust">Trust</a>
+      <a href="#compare">Why us</a>
+      <a href="index.html">For SMEs</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Supply-chain globe (ported from the live site) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="globe.js"></script>
+
+</body>
+</html>
