@@ -11,7 +11,7 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
 const EXPLODE_START = 0.3;   // 30% exploded when the section first appears
 const EXPLODE_FACTOR = 2.2;  // matches the chair viewer's slider mapping
-const SCROLL_SPAN = 0.65;    // assembly completes over ~65% of a viewport of scrolling
+const ASSEMBLED_AT_TOP = 10;  // px from the top of the viewport where the chair is fully assembled
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
@@ -142,7 +142,8 @@ function initChair(container) {
     const trigger = matchMedia("(max-width: 820px)").matches ? triggerMobile : triggerDesktop;
     const rect = trigger.getBoundingClientRect();
     const vh = window.innerHeight || 1;
-    const p = clamp((vh - rect.top) / (vh * SCROLL_SPAN), 0, 1);
+    // 0 (exploded) when the trigger enters from the bottom, 1 (assembled) when it's 10px from the top
+    const p = clamp((vh - rect.top) / (vh - ASSEMBLED_AT_TOP), 0, 1);
     return EXPLODE_START * (1 - p);
   }
 
