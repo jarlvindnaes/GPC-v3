@@ -63,7 +63,7 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 /* ---------- Buttons ---------- */
 .btns { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: 999px;
-  font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+  font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid transparent; cursor: pointer; white-space: nowrap; }
 .btn--primary { background: var(--indigo); color: #fff; }
 .btn--ghost { border-color: var(--line); color: var(--ink); }
 .section--dark .btn--ghost { border-color: var(--dark-line); color: var(--dark-ink); }
@@ -84,7 +84,9 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .nav__links a:not(.btn) { font-size: 14px; font-weight: 500; color: var(--ink-soft); text-decoration: none; }
 .nav__links a:not(.btn):hover { color: var(--ink); }
 .nav__links .btn { padding: 9px 18px; font-size: 14px; }
-@media (max-width: 760px){ .nav__links a:not(.btn){ display:none; } }
+@media (max-width: 760px){ .nav__links a:not(.btn){ display:none; } .nav .container { padding: 0 18px; } }
+/* phones: collapse the nav logo to just the icon so it never collides with the button (footer keeps the wordmark) */
+@media (max-width: 520px){ .nav .logo-text, .nav .logo .badge { display:none; } }
 
 /* ---------- Hero ---------- */
 .hero { padding: 80px 0 72px; }
