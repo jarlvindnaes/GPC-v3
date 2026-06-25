@@ -16,7 +16,7 @@
   const SLATE = "#93a0c4";
   const EMERALD = "#00b27e";
   const LABEL = "#5d6373";
-  const HUB_LABELS = ["SKU 0215", "SKU 4471", "shared part", "SKU 1180", "SKU 3092", "SKU 7740", "SKU 0884"];
+  const HUB_LABELS = ["SKU 0215", "SKU 4471", "shared part", "SKU 1180", "shared part", "SKU 7740", "SKU 0884"];
   const CONNECT = 200;
   const CONNECT2 = CONNECT * CONNECT;
 
