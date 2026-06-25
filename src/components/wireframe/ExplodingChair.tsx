@@ -59,7 +59,8 @@ export function ExplodingChair() {
     pmrem.compileEquirectangularShader();
     let envMap: Three.Texture | null = null;
     const rgbeLoader = new RGBELoader();
-    rgbeLoader.load(`${import.meta.env.BASE_URL}wireframes/studio.hdr`, (hdr) => {
+    // Shared with the passport phone (hdri/studio_small_03_1k.hdr) so the SME page loads one HDR, not two.
+    rgbeLoader.load(`${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`, (hdr) => {
       hdr.mapping = Three.EquirectangularReflectionMapping;
       envMap = pmrem.fromEquirectangular(hdr).texture;
       scene.environment = envMap;
