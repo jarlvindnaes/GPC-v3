@@ -2,6 +2,7 @@
 import WireframeLayout from "../../layouts/WireframeLayout.astro";
 import { ParticleField } from "../../components/wireframe/ParticleField";
 import { ExplodingChair } from "../../components/wireframe/ExplodingChair";
+import { PassportPhone } from "../../components/wireframe/PassportPhone";
 import { withBase } from "../../utilities/withBase";
 import { ShieldCheck, Database, QrCode } from "lucide-react";
 
@@ -249,9 +250,8 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <!-- mobile-only: phone sits right under the lead so the product is seen before the detail list -->
-      <div class="ph passport-phone-m" style="min-height:360px; margin:24px 0">
-        <span class="ph__tag">Placeholder</span>
-        <div class="ph__title">DPP inside the 3D phone</div>
+      <div class="passport-phone-m" style="margin:24px 0">
+        <PassportPhone client:only="react" />
       </div>
 
       <ul class="ticks" style="margin-top:20px">
@@ -274,11 +274,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </div>
     <div class="passport-phone-d">
-      <div class="ph" style="min-height:420px">
-        <span class="ph__tag">Placeholder</span>
-        <div class="ph__title">DPP inside the 3D phone</div>
-        <div class="ph__desc">Our best current asset. Drops in here later - for now, a frame so we can judge placement &amp; copy.</div>
-      </div>
+      <PassportPhone client:only="react" />
     </div>
   </div>
 </section>
