@@ -47,7 +47,7 @@ export function ExplodingChair() {
     renderer.setSize(host.clientWidth, host.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = Three.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.65;
+    renderer.toneMappingExposure = 0.56;
     renderer.outputColorSpace = Three.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.style.display = "block";
