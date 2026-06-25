@@ -28,9 +28,9 @@
     nodes = [];
     // fixed composition: 5 indigo hubs (with halo + caption), 19 slate dots, 2 emerald
     const kinds = [];
-    for (let i = 0; i < 5; i++) kinds.push("hub");
-    for (let i = 0; i < 2; i++) kinds.push("verified");
-    for (let i = 0; i < 19; i++) kinds.push("node");
+    for (let i = 0; i < 7; i++) kinds.push("hub");
+    for (let i = 0; i < 4; i++) kinds.push("verified");
+    for (let i = 0; i < 25; i++) kinds.push("node");
     let hub = 0;
     for (const kind of kinds) {
       const depth = 0.35 + Math.random() * 0.65;
@@ -49,10 +49,15 @@
   }
 
   function resize() {
-    W = container.clientWidth; H = container.clientHeight;
-    if (!W || !H) return;
-    canvas.width = W * DPR; canvas.height = H * DPR;
+    const newW = container.clientWidth, newH = container.clientHeight;
+    if (!newW || !newH) return;
+    canvas.width = newW * DPR; canvas.height = newH * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    if (nodes.length && W && H) {                 // rescale existing nodes to the new box so they keep filling it
+      const sx = newW / W, sy = newH / H;
+      for (const n of nodes) { n.x *= sx; n.y *= sy; }
+    }
+    W = newW; H = newH;
     if (!nodes.length) initNodes();
   }
 

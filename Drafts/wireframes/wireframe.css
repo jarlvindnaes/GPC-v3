@@ -320,6 +320,12 @@ td.no { color: var(--ink-soft); }
 
 /* ---- SKU network (Enterprise hero, light): animated canvas drawn by network.js ---- */
 .constellation { position: relative; width: 100%; min-height: 340px; }
+/* desktop: break the network out to fill the right side of the hero, full height, without pushing the copy */
+@media (min-width: 821px) {
+  .hero:has(#sku-network) { position: relative; overflow: hidden; }
+  .hero:has(#sku-network) .split > div:first-child { position: relative; z-index: 1; }   /* keep the copy above the network */
+  #sku-network { position: absolute; inset: 0 0 70px auto; width: 54%; height: auto; min-height: 0; z-index: 0; }
+}
 .constellation__cap { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); white-space: nowrap;
   font-size: 12px; color: var(--ink-soft); }
 
