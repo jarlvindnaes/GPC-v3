@@ -37,12 +37,13 @@
       const base = kind === "hub" ? 5.5 + Math.random() * 2
                  : kind === "verified" ? 3.5 + Math.random() * 1.5
                  : 1.8 + Math.random() * 2.4;
+      const label = kind === "hub" ? HUB_LABELS[hub++ % HUB_LABELS.length] : "";
       nodes.push({
         x: Math.random() * W, y: Math.random() * H,
         vx: (Math.random() - 0.5) * 0.3 * depth, vy: (Math.random() - 0.5) * 0.2 * depth,
         radius: base * (0.7 + depth * 0.3), baseRadius: base * (0.7 + depth * 0.3),
         depth, phase: Math.random() * Math.PI * 2, brighten: 0, kind,
-        label: kind === "hub" ? HUB_LABELS[hub++ % HUB_LABELS.length] : ""
+        label, labelHalf: label ? label.length * 3.4 : 0   // approx half text width at 11px
       });
     }
   }
@@ -65,8 +66,6 @@
     for (const n of nodes) {
       n.x += n.vx + Math.sin(time * 0.5 + n.phase) * 0.15 * n.depth;
       n.y += n.vy + Math.cos(time * 0.4 + n.phase + 1) * 0.1 * n.depth;
-      if (n.x < 0 || n.x > W) { n.vx = -n.vx; n.x = Math.max(0, Math.min(W, n.x)); }
-      if (n.y < 0 || n.y > H) { n.vy = -n.vy; n.y = Math.max(0, Math.min(H, n.y)); }
       let tBright = 0, tRad = n.baseRadius;
       if (mouse.active) {
         const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
@@ -75,6 +74,14 @@
       }
       n.radius += (tRad - n.radius) * lerp;
       n.brighten += (tBright - n.brighten) * lerp;
+      // Clamp the FULL footprint inside the canvas (dot + hub halo + caption below) so nothing clips at the edges.
+      const halo = n.kind === "hub" ? n.radius * 2.6 : n.radius;
+      const mX = Math.max(halo, n.labelHalf);
+      const mBottom = Math.max(halo, n.label ? n.radius + 24 : 0);
+      if (n.x < mX) { n.x = mX; n.vx = Math.abs(n.vx); }
+      else if (n.x > W - mX) { n.x = W - mX; n.vx = -Math.abs(n.vx); }
+      if (n.y < halo) { n.y = halo; n.vy = Math.abs(n.vy); }
+      else if (n.y > H - mBottom) { n.y = H - mBottom; n.vy = -Math.abs(n.vy); }
     }
 
     // proximity links
