@@ -60,8 +60,8 @@ a { color: inherit; }
 #globe { position: relative; width: 100%; height: 380px; min-height: 320px; }
 @media (min-width: 821px) {
   #supply-chain .split > div:last-child { position: relative; }
-  #globe { position: absolute; top: 50%; left: 50%; transform: translate(calc(-50% + 90px), -50%);
-    width: 560px; height: 560px; min-height: 0; }
+  #globe { position: absolute; top: 50%; left: 50%; transform: translate(calc(-50% + 70px), -50%);
+    width: 640px; height: 640px; min-height: 0; }
 }
 
 /* Interactive warping-grid background for the "Trust & compliance" section (see grid.js) */

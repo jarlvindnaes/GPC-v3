@@ -405,7 +405,7 @@ function initGlobe(container) {
   container.appendChild(renderer.domElement);
 
   // Fit the whole globe inside the container (diameter = 0.86 * smaller side) instead of letting it bleed past the edges.
-  const GLOBE_FIT = 0.94;
+  const GLOBE_FIT = 0.78;
   let globeScale = (Math.min(width, height) * GLOBE_FIT) / (GLOBE_RADIUS * 2);
   const globeGroup = new Three.Group();
   globeGroup.scale.setScalar(globeScale);
