@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 
-import { classNames } from "../../utilities/classNames";
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { useIsTouchDevice } from "../../utilities/useIsTouchDevice";
 
@@ -42,7 +41,15 @@ function readBrandColor(): { r: number; g: number; b: number } {
   };
 }
 
-export function ParticleField({ className }: { className?: string }) {
+const CANVAS_STYLE = {
+  position: "absolute",
+  inset: "0",
+  width: "100%",
+  height: "100%",
+  display: "block"
+} as const;
+
+export function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isNear = useIsNearViewport(canvasRef);
   const { isTouchRef } = useIsTouchDevice();
@@ -206,10 +213,8 @@ export function ParticleField({ className }: { className?: string }) {
   }, [isNear, isTouchRef]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-label="Decorative connected-particle background"
-      className={classNames("pointer-events-none absolute inset-0 h-full w-full", className)}
-    />
+    <div className="particle-field" aria-hidden={true}>
+      <canvas ref={canvasRef} style={CANVAS_STYLE} />
+    </div>
   );
 }
