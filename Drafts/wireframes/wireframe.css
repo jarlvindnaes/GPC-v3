@@ -219,6 +219,21 @@ td.no { color: var(--ink-soft); }
 .logos .lg { font-weight: 700; letter-spacing: 0.05em; color: var(--ink-soft); font-size: 15px;
   border: 1px dashed var(--line); border-radius: 8px; padding: 8px 16px; }
 
+/* Animated logo marquee (ported from the live site's "Partnering with World-Class Manufacturers"):
+   the track holds two identical groups; each group carries its own trailing gap (padding-right),
+   so translateX(-50%) lands group 2 exactly where group 1 started — a perfectly seamless loop. */
+.logo-marquee { position: relative; overflow: hidden; margin-top: 28px;
+  -webkit-mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
+          mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%); }
+.logo-track { display: flex; width: max-content; animation: logo-scroll 34s linear infinite; }
+.logo-track:hover { animation-play-state: paused; }
+.logo-group { display: flex; align-items: center; gap: 72px; padding-right: 72px; flex: none; }
+.logo-img { height: 26px; width: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
+.logo-img:hover { opacity: 1; }
+@keyframes logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 600px) { .logo-group { gap: 48px; padding-right: 48px; } .logo-img { height: 22px; } }
+@media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
+
 /* ---------- CTA band ---------- */
 .cta-band { background: var(--indigo); color: #fff; border-radius: 22px; padding: 56px 48px; text-align: center; }
 .cta-band h2 { color: #fff; }
