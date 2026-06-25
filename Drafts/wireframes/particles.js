@@ -53,7 +53,7 @@
         const pa = particles[a], pb = particles[b];
         const d2 = (pa.x - pb.x) ** 2 + (pa.y - pb.y) ** 2;
         if (d2 < threshold) {
-          const op = (1 - d2 / 20000) * 0.5;   // dimmed for a background feel
+          const op = (1 - d2 / 20000) * 0.32;  // dimmed for a quiet background feel
           if (op <= 0) continue;
           ctx.strokeStyle = `rgba(${DOT.r},${DOT.g},${DOT.b},${op})`;
           ctx.lineWidth = 1;

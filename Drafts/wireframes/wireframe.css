@@ -50,7 +50,7 @@ a { color: inherit; }
 /* Connected-particle background for the "How it works" section (see particles.js) */
 #how { position: relative; overflow: hidden; }
 #how > .container { position: relative; z-index: 1; }
-.how-particles { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+.how-particles { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55;
   -webkit-mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
           mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%); }
 .section--dark .kicker { color: var(--indigo-soft); }
