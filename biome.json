@@ -91,6 +91,6 @@
     }
   },
   "files": {
-    "includes": ["**", "!**/dist", "!**/*.css", "!**/*.astro", "!.astro/**"]
+    "includes": ["**", "!**/dist", "!**/*.css", "!**/*.astro", "!.astro/**", "!Drafts/**"]
   }
 }

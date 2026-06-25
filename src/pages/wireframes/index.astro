@@ -1,0 +1,26 @@
+---
+import { ParticleField } from "../../components/wireframe/ParticleField";
+import WireframeLayout from "../../layouts/WireframeLayout.astro";
+---
+
+<WireframeLayout title="Wireframe — SMV (migrating to Astro)">
+  <main id="main-content">
+    <section class="relative overflow-hidden bg-brand-deep py-24 text-white md:py-32">
+      <ParticleField
+        client:only="react"
+        className="opacity-55 [mask-image:linear-gradient(to_bottom,transparent,#000_12%,#000_86%,transparent)]"
+      />
+      <div class="relative z-10 mx-auto max-w-5xl px-6">
+        <p class="font-semibold text-brand-light text-xs uppercase tracking-[0.2em]">The data layer</p>
+        <h1 class="mt-4 font-display font-bold text-4xl tracking-tight md:text-5xl">
+          One data layer. Not ten point tools.
+        </h1>
+        <p class="mt-5 max-w-2xl text-slate-300 leading-relaxed">
+          First section migrated onto the production stack. The connected-particle background is now a React island
+          that reads the brand colour token, pauses off-screen, skips mouse physics on touch devices, and honours
+          reduced-motion — the same conventions the main site uses.
+        </p>
+      </div>
+    </section>
+  </main>
+</WireframeLayout>

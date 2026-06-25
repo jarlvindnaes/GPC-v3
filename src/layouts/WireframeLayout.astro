@@ -1,0 +1,43 @@
+---
+import "../index.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  label?: string;
+}
+
+const {
+  title = "Product Connect — Wireframe",
+  description = "Wireframe and draft, migrating onto the production Astro stack.",
+  label = "WIREFRAME · SMV"
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0F1D45" />
+    <meta name="robots" content="noindex" />
+    <title>{title}</title>
+    <link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${base}fonts/space-grotesk-latin.woff2`} as="font" type="font/woff2" crossorigin />
+  </head>
+  <body class="bg-white font-sans text-brand-text">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-medium focus:text-slate-900 focus:shadow-lg"
+    >
+      Skip to main content
+    </a>
+    <div class="bg-brand-deep px-4 py-2 text-center text-white text-xs tracking-wide">
+      <strong>{label}</strong> · message &amp; structure only. Visuals are placeholders.
+    </div>
+    <slot />
+  </body>
+</html>
