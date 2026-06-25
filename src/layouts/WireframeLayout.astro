@@ -1,5 +1,7 @@
 ---
 import "../index.css";
+import { BackToTop } from "../components/wireframe/BackToTop";
+import { NavAutoHide } from "../components/wireframe/NavAutoHide";
 
 interface Props {
   title?: string;
@@ -40,5 +42,7 @@ const base = import.meta.env.BASE_URL;
       <strong>{label}</strong> · message &amp; structure only. Visuals are placeholders.
     </div>
     <slot />
+    <NavAutoHide client:load />
+    <BackToTop client:load />
   </body>
 </html>
