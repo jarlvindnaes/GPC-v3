@@ -91,7 +91,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ THE DATA LAYER (DARK - under the hood) ============ -->
 <section class="section section--dark" id="how">
-  <ParticleField client:only="react" />
+  <ParticleField client:visible />
   <div class="container">
     <div class="section__head">
       <span class="kicker">The data layer</span>
@@ -140,7 +140,7 @@ const base = import.meta.env.BASE_URL;
     <div class="split" style="margin-top:44px">
       <div>
         <!-- Live scroll-scrubbed exploded assembly (real 3D model); breaks out behind the copy on desktop -->
-        <ExplodingChair client:only="react" />
+        <ExplodingChair client:visible />
       </div>
       <div>
         <h3 style="margin-bottom:6px">No re-typing. No re-calculating. No starting over.</h3>
@@ -251,7 +251,7 @@ const base = import.meta.env.BASE_URL;
 
       <!-- mobile-only: phone sits right under the lead so the product is seen before the detail list -->
       <div class="passport-phone-m" style="margin:24px 0">
-        <PassportPhone client:only="react" />
+        <PassportPhone client:visible />
       </div>
 
       <ul class="ticks" style="margin-top:20px">
@@ -274,7 +274,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </div>
     <div class="passport-phone-d">
-      <PassportPhone client:only="react" />
+      <PassportPhone client:visible />
     </div>
   </div>
 </section>
