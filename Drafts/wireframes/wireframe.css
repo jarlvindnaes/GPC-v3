@@ -46,6 +46,13 @@ a { color: inherit; }
 /* hairline divider between two consecutive light sections (dark sections already separate by colour) */
 .section:not(.section--dark):not(.section--tight) + .section:not(.section--dark):not(.section--tight) { border-top: 1px solid var(--line); }
 .section--dark { background: var(--dark); color: var(--dark-ink); }
+
+/* Connected-particle background for the "How it works" section (see particles.js) */
+#how { position: relative; overflow: hidden; }
+#how > .container { position: relative; z-index: 1; }
+.how-particles { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  -webkit-mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
+          mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%); }
 .section--dark .kicker { color: var(--indigo-soft); }
 .section--dark .sub { color: var(--dark-soft); }
 
