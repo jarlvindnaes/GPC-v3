@@ -15,6 +15,8 @@
   const INDIGO = "#3e63dd";
   const SLATE = "#93a0c4";
   const EMERALD = "#00b27e";
+  const LABEL = "#5d6373";
+  const HUB_LABELS = ["SKU 0215", "SKU 4471", "shared part", "SKU 1180", "SKU 3092", "SKU 7740", "SKU 0884"];
   const CONNECT = 200;
   const CONNECT2 = CONNECT * CONNECT;
 
@@ -24,11 +26,12 @@
   function initNodes() {
     if (!W || !H) return;
     const coarse = matchMedia("(pointer: coarse)").matches;
-    const count = Math.min(coarse ? 22 : 46, Math.floor((W * H) / (coarse ? 22000 : 13000)));
+    const count = Math.min(coarse ? 34 : 64, Math.max(coarse ? 20 : 36, Math.floor((W * H) / (coarse ? 9000 : 2900))));
     nodes = [];
+    let hub = 0;
     for (let i = 0; i < count; i++) {
       let kind = "node";                       // most dots: small, slate
-      if (i % 9 === 0) kind = "hub";           // a few big indigo hubs (with halo)
+      if (i % 9 === 0) kind = "hub";           // a few big indigo hubs (with halo + caption)
       else if (i % 13 === 5) kind = "verified"; // a few emerald
       const depth = 0.35 + Math.random() * 0.65;
       const base = kind === "hub" ? 5.5 + Math.random() * 2
@@ -38,7 +41,8 @@
         x: Math.random() * W, y: Math.random() * H,
         vx: (Math.random() - 0.5) * 0.3 * depth, vy: (Math.random() - 0.5) * 0.2 * depth,
         radius: base * (0.7 + depth * 0.3), baseRadius: base * (0.7 + depth * 0.3),
-        depth, phase: Math.random() * Math.PI * 2, brighten: 0, kind
+        depth, phase: Math.random() * Math.PI * 2, brighten: 0, kind,
+        label: kind === "hub" ? HUB_LABELS[hub++ % HUB_LABELS.length] : ""
       });
     }
   }
@@ -100,6 +104,11 @@
       const baseAlpha = (n.kind === "node" ? 0.5 : 0.85) + n.depth * 0.15;
       ctx.fillStyle = color; ctx.globalAlpha = Math.min(1, baseAlpha + n.brighten * 0.3);
       ctx.beginPath(); ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2); ctx.fill();
+      if (n.label) {
+        ctx.fillStyle = LABEL; ctx.globalAlpha = 0.6;
+        ctx.font = "11px system-ui, -apple-system, sans-serif"; ctx.textAlign = "center";
+        ctx.fillText(n.label, n.x, n.y + n.radius + 14);
+      }
     }
     ctx.globalAlpha = 1;
   }
