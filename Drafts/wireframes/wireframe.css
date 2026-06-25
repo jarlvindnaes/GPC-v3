@@ -53,6 +53,13 @@ a { color: inherit; }
 .how-particles { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55;
   -webkit-mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
           mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%); }
+
+/* Interactive warping-grid background for the "Trust & compliance" section (see grid.js) */
+#trust { position: relative; overflow: hidden; }
+#trust > .container { position: relative; z-index: 1; }
+.trust-grid { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.7;
+  -webkit-mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
+          mask: linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%); }
 .section--dark .kicker { color: var(--indigo-soft); }
 .section--dark .sub { color: var(--dark-soft); }
 
