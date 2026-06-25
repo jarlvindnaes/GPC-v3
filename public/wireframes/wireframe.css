@@ -166,6 +166,10 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 
 .passport-phone-m { display: none; }
 @media (max-width: 820px){ .passport-phone-m { display: flex; } .passport-phone-d { display: none; } }
+/* Let the desktop passport phone fill the column height (match the copy on the left) */
+#passport .split { align-items: stretch; }
+.passport-phone-d { display: flex; align-items: stretch; }
+.passport-phone-d > astro-island { display: block; width: 100%; }
 
 /* The DPP phone content (.dpp-phone) ships its own Tailwind typography in @layer utilities.
    wireframe.css is loaded unlayered, so its bare element rules (h1/h2/h3 sizes, body font, etc.)

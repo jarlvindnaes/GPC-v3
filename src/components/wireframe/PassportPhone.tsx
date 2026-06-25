@@ -37,7 +37,7 @@ export function PassportPhone() {
   }, [expanded]);
 
   return (
-    <div className="relative mx-auto h-[460px] w-full max-w-[300px]">
+    <div className="relative mx-auto h-full min-h-[460px] w-full max-w-[500px]">
       <HtmlPhoneCanvas noChrome={true} rotation={[0.05, 0.4, 0]}>
         <DppPhoneScreen />
       </HtmlPhoneCanvas>
