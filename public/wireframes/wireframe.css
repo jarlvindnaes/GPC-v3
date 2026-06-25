@@ -171,17 +171,22 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .passport-phone-d { display: flex; align-items: stretch; }
 .passport-phone-d > astro-island { display: block; width: 100%; }
 
-/* The DPP phone content (.dpp-phone) ships its own Tailwind typography in @layer utilities.
-   wireframe.css is loaded unlayered, so its bare element rules (h1/h2/h3 sizes, body font, etc.)
-   would otherwise override the DPP's utilities and blow the text up. Revert those properties
-   inside the phone so the DPP's own styling wins (revert-layer rolls back to the utilities layer). */
+/* The DPP phone content (.dpp-phone) ships its own Tailwind styling in @layer utilities.
+   wireframe.css is loaded unlayered, so its global reset (* { margin/padding: 0 }) and bare
+   element rules (h1/h2/h3 sizes, body font, etc.) would otherwise override the DPP's utilities —
+   stripping its side padding and blowing the text up. Revert those properties inside the phone so
+   the DPP's own styling wins one-to-one (revert-layer rolls back to the utilities layer). */
+.dpp-phone,
+.dpp-phone :where(*) {
+  margin: revert-layer;
+  padding: revert-layer;
+}
 .dpp-phone :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, a, button) {
   font-family: revert-layer;
   font-size: revert-layer;
   font-weight: revert-layer;
   line-height: revert-layer;
   letter-spacing: revert-layer;
-  margin: revert-layer;
 }
 
 /* ---------- Cards ---------- */
