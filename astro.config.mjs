@@ -10,6 +10,9 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   base: "/GPC-v3/",
   site: "https://jarlvindnaes.github.io",
+  // Emit build assets to "astro-assets" (no leading underscore) so GitHub Pages' Jekyll,
+  // which strips "_"-prefixed folders, still serves the island scripts.
+  build: { assets: "astro-assets" },
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
