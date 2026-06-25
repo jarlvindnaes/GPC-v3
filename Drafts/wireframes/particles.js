@@ -1,12 +1,10 @@
-// Connected-particle background for the dark "How it works" section.
+// Connected-particle background for dark "data layer" sections.
 // Vanilla-canvas port of the product-connect-website <Particles> component:
 // dots drift and bounce off the edges, link to nearby dots, and repel + grow + brighten near the mouse.
 // Recoloured from the original dark-navy dots to a light indigo so it reads on the dark section,
 // and dimmed so it stays a background illustration behind the copy.
-(() => {
-  const host = document.getElementById("how-particles");
-  if (!host) return;
-
+// Runs an independent instance for every .particle-field host on the page (shared across pages).
+function initParticleField(host) {
   const canvas = document.createElement("canvas");
   canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none";
   host.appendChild(canvas);
@@ -107,4 +105,6 @@
 
   resize();
   draw();
-})();
+}
+
+for (const host of document.querySelectorAll(".particle-field")) initParticleField(host);
