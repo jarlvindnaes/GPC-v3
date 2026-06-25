@@ -1,8 +1,46 @@
+import { useProgress } from "@react-three/drei";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { DppPhoneScreen } from "../dpp/DppPhoneScreen";
 import { HtmlPhoneCanvas } from "../Native3DModels";
+
+// Progress overlay shown while the 3D phone model + HDR load. Reads drei's global load progress
+// (works outside the Canvas) and unmounts once finished, so it never re-appears for later islands.
+function PhoneLoadingOverlay() {
+  const { progress, active } = useProgress();
+  const [visible, setVisible] = useState(true);
+  const done = !active && progress === 100;
+
+  useEffect(() => {
+    if (done) {
+      const timeout = setTimeout(() => {
+        setVisible(false);
+      }, 500);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [done]);
+
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`pointer-events-none absolute inset-0 z-[5] flex flex-col items-center justify-center transition-opacity duration-500 ${done ? "opacity-0" : "opacity-100"}`}
+    >
+      <p className="mb-3 font-medium text-slate-400 text-xs tracking-wide">Loading the passport …</p>
+      <div className="h-1 w-40 overflow-hidden rounded-full bg-slate-200">
+        <div
+          className="h-full rounded-full bg-indigo-500 transition-[width] duration-300 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 // 3D iPhone showing the Digital Product Passport, ported from the main site's ChairPhoneShowcase
 // but without the click-to-open chair: the phone is shown open, with the same expand-to-fullscreen
@@ -41,6 +79,7 @@ export function PassportPhone() {
       <HtmlPhoneCanvas noChrome={true} rotation={[0.05, 0.4, 0]}>
         <DppPhoneScreen />
       </HtmlPhoneCanvas>
+      <PhoneLoadingOverlay />
 
       <button
         type="button"
