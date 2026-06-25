@@ -25,14 +25,14 @@
 
   function initNodes() {
     if (!W || !H) return;
-    const coarse = matchMedia("(pointer: coarse)").matches;
-    const count = Math.min(coarse ? 34 : 64, Math.max(coarse ? 20 : 36, Math.floor((W * H) / (coarse ? 9000 : 2900))));
     nodes = [];
+    // fixed composition: 5 indigo hubs (with halo + caption), 19 slate dots, 2 emerald
+    const kinds = [];
+    for (let i = 0; i < 5; i++) kinds.push("hub");
+    for (let i = 0; i < 2; i++) kinds.push("verified");
+    for (let i = 0; i < 19; i++) kinds.push("node");
     let hub = 0;
-    for (let i = 0; i < count; i++) {
-      let kind = "node";                       // most dots: small, slate
-      if (i % 9 === 0) kind = "hub";           // a few big indigo hubs (with halo + caption)
-      else if (i % 13 === 5) kind = "verified"; // a few emerald
+    for (const kind of kinds) {
       const depth = 0.35 + Math.random() * 0.65;
       const base = kind === "hub" ? 5.5 + Math.random() * 2
                  : kind === "verified" ? 3.5 + Math.random() * 1.5
