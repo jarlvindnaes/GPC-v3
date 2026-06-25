@@ -60,7 +60,7 @@ a { color: inherit; }
 #globe { position: relative; width: 100%; height: 380px; min-height: 320px; }
 @media (min-width: 821px) {
   #supply-chain .split > div:last-child { position: relative; }
-  #globe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  #globe { position: absolute; top: 50%; left: 50%; transform: translate(calc(-50% + 90px), -50%);
     width: 560px; height: 560px; min-height: 0; }
 }
 
