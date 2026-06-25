@@ -230,8 +230,9 @@ td.no { color: var(--ink-soft); }
 .logo-group { display: flex; align-items: center; gap: 72px; padding-right: 72px; flex: none; }
 .logo-img { height: 26px; width: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
 .logo-img:hover { opacity: 1; }
+.logo-img--wide { height: 19px; }   /* New Works is a very wide wordmark — trim its height to balance the row */
 @keyframes logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (max-width: 600px) { .logo-group { gap: 48px; padding-right: 48px; } .logo-img { height: 22px; } }
+@media (max-width: 600px) { .logo-group { gap: 48px; padding-right: 48px; } .logo-img { height: 22px; } .logo-img--wide { height: 16px; } }
 @media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
 
 /* ---------- CTA band ---------- */
