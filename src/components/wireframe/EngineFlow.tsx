@@ -10,7 +10,8 @@ import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 const YELLOW = "#f2b43c";
 const GREEN = "#41c98a";
 const LINE_ALPHA = "66"; // ~0.4 on the dark engine background
-const DOT_SPEED = 1.3; // px per frame
+const DOT_SPEED = 0.5; // px per frame
+const CORE_MARGIN = 10; // gap from the core's top/bottom edge for the spread connection points
 const DOT_RADIUS = 3.6;
 
 interface Seg {
@@ -100,12 +101,17 @@ export function EngineFlow() {
       const next: Flow[] = [];
       const sideBySide = inBoxes[0].right <= c.left + 2 && c.right <= outBoxes[0].left + 2;
       if (sideBySide) {
-        for (const box of inBoxes) {
-          next.push(buildFlow(YELLOW, [{ x1: box.right, y1: box.midY, x2: c.left, y2: c.midY }]));
-        }
-        for (const box of outBoxes) {
-          next.push(buildFlow(GREEN, [{ x1: c.right, y1: c.midY, x2: box.left, y2: box.midY }]));
-        }
+        // distribute the core-side endpoints evenly down the core's height (with a top/bottom margin)
+        const spreadY = (count: number, index: number) => {
+          const usable = c.bottom - c.top - CORE_MARGIN * 2;
+          return c.top + CORE_MARGIN + (count > 1 ? (usable * index) / (count - 1) : usable / 2);
+        };
+        inBoxes.forEach((box, i) => {
+          next.push(buildFlow(YELLOW, [{ x1: box.right, y1: box.midY, x2: c.left, y2: spreadY(inBoxes.length, i) }]));
+        });
+        outBoxes.forEach((box, i) => {
+          next.push(buildFlow(GREEN, [{ x1: c.right, y1: spreadY(outBoxes.length, i), x2: box.left, y2: box.midY }]));
+        });
       } else {
         const x = c.midX;
         const yellow: Seg[] = [];
