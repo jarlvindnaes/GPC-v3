@@ -142,6 +142,7 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .hero__media h1 .hl { color: var(--indigo-soft); }
 /* supporting copy below the video (normal light theme) */
 .hero__support { padding: 34px 0 6px; }
+.hero__support .kicker { display: block; margin-bottom: 12px; }
 .hero__support .sub { margin-top: 0; font-size: clamp(17px,2.1vw,21px); max-width: 64ch; }
 .hero__support .sub b { color: var(--ink); font-weight: 600; }
 .hero__support .btns { margin-top: 24px; }
