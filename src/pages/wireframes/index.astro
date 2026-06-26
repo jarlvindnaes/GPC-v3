@@ -3,6 +3,7 @@ import WireframeLayout from "../../layouts/WireframeLayout.astro";
 import { ParticleField } from "../../components/wireframe/ParticleField";
 import { EngineFlow } from "../../components/wireframe/EngineFlow";
 import { ExplodingChair } from "../../components/wireframe/ExplodingChair";
+import { ScrewSpinner } from "../../components/wireframe/ScrewSpinner";
 import { PassportPhone } from "../../components/wireframe/PassportPhone";
 import { withBase } from "../../utilities/withBase";
 import { ShieldCheck, Database, QrCode, Box, Network, ClipboardList, FileCheck, Leaf, ChartColumn, BadgeCheck, ShoppingCart, Ship } from "lucide-react";
@@ -173,6 +174,9 @@ const base = import.meta.env.BASE_URL;
       <h2>Measure a component once. Reuse it everywhere.</h2>
       <p class="sub">We gather data and calculate LCA at the <b>component</b> level - a leg, a screw, a fabric - not just the finished product. So the work compounds: every product that shares a component inherits its data automatically, with nothing re-typed.</p>
     </div>
+
+    <!-- A single metal screw lifted from the chair model, isolated and turning in the top-right -->
+    <ScrewSpinner client:visible={{ rootMargin: "400px" }} />
 
     <div class="split" style="margin-top:44px">
       <div>

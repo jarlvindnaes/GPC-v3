@@ -202,13 +202,18 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 #chair-explode:active { cursor: grabbing; }
 #chair-explode[data-loading]::before { content: attr(data-loading); position: absolute; inset: 0; display: flex;
   align-items: center; justify-content: center; color: var(--ink-soft); font-size: 14px; letter-spacing: 0.04em; }
+/* isolated screw: hidden on mobile (the exploded chair is the component visual there) */
+.screw-spinner { display: none; }
 @media (min-width: 821px) {
   #components { position: relative; isolation: isolate; overflow: hidden; padding-bottom: 24px; }   /* assembled chair leaves empty canvas at the bottom, so pull the next section up */
+  #components > .container { position: relative; }
   /* big chair (~720px) pulled up and to the left, behind the heading/copy */
   #components .split { position: relative; align-items: start; min-height: 380px; }
   #chair-explode { position: absolute; top: 0; left: 0; width: 500px; height: 500px; margin-top: -90px; margin-left: 10px; z-index: 0; }
   #components .section__head,
   #components .split > div:last-child { position: relative; z-index: 1; }   /* heading + copy sit above the chair */
+  /* the lone screw fills the empty space to the right of the (64ch-capped) heading */
+  .screw-spinner { display: block; position: absolute; top: -8px; right: 0; width: min(42%, 460px); height: 300px; z-index: 1; }
 }
 
 /* Passport phone: one instance per breakpoint. The mobile slot (under the lead) and the desktop
