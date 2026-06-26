@@ -160,11 +160,11 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
     linear-gradient(0deg, rgba(8,10,20,0.85) 0%, rgba(8,10,20,0.45) 42%, rgba(8,10,20,0.1) 76%); }
 }
 /* Wider than 1260px starts cropping important content in the footage, so cap the video there
-   and fade its sides into a white margin (the .hero__media max-width does the capping). */
+   (.hero__media max-width) and let its sides fade into a dark-blue band that continues to the edges. */
 @media (min-width: 1261px){
-  .hero--video { background: #fff; }
+  .hero__band { background: var(--dark); }
   .hero__scrim { background:
-    linear-gradient(90deg, #fff 0, rgba(255,255,255,0) 64px, rgba(255,255,255,0) calc(100% - 64px), #fff 100%),
+    linear-gradient(90deg, #11152a 0, rgba(17,21,42,0) 64px, rgba(17,21,42,0) calc(100% - 64px), #11152a 100%),
     linear-gradient(0deg, rgba(8,10,20,0.82) 0%, rgba(8,10,20,0.42) 34%, rgba(8,10,20,0.06) 66%); }
 }
 
