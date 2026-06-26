@@ -280,8 +280,16 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .engine__hub .core { border: 2px solid var(--indigo); border-radius: 16px; padding: 22px 18px; background: rgba(62,99,221,0.12); }
 .engine__hub .core b { display: block; font-size: 18px; }
 .engine__hub .core span { font-size: 12.5px; color: var(--dark-soft); }
-/* taller Product Connect box on desktop (content vertically centred) */
-@media (min-width: 821px){ .engine__hub .core { min-height: 220px; display: flex; flex-direction: column; justify-content: center; } }
+/* white logo masked from logo.svg, centred on top inside the core (desktop only) */
+.core__logo { display: none; }
+@media (min-width: 821px){
+  /* taller Product Connect box, content vertically centred */
+  .engine__hub .core { min-height: 220px; display: flex; flex-direction: column; justify-content: center;
+    /* nudge down so the box is centred against the boxes (the columns have a header above their lists) */
+    transform: translateY(17px); }
+  .core__logo { display: block; width: 42px; height: 42px; margin: 0 auto 12px; background-color: #fff;
+    -webkit-mask: url(logo.svg) center / contain no-repeat; mask: url(logo.svg) center / contain no-repeat; }
+}
 
 /* ---------- List with ticks ---------- */
 .ticks { list-style: none; margin-top: 8px; }
