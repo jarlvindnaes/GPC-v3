@@ -125,8 +125,8 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .hero .sub b { color: var(--ink); font-weight: 600; }
 
 /* ---------- Video hero: headline over a full-bleed clip, supporting copy below ---------- */
-/* padding-top clears the sticky nav so the video sits below it instead of underneath it */
-.hero--video { padding: 28px 0 0; }
+/* flush against the bottom of the sticky nav (no gap) */
+.hero--video { padding: 0; }
 .hero__media { position: relative; min-height: min(54vh, 500px);
   display: flex; align-items: flex-end; overflow: hidden; color: #fff; }
 .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
