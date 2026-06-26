@@ -8,23 +8,19 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 
-// Scroll-driven exploded-assembly of the TAKT Cross Chair for the #components section.
-// Ported from Drafts/wireframes/chair-scroll.js (vanilla three.js + CDN importmap) to a hydrated
-// React island. The chair starts ~30% exploded and assembles as the section scrolls toward the top
-// of the viewport (re-exploding when scrolling back up). It auto-rotates and is drag-rotatable.
-// The renderer canvas is created in the effect and appended into the aria-hidden host div so the
-// existing #chair-explode CSS applies. Behaviour mirrors the source exactly, with three r0.183 API
-// updates (SRGBColorSpace / outputColorSpace / texture color-space) and BASE_URL asset paths.
+// Exploded-assembly of the TAKT Cross Chair for the #components section. Adapted from
+// Drafts/wireframes/chair-scroll.js (vanilla three.js + CDN importmap) to a hydrated React island.
+// The chair continuously eases between fully assembled and ~30% exploded on a loop (independent of
+// scroll), while it auto-rotates and stays drag-rotatable. The renderer canvas is created in the
+// effect and appended into the aria-hidden host div so the existing #chair-explode CSS applies,
+// with three r0.183 API updates (SRGBColorSpace / outputColorSpace / texture color-space) and
+// BASE_URL asset paths.
 
-const EXPLODE_START = 0.3; // 30% exploded when the section first appears
+const EXPLODE_START = 0.3; // peak "explosion" of the breathing loop (~30% apart)
 const EXPLODE_FACTOR = 2.2; // matches the chair viewer's slider mapping
-const ASSEMBLED_GAP = 10; // px below the sticky nav where the chair is fully assembled
+const CYCLE_SECONDS = 7; // one full assemble -> explode -> assemble loop
 const FRAME_PAD = 0.85; // < 1 zooms the camera in (the chair fills the frame)
 const DRACO_DECODER_PATH = "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
-
-const clamp = (value: number, lo: number, hi: number): number => {
-  return Math.min(hi, Math.max(lo, value));
-};
 
 interface PartUserData {
   basePos: Three.Vector3;
@@ -217,26 +213,27 @@ export function ExplodingChair() {
       }
     );
 
-    // Stay fully exploded until the trigger enters view, then assemble as it scrolls up.
-    // Drive the assembly off the chair's OWN scroll position: exploded when it enters from the
-    // bottom, fully assembled when its top reaches just below the sticky nav.
-    const nav = document.querySelector(".nav");
-    const explodeAmount = (): number => {
-      const rect = host.getBoundingClientRect();
-      const vh = window.innerHeight || 1;
-      const assembledAt = (nav instanceof HTMLElement ? nav.offsetHeight : 0) + ASSEMBLED_GAP;
-      const p = clamp((vh - rect.top) / (vh - assembledAt), 0, 1);
-      return EXPLODE_START * (1 - p);
-    };
+    // Continuous "breathing" assembly (no scroll involvement): the chair eases from fully assembled
+    // out to ~EXPLODE_START exploded and back, on a loop. The cosine easing dwells gently at each
+    // extreme. Time only advances while the chair is on-screen, so it never jumps after being away.
+    const clock = new Three.Clock();
+    let elapsed = 0;
+    const omega = (Math.PI * 2) / CYCLE_SECONDS;
 
     let raf = 0;
     const animate = () => {
       raf = requestAnimationFrame(animate);
+      const dt = clock.getDelta();
       if (!isNear.current) {
         return;
       }
       if (ready) {
-        const k = EXPLODE_FACTOR * explodeAmount();
+        if (!reduceMotion) {
+          elapsed += dt;
+        }
+        // 0 (assembled) -> EXPLODE_START (exploded) -> 0, eased at both ends
+        const amount = reduceMotion ? 0 : (EXPLODE_START * (1 - Math.cos(elapsed * omega))) / 2;
+        const k = EXPLODE_FACTOR * amount;
         for (const part of parts) {
           const data = part.userData as PartUserData;
           const b = data.basePos;
