@@ -18,7 +18,8 @@ import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 
 const EXPLODE_START = 0.3; // peak "explosion" of the breathing loop (~30% apart)
 const EXPLODE_FACTOR = 2.2; // matches the chair viewer's slider mapping
-const CYCLE_SECONDS = 7; // one full assemble -> explode -> assemble loop
+const HOLD_ASSEMBLED = 1; // seconds the chair rests fully assembled each loop
+const EXPLODE_SECONDS = 6; // seconds for one explode-out-and-back
 const FRAME_PAD = 0.85; // < 1 zooms the camera in (the chair fills the frame)
 const DRACO_DECODER_PATH = "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
 
@@ -218,7 +219,7 @@ export function ExplodingChair() {
     // extreme. Time only advances while the chair is on-screen, so it never jumps after being away.
     const clock = new Three.Clock();
     let elapsed = 0;
-    const omega = (Math.PI * 2) / CYCLE_SECONDS;
+    const loopSeconds = HOLD_ASSEMBLED + EXPLODE_SECONDS;
 
     let raf = 0;
     const animate = () => {
@@ -231,8 +232,15 @@ export function ExplodingChair() {
         if (!reduceMotion) {
           elapsed += dt;
         }
-        // 0 (assembled) -> EXPLODE_START (exploded) -> 0, eased at both ends
-        const amount = reduceMotion ? 0 : (EXPLODE_START * (1 - Math.cos(elapsed * omega))) / 2;
+        // Rest fully assembled (amount 0) for HOLD_ASSEMBLED, then ease out to EXPLODE_START and
+        // back over EXPLODE_SECONDS. The cosine has zero slope at both ends, so entering/leaving
+        // the hold is seamless. reduceMotion never advances elapsed, so it stays assembled.
+        const phase = elapsed % loopSeconds;
+        let amount = 0;
+        if (phase > HOLD_ASSEMBLED) {
+          const m = (phase - HOLD_ASSEMBLED) / EXPLODE_SECONDS;
+          amount = (EXPLODE_START * (1 - Math.cos(m * Math.PI * 2))) / 2;
+        }
         const k = EXPLODE_FACTOR * amount;
         for (const part of parts) {
           const data = part.userData as PartUserData;
