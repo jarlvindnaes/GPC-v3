@@ -407,6 +407,7 @@ td.no { color: var(--ink-soft); }
 .crosssell a { color: var(--indigo); font-weight: 600; text-decoration: none; }
 /* Enterprise cross-sell banner (SME page): dark card with the brand indigo CTA button */
 .ent-banner {
+  position: relative; overflow: hidden; /* host + clip the particle background to the rounded card */
   margin-top: 28px;
   background: linear-gradient(135deg, var(--dark-2), var(--dark));
   border: 1px solid rgba(62, 99, 221, 0.30);
@@ -414,6 +415,7 @@ td.no { color: var(--ink-soft); }
   padding: clamp(28px, 4.5vw, 48px);
   display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
 }
+.ent-banner > :not(.particle-field) { position: relative; z-index: 1; } /* keep copy + button above the particles */
 .ent-banner h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 8px; color: #fff; }
 .ent-banner p { color: var(--dark-soft); font-size: 15px; max-width: 520px; margin: 0; }
 .ent-banner .btn--primary { white-space: nowrap; }
