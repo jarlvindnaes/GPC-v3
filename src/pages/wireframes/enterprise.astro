@@ -45,7 +45,7 @@ const base = import.meta.env.BASE_URL;
     </div>
     <div>
       <!-- Animated SKU network (vanilla canvas, ported from the live site HeroNetwork) -->
-      <SkuNetwork client:visible />
+      <SkuNetwork client:visible={{ rootMargin: "400px" }} />
     </div>
   </div>
 </header>
@@ -81,7 +81,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ THE DATA LAYER (DARK) - centrepiece ============ -->
 <section class="section section--dark" id="layer">
-  <ParticleField client:visible />
+  <ParticleField client:visible={{ rootMargin: "400px" }} />
   <div class="container">
     <div class="section__head">
       <span class="kicker">The data layer</span>
@@ -155,7 +155,7 @@ const base = import.meta.env.BASE_URL;
       </ul>
     </div>
     <div>
-      <SupplyGlobe client:visible />
+      <SupplyGlobe client:visible={{ rootMargin: "400px" }} />
     </div>
   </div>
 </section>
@@ -189,7 +189,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ TRUST & COMPLIANCE (DARK) - four reassurance themes, one band ============ -->
 <section class="section section--dark" id="trust">
-  <GridField client:visible />
+  <GridField client:visible={{ rootMargin: "400px" }} />
   <div class="container">
     <div class="section__head">
       <span class="kicker">Trust &amp; compliance</span>
