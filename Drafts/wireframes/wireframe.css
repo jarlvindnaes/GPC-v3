@@ -232,6 +232,8 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 /* isolated screw: hidden on mobile (the exploded chair is the component visual there) */
 .screw-spinner { display: none; cursor: grab; }
 .screw-spinner:active { cursor: grabbing; }
+/* white background so the component section reads as distinct from the warm paper sections around it */
+#components { background: #fff; }
 @media (min-width: 821px) {
   #components { position: relative; isolation: isolate; overflow: hidden; padding-bottom: 24px; }   /* assembled chair leaves empty canvas at the bottom, so pull the next section up */
   #components > .container { position: relative; }
