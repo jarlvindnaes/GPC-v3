@@ -6,7 +6,7 @@ import { SkuNetwork } from "../../components/wireframe/SkuNetwork";
 import { SupplyGlobe } from "../../components/wireframe/SupplyGlobe";
 import { GridField } from "../../components/wireframe/GridField";
 import { withBase } from "../../utilities/withBase";
-import { Boxes, Plug, BadgeCheck, FlaskConical, TrendingUp, PackageCheck, ClipboardCheck, Scale, Download, ShieldCheck } from "lucide-react";
+import { Boxes, Plug, BadgeCheck, FlaskConical, TrendingUp, PackageCheck, ClipboardCheck, Scale, Download, ShieldCheck, Database, Box, Network, ClipboardList, FileCheck, Leaf, ChartColumn, ShoppingCart, Ship } from "lucide-react";
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -94,11 +94,11 @@ const base = import.meta.env.BASE_URL;
       <div class="engine__col">
         <h4>Data in</h4>
         <ul class="engine__list">
-          <li>ERP / PLM / PIM systems</li>
-          <li>3D / CAD across product lines</li>
-          <li>Multi-tier supplier data</li>
-          <li>Bills of materials &amp; materials</li>
-          <li>Certificates &amp; test reports</li>
+          <li><Database /> ERP / PLM / PIM systems</li>
+          <li><Box /> 3D / CAD across product lines</li>
+          <li><Network /> Multi-tier supplier data</li>
+          <li><ClipboardList /> Bills of materials &amp; materials</li>
+          <li><FileCheck /> Certificates &amp; test reports</li>
         </ul>
       </div>
       <div class="engine__hub">
@@ -107,11 +107,11 @@ const base = import.meta.env.BASE_URL;
       <div class="engine__col">
         <h4>Value out</h4>
         <ul class="engine__list">
-          <li>Component-level LCA at scale</li>
-          <li>GHG accounting &amp; ESG reporting</li>
-          <li>ERP-minted, verified EPDs &amp; DPPs</li>
-          <li>Spare-parts commerce</li>
-          <li>CBAM &amp; customs reporting</li>
+          <li><Leaf /> Component-level LCA at scale</li>
+          <li><ChartColumn /> GHG accounting &amp; ESG reporting</li>
+          <li><BadgeCheck /> ERP-minted, verified EPDs &amp; DPPs</li>
+          <li><ShoppingCart /> Spare-parts commerce</li>
+          <li><Ship /> CBAM &amp; customs reporting</li>
         </ul>
       </div>
     </div>

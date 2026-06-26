@@ -275,7 +275,8 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .engine__flow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
 .engine__col h4 { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dark-soft); margin-bottom: 14px; }
 .engine__list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.engine__list li { background: var(--dark-2); border: 1px solid var(--dark-line); border-radius: 10px; padding: 12px 16px; font-size: 14.5px; }
+.engine__list li { display: flex; align-items: center; gap: 11px; background: var(--dark-2); border: 1px solid var(--dark-line); border-radius: 10px; padding: 12px 16px; font-size: 14.5px; }
+.engine__list li svg { width: 18px; height: 18px; flex: none; color: var(--indigo-soft); }
 .engine__hub { text-align: center; }
 .engine__hub .core { border: 2px solid var(--indigo); border-radius: 16px; padding: 22px 18px; background: rgba(62,99,221,0.12); }
 .engine__hub .core b { display: block; font-size: 18px; }
