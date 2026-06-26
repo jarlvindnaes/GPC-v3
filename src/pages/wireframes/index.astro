@@ -26,10 +26,23 @@ const base = import.meta.env.BASE_URL;
   </div>
 </nav>
 
-<!-- ============ HERO (light) - wonder, not fear ============ -->
-<header class="section hero" id="main-content">
-  <div class="container split">
-    <div>
+<!-- ============ HERO (video) - full-bleed commercial with overlaid copy ============ -->
+<header class="section hero hero--video" id="main-content">
+  <video
+    class="hero__video"
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="auto"
+    poster={`${base}wireframes/hero-commercial-poster.jpg`}
+  >
+    <source src={`${base}wireframes/hero-commercial.mp4`} type="video/mp4" />
+  </video>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__copy">
       <span class="kicker">Product data for furniture makers</span>
       <h1>Your furniture is <span class="hl">smarter than you think.</span></h1>
       <p class="sub">
@@ -42,23 +55,39 @@ const base = import.meta.env.BASE_URL;
       </div>
       <p class="note">Self-service · No consultants required · And when the EU's documentation rules land, you're already done.</p>
     </div>
-
-    <div>
-      <!-- mic + chair hero shot - placeholder until we produce it (the TANKER device) -->
-      <div class="ph" style="min-height:220px">
-        <span class="ph__tag">Placeholder · image</span>
-        <div class="ph__title">Talking chair + microphone</div>
-        <div class="ph__desc">The TANKER hero shot - to be produced.</div>
-      </div>
-      <!-- the before/after dialogue - real HTML/CSS -->
-      <div class="bubbles" style="margin-top:20px">
-        <div class="bubble bubble--q">"What's your CO₂ footprint?"</div>
-        <div class="bubble bubble--mute">"Uhh....."&nbsp;&nbsp;·&nbsp;&nbsp;most furniture, today</div>
-        <div class="bubble bubble--a">"32.3&nbsp;kg. Precisely. Want it by component?"&nbsp;&nbsp;·&nbsp;&nbsp;yours, on Product Connect</div>
-      </div>
-    </div>
   </div>
+
+  <button type="button" class="hero__sound" id="hero-sound" aria-label="Turn on sound" aria-pressed="false">
+    <svg class="hero__sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="22" y1="9" x2="16" y2="15" />
+      <line x1="16" y1="9" x2="22" y2="15" />
+    </svg>
+    <svg class="hero__sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+    </svg>
+  </button>
 </header>
+
+<script>
+  // Hero video: starts muted (so it can autoplay) — this button toggles sound on/off.
+  const heroVideo = document.querySelector(".hero__video");
+  const soundButton = document.getElementById("hero-sound");
+  if (heroVideo instanceof HTMLVideoElement && soundButton) {
+    soundButton.addEventListener("click", () => {
+      heroVideo.muted = !heroVideo.muted;
+      const soundOn = !heroVideo.muted;
+      soundButton.classList.toggle("sound-on", soundOn);
+      soundButton.setAttribute("aria-pressed", String(soundOn));
+      soundButton.setAttribute("aria-label", soundOn ? "Turn off sound" : "Turn on sound");
+      if (soundOn) {
+        heroVideo.play().catch(() => {});
+      }
+    });
+  }
+</script>
 
 <!-- ============ TRUST (light, tight) ============ -->
 <section class="section section--tight">
