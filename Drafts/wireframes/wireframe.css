@@ -405,6 +405,18 @@ td.no { color: var(--ink-soft); }
 /* cross-sell line */
 .crosssell { text-align: center; margin-top: 28px; font-size: 15px; color: var(--ink-soft); }
 .crosssell a { color: var(--indigo); font-weight: 600; text-decoration: none; }
+/* Enterprise cross-sell banner (SME page): dark emerald card with a clear CTA button */
+.ent-banner {
+  margin-top: 28px;
+  background: linear-gradient(135deg, #0d231d, #0a1714);
+  border: 1px solid rgba(0, 178, 126, 0.28);
+  border-radius: 18px;
+  padding: clamp(28px, 4.5vw, 48px);
+  display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+}
+.ent-banner h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 8px; color: #fff; }
+.ent-banner p { color: var(--dark-soft); font-size: 15px; max-width: 520px; margin: 0; }
+.ent-banner .btn--primary { background: #0a7d57; color: #fff; white-space: nowrap; }
 
 /* ---------- Footer ---------- */
 .footer { background: var(--dark); color: var(--dark-soft); padding: 56px 0; }
