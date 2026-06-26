@@ -21,6 +21,7 @@
   --indigo: #3e63dd;       /* brand primary (kept) */
   --indigo-soft: #9db4ff;
   --clay: #d6a07a;         /* warm accent (furniture world) */
+  --clay-ink: #985226;     /* darker clay for text on light (AA contrast) */
   --emerald: #00b27e;      /* verified / success */
   --rose: #d8695e;
 
@@ -111,7 +112,9 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .brand-mark { display: inline-block; width: 1.4em; height: 1.4em; margin-right: 9px; flex: none;
   background-color: currentColor; -webkit-mask: url(logo.svg) center / contain no-repeat; mask: url(logo.svg) center / contain no-repeat; }
 .logo .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--clay); border: 1px solid var(--clay); border-radius: 6px; padding: 2px 6px; margin-left: 8px; }
+  color: var(--clay-ink); border: 1px solid var(--clay); border-radius: 6px; padding: 2px 6px; margin-left: 8px; }
+/* footer logo sits on the dark band, so the badge keeps the lighter clay (clay-ink would be dark-on-dark) */
+.footer .badge { color: var(--clay); }
 .nav__links { display: flex; gap: 26px; align-items: center; }
 .nav__links a:not(.btn) { font-size: 14px; font-weight: 500; color: var(--ink-soft); text-decoration: none; }
 .nav__links a:not(.btn):hover { color: var(--ink); }
@@ -282,7 +285,7 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 @media (min-width: 821px){ .engine { column-gap: 92px; } }
 /* animated flow lines/dots overlay (see EngineFlow.tsx); absolute so it stays out of the grid */
 .engine__flow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
-.engine__col h4 { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dark-soft); margin-bottom: 14px; }
+.engine__col h3 { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dark-soft); margin-bottom: 14px; }
 .engine__list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .engine__list li { display: flex; align-items: center; gap: 11px; background: var(--dark-2); border: 1px solid var(--dark-line); border-radius: 10px; padding: 12px 16px; font-size: 14.5px; }
 .engine__list li svg { width: 18px; height: 18px; flex: none; color: var(--indigo-soft); }
@@ -338,7 +341,7 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 table { width: 100%; border-collapse: collapse; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
 th, td { padding: 15px 18px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--line); }
 th { background: var(--paper-2); font-weight: 700; }
-td.yes { color: var(--emerald); font-weight: 700; }
+td.yes { color: #0a7d57; font-weight: 700; }
 td.no { color: var(--ink-soft); }
 /* mobile: tighten cells so all four columns fit without the table running off the side */
 @media (max-width: 600px) { .table-wrap th, .table-wrap td { padding: 10px 7px; font-size: 11.5px; } }
@@ -367,7 +370,7 @@ td.no { color: var(--ink-soft); }
 /* ---------- CTA band ---------- */
 .cta-band { background: var(--indigo); color: #fff; border-radius: 22px; padding: 56px 48px; text-align: center; }
 .cta-band h2 { color: #fff; }
-.cta-band .sub { color: rgba(255,255,255,0.85); margin: 16px auto 0; }
+.cta-band .sub { color: rgba(255,255,255,0.92); margin: 16px auto 0; }
 .cta-band .btns { justify-content: center; }
 .cta-band .btn--primary { background: #fff; color: var(--indigo); }
 .cta-band .btn--ghost { border-color: rgba(255,255,255,0.5); color: #fff; }

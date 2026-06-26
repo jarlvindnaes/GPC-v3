@@ -11,10 +11,14 @@ import { ShieldCheck, Database, QrCode, Box, Network, ClipboardList, FileCheck, 
 const base = import.meta.env.BASE_URL;
 ---
 
-<WireframeLayout title="Product Connect — for furniture makers (SMV wireframe)" label="WIREFRAME · SMV">
+<WireframeLayout
+  title="Product Connect — digital product passports for furniture makers"
+  description="Turn the furniture you already make into verified digital twins, ESPR-ready Digital Product Passports, and component-level LCA — straight from your existing 3D models, with nothing re-typed."
+  label="WIREFRAME · SMV"
+>
 
 <!-- ============ NAV ============ -->
-<nav class="nav">
+<nav class="nav" aria-label="Primary">
   <div class="container nav__inner">
     <a class="logo" href={withBase("/wireframes/")}><span class="brand-mark"></span><span class="logo-text">PRODUCT&nbsp;CONNECT</span></a>
     <div class="nav__links">
@@ -28,8 +32,10 @@ const base = import.meta.env.BASE_URL;
   </div>
 </nav>
 
+<main id="main-content">
+
 <!-- ============ HERO (video) - full-bleed commercial with overlaid copy ============ -->
-<header class="section hero hero--video" id="main-content">
+<header class="section hero hero--video">
   <div class="hero__band">
   <div class="hero__media">
   <video
@@ -140,7 +146,7 @@ const base = import.meta.env.BASE_URL;
     <div class="engine">
       <EngineFlow client:visible={{ rootMargin: "400px" }} />
       <div class="engine__col">
-        <h4>Data in</h4>
+        <h3>Data in</h3>
         <ul class="engine__list">
           <li><Database /> ERP / PLM / PIM systems</li>
           <li><Box /> 3D / CAD across product lines</li>
@@ -153,7 +159,7 @@ const base = import.meta.env.BASE_URL;
         <div class="core"><span class="core__logo" aria-hidden="true"></span><b>PRODUCT CONNECT</b><span>one product graph, every SKU</span></div>
       </div>
       <div class="engine__col">
-        <h4>Value out</h4>
+        <h3>Value out</h3>
         <ul class="engine__list">
           <li><Leaf /> Component-level LCA at scale</li>
           <li><ChartColumn /> GHG accounting &amp; ESG reporting</li>
@@ -225,7 +231,7 @@ const base = import.meta.env.BASE_URL;
 
     <!-- 1 future vision, set apart -->
     <div class="card" style="margin-top:20px; border-style:dashed; border-color:var(--clay); background:#fbf3ec">
-      <span class="kicker" style="color:var(--clay)">Where this is going</span>
+      <span class="kicker" style="color:var(--clay-ink)">Where this is going</span>
       <h3>Every product, connected for life.</h3>
       <p>As suppliers verify their components, your data sharpens with every product you add. The long-term goal: every product you've ever made, traceable and serviceable for its entire life.</p>
     </div>
@@ -441,6 +447,8 @@ const base = import.meta.env.BASE_URL;
     <p class="crosssell">Running a larger operation? <a href={withBase("/wireframes/enterprise")}>Product Connect for Enterprise →</a></p>
   </div>
 </section>
+
+</main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="footer">

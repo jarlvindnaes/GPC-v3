@@ -31,7 +31,7 @@ function PhoneLoadingOverlay() {
     <div
       className={`pointer-events-none absolute inset-0 z-[5] flex flex-col items-center justify-center transition-opacity duration-500 ${done ? "opacity-0" : "opacity-100"}`}
     >
-      <p className="mb-3 font-medium text-slate-400 text-xs tracking-wide">Loading the passport …</p>
+      <p className="mb-3 font-medium text-slate-600 text-xs tracking-wide">Loading the passport …</p>
       <div className="h-1 w-40 overflow-hidden rounded-full bg-slate-200">
         <div
           className="h-full rounded-full bg-indigo-500 transition-[width] duration-300 ease-out"

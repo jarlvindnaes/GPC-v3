@@ -11,10 +11,14 @@ import { Boxes, Plug, BadgeCheck, FlaskConical, TrendingUp, PackageCheck, Clipbo
 const base = import.meta.env.BASE_URL;
 ---
 
-<WireframeLayout title="Product Connect — Enterprise (wireframe)" label="WIREFRAME · ENTERPRISE">
+<WireframeLayout
+  title="Product Connect for Enterprise — LCA, passports & supplier data at scale"
+  description="Component-level LCA, supplier verification, and ESPR Digital Product Passports across your entire catalogue — one product graph, every SKU, synced with your ERP and PIM."
+  label="WIREFRAME · ENTERPRISE"
+>
 
 <!-- ============ NAV ============ -->
-<nav class="nav">
+<nav class="nav" aria-label="Primary">
   <div class="container nav__inner">
     <a class="logo" href={withBase("/wireframes/enterprise")}><span class="brand-mark"></span><span class="logo-text">PRODUCT&nbsp;CONNECT</span> <span class="badge">Enterprise</span></a>
     <div class="nav__links">
@@ -29,7 +33,8 @@ const base = import.meta.env.BASE_URL;
 </nav>
 
 <!-- ============ HERO ============ -->
-<header class="section hero" id="main-content">
+<main id="main-content">
+<header class="section hero">
   <div class="container split">
     <div>
       <span class="kicker">For large &amp; complex portfolios</span>
@@ -92,7 +97,7 @@ const base = import.meta.env.BASE_URL;
     <div class="engine">
       <EngineFlow client:visible={{ rootMargin: "400px" }} />
       <div class="engine__col">
-        <h4>Data in</h4>
+        <h3>Data in</h3>
         <ul class="engine__list">
           <li><Database /> ERP / PLM / PIM systems</li>
           <li><Box /> 3D / CAD across product lines</li>
@@ -105,7 +110,7 @@ const base = import.meta.env.BASE_URL;
         <div class="core"><span class="core__logo" aria-hidden="true"></span><b>PRODUCT CONNECT</b><span>one product graph, every SKU</span></div>
       </div>
       <div class="engine__col">
-        <h4>Value out</h4>
+        <h3>Value out</h3>
         <ul class="engine__list">
           <li><Leaf /> Component-level LCA at scale</li>
           <li><ChartColumn /> GHG accounting &amp; ESG reporting</li>
@@ -171,7 +176,7 @@ const base = import.meta.env.BASE_URL;
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>&nbsp;</th><th>Consultants</th><th>Point tools</th><th>Product Connect</th></tr>
+          <tr><th scope="col"><span class="sr-only">Capability</span></th><th scope="col">Consultants</th><th scope="col">Point tools</th><th scope="col">Product Connect</th></tr>
         </thead>
         <tbody>
           <tr><td>One connected data layer</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
@@ -259,6 +264,8 @@ const base = import.meta.env.BASE_URL;
     <p class="crosssell">Smaller catalogue, self-service? <a href={withBase("/wireframes/")}>Product Connect for SMEs →</a></p>
   </div>
 </section>
+
+</main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="footer">
