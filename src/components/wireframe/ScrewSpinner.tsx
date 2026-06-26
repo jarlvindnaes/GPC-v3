@@ -13,6 +13,9 @@ import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 // first "Metal_Screw" mesh, bakes its world transform, recentres the geometry, and spins it on its own.
 
 const DRACO_DECODER_PATH = "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
+// The original site's bolt ships a "BoltSteel" PBR material (baseColor + metallicRoughness + normal +
+// occlusion maps) that gives it its natural, worn-metal look. We lift that material onto the chair screw.
+const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
 const FRAME_PAD = 1.15; // > 1 leaves margin around the screw so it never clips while turning
 const TILT = 0.62; // lean the screw off vertical so the spin reads as a 3D tumble, not an axial spin
 const SPIN_SPEED = 0.7; // radians / second
@@ -33,7 +36,7 @@ export function ScrewSpinner() {
     renderer.setSize(host.clientWidth, host.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = Three.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.62; // a touch brighter than the chair so the lone screw reads on light
+    renderer.toneMappingExposure = 0.9; // close to the original bolt viewer so the BoltSteel material reads
     renderer.outputColorSpace = Three.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.style.display = "block";
@@ -87,16 +90,21 @@ export function ScrewSpinner() {
 
     let disposed = false;
 
-    loader.load(
-      `${import.meta.env.BASE_URL}wireframes/cross-chair-04.glb`,
-      (gltf) => {
+    const loadGltf = (url: string): Promise<{ scene: Three.Group }> =>
+      new Promise((resolve, reject) => {
+        loader.load(url, resolve, undefined, reject);
+      });
+
+    // Load the chair (for the screw geometry) and the bolt (for its BoltSteel material) together.
+    Promise.all([loadGltf(`${import.meta.env.BASE_URL}wireframes/cross-chair-04.glb`), loadGltf(BOLT_MODEL)])
+      .then(([chair, bolt]) => {
         if (disposed) {
           return;
         }
-        gltf.scene.updateMatrixWorld(true);
+        chair.scene.updateMatrixWorld(true);
 
         let screw: Three.Mesh | null = null;
-        gltf.scene.traverse((object) => {
+        chair.scene.traverse((object) => {
           const mesh = object as Three.Mesh;
           if (!screw && mesh.isMesh && mesh.name.startsWith("Metal_Screw")) {
             screw = mesh;
@@ -107,6 +115,17 @@ export function ScrewSpinner() {
           return;
         }
 
+        // Lift the bolt's PBR material (with its baked maps + correct colour spaces from GLTFLoader).
+        let boltMaterial: Three.MeshStandardMaterial | null = null;
+        bolt.scene.traverse((object) => {
+          const mesh = object as Three.Mesh;
+          if (!boltMaterial && mesh.isMesh && mesh.material) {
+            boltMaterial = (
+              Array.isArray(mesh.material) ? mesh.material[0] : mesh.material
+            ) as Three.MeshStandardMaterial;
+          }
+        });
+
         // Bake the screw's place in the chair into its geometry, then recentre it at the origin so the
         // group can spin it about its own centre. applyMatrix4 transforms the normals too (no recompute).
         const geometry = (screw as Three.Mesh).geometry.clone();
@@ -115,11 +134,12 @@ export function ScrewSpinner() {
         const center = (geometry.boundingBox as Three.Box3).getCenter(new Three.Vector3());
         geometry.translate(-center.x, -center.y, -center.z);
 
-        const material = new Three.MeshStandardMaterial({
-          color: 0xb4b7bc,
-          metalness: 0.85,
-          roughness: 0.38
-        });
+        const material =
+          boltMaterial ?? new Three.MeshStandardMaterial({ color: 0xb4b7bc, metalness: 0.85, roughness: 0.38 });
+        material.side = Three.DoubleSide;
+        material.envMapIntensity = 1;
+        material.needsUpdate = true;
+
         const mesh = new Three.Mesh(geometry, material);
         mesh.rotation.z = TILT;
         spinner.add(mesh);
@@ -127,13 +147,11 @@ export function ScrewSpinner() {
         frameScrew();
         host.removeAttribute("data-loading");
         ready = true;
-      },
-      undefined,
-      (err) => {
+      })
+      .catch((err) => {
         host.setAttribute("data-loading", "Failed to load screw model");
         console.error(err);
-      }
-    );
+      });
 
     let raf = 0;
     const clock = new Three.Clock();
@@ -178,7 +196,13 @@ export function ScrewSpinner() {
         mesh.geometry.dispose();
         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
         for (const material of mats) {
-          material.dispose();
+          const m = material as Three.MeshStandardMaterial;
+          m.map?.dispose();
+          m.normalMap?.dispose();
+          m.roughnessMap?.dispose();
+          m.metalnessMap?.dispose();
+          m.aoMap?.dispose();
+          m.dispose();
         }
       });
 
