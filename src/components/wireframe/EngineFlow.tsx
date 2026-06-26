@@ -21,12 +21,18 @@ interface Seg {
   y2: number;
 }
 
+interface Dot {
+  offset: number; // 0..1 start position along the flow
+  speed: number; // per-dot speed multiplier
+}
+
 interface Flow {
   color: string;
   segs: Seg[];
   lengths: number[];
   total: number;
-  dots: number;
+  continuous: boolean; // true = one smooth path (desktop curve); false = separate segments (mobile gaps)
+  dots: Dot[];
 }
 
 export function EngineFlow() {
@@ -56,10 +62,42 @@ export function EngineFlow() {
     let raf = 0;
     let time = 0;
 
-    const buildFlow = (color: string, segs: Seg[]): Flow => {
+    const makeDots = (count: number): Dot[] => {
+      const dots: Dot[] = [];
+      for (let i = 0; i < count; i++) {
+        dots.push({ offset: Math.random(), speed: 0.55 + Math.random() * 0.95 });
+      }
+      return dots;
+    };
+
+    const buildFlow = (color: string, segs: Seg[], continuous: boolean): Flow => {
       const lengths = segs.map((s) => Math.hypot(s.x2 - s.x1, s.y2 - s.y1));
       const total = lengths.reduce((a, b) => a + b, 0);
-      return { color, segs, lengths, total, dots: segs.length > 1 ? 3 : 1 };
+      return { color, segs, lengths, total, continuous, dots: makeDots(continuous ? 2 : 3) };
+    };
+
+    // sample a cubic bezier into short straight segments (so curves animate + draw the same way as lines)
+    const curveSegs = (
+      p0: { x: number; y: number },
+      c1: { x: number; y: number },
+      c2: { x: number; y: number },
+      p3: { x: number; y: number }
+    ): Seg[] => {
+      const steps = 26;
+      const pts: { x: number; y: number }[] = [];
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const u = 1 - t;
+        pts.push({
+          x: u * u * u * p0.x + 3 * u * u * t * c1.x + 3 * u * t * t * c2.x + t * t * t * p3.x,
+          y: u * u * u * p0.y + 3 * u * u * t * c1.y + 3 * u * t * t * c2.y + t * t * t * p3.y
+        });
+      }
+      const segs: Seg[] = [];
+      for (let i = 0; i < pts.length - 1; i++) {
+        segs.push({ x1: pts[i].x, y1: pts[i].y, x2: pts[i + 1].x, y2: pts[i + 1].y });
+      }
+      return segs;
     };
 
     const measure = () => {
@@ -106,11 +144,22 @@ export function EngineFlow() {
           const usable = c.bottom - c.top - CORE_MARGIN * 2;
           return c.top + CORE_MARGIN + (count > 1 ? (usable * index) / (count - 1) : usable / 2);
         };
+        // organic S-curves: leave the box and arrive at the core with horizontal tangents
         inBoxes.forEach((box, i) => {
-          next.push(buildFlow(YELLOW, [{ x1: box.right, y1: box.midY, x2: c.left, y2: spreadY(inBoxes.length, i) }]));
+          const start = { x: box.right, y: box.midY };
+          const end = { x: c.left, y: spreadY(inBoxes.length, i) };
+          const dx = (end.x - start.x) * 0.5;
+          next.push(
+            buildFlow(YELLOW, curveSegs(start, { x: start.x + dx, y: start.y }, { x: end.x - dx, y: end.y }, end), true)
+          );
         });
         outBoxes.forEach((box, i) => {
-          next.push(buildFlow(GREEN, [{ x1: c.right, y1: spreadY(outBoxes.length, i), x2: box.left, y2: box.midY }]));
+          const start = { x: c.right, y: spreadY(outBoxes.length, i) };
+          const end = { x: box.left, y: box.midY };
+          const dx = (end.x - start.x) * 0.5;
+          next.push(
+            buildFlow(GREEN, curveSegs(start, { x: start.x + dx, y: start.y }, { x: end.x - dx, y: end.y }, end), true)
+          );
         });
       } else {
         const x = c.midX;
@@ -119,12 +168,12 @@ export function EngineFlow() {
           yellow.push({ x1: x, y1: inBoxes[k].bottom, x2: x, y2: inBoxes[k + 1].top });
         }
         yellow.push({ x1: x, y1: inBoxes[inBoxes.length - 1].bottom, x2: x, y2: c.top });
-        next.push(buildFlow(YELLOW, yellow));
+        next.push(buildFlow(YELLOW, yellow, false));
         const green: Seg[] = [{ x1: x, y1: c.bottom, x2: x, y2: outBoxes[0].top }];
         for (let k = 0; k < outBoxes.length - 1; k++) {
           green.push({ x1: x, y1: outBoxes[k].bottom, x2: x, y2: outBoxes[k + 1].top });
         }
-        next.push(buildFlow(GREEN, green));
+        next.push(buildFlow(GREEN, green, false));
       }
       flows = next;
     };
@@ -148,13 +197,27 @@ export function EngineFlow() {
       ctx.clearRect(0, 0, width, height);
       ctx.lineWidth = 2;
       ctx.lineCap = "round";
+      ctx.lineJoin = "round";
       for (const f of flows) {
+        if (!f.segs.length) {
+          continue;
+        }
         ctx.strokeStyle = `${f.color}${LINE_ALPHA}`;
-        for (const s of f.segs) {
+        if (f.continuous) {
+          // one smooth path through every sampled point (renders the bezier as a curve)
           ctx.beginPath();
-          ctx.moveTo(s.x1, s.y1);
-          ctx.lineTo(s.x2, s.y2);
+          ctx.moveTo(f.segs[0].x1, f.segs[0].y1);
+          for (const s of f.segs) {
+            ctx.lineTo(s.x2, s.y2);
+          }
           ctx.stroke();
+        } else {
+          for (const s of f.segs) {
+            ctx.beginPath();
+            ctx.moveTo(s.x1, s.y1);
+            ctx.lineTo(s.x2, s.y2);
+            ctx.stroke();
+          }
         }
       }
       for (const f of flows) {
@@ -164,9 +227,8 @@ export function EngineFlow() {
         ctx.fillStyle = f.color;
         ctx.shadowColor = f.color;
         ctx.shadowBlur = 9;
-        for (let k = 0; k < f.dots; k++) {
-          const phase = (f.total / f.dots) * k;
-          const distance = (time * DOT_SPEED + phase) % f.total;
+        for (const dot of f.dots) {
+          const distance = (time * DOT_SPEED * dot.speed + dot.offset * f.total) % f.total;
           const p = pointAt(f, distance);
           ctx.beginPath();
           ctx.arc(p.x, p.y, DOT_RADIUS, 0, Math.PI * 2);
@@ -203,5 +265,7 @@ export function EngineFlow() {
     };
   }, [isNear]);
 
-  return <canvas ref={canvasRef} className="engine__flow" aria-label="Animated data flow into and out of Product Connect" />;
+  return (
+    <canvas ref={canvasRef} className="engine__flow" aria-label="Animated data flow into and out of Product Connect" />
+  );
 }
