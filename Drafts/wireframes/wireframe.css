@@ -82,6 +82,9 @@ a { color: inherit; }
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--indigo);
   margin-bottom: 18px;
 }
+/* Headings inherit the body system font, like the original wireframe. The shared index.css base
+   layer otherwise forces every heading to Space Grotesk; this unlayered rule overrides it. */
+h1, h2, h3, h4, h5, h6 { font-family: inherit; }
 h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; }
 h1 .hl { color: var(--indigo); }
 h2 { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.12; letter-spacing: -0.02em; font-weight: 800; }
