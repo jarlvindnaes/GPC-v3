@@ -7,15 +7,26 @@ interface Props {
   title?: string;
   description?: string;
   label?: string;
+  image?: string;
 }
 
+// Intended production home for these pages (canonical + Open Graph URLs).
+const SITE_ORIGIN = "https://productconnect.com";
+
 const {
-  title = "Product Connect — Wireframe",
-  description = "Wireframe and draft, migrating onto the production Astro stack.",
-  label = "WIREFRAME · SMV"
+  title = "Product Connect — digital product passports for furniture",
+  description = "Turn the furniture you already make into verified digital twins, ESPR-ready Digital Product Passports, and component-level LCA — straight from your existing 3D models, with nothing re-typed.",
+  label = "WIREFRAME · SMV",
+  image
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
+// The pages deploy under a base path (/GPC-v3/ or /pc-wireframes/); map that onto the production origin.
+const relativePath = Astro.url.pathname.startsWith(base)
+  ? Astro.url.pathname.slice(base.length)
+  : Astro.url.pathname.replace(/^\//, "");
+const canonical = `${SITE_ORIGIN}/${relativePath}`;
+const ogImage = image ?? `${SITE_ORIGIN}/wireframes/hero-commercial-poster.jpg`;
 ---
 
 <!doctype html>
@@ -23,10 +34,37 @@ const base = import.meta.env.BASE_URL;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <meta name="theme-color" content="#0F1D45" />
-    <meta name="robots" content="noindex" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <!-- Staging mirror: keep it out of the index, but follow links and stay launch-ready. -->
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#0F1D45" />
+
+    <!-- Favicons — identical to the Product Connect platform -->
+    <link rel="icon" href={`${base}favicon.ico`} sizes="any" />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <link rel="manifest" href={`${base}site.webmanifest`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Product Connect" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:image:alt" content="Product Connect" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Product Connect" />
+
     <link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={`${base}fonts/space-grotesk-latin.woff2`} as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href={`${base}wireframes/wireframe.css`} />
@@ -38,9 +76,9 @@ const base = import.meta.env.BASE_URL;
     >
       Skip to main content
     </a>
-    <div class="bg-brand-deep px-4 py-2 text-center text-white text-xs tracking-wide">
+    <header class="bg-brand-deep px-4 py-2 text-center text-white text-xs tracking-wide">
       <strong>{label}</strong> · message &amp; structure only. Visuals are placeholders.
-    </div>
+    </header>
     <slot />
     <NavAutoHide client:load />
     <BackToTop client:load />
