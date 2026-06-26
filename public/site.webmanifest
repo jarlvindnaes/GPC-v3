@@ -1,0 +1,21 @@
+{
+  "name": "Product Connect",
+  "short_name": "Product Connect",
+  "description": "Digital product passports for furniture makers.",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0F1D45",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
