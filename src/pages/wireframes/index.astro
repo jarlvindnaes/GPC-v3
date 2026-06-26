@@ -28,6 +28,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ HERO (video) - full-bleed commercial with overlaid copy ============ -->
 <header class="section hero hero--video" id="main-content">
+  <div class="hero__media">
   <video
     class="hero__video"
     autoplay
@@ -41,19 +42,11 @@ const base = import.meta.env.BASE_URL;
   </video>
   <div class="hero__scrim" aria-hidden="true"></div>
 
+  <!-- only the headline sits on the video; the supporting copy is below it -->
   <div class="container hero__inner">
     <div class="hero__copy">
       <span class="kicker">Product data for furniture makers</span>
       <h1>Your furniture is <span class="hl">smarter than you think.</span></h1>
-      <p class="sub">
-        <b>Measure once. Prove anything.</b> Product Connect turns the furniture you already make into verified
-        digital twins - CO₂ footprint, bill of materials, and an ESPR-ready passport, all from data you already have.
-      </p>
-      <div class="btns">
-        <a class="btn btn--primary" href="#cta">Book a demo</a>
-        <a class="btn btn--ghost" href="#how">See how it works</a>
-      </div>
-      <p class="note">Self-service · No consultants required · And when the EU's documentation rules land, you're already done.</p>
     </div>
   </div>
 
@@ -69,6 +62,19 @@ const base = import.meta.env.BASE_URL;
       <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
     </svg>
   </button>
+  </div>
+
+  <div class="container hero__support">
+    <p class="sub">
+      <b>Measure once. Prove anything.</b> Product Connect turns the furniture you already make into verified
+      digital twins - CO₂ footprint, bill of materials, and an ESPR-ready passport, all from data you already have.
+    </p>
+    <div class="btns">
+      <a class="btn btn--primary" href="#cta">Book a demo</a>
+      <a class="btn btn--ghost" href="#how">See how it works</a>
+    </div>
+    <p class="note">Self-service · No consultants required · And when the EU's documentation rules land, you're already done.</p>
+  </div>
 </header>
 
 <script>
