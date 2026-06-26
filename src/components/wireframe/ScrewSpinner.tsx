@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as Three from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -16,9 +17,8 @@ const DRACO_DECODER_PATH = "https://www.gstatic.com/draco/versioned/decoders/1.5
 // The original site's bolt ships a "BoltSteel" PBR material (baseColor + metallicRoughness + normal +
 // occlusion maps) that gives it its natural, worn-metal look. We lift that material onto the chair screw.
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;
-const FRAME_PAD = 1.15; // > 1 leaves margin around the screw so it never clips while turning
-const TILT = 0.62; // lean the screw off vertical so the spin reads as a 3D tumble, not an axial spin
-const SPIN_SPEED = 0.7; // radians / second
+const FRAME_PAD = 1.25; // > 1 leaves margin around the screw's bounding sphere so it never clips at any angle
+const TILT = 0.62; // lean the screw off vertical so the idle spin reads as a 3D tumble, not an axial spin
 
 export function ScrewSpinner() {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -58,6 +58,15 @@ export function ScrewSpinner() {
 
     const camera = new Three.PerspectiveCamera(35, host.clientWidth / host.clientHeight, 0.01, 1000);
 
+    // Drag to rotate (same feel as the chair); idle auto-rotate that resumes after a drag.
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.enablePan = false;
+    controls.enableZoom = false; // let the wheel scroll the page, not zoom the screw
+    controls.autoRotate = !reduceMotion;
+    controls.autoRotateSpeed = 1.1;
+
     scene.add(new Three.AmbientLight(0xffffff, 0.7));
     const key = new Three.DirectionalLight(0xfff8f0, 0.5);
     key.position.set(4, 5, 6);
@@ -66,22 +75,23 @@ export function ScrewSpinner() {
     fill.position.set(-5, 2, -3);
     scene.add(fill);
 
-    const spinner = new Three.Group(); // rotates on world Y; the screw sits inside it pre-tilted
+    const spinner = new Three.Group(); // holds the pre-tilted screw; the camera orbits it
     scene.add(spinner);
 
-    let ready = false;
-
     const frameScrew = () => {
-      const radius = new Three.Box3().setFromObject(spinner).getBoundingSphere(new Three.Sphere()).radius * FRAME_PAD;
-      if (!radius) {
+      const sphere = new Three.Box3().setFromObject(spinner).getBoundingSphere(new Three.Sphere());
+      if (!sphere.radius) {
         return;
       }
+      const radius = sphere.radius * FRAME_PAD;
       const fovV = Three.MathUtils.degToRad(camera.fov);
       const fovH = 2 * Math.atan(Math.tan(fovV / 2) * camera.aspect);
+      // Fit the bounding SPHERE (rotation-invariant), so the screw never clips however it's dragged.
       const dist = radius / Math.sin(Math.min(fovV, fovH) / 2);
       const dir = new Three.Vector3(0.4, 0.25, 1).normalize();
-      camera.position.copy(dir.multiplyScalar(dist));
-      camera.lookAt(0, 0, 0);
+      camera.position.copy(sphere.center).addScaledVector(dir, dist);
+      controls.target.copy(sphere.center);
+      controls.update();
     };
 
     const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
@@ -146,7 +156,6 @@ export function ScrewSpinner() {
 
         frameScrew();
         host.removeAttribute("data-loading");
-        ready = true;
       })
       .catch((err) => {
         host.setAttribute("data-loading", "Failed to load screw model");
@@ -154,16 +163,12 @@ export function ScrewSpinner() {
       });
 
     let raf = 0;
-    const clock = new Three.Clock();
     const animate = () => {
       raf = requestAnimationFrame(animate);
       if (!isNear.current) {
         return;
       }
-      const dt = clock.getDelta();
-      if (ready && !reduceMotion) {
-        spinner.rotation.y += dt * SPIN_SPEED;
-      }
+      controls.update(); // drives damping + idle auto-rotate
       renderer.render(scene, camera);
     };
     raf = requestAnimationFrame(animate);
@@ -186,6 +191,7 @@ export function ScrewSpinner() {
       disposed = true;
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
+      controls.dispose();
       draco.dispose();
 
       spinner.traverse((object) => {
