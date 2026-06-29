@@ -314,8 +314,25 @@ export function TieredDataLayer() {
           <text x={1005} y={96}>
             VALUE OUT
           </text>
-          <text x={92} y={layout.funnelLabelY} fontSize={9.5} fill="#8794b5">
-            MULTI-TIER SUPPLIERS
+        </g>
+        <g fontSize={8.5} fontWeight={700} letterSpacing={0.6} fill="#8794b5" textAnchor="middle">
+          <text x={43} y={layout.funnelLabelY}>
+            TIER 3
+          </text>
+          <text x={43} y={layout.funnelLabelY + 11}>
+            SUPPLIERS
+          </text>
+          <text x={142} y={layout.funnelLabelY}>
+            TIER 2
+          </text>
+          <text x={142} y={layout.funnelLabelY + 11}>
+            SUPPLIERS
+          </text>
+          <text x={238} y={layout.funnelLabelY}>
+            TIER 1
+          </text>
+          <text x={238} y={layout.funnelLabelY + 11}>
+            SUPPLIERS
           </text>
         </g>
       </svg>
