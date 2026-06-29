@@ -196,22 +196,26 @@ export function EngineFlow() {
         }
       } else {
         const x = c.midX;
+        // follow on-screen order (mobile reorders the supplier chip to the top via CSS), so the
+        // single vertical flow never zig-zags regardless of DOM order
+        const inSorted = [...inBoxes].sort((a, b) => a.top - b.top);
+        const outSorted = [...outBoxes].sort((a, b) => a.top - b.top);
         const yellow: Seg[] = [];
-        for (let k = 0; k < inBoxes.length - 1; k++) {
-          yellow.push({ x1: x, y1: inBoxes[k].bottom, x2: x, y2: inBoxes[k + 1].top });
+        for (let k = 0; k < inSorted.length - 1; k++) {
+          yellow.push({ x1: x, y1: inSorted[k].bottom, x2: x, y2: inSorted[k + 1].top });
         }
-        yellow.push({ x1: x, y1: inBoxes[inBoxes.length - 1].bottom, x2: x, y2: c.top });
+        yellow.push({ x1: x, y1: inSorted[inSorted.length - 1].bottom, x2: x, y2: c.top });
         next.push(buildFlow(YELLOW, yellow, false));
-        const green: Seg[] = [{ x1: x, y1: c.bottom, x2: x, y2: outBoxes[0].top }];
-        for (let k = 0; k < outBoxes.length - 1; k++) {
-          green.push({ x1: x, y1: outBoxes[k].bottom, x2: x, y2: outBoxes[k + 1].top });
+        const green: Seg[] = [{ x1: x, y1: c.bottom, x2: x, y2: outSorted[0].top }];
+        for (let k = 0; k < outSorted.length - 1; k++) {
+          green.push({ x1: x, y1: outSorted[k].bottom, x2: x, y2: outSorted[k + 1].top });
         }
         next.push(buildFlow(GREEN, green, false));
-        // stacked: the tier funnel sits above the inputs and feeds straight down into the data-in stack
+        // stacked: the tier funnel sits above the inputs and feeds straight down into the top chip
         const tiersEl = engine.querySelector(".engine__tiers");
         if (tiersEl) {
           const tb = rel(tiersEl);
-          next.push(buildFlow(YELLOW, [{ x1: x, y1: tb.bottom, x2: x, y2: inBoxes[0].top }], false, 2));
+          next.push(buildFlow(YELLOW, [{ x1: x, y1: tb.bottom, x2: x, y2: inSorted[0].top }], false, 2));
         }
       }
       flows = next;

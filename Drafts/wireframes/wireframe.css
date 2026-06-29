@@ -323,6 +323,8 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
   .engine__tiers { flex-direction: column; gap: 10px; margin-bottom: 6px; }
   .tier { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px; }
   .tier__label { width: 100%; text-align: center; margin-top: 2px; }
+  /* the funnel feeds this chip, so put it first in the stack right under the tiers */
+  .engine__supplier { order: -1; }
 }
 /* animated flow lines/dots overlay (see EngineFlow.tsx); absolute so it stays out of the grid */
 .engine__flow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
