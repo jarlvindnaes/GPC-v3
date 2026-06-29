@@ -411,6 +411,11 @@ td.no { color: var(--ink-soft); }
 .tiered-data-layer { width: 100%; margin-top: 24px; }
 /* only the top-level diagram svg scales; nested lucide icon svgs keep their own size */
 .tiered-data-layer > svg { display: block; width: 100%; height: auto; }
+/* too wide to shrink legibly on phones - let it scroll horizontally at a readable min width */
+@media (max-width: 760px) {
+  .tiered-data-layer { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tiered-data-layer > svg { width: 1040px; }
+}
 
 /* Enterprise cross-sell banner (SME page): dark card with the brand indigo CTA button */
 .ent-banner {
