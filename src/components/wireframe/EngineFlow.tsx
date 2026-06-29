@@ -70,10 +70,10 @@ export function EngineFlow() {
       return dots;
     };
 
-    const buildFlow = (color: string, segs: Seg[], continuous: boolean): Flow => {
+    const buildFlow = (color: string, segs: Seg[], continuous: boolean, dotCount?: number): Flow => {
       const lengths = segs.map((s) => Math.hypot(s.x2 - s.x1, s.y2 - s.y1));
       const total = lengths.reduce((a, b) => a + b, 0);
-      return { color, segs, lengths, total, continuous, dots: makeDots(continuous ? 2 : 3) };
+      return { color, segs, lengths, total, continuous, dots: makeDots(dotCount ?? (continuous ? 2 : 3)) };
     };
 
     // sample a cubic bezier into short straight segments (so curves animate + draw the same way as lines)
@@ -98,6 +98,22 @@ export function EngineFlow() {
         segs.push({ x1: pts[i].x, y1: pts[i].y, x2: pts[i + 1].x, y2: pts[i + 1].y });
       }
       return segs;
+    };
+
+    // a left-to-right S-curve that leaves/arrives with horizontal tangents (used for box->core + the funnel)
+    const hCurve = (
+      start: { x: number; y: number },
+      end: { x: number; y: number },
+      color: string,
+      dotCount?: number
+    ): Flow => {
+      const dx = (end.x - start.x) * 0.5;
+      return buildFlow(
+        color,
+        curveSegs(start, { x: start.x + dx, y: start.y }, { x: end.x - dx, y: end.y }, end),
+        true,
+        dotCount
+      );
     };
 
     const measure = () => {
@@ -161,6 +177,23 @@ export function EngineFlow() {
             buildFlow(GREEN, curveSegs(start, { x: start.x + dx, y: start.y }, { x: end.x - dx, y: end.y }, end), true)
           );
         });
+        // multi-tier supplier funnel: tier 3 -> tier 2 -> tier 1 -> the "Multi-tier supplier data" chip
+        const supplier = engine.querySelector(".engine__supplier");
+        const tierGroups = [...engine.querySelectorAll(".engine__tiers .tier")].map((t) =>
+          [...t.querySelectorAll(".tier__bar")].map(rel)
+        );
+        if (supplier && tierGroups.length === 3 && tierGroups.every((g) => g.length > 0)) {
+          const sup = rel(supplier);
+          const [t3, t2, t1] = tierGroups;
+          t3.forEach((b, i) => {
+            const tgt = t2[Math.min(Math.floor(i / 2), t2.length - 1)];
+            next.push(hCurve({ x: b.right, y: b.midY }, { x: tgt.left, y: tgt.midY }, YELLOW, 1));
+          });
+          for (const b of t2) {
+            next.push(hCurve({ x: b.right, y: b.midY }, { x: t1[0].left, y: t1[0].midY }, YELLOW, 1));
+          }
+          next.push(hCurve({ x: t1[0].right, y: t1[0].midY }, { x: sup.left, y: sup.midY }, YELLOW, 1));
+        }
       } else {
         const x = c.midX;
         const yellow: Seg[] = [];
@@ -174,6 +207,12 @@ export function EngineFlow() {
           green.push({ x1: x, y1: outBoxes[k].bottom, x2: x, y2: outBoxes[k + 1].top });
         }
         next.push(buildFlow(GREEN, green, false));
+        // stacked: the tier funnel sits above the inputs and feeds straight down into the data-in stack
+        const tiersEl = engine.querySelector(".engine__tiers");
+        if (tiersEl) {
+          const tb = rel(tiersEl);
+          next.push(buildFlow(YELLOW, [{ x1: x, y1: tb.bottom, x2: x, y2: inBoxes[0].top }], false, 2));
+        }
       }
       flows = next;
     };

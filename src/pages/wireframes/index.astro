@@ -143,14 +143,32 @@ const base = import.meta.env.BASE_URL;
       <h2>One data layer. <span class="hl">Not ten point tools.</span></h2>
       <p class="sub">Most companies bolt on a new tool for every regulation, and the data scatters across systems. Product Connect replaces the stack with one foundation - enter a fact once, and it feeds every report, EPD, and passport. Calculate a component once; every product that shares it reuses the result.</p>
     </div>
-    <div class="engine">
+    <div class="engine engine--tiered">
       <EngineFlow client:visible={{ rootMargin: "400px" }} />
+      <div class="engine__tiers" aria-hidden="true">
+        <div class="tier">
+          <span class="tier__bar"></span>
+          <span class="tier__bar"></span>
+          <span class="tier__bar"></span>
+          <span class="tier__bar"></span>
+          <span class="tier__label">Tier 3</span>
+        </div>
+        <div class="tier">
+          <span class="tier__bar"></span>
+          <span class="tier__bar"></span>
+          <span class="tier__label">Tier 2</span>
+        </div>
+        <div class="tier">
+          <span class="tier__bar"></span>
+          <span class="tier__label">Tier 1</span>
+        </div>
+      </div>
       <div class="engine__col">
         <h3>Data in</h3>
         <ul class="engine__list">
           <li><Database /> ERP / PLM / PIM systems</li>
           <li><Box /> 3D / CAD across product lines</li>
-          <li><Network /> Multi-tier supplier data</li>
+          <li class="engine__supplier"><Network /> Multi-tier supplier data</li>
           <li><ClipboardList /> Bills of materials &amp; materials</li>
           <li><FileCheck /> Certificates &amp; test reports</li>
         </ul>
