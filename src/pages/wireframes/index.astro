@@ -182,11 +182,61 @@ const base = import.meta.env.BASE_URL;
       <div class="engine__col">
         <h3>Value out</h3>
         <ul class="engine__list">
-          <li><Leaf /> Component-level LCA at scale</li>
-          <li><ChartColumn /> GHG accounting &amp; ESG reporting</li>
-          <li><BadgeCheck /> ERP-minted, verified EPDs &amp; DPPs</li>
-          <li><ShoppingCart /> Spare-parts commerce</li>
-          <li><Ship /> CBAM &amp; customs reporting</li>
+          <li class="engine__out">
+            <BadgeCheck />
+            <div class="engine__out-body">
+              <span class="engine__out-title">Compliance</span>
+              <ul class="engine__out-pts">
+                <li>Regulatory &amp; CBAM reporting</li>
+                <li>Risk assessment</li>
+                <li>Audit-ready EPDs &amp; DPPs</li>
+              </ul>
+            </div>
+          </li>
+          <li class="engine__out">
+            <Leaf />
+            <div class="engine__out-body">
+              <span class="engine__out-title">Sustainability</span>
+              <ul class="engine__out-pts">
+                <li>GHG accounting &amp; ESG reporting</li>
+                <li>Impact measurement</li>
+                <li>Stakeholder engagement</li>
+              </ul>
+            </div>
+          </li>
+          <li class="engine__out">
+            <ChartColumn />
+            <div class="engine__out-body">
+              <span class="engine__out-title">Development</span>
+              <ul class="engine__out-pts">
+                <li>Product design &amp; engineering</li>
+                <li>Component-level LCA</li>
+                <li>Production certification</li>
+              </ul>
+            </div>
+          </li>
+          <li class="engine__out">
+            <Ship />
+            <div class="engine__out-body">
+              <span class="engine__out-title">Operations</span>
+              <ul class="engine__out-pts">
+                <li>Product planning</li>
+                <li>Quality control</li>
+                <li>Spare parts &amp; resource efficiency</li>
+              </ul>
+            </div>
+          </li>
+          <li class="engine__out">
+            <ShoppingCart />
+            <div class="engine__out-body">
+              <span class="engine__out-title">Procurement</span>
+              <ul class="engine__out-pts">
+                <li>Supplier onboarding</li>
+                <li>Contract management</li>
+                <li>Spend analysis</li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
     </div>

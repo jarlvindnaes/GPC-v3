@@ -145,8 +145,9 @@ export function EngineFlow() {
         };
       };
       const c = rel(core);
-      const inBoxes = [...cols[0].querySelectorAll(".engine__list li")].map(rel);
-      const outBoxes = [...cols[1].querySelectorAll(".engine__list li")].map(rel);
+      // direct children only, so nested bullet <li>s inside a value-out chip aren't treated as boxes
+      const inBoxes = [...cols[0].querySelectorAll(".engine__list > li")].map(rel);
+      const outBoxes = [...cols[1].querySelectorAll(".engine__list > li")].map(rel);
       if (!inBoxes.length || !outBoxes.length) {
         flows = [];
         return;
