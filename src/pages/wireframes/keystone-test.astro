@@ -1,6 +1,7 @@
 ---
 import WireframeLayout from "../../layouts/WireframeLayout.astro";
 import { KeystoneFlow } from "../../components/wireframe/KeystoneFlow";
+import { TieredDataLayer } from "../../components/wireframe/TieredDataLayer";
 ---
 
 <WireframeLayout title="Keystone flow — draft" label="WIREFRAME · KEYSTONE DRAFT">
@@ -16,6 +17,20 @@ import { KeystoneFlow } from "../../components/wireframe/KeystoneFlow";
           </p>
         </div>
         <KeystoneFlow client:visible={{ rootMargin: "400px" }} />
+      </div>
+    </section>
+
+    <section class="section section--dark">
+      <div class="container">
+        <div class="section__head" style="text-align:center; margin-inline:auto">
+          <span class="kicker">Variant 3 · dark</span>
+          <h2>The data layer, with the supplier funnel.</h2>
+          <p class="sub" style="margin-inline:auto">
+            A mix of the two: the engine's icon inputs and value-out, with the multi-tier supplier funnel
+            feeding the "Multi-tier supplier data" input.
+          </p>
+        </div>
+        <TieredDataLayer client:visible={{ rootMargin: "400px" }} />
       </div>
     </section>
   </main>

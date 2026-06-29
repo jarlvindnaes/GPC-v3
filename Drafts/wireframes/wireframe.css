@@ -408,6 +408,9 @@ td.no { color: var(--ink-soft); }
 /* Keystone data-flow illustration (draft) */
 .keystone-flow { width: 100%; margin-top: 24px; }
 .keystone-flow svg { display: block; width: 100%; height: auto; }
+.tiered-data-layer { width: 100%; margin-top: 24px; }
+/* only the top-level diagram svg scales; nested lucide icon svgs keep their own size */
+.tiered-data-layer > svg { display: block; width: 100%; height: auto; }
 
 /* Enterprise cross-sell banner (SME page): dark card with the brand indigo CTA button */
 .ent-banner {
