@@ -1,0 +1,22 @@
+---
+import WireframeLayout from "../../layouts/WireframeLayout.astro";
+import { KeystoneFlow } from "../../components/wireframe/KeystoneFlow";
+---
+
+<WireframeLayout title="Keystone flow — draft" label="WIREFRAME · KEYSTONE DRAFT">
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <div class="section__head" style="text-align:center; margin-inline:auto">
+          <span class="kicker">One product graph</span>
+          <h2>Collect data once. <span class="hl">Use it everywhere.</span></h2>
+          <p class="sub" style="margin-inline:auto">
+            Every tier of your supply chain feeds one graph - and that single source flows out to every report,
+            certification, and passport you need.
+          </p>
+        </div>
+        <KeystoneFlow client:visible={{ rootMargin: "400px" }} />
+      </div>
+    </section>
+  </main>
+</WireframeLayout>
