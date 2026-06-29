@@ -1,6 +1,6 @@
 ---
 import WireframeLayout from "../../layouts/WireframeLayout.astro";
-import { TieredDataLayer } from "../../components/wireframe/TieredDataLayer";
+import { EngineFlow } from "../../components/wireframe/EngineFlow";
 import { ParticleField } from "../../components/wireframe/ParticleField";
 import { SkuNetwork } from "../../components/wireframe/SkuNetwork";
 import { SupplyGlobe } from "../../components/wireframe/SupplyGlobe";
@@ -94,7 +94,32 @@ const base = import.meta.env.BASE_URL;
       <h2>One data layer. Not ten point tools.</h2>
       <p class="sub">Most companies bolt on a new tool for every regulation, and the data scatters across systems. Product Connect replaces the stack with one foundation - enter a fact once, and it feeds every report, EPD, and passport. Calculate a component once; every product that shares it reuses the result.</p>
     </div>
-    <TieredDataLayer client:visible={{ rootMargin: "400px" }} />
+    <div class="engine">
+      <EngineFlow client:visible={{ rootMargin: "400px" }} />
+      <div class="engine__col">
+        <h3>Data in</h3>
+        <ul class="engine__list">
+          <li><Database /> ERP / PLM / PIM systems</li>
+          <li><Box /> 3D / CAD across product lines</li>
+          <li><Network /> Multi-tier supplier data</li>
+          <li><ClipboardList /> Bills of materials &amp; materials</li>
+          <li><FileCheck /> Certificates &amp; test reports</li>
+        </ul>
+      </div>
+      <div class="engine__hub">
+        <div class="core"><span class="core__logo" aria-hidden="true"></span><b>PRODUCT CONNECT</b><span>one product graph, every SKU</span></div>
+      </div>
+      <div class="engine__col">
+        <h3>Value out</h3>
+        <ul class="engine__list">
+          <li><Leaf /> Component-level LCA at scale</li>
+          <li><ChartColumn /> GHG accounting &amp; ESG reporting</li>
+          <li><BadgeCheck /> ERP-minted, verified EPDs &amp; DPPs</li>
+          <li><ShoppingCart /> Spare-parts commerce</li>
+          <li><Ship /> CBAM &amp; customs reporting</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
