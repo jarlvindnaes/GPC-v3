@@ -83,5 +83,38 @@ const ogImage = image ?? `${SITE_ORIGIN}/wireframes/hero-commercial-poster.jpg`;
     <slot />
     <NavAutoHide client:load />
     <BackToTop client:load />
+
+    <script>
+      // Cursor-tracked blue gradient on the highlighted (.hl) parts of headlines. Sets --mouse-x/--mouse-y
+      // (percent within the element) while hovering; the CSS radial-gradient follows. Resets to centre on leave.
+      for (const el of document.querySelectorAll<HTMLElement>("h1 .hl, h2 .hl, h3 .hl")) {
+        let raf = 0;
+        let pending: { x: number; y: number } | null = null;
+        const flush = () => {
+          raf = 0;
+          if (!pending) {
+            return;
+          }
+          const rect = el.getBoundingClientRect();
+          el.style.setProperty("--mouse-x", `${((pending.x - rect.left) / rect.width) * 100}%`);
+          el.style.setProperty("--mouse-y", `${((pending.y - rect.top) / rect.height) * 100}%`);
+        };
+        el.addEventListener("mousemove", (event) => {
+          pending = { x: event.clientX, y: event.clientY };
+          if (!raf) {
+            raf = requestAnimationFrame(flush);
+          }
+        });
+        el.addEventListener("mouseleave", () => {
+          pending = null;
+          if (raf) {
+            cancelAnimationFrame(raf);
+            raf = 0;
+          }
+          el.style.removeProperty("--mouse-x");
+          el.style.removeProperty("--mouse-y");
+        });
+      }
+    </script>
   </body>
 </html>

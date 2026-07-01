@@ -109,6 +109,22 @@ h1, h2, h3, h4, h5, h6 {
 h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; }
 h1 .hl, h2 .hl, h3 .hl { color: var(--indigo); }
 .section--dark :is(h1, h2, h3) .hl { color: var(--indigo-soft); }
+/* subtle blue-to-blue gradient that tracks the cursor (see the mouse-tracking script in the layout).
+   Two blues only - not the old accent->violet rainbow. Falls back to the solid colours above. */
+@supports (-webkit-background-clip: text) {
+  h1 .hl, h2 .hl, h3 .hl {
+    --hl-a: #7a9cff; /* brighter blue at the cursor */
+    --hl-b: #3a5bd0; /* base indigo toward the edges */
+    background-image: radial-gradient(circle 240px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--hl-a), var(--hl-b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .section--dark :is(h1, h2, h3) .hl, .hero__media h1 .hl {
+    --hl-a: #e2e9ff;
+    --hl-b: #93aef2;
+  }
+}
 h2 { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.12; letter-spacing: -0.02em; font-weight: 800; }
 h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .sub { font-size: clamp(16px, 1.9vw, 19px); color: var(--ink-soft); max-width: 60ch; margin-top: 16px; }
