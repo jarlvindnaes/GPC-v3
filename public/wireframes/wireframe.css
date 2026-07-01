@@ -119,6 +119,9 @@ h1 .hl, h2 .hl, h3 .hl { color: var(--indigo); }
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* paint the gradient per wrapped line, so multi-line highlights stay consistent (no top/bottom split) */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
   .section--dark :is(h1, h2, h3) .hl, .hero__media h1 .hl {
     --hl-a: #e2e9ff;
