@@ -123,6 +123,7 @@ h1 .hl, h2 .hl, h3 .hl { color: var(--indigo); }
   .section--dark :is(h1, h2, h3) .hl, .hero__media h1 .hl {
     --hl-a: #e2e9ff;
     --hl-b: #93aef2;
+    color: transparent; /* override the solid dark-mode colour so the gradient shows through */
   }
 }
 h2 { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.12; letter-spacing: -0.02em; font-weight: 800; }
