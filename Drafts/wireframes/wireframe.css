@@ -439,15 +439,14 @@ td.no { color: var(--ink-soft); }
   -webkit-mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
           mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%); }
 .logo-track { display: flex; width: max-content; animation: logo-scroll 34s linear infinite; }
-.logo-track:hover { animation-play-state: paused; }
 .logo-group { display: flex; align-items: center; gap: 56px; padding-right: 56px; flex: none; }
-/* each partner: a furniture photo above its logo */
-.brand { display: flex; flex-direction: column; align-items: center; gap: 16px; flex: none; }
-/* all partner photos are the same size, so show them at their natural ratio (no cropping) */
-.brand__photo { width: 168px; height: auto; border-radius: 12px; display: block; opacity: 0.85; transition: opacity .4s ease; }
-.brand:hover .brand__photo, .brand:hover .logo-img { opacity: 1; }
+/* each partner: a furniture photo above its logo; grows on hover so it's easier to see */
+.brand { display: flex; flex-direction: column; align-items: center; gap: 16px; flex: none; position: relative; transition: transform .3s ease; }
+.brand:hover { transform: scale(1.14); z-index: 2; }
+/* all partner photos are the same size, shown at their natural ratio (no cropping), always fully visible */
+.brand__photo { width: 168px; height: auto; border-radius: 12px; display: block; }
 .logo-img { height: 18px; width: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
-.logo-img:hover { opacity: 1; }
+.brand:hover .logo-img { opacity: 1; }   /* only the logo is dimmed until its partner is hovered */
 .logo-img--wide { height: 13px; }   /* New Works is a very wide wordmark — trim its height to balance the row */
 @keyframes logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (max-width: 600px) { .logo-group { gap: 40px; padding-right: 40px; } .brand__photo { width: 132px; } .logo-img { height: 15px; } .logo-img--wide { height: 11px; } }
