@@ -444,11 +444,11 @@ td.no { color: var(--ink-soft); }
 /* all partner photos are the same size, so show them at their natural ratio (no cropping) */
 .brand__photo { width: 168px; height: auto; border-radius: 12px; display: block; opacity: 0.85; transition: opacity .4s ease; }
 .brand:hover .brand__photo, .brand:hover .logo-img { opacity: 1; }
-.logo-img { height: 26px; width: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
+.logo-img { height: 18px; width: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
 .logo-img:hover { opacity: 1; }
-.logo-img--wide { height: 19px; }   /* New Works is a very wide wordmark — trim its height to balance the row */
+.logo-img--wide { height: 13px; }   /* New Works is a very wide wordmark — trim its height to balance the row */
 @keyframes logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (max-width: 600px) { .logo-group { gap: 40px; padding-right: 40px; } .brand__photo { width: 132px; } .logo-img { height: 22px; } .logo-img--wide { height: 16px; } }
+@media (max-width: 600px) { .logo-group { gap: 40px; padding-right: 40px; } .brand__photo { width: 132px; } .logo-img { height: 15px; } .logo-img--wide { height: 11px; } }
 @media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
 
 /* ---------- CTA band ---------- */
