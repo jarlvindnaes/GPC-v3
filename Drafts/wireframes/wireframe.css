@@ -435,7 +435,7 @@ td.no { color: var(--ink-soft); }
 /* Animated logo marquee (ported from the live site's "Partnering with World-Class Manufacturers"):
    the track holds two identical groups; each group carries its own trailing gap (padding-right),
    so translateX(-50%) lands group 2 exactly where group 1 started — a perfectly seamless loop. */
-.logo-marquee { position: relative; overflow: hidden; margin-top: 28px;
+.logo-marquee { position: relative; overflow: hidden; margin-top: 28px; padding: 20px 0; /* vertical room so the hover-grow isn't clipped */
   -webkit-mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
           mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%); }
 .logo-track { display: flex; width: max-content; animation: logo-scroll 34s linear infinite; }
@@ -445,11 +445,11 @@ td.no { color: var(--ink-soft); }
 .brand:hover { transform: scale(1.14); z-index: 2; }
 /* all partner photos are the same size, shown at their natural ratio (no cropping), always fully visible */
 .brand__photo { width: 168px; height: auto; border-radius: 12px; display: block; }
-.logo-img { height: 18px; width: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
+/* bounding box: cap width AND height so very wide wordmarks (e.g. Traefolk) don't dwarf the rest */
+.logo-img { max-height: 18px; max-width: 132px; width: auto; height: auto; flex: none; opacity: 0.4; transition: opacity .4s ease; }
 .brand:hover .logo-img { opacity: 1; }   /* only the logo is dimmed until its partner is hovered */
-.logo-img--wide { height: 13px; }   /* New Works is a very wide wordmark — trim its height to balance the row */
 @keyframes logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (max-width: 600px) { .logo-group { gap: 40px; padding-right: 40px; } .brand__photo { width: 132px; } .logo-img { height: 15px; } .logo-img--wide { height: 11px; } }
+@media (max-width: 600px) { .logo-group { gap: 40px; padding-right: 40px; } .brand__photo { width: 132px; } .logo-img { max-height: 15px; max-width: 104px; } }
 @media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
 
 /* ---------- CTA band ---------- */
