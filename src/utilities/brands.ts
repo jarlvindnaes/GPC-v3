@@ -8,6 +8,7 @@ export interface Brand {
 export const brands: Brand[] = [
   { name: "Benchmark", slug: "benchmark" },
   { name: "Dansani", slug: "dansani" },
+  { name: "Loungers", slug: "loungers" },
   { name: "Mater", slug: "mater" },
   { name: "Muuto", slug: "muuto" },
   { name: "New Works", slug: "new-works", wide: true },
