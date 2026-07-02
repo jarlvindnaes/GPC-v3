@@ -7,6 +7,7 @@ import { ScrewSpinner } from "../../components/wireframe/ScrewSpinner";
 import { PassportPhone } from "../../components/wireframe/PassportPhone";
 import { withBase } from "../../utilities/withBase";
 import { ShieldCheck, Database, QrCode, Box, Network, ClipboardList, FileCheck, Leaf, ChartColumn, BadgeCheck, ShoppingCart, Ship } from "lucide-react";
+import { brands } from "../../utilities/brands";
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -112,22 +113,20 @@ const base = import.meta.env.BASE_URL;
     <div class="logo-marquee" aria-label="Manufacturers using Product Connect">
       <div class="logo-track">
         <div class="logo-group">
-          <img class="logo-img" src={`${base}wireframes/logos/benchmark.svg`} alt="Benchmark">
-          <img class="logo-img" src={`${base}wireframes/logos/dansani.svg`} alt="Dansani">
-          <img class="logo-img" src={`${base}wireframes/logos/loungers.svg`} alt="Loungers">
-          <img class="logo-img" src={`${base}wireframes/logos/mater.svg`} alt="Mater">
-          <img class="logo-img" src={`${base}wireframes/logos/muuto.svg`} alt="Muuto">
-          <img class="logo-img logo-img--wide" src={`${base}wireframes/logos/new-works.svg`} alt="New Works">
-          <img class="logo-img" src={`${base}wireframes/logos/takt.svg`} alt="Takt">
+          {brands.map((b) => (
+            <div class="brand">
+              <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />
+              <img class:list={["logo-img", { "logo-img--wide": b.wide }]} src={`${base}wireframes/logos/${b.slug}.svg`} alt={b.name} />
+            </div>
+          ))}
         </div>
         <div class="logo-group" aria-hidden="true">
-          <img class="logo-img" src={`${base}wireframes/logos/benchmark.svg`} alt="">
-          <img class="logo-img" src={`${base}wireframes/logos/dansani.svg`} alt="">
-          <img class="logo-img" src={`${base}wireframes/logos/loungers.svg`} alt="">
-          <img class="logo-img" src={`${base}wireframes/logos/mater.svg`} alt="">
-          <img class="logo-img" src={`${base}wireframes/logos/muuto.svg`} alt="">
-          <img class="logo-img logo-img--wide" src={`${base}wireframes/logos/new-works.svg`} alt="">
-          <img class="logo-img" src={`${base}wireframes/logos/takt.svg`} alt="">
+          {brands.map((b) => (
+            <div class="brand">
+              <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />
+              <img class:list={["logo-img", { "logo-img--wide": b.wide }]} src={`${base}wireframes/logos/${b.slug}.svg`} alt="" />
+            </div>
+          ))}
         </div>
       </div>
     </div>
