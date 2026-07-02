@@ -435,14 +435,14 @@ td.no { color: var(--ink-soft); }
 /* Animated logo marquee (ported from the live site's "Partnering with World-Class Manufacturers"):
    the track holds two identical groups; each group carries its own trailing gap (padding-right),
    so translateX(-50%) lands group 2 exactly where group 1 started — a perfectly seamless loop. */
-.logo-marquee { position: relative; overflow: hidden; margin-top: 28px; padding: 20px 0; /* vertical room so the hover-grow isn't clipped */
+.logo-marquee { position: relative; overflow: hidden; margin-top: 28px; padding: 34px 0; /* vertical room so the hover-grow isn't clipped */
   -webkit-mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
           mask: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%); }
 .logo-track { display: flex; width: max-content; animation: logo-scroll 34s linear infinite; }
 .logo-group { display: flex; align-items: center; gap: 56px; padding-right: 56px; flex: none; }
 /* each partner: a furniture photo above its logo; grows on hover so it's easier to see */
 .brand { display: flex; flex-direction: column; align-items: center; gap: 16px; flex: none; position: relative; transition: transform .3s ease; }
-.brand:hover { transform: scale(1.14); z-index: 2; }
+.brand:hover { transform: scale(1.32); z-index: 2; }
 /* all partner photos are the same size, shown at their natural ratio (no cropping), always fully visible */
 .brand__photo { width: 168px; height: auto; border-radius: 12px; display: block; }
 /* bounding box: cap width AND height so very wide wordmarks (e.g. Traefolk) don't dwarf the rest */
