@@ -7,9 +7,7 @@ import { useEffect, useRef, useState } from "react";
  * Uses matchMedia for initial check, then listens for first pointer event to confirm.
  */
 export function useIsTouchDevice() {
-  const [isTouch] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
-  );
+  const [isTouch] = useState(() => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches);
   const isTouchRef = useRef(isTouch);
 
   useEffect(() => {

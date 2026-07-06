@@ -1,10 +1,9 @@
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF, useTexture } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { BookOpen, Globe, QrCode, Recycle, Wrench } from "lucide-react";
+import { BookOpen, Globe, Recycle, Wrench } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as Three from "three";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
-import { DppApp } from "./dpp/DppApp";
 import { WebsiteButton } from "./WebsiteButton";
 
 /**
@@ -29,6 +28,21 @@ export function RenderController({ isActive }: { isActive: React.RefObject<boole
     return () => cancelAnimationFrame(animationFrameId);
   }, [invalidate]);
 
+  return null;
+}
+
+// Forces a repaint whenever the canvas is resized. With frameloop="demand", a resize (e.g. the
+// desktop phone slot being un-hidden after the window is dragged narrow → wide) resizes the canvas
+// buffer but doesn't schedule a render, so a stale frame stays stretched to the new size — the
+// phone looks huge until the next interaction. Invalidating on every size change fixes that.
+function ResizeRepaint() {
+  const width = useThree((state) => state.size.width);
+  const height = useThree((state) => state.size.height);
+  const invalidate = useThree((state) => state.invalidate);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: width/height are intentional re-run triggers (a resize must repaint), not values read in the body
+  useEffect(() => {
+    invalidate();
+  }, [width, height, invalidate]);
   return null;
 }
 
@@ -86,7 +100,7 @@ export function RawMaterialCanvas({ isActiveReference }: { isActiveReference?: R
       ref={containerReference}
       role="img"
       aria-label="3D raw material model viewer"
-      className="h-full w-full touch-pan-y cursor-grab active:cursor-grabbing lg:touch-auto"
+      className="h-full w-full cursor-grab touch-pan-y active:cursor-grabbing lg:touch-auto"
     >
       <Canvas
         frameloop="demand"
@@ -104,7 +118,6 @@ export function RawMaterialCanvas({ isActiveReference }: { isActiveReference?: R
           rotation={[0.1, -Math.PI / 4, 0]}
           polar={[-Math.PI / 4, Math.PI / 4]}
           azimuth={[-Math.PI, Math.PI]}
-          config={{ mass: 4, tension: 120, friction: 40 }}
         >
           <group position={[0, -0.3, 0]} scale={1.31}>
             <CustomRockModel isActiveReference={effectiveReference} />
@@ -153,7 +166,7 @@ export function ComponentsCanvas({
       ref={containerReference}
       role="img"
       aria-label="3D component model viewer"
-      className="h-full w-full touch-pan-y cursor-grab active:cursor-grabbing lg:touch-auto"
+      className="h-full w-full cursor-grab touch-pan-y active:cursor-grabbing lg:touch-auto"
     >
       <Canvas
         frameloop="demand"
@@ -172,7 +185,6 @@ export function ComponentsCanvas({
           rotation={[0.1, -Math.PI / 4, 0]}
           polar={[-Math.PI / 4, Math.PI / 4]}
           azimuth={[-Math.PI, Math.PI]}
-          config={{ mass: 4, tension: 120, friction: 40 }}
         >
           <BoltModel isActiveReference={effectiveReference} />
         </PresentationControls>
@@ -307,7 +319,7 @@ export function FinishedProductCanvas({
       ref={containerReference}
       role="img"
       aria-label="3D finished product model viewer"
-      className="absolute inset-0 touch-pan-y cursor-grab active:cursor-grabbing lg:touch-auto"
+      className="absolute inset-0 cursor-grab touch-pan-y active:cursor-grabbing lg:touch-auto"
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         mouseRef.current.set(
@@ -340,7 +352,6 @@ export function FinishedProductCanvas({
           rotation={[0.08, -Math.PI / 4, 0]}
           polar={[-Math.PI / 4, Math.PI / 4]}
           azimuth={[-Math.PI, Math.PI]}
-          config={{ mass: 4, tension: 120, friction: 40 }}
         >
           <WireframeChairModel isActiveReference={effectiveReference} />
         </PresentationControls>
@@ -394,7 +405,8 @@ export interface PhoneCameraConfig {
   large: { position: [number, number, number]; lookAt: [number, number, number] };
 }
 
-/** Glassmorphic tooltip bubble used by all phone canvas variants. */
+/** Glassmorphic tooltip bubble — retained variant helper, not currently mounted. */
+// biome-ignore lint/correctness/noUnusedVariables: kept legacy phone-variant helper (see note on IphoneVideoModel)
 function TooltipBubble({ tooltip, scale = 1 }: { tooltip: PhoneTooltip; scale?: number }) {
   return (
     <div className="pointer-events-none select-none" style={{ transform: `scale(${scale})` }}>
@@ -623,7 +635,6 @@ export function IphoneCanvas({
           rotation={[0.05, 0, 0]}
           polar={[-Math.PI / 6, Math.PI / 6]}
           azimuth={[-Math.PI / 4, Math.PI / 4]}
-          config={{ mass: 4, tension: 120, friction: 40 }}
         >
           <IphoneModel screenImage={screenImage} tooltips={tooltips} />
           {children}
@@ -1087,7 +1098,9 @@ function LiveClock({ color }: { color: string }) {
     }, msUntilNextMinute);
     return () => {
       clearTimeout(timeout);
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, []);
 
@@ -1104,7 +1117,7 @@ function LiveClock({ color }: { color: string }) {
         zIndex: 11,
         pointerEvents: "none",
         lineHeight: 1,
-        letterSpacing: 0,
+        letterSpacing: 0
       }}
     >
       {time}
@@ -1121,6 +1134,7 @@ function StatusBarIcons({ color }: { color: string }) {
       viewBox="0 0 213 19"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden={true}
       style={{
         position: "absolute",
         top: 10,
@@ -1129,7 +1143,7 @@ function StatusBarIcons({ color }: { color: string }) {
         width: "88%",
         height: "auto",
         zIndex: 11,
-        pointerEvents: "none",
+        pointerEvents: "none"
       }}
     >
       <g transform="translate(-8, 0)">
@@ -1185,7 +1199,7 @@ export function HtmlPhoneCanvas({
   statusBarStyle = "light",
   noChrome = false,
   resetKey = 0,
-  rotation = [0.05, 0, 0],
+  rotation = [0.05, 0, 0]
 }: {
   children: React.ReactNode;
   isPlaying?: boolean;
@@ -1220,7 +1234,9 @@ export function HtmlPhoneCanvas({
   const phoneContentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = phoneContentRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     const handleWheel = (e: WheelEvent) => {
       e.stopPropagation();
       // Find the scrollable child (DppApp scroll container)
@@ -1241,7 +1257,7 @@ export function HtmlPhoneCanvas({
       ref={containerRef}
       role="img"
       aria-label="3D iPhone with interactive content"
-      className="relative h-full w-full cursor-grab active:cursor-grabbing overflow-hidden"
+      className="relative h-full w-full cursor-grab overflow-hidden active:cursor-grabbing"
     >
       <Canvas
         frameloop="demand"
@@ -1250,6 +1266,7 @@ export function HtmlPhoneCanvas({
         style={{ background: "transparent" }}
       >
         {hasPlayingProp && <PassportPhoneCameraRig isPlaying={isPlaying} />}
+        <ResizeRepaint />
         <RenderController isActive={effectiveActiveRef} />
         <ambientLight intensity={0.8} />
         <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
@@ -1261,7 +1278,6 @@ export function HtmlPhoneCanvas({
           rotation={rotation}
           polar={[-Math.PI / 6, Math.PI / 6]}
           azimuth={[-Math.PI / 4, Math.PI / 4]}
-          config={{ mass: 4, tension: 120, friction: 40 }}
         >
           <IphoneHtmlModel overlayRef={overlayRef} />
         </PresentationControls>
@@ -1280,7 +1296,7 @@ export function HtmlPhoneCanvas({
           transformOrigin: "0 0",
           pointerEvents: "none",
           display: "none",
-          willChange: "transform",
+          willChange: "transform"
         }}
       >
         <div
@@ -1316,7 +1332,7 @@ export function HtmlPhoneCanvas({
                   width: "88%",
                   height: "auto",
                   zIndex: 10,
-                  pointerEvents: "none",
+                  pointerEvents: "none"
                 }}
               />
               <StatusBarIcons color={statusBarColor} />
@@ -1364,6 +1380,8 @@ function PassportPhoneCameraRig({ isPlaying }: { isPlaying: boolean }) {
   return null;
 }
 
+// Legacy video-based passport phone, superseded by HtmlPhoneCanvas. Retained but not mounted anywhere.
+// biome-ignore lint/correctness/noUnusedVariables: kept legacy video-phone variant (with IphoneVideoModel / useManualVideoTexture)
 function PassportPhoneCanvas({ isPlaying }: { isPlaying: boolean }) {
   const isActiveRef = useRef(false);
   isActiveRef.current = isPlaying;
@@ -1386,7 +1404,6 @@ function PassportPhoneCanvas({ isPlaying }: { isPlaying: boolean }) {
         rotation={[0.05, 0, 0]}
         polar={[-Math.PI / 8, Math.PI / 8]}
         azimuth={[-Math.PI / 6, Math.PI / 6]}
-        config={{ mass: 4, tension: 120, friction: 40 }}
       >
         <IphoneVideoModel videoSrc={PASSPORT_PHONE_VIDEO} isPlaying={isPlaying} />
       </PresentationControls>
@@ -1491,7 +1508,10 @@ function buildQrTexture(): Three.CanvasTexture {
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext("2d")!;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("2D canvas context unavailable");
+  }
 
   const cx = size / 2;
   const cy = size / 2;
@@ -1612,7 +1632,6 @@ export function DppInteractiveProduct() {
               rotation={[0.08, -Math.PI / 4, 0]}
               polar={[-Math.PI / 4, Math.PI / 4]}
               azimuth={[-Math.PI, Math.PI]}
-              config={{ mass: 2, tension: 200, friction: 30 }}
             >
               <DppChairModel isActiveReference={isNearReference} />
               {hotspots.map((hotspot) => (
@@ -1642,12 +1661,12 @@ export function DppInteractiveProduct() {
               <p className="mb-1.5 font-semibold text-brand text-xs uppercase tracking-widest">
                 Digital Product Passport
               </p>
-              <h2 className="font-bold text-2xl text-balance text-brand-darkest leading-snug">
+              <h2 className="text-balance font-bold text-2xl text-brand-darkest leading-snug">
                 West Elm Slope
                 <br />
                 Leather Chair
               </h2>
-              <p className="mt-1 font-mono text-slate-400 text-xs">DPP-2024-WE-SL-0042</p>
+              <p className="mt-1 font-mono text-slate-600 text-xs">DPP-2024-WE-SL-0042</p>
             </div>
             <div className="mt-1 shrink-0 rounded-lg bg-brand-deep px-2.5 py-1 font-bold text-[10px] text-white">
               ESPR 2026
@@ -1667,7 +1686,7 @@ export function DppInteractiveProduct() {
               </div>
               <div>
                 <h4 className="mb-0.5 font-semibold text-slate-800 text-sm">Local Manufacturing</h4>
-                <p className="text-slate-500 text-xs leading-relaxed">
+                <p className="text-slate-600 text-xs leading-relaxed">
                   Assembled in Gdańsk, Poland. 85% lower carbon footprint vs. global average. Certified ISO 14001.
                 </p>
                 <span className="mt-1.5 inline-block rounded-full border border-brand/20 bg-brand-surface px-2 py-0.5 font-medium text-[11px] text-brand">
@@ -1685,11 +1704,11 @@ export function DppInteractiveProduct() {
               </div>
               <div>
                 <h4 className="mb-0.5 font-semibold text-slate-800 text-sm">Sustainable Fabric</h4>
-                <p className="text-slate-500 text-xs leading-relaxed">
+                <p className="text-slate-600 text-xs leading-relaxed">
                   Full-grain, vegetable-tanned leather. Easily replaceable. View repair manuals and find local service
                   centres.
                 </p>
-                <span className="mt-1.5 inline-block rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 font-medium text-[11px] text-emerald-600">
+                <span className="mt-1.5 inline-block rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 font-medium text-[11px] text-emerald-700">
                   Repairability: 9/10
                 </span>
               </div>
@@ -1704,10 +1723,10 @@ export function DppInteractiveProduct() {
               </div>
               <div>
                 <h4 className="mb-0.5 font-semibold text-slate-800 text-sm">FSC Certified Oak Frame</h4>
-                <p className="text-slate-500 text-xs leading-relaxed">
+                <p className="text-slate-600 text-xs leading-relaxed">
                   Responsibly harvested. Expected lifecycle 25+ years. Structural warranty included via passport.
                 </p>
-                <span className="mt-1.5 inline-block rounded-full border border-amber-100 bg-amber-50 px-2 py-0.5 font-medium text-[11px] text-amber-600">
+                <span className="mt-1.5 inline-block rounded-full border border-amber-100 bg-amber-50 px-2 py-0.5 font-medium text-[11px] text-amber-700">
                   FSC-C123456 · 25yr lifecycle
                 </span>
               </div>
@@ -1718,7 +1737,7 @@ export function DppInteractiveProduct() {
 
           {/* Material composition */}
           <div>
-            <p className="mb-2.5 font-semibold text-slate-500 text-xs uppercase tracking-wide">Material Composition</p>
+            <p className="mb-2.5 font-semibold text-slate-600 text-xs uppercase tracking-wide">Material Composition</p>
             <div className="space-y-1.5">
               {[
                 { label: "Full-grain leather", percentage: 54, color: "#a16207" },
@@ -1727,7 +1746,7 @@ export function DppInteractiveProduct() {
                 { label: "Natural foam padding", percentage: 4, color: "#0e7490" }
               ].map((material) => (
                 <div key={material.label} className="flex items-center gap-2">
-                  <span className="w-36 shrink-0 text-[11px] text-slate-500">{material.label}</span>
+                  <span className="w-36 shrink-0 text-[11px] text-slate-600">{material.label}</span>
                   <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
                     <div
                       className="h-full rounded-full"
@@ -1746,14 +1765,14 @@ export function DppInteractiveProduct() {
 
           {/* Certifications */}
           <div>
-            <p className="mb-2.5 font-semibold text-slate-500 text-xs uppercase tracking-wide">
+            <p className="mb-2.5 font-semibold text-slate-600 text-xs uppercase tracking-wide">
               Certifications & Compliance
             </p>
             <div className="flex flex-wrap gap-1.5">
               {[
-                { label: "FSC Certified", color: "#16a34a" },
-                { label: "ISO 14001", color: "#0284c7" },
-                { label: "ESPR 2026", color: "#6366f1" },
+                { label: "FSC Certified", color: "#15803d" },
+                { label: "ISO 14001", color: "#0369a1" },
+                { label: "ESPR 2026", color: "#4f46e5" },
                 { label: "REACH Compliant", color: "#0e7490" },
                 { label: "EU Ecolabel", color: "#15803d" },
                 { label: "GS1 Digital Link", color: "#7c3aed" }
@@ -1779,7 +1798,7 @@ export function DppInteractiveProduct() {
           <div>
             <div className="mb-2 flex items-center justify-between">
               <span className="font-semibold text-slate-600 text-xs uppercase tracking-wide">Sustainability Score</span>
-              <span className="font-bold text-emerald-600 text-sm">94 / 100</span>
+              <span className="font-bold text-emerald-700 text-sm">94 / 100</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-slate-100">
               <div
@@ -1787,7 +1806,7 @@ export function DppInteractiveProduct() {
                 style={{ width: "94%" }}
               />
             </div>
-            <div className="mt-1 flex justify-between text-[10px] text-slate-400">
+            <div className="mt-1 flex justify-between text-[10px] text-slate-600">
               <span>ESPR Compliant</span>
               <span>Top 3% in category</span>
             </div>
@@ -1801,25 +1820,25 @@ export function DppInteractiveProduct() {
               <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
                 <Wrench className="h-3 w-3" /> Spare Parts
               </p>
-              <p className="text-[11px] text-slate-400 leading-snug">4 parts available in-passport</p>
+              <p className="text-[11px] text-slate-600 leading-snug">4 parts available in-passport</p>
             </div>
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
               <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
                 <Recycle className="h-3 w-3" /> End of Life
               </p>
-              <p className="text-[11px] text-slate-400 leading-snug">Certified recycling partner</p>
+              <p className="text-[11px] text-slate-600 leading-snug">Certified recycling partner</p>
             </div>
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
               <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
                 <BookOpen className="h-3 w-3" /> Care Guide
               </p>
-              <p className="text-[11px] text-slate-400 leading-snug">Leather maintenance tips</p>
+              <p className="text-[11px] text-slate-600 leading-snug">Leather maintenance tips</p>
             </div>
             <div className="cursor-pointer rounded-xl border border-slate-100 bg-slate-50 p-3 transition-colors hover:border-slate-200">
               <p className="mb-0.5 flex items-center gap-1 font-semibold text-[11px] text-slate-700">
                 <Globe className="h-3 w-3" /> Resale Market
               </p>
-              <p className="text-[11px] text-slate-400 leading-snug">Verified second-hand listing</p>
+              <p className="text-[11px] text-slate-600 leading-snug">Verified second-hand listing</p>
             </div>
           </div>
 
@@ -1835,7 +1854,7 @@ export function DppInteractiveProduct() {
               </svg>
               Scan or Share Passport
             </WebsiteButton>
-            <p className="mt-2.5 text-center text-slate-400 text-xs">
+            <p className="mt-2.5 text-center text-slate-600 text-xs">
               GS1-compliant · ESPR 2026 ready · Verified by Product Connect
             </p>
           </div>

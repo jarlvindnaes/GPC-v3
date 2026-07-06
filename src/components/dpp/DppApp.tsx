@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { brandConfig } from "./dppBrandConfig";
 import { DppCheckoutOverlay } from "./DppCheckoutOverlay";
 import { DppHeader } from "./DppHeader";
 import DppImpactView from "./DppImpactView";
@@ -8,6 +7,7 @@ import DppInfoView from "./DppInfoView";
 import { DppMaintenanceView } from "./DppMaintenanceView";
 import { DppNavigation } from "./DppNavigation";
 import { BasketIcon, DppProductView, parts } from "./DppProductView";
+import { brandConfig } from "./dppBrandConfig";
 import type { CartItem } from "./dppTypes";
 
 type TabId = "about" | "maintenance" | "impact" | "parts";
@@ -62,7 +62,9 @@ export function DppApp() {
 
   useEffect(() => {
     const el = scrollContainerRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     const onScroll = () => setIsScrolled(el.scrollTop > 10);
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
@@ -86,7 +88,7 @@ export function DppApp() {
         overflow: "hidden",
         borderRadius: 62,
         background: "#fff",
-        color: "#000",
+        color: "#000"
       }}
     >
       {/* Fixed header */}
@@ -95,7 +97,7 @@ export function DppApp() {
       {/* Scrollable content area */}
       <div
         ref={scrollContainerRef}
-        data-phone-scroll
+        data-phone-scroll={true}
         onTouchMove={handleTouchMove}
         style={{
           position: "absolute",
@@ -114,7 +116,9 @@ export function DppApp() {
         {activeTab === "about" && <DppInfoView scrollRef={scrollContainerRef} />}
         {activeTab === "maintenance" && <DppMaintenanceView scrollRef={scrollContainerRef} />}
         {activeTab === "impact" && <DppImpactView scrollRef={scrollContainerRef} />}
-        {activeTab === "parts" && <DppProductView scrollRef={scrollContainerRef} overlayRef={overlayRef} onAddToCart={handleAddToCart} />}
+        {activeTab === "parts" && (
+          <DppProductView scrollRef={scrollContainerRef} overlayRef={overlayRef} onAddToCart={handleAddToCart} />
+        )}
       </div>
 
       {/* Overlay container for bottom sheets — sits outside the scroll
@@ -126,7 +130,7 @@ export function DppApp() {
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          zIndex: 50,
+          zIndex: 50
         }}
       />
 
@@ -135,7 +139,7 @@ export function DppApp() {
         {cartCount > 0 && !checkoutOpen && (
           <motion.div
             key={cartCount}
-            className="absolute pointer-events-auto"
+            className="pointer-events-auto absolute"
             style={{ top: 161, right: 16, zIndex: 51 }}
             initial={{ x: 120, opacity: 0, scale: 0.8 }}
             animate={{ x: 0, opacity: 1, scale: 1 }}
@@ -150,19 +154,19 @@ export function DppApp() {
                 duration: 1,
                 ease: "easeOut",
                 repeat: Infinity,
-                repeatDelay: 4,
+                repeatDelay: 4
               }}
             />
             <button
               type="button"
               onClick={() => setCheckoutOpen(true)}
-              className="relative flex items-center gap-[16px] rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.18)] cursor-pointer h-[40px] px-[12px]"
+              className="relative flex h-[40px] cursor-pointer items-center gap-[16px] rounded-[10px] px-[12px] shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
               style={{ backgroundColor: brandConfig.colors.primary }}
             >
               <div className="relative shrink-0">
                 <BasketIcon size={24} />
                 <div
-                  className="absolute -top-[6px] -right-[8px] flex items-center justify-center min-w-[16px] h-[16px] rounded-full bg-white px-[3px]"
+                  className="absolute -top-[6px] -right-[8px] flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-white px-[3px]"
                   style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
                 >
                   <span
@@ -211,10 +215,9 @@ export function DppApp() {
           left: 0,
           right: 0,
           height: 60,
-          background:
-            "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+          background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
           pointerEvents: "none",
-          zIndex: 39,
+          zIndex: 39
         }}
       />
     </div>

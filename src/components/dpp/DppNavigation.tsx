@@ -101,6 +101,7 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
 
             return (
               <button
+                type="button"
                 key={item.id}
                 id={`tab-${item.id}`}
                 role="tab"
@@ -163,20 +164,20 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
               </button>
             );
           })}
-        {/* Active tab indicator (animated colored line at bottom) */}
-        <motion.div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            height: 2,
-            width: 73,
-            backgroundColor: brandConfig.colors.primary
-          }}
-          animate={{
-            left: `calc(12px + (100% - 24px) * ${tabPositions[activeTab]} - 36.5px)`
-          }}
-          transition={{ type: "spring", stiffness: 400, damping: 35 }}
-        />
+          {/* Active tab indicator (animated colored line at bottom) */}
+          <motion.div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              height: 2,
+              width: 73,
+              backgroundColor: brandConfig.colors.primary
+            }}
+            animate={{
+              left: `calc(12px + (100% - 24px) * ${tabPositions[activeTab]} - 36.5px)`
+            }}
+            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+          />
         </div>
       </div>
     </nav>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DppCollapsibleSection } from "./DppCollapsibleSection";
-import { brandConfig } from "./dppBrandConfig";
 import { uiIcons } from "./dppIcons";
 import { slopeChair } from "./dppProductData";
 
@@ -8,7 +7,7 @@ const data = slopeChair;
 
 /** Simple inline divider */
 function Divider() {
-  return <div aria-hidden="true" className="w-full h-px bg-[#d5d5d5] shrink-0" />;
+  return <div aria-hidden="true" className="h-px w-full shrink-0 bg-[#d5d5d5]" />;
 }
 
 const specifications = [
@@ -50,20 +49,20 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
   return (
     <div className="relative w-full pb-[80px]">
       {/* Hero Image */}
-      <div className="shrink-0 w-full" data-name="big 1">
+      <div className="w-full shrink-0" data-name="big 1">
         <img
           alt={`${data.categorization.displayName} — ${data.categorization.category.toLowerCase()} by ${data.identity.brandName}`}
-          className="w-full block pointer-events-none"
+          className="pointer-events-none block w-full"
           src={data.commerce.photographs.hero}
         />
       </div>
 
       {/* Title Section */}
       <div
-        className="px-[16px] py-[24px] w-full font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[16px] text-[rgba(0,4,24,0.58)] text-nowrap whitespace-pre font-width-normal"
+        className="w-full whitespace-pre text-nowrap px-[16px] py-[24px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,4,24,0.58)] leading-[24px]"
         data-name="Title"
       >
-        <h1 className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 text-[rgba(0,7,19,0.62)] text-[16px] leading-[24px] font-width-normal">
+        <h1 className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
           {data.categorization.displayName}
         </h1>
         <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -77,24 +76,24 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={historyOpen}
         onToggle={() => setHistoryOpen(!historyOpen)}
       >
-        <div className="h-[404px] overflow-clip relative shrink-0 w-full">
-          <p className="absolute font-['SF_Pro:Light',sans-serif] font-[274.315] leading-[24px] left-0 text-[16px] text-[rgba(0,7,19,0.62)] text-nowrap top-[15px] whitespace-pre font-width-normal">
+        <div className="relative h-[404px] w-full shrink-0 overflow-clip">
+          <p className="absolute top-[15px] left-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
             {data.lifecycleAndMaintenance.productAgeStatement}
           </p>
 
           {/* Timeline entries */}
-          <div className="absolute content-stretch flex flex-col h-[304px] items-start justify-between left-[64px] overflow-clip top-[62px] w-[243px]">
-            {data.lifecycleAndMaintenance.productHistory.map((event, index) => (
+          <div className="absolute top-[62px] left-[64px] flex h-[304px] w-[243px] flex-col content-stretch items-start justify-between overflow-clip">
+            {data.lifecycleAndMaintenance.productHistory.map((event) => (
               <div
-                key={index}
-                className="font-['SF_Pro:Medium',sans-serif] font-[510] h-[52px] relative shrink-0 text-nowrap w-full whitespace-pre"
+                key={event.date}
+                className="relative h-[52px] w-full shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Medium',sans-serif] font-[510]"
               >
-                <p className="absolute font-['SF_Pro:Bold',sans-serif] font-bold leading-[24px] left-0 text-[16px] text-[rgba(0,7,19,0.62)] top-[6px] font-width-normal">
+                <p className="absolute top-[6px] left-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
                   {event.title}
                 </p>
                 <time
                   dateTime={event.date}
-                  className="absolute leading-[20px] left-0 text-[14px] text-[rgba(0,4,24,0.58)] top-[28px] block font-width-normal"
+                  className="absolute top-[28px] left-0 block font-width-normal text-[14px] text-[rgba(0,4,24,0.58)] leading-[20px]"
                 >
                   {new Date(event.date).toLocaleDateString("en-GB", {
                     day: "numeric",
@@ -107,7 +106,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
           </div>
 
           {/* Timeline icons and lines */}
-          <div className="absolute h-[290px] left-0 top-[70px] w-[38px]">
+          <div className="absolute top-[70px] left-0 h-[290px] w-[38px]">
             <svg
               aria-hidden="true"
               className="block size-full"
@@ -190,16 +189,16 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={specificationsOpen}
         onToggle={() => setSpecificationsOpen(!specificationsOpen)}
       >
-        <dl className="font-['SF_Pro:Regular','Noto_Sans:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] m-0 font-width-normal">
+        <dl className="relative m-0 w-full shrink-0 pb-[20px] font-['SF_Pro:Regular','Noto_Sans:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
           {specifications.map((spec, index) => (
-            <React.Fragment key={index}>
-              <dt className="font-['SF_Pro:Bold','Noto_Sans:Regular',sans-serif] font-bold mb-0 font-width-normal">
+            <React.Fragment key={spec.label}>
+              <dt className="mb-0 font-['SF_Pro:Bold','Noto_Sans:Regular',sans-serif] font-bold font-width-normal">
                 {spec.label}
               </dt>
               <dd className="mb-0 ml-0">
                 {"lines" in spec
                   ? spec.lines.map((line, lineIndex) => (
-                      <React.Fragment key={lineIndex}>
+                      <React.Fragment key={`${spec.label}-${line}`}>
                         {line}
                         {lineIndex < spec.lines.length - 1 && <br aria-hidden="true" />}
                       </React.Fragment>
@@ -220,15 +219,15 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={descriptionOpen}
         onToggle={() => setDescriptionOpen(!descriptionOpen)}
       >
-        <div className="flex flex-col gap-[24px] w-full pb-[20px]">
-          <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,5,9,0.89)] w-full whitespace-pre-wrap font-width-normal">
+        <div className="flex w-full flex-col gap-[24px] pb-[20px]">
+          <p className="relative w-full shrink-0 whitespace-pre-wrap font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,5,9,0.89)] leading-[24px]">
             {data.commerce.description}
           </p>
           {data.commerce.photographs.dimensionsDiagram && (
-            <figure className="shrink-0 w-full m-0" data-name="image_01 1">
+            <figure className="m-0 w-full shrink-0" data-name="image_01 1">
               <img
                 alt={`Dimensions diagram: H ${data.categorization.dimensions.height.value}${data.categorization.dimensions.height.unit} × W ${data.categorization.dimensions.width.value}${data.categorization.dimensions.width.unit} × D ${data.categorization.dimensions.depth.value}${data.categorization.dimensions.depth.unit}`}
-                className="w-full block pointer-events-none"
+                className="pointer-events-none block w-full"
                 src={data.commerce.photographs.dimensionsDiagram}
               />
             </figure>
@@ -244,7 +243,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={companyOpen}
         onToggle={() => setCompanyOpen(!companyOpen)}
       >
-        <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full whitespace-pre-wrap pb-[20px] font-width-normal">
+        <p className="relative w-full shrink-0 whitespace-pre-wrap pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
           {data.company.description}
         </p>
       </DppCollapsibleSection>
@@ -253,10 +252,10 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       {/* Image 1 */}
       {data.commerce.photographs.lifestyle && (
-        <div className="shrink-0 w-full" data-name="image 1">
+        <div className="w-full shrink-0" data-name="image 1">
           <img
             alt={`${data.categorization.displayName} in a lifestyle setting`}
-            className="w-full block pointer-events-none"
+            className="pointer-events-none block w-full"
             src={data.commerce.photographs.lifestyle}
           />
         </div>
@@ -266,29 +265,29 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       {/* Contact Us Section */}
       <DppCollapsibleSection title="Contact Us" isOpen={contactOpen} onToggle={() => setContactOpen(!contactOpen)}>
-        <address className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full pb-[20px] not-italic font-width-normal">
-          <p className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 font-width-normal">{"Workshop & Offices: "}</p>
+        <address className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] not-italic leading-[24px]">
+          <p className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">{"Workshop & Offices: "}</p>
           <p className="mb-0">{`${data.company.contact.companyName} `}</p>
-          {data.company.contact.addressLines.map((line, index) => (
-            <p key={index} className="mb-0">{`${line} `}</p>
+          {data.company.contact.addressLines.map((line) => (
+            <p key={line} className="mb-0">{`${line} `}</p>
           ))}
           <p className="mb-0">
             <br />
           </p>
           <p className="mb-0">
             <a
-              className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6C7254]"
+              className="focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
               href={`tel:${data.company.contact.phone.replace(/\s/g, "")}`}
             >{`${data.company.contact.phone} `}</a>
           </p>
           <p className="mb-0">
             <a
-              className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6C7254]"
+              className="focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
               href={`mailto:${data.company.contact.email}`}
             >{`${data.company.contact.email} `}</a>
           </p>
           <a
-            className="[text-underline-position:from-font] block cursor-pointer decoration-solid underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6C7254]"
+            className="block cursor-pointer underline decoration-solid [text-underline-position:from-font] focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
             href={data.company.contact.websiteUrl}
           >
             {data.company.contact.website}
@@ -297,9 +296,9 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
       </DppCollapsibleSection>
 
       {/* Digital Product Passport */}
-      <div className="flex flex-col items-center text-center rounded-[12px] bg-[rgba(0,0,0,0.035)] border border-[rgba(0,0,0,0.06)] px-[14px] pt-[14px] pb-[12px] mx-[16px] mb-[24px] w-[calc(100%-32px)]">
+      <div className="mx-[16px] mb-[24px] flex w-[calc(100%-32px)] flex-col items-center rounded-[12px] border border-[rgba(0,0,0,0.06)] bg-[rgba(0,0,0,0.035)] px-[14px] pt-[14px] pb-[12px] text-center">
         {/* Product Connect logo */}
-        <svg className="w-[20px] h-[22px] mb-[8px] block" viewBox="0 0 417 451" fill="none" aria-hidden="true">
+        <svg className="mb-[8px] block h-[22px] w-[20px]" viewBox="0 0 417 451" fill="none" aria-hidden="true">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -308,10 +307,10 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
           />
         </svg>
         {/* Divider */}
-        <div className="w-[24px] h-[1px] bg-[rgba(0,7,19,0.18)] mb-[8px]" />
+        <div className="mb-[8px] h-[1px] w-[24px] bg-[rgba(0,7,19,0.18)]" />
         {/* Info lines */}
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal text-[10px] text-[rgba(0,7,19,0.58)] leading-[16px] tracking-[0.02em] font-width-normal">
-          <p className="mb-0 font-['SF_Pro:Medium',sans-serif] font-[510] uppercase tracking-[0.06em] text-[rgba(0,7,19,0.58)] font-width-normal">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[10px] text-[rgba(0,7,19,0.58)] leading-[16px] tracking-[0.02em]">
+          <p className="mb-0 font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[rgba(0,7,19,0.58)] uppercase tracking-[0.06em]">
             Digital Product Passport
           </p>
           <p className="mb-0">

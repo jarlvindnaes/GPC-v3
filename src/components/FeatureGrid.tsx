@@ -38,7 +38,7 @@ const features = [
       "Track grid mix, trade routes & raw material origins"
     ],
     color: "emerald",
-    visual: <SupplierDataEntryVisual alignTop />,
+    visual: <SupplierDataEntryVisual alignTop={true} />,
     fillVisual: true
   },
   {
@@ -138,7 +138,7 @@ export function FeatureGrid({ variant = "full" }: { variant?: "full" | "compact"
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 max-w-3xl">
-          <h2 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 text-balance font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
             Everything you need to build intelligent products.
           </h2>
           <p className="text-pretty text-brand-text text-lg md:text-xl">
@@ -174,7 +174,9 @@ export function FeatureGrid({ variant = "full" }: { variant?: "full" | "compact"
                 fadeVisualOnResize={feature.fadeVisualOnResize}
               >
                 <motion.div layoutId={`title-${feature.id}`} className="mb-6">
-                  <h3 className="mb-3 font-display font-semibold text-2xl text-balance text-brand-darkest">{feature.title}</h3>
+                  <h3 className="mb-3 text-balance font-display font-semibold text-2xl text-brand-darkest">
+                    {feature.title}
+                  </h3>
                   <p className="text-pretty text-brand-text leading-relaxed">{feature.shortDescription}</p>
                 </motion.div>
               </WebsiteCard>

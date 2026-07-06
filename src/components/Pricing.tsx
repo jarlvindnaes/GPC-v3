@@ -7,7 +7,7 @@ export function Pricing() {
       <div className="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="mb-4 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight md:text-4xl">
+          <h2 className="mb-4 text-balance font-display font-semibold text-3xl text-brand-darkest tracking-tight md:text-4xl">
             Component-based pricing
           </h2>
           <p className="text-pretty text-brand-text text-lg">

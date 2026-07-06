@@ -7,8 +7,8 @@ import trainAnimation from "../animations/train-animation.json";
 import truckAnimation from "../animations/truck-animation.json";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { AnimatedIcon } from "./AnimatedIcon";
-import { LcaEngineVisual } from "./LcaEngineVisual";
 import { ChairPhoneShowcase } from "./ChairPhoneShowcase";
+import { LcaEngineVisual } from "./LcaEngineVisual";
 import { ComponentsCanvas, FinishedProductCanvas, RawMaterialCanvas } from "./Native3DModels";
 import { SupplierDataEntryVisual } from "./SupplierDataEntryVisual";
 
@@ -89,7 +89,10 @@ export function StorytellingScroll() {
     <>
       <section id="story" ref={containerRef} className="relative h-[700vh] bg-brand-deep text-white">
         {/* Header section — fades out as sticky content scrolls in */}
-        <motion.div style={{ opacity: headerOp }} className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16">
+        <motion.div
+          style={{ opacity: headerOp }}
+          className="pointer-events-none absolute top-0 right-0 left-0 z-20 pt-16 pb-8 md:pt-24 md:pb-16"
+        >
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -97,7 +100,7 @@ export function StorytellingScroll() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="mb-6 font-display font-semibold text-3xl text-balance tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+              <h2 className="mb-6 text-balance font-display font-semibold text-3xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 How it works
               </h2>
               <p className="mx-auto max-w-4xl text-pretty text-base text-slate-400 leading-relaxed sm:text-lg md:text-xl">
@@ -127,7 +130,7 @@ export function StorytellingScroll() {
             />
           </div>
 
-          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-14 pb-2 sm:pt-20 sm:px-6 lg:mt-20 lg:h-auto lg:flex-row lg:gap-12 lg:px-8 lg:py-0">
+          <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-1 px-4 pt-14 pb-2 sm:px-6 sm:pt-20 lg:mt-20 lg:h-auto lg:flex-row lg:gap-12 lg:px-8 lg:py-0">
             {/* ── Text panel (left) ── */}
             <div className="relative flex h-[200px] w-full shrink-0 items-center pl-10 sm:h-[270px] sm:pl-12 lg:h-[420px] lg:w-[44%] lg:pr-12 lg:pl-0">
               {[
@@ -183,10 +186,12 @@ export function StorytellingScroll() {
                   <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-dark/60 bg-brand-dark text-indigo-400 shadow-indigo-500/10 shadow-lg md:mb-6">
                     {icon}
                   </div>
-                  <h2 className="mb-2 font-bold text-2xl text-balance leading-[1.1] tracking-tight sm:text-4xl md:mb-4 md:text-5xl">
+                  <h2 className="mb-2 text-balance font-bold text-2xl leading-[1.1] tracking-tight sm:text-4xl md:mb-4 md:text-5xl">
                     {title}
                   </h2>
-                  <p className="max-w-sm text-pretty text-sm text-slate-400 leading-relaxed sm:text-base md:text-lg">{body}</p>
+                  <p className="max-w-sm text-pretty text-slate-400 text-sm leading-relaxed sm:text-base md:text-lg">
+                    {body}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -196,16 +201,18 @@ export function StorytellingScroll() {
               {/* Visual 1: Chair */}
               <motion.div
                 style={{ opacity: vOp1, pointerEvents: pView1 as MotionStyle["pointerEvents"], zIndex: z1, y: chairY }}
-                className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
+                className="absolute inset-y-0 -right-4 left-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
                 <div className="relative h-full w-full">
                   <FinishedProductCanvas fieldOfView={55} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-4 left-6 right-4 flex justify-center sm:left-8 sm:right-6 sm:bottom-6 lg:left-0 lg:right-0">
+                <div className="pointer-events-none absolute right-4 bottom-4 left-6 flex justify-center sm:right-6 sm:bottom-6 sm:left-8 lg:right-0 lg:left-0">
                   <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <p className="whitespace-nowrap font-semibold text-sm text-white">West Elm Slope Leather Chair</p>
+                        <p className="whitespace-nowrap font-semibold text-sm text-white">
+                          West Elm Slope Leather Chair
+                        </p>
                         <p className="mt-0.5 text-[11px] text-slate-400">247 components • 18 suppliers</p>
                       </div>
                       <div className="flex items-center gap-1.5 border-slate-600/40 border-l pl-3">
@@ -220,12 +227,12 @@ export function StorytellingScroll() {
               {/* Visual 2: Components - 3D Model */}
               <motion.div
                 style={{ opacity: vOp2, pointerEvents: pView2 as MotionStyle["pointerEvents"], zIndex: z2 }}
-                className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
+                className="absolute inset-y-0 -right-4 left-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
                 <div className="aspect-square w-[min(100%,65vw)] sm:w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
                   <ComponentsCanvas cameraDistanceRef={boltDistanceRef} isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-4 left-6 right-4 flex justify-center sm:left-8 sm:right-6 sm:bottom-6 lg:left-0 lg:right-0">
+                <div className="pointer-events-none absolute right-4 bottom-4 left-6 flex justify-center sm:right-6 sm:bottom-6 sm:left-8 lg:right-0 lg:left-0">
                   <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
                     <p className="font-semibold text-sm text-white">Steel Bolt - ISO 4762 M8×30</p>
                     <div className="mt-1.5 flex items-center gap-3">
@@ -242,7 +249,7 @@ export function StorytellingScroll() {
               {/* Visual 3: Supplier portal card */}
               <motion.div
                 style={{ opacity: vOp3, x: vX3, pointerEvents: pView3 as MotionStyle["pointerEvents"], zIndex: z3 }}
-                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
+                className="absolute inset-y-0 right-0 left-10 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <SupplierDataEntryVisual />
               </motion.div>
@@ -250,12 +257,12 @@ export function StorytellingScroll() {
               {/* Visual 4: Raw Material (3D rock) */}
               <motion.div
                 style={{ opacity: vOp4, pointerEvents: pView4 as MotionStyle["pointerEvents"], zIndex: z4 }}
-                className="absolute inset-y-0 left-4 -right-4 flex items-center justify-center sm:-right-6 lg:inset-0"
+                className="absolute inset-y-0 -right-4 left-4 flex items-center justify-center sm:-right-6 lg:inset-0"
               >
                 <div className="aspect-square w-[min(100%,65vw)] sm:w-[min(100%,80vw)] lg:w-[min(100%,85vh)]">
                   <RawMaterialCanvas isActiveReference={canvasActive} />
                 </div>
-                <div className="pointer-events-none absolute bottom-4 left-6 right-4 flex justify-center sm:left-8 sm:right-6 sm:bottom-6 lg:left-0 lg:right-0">
+                <div className="pointer-events-none absolute right-4 bottom-4 left-6 flex justify-center sm:right-6 sm:bottom-6 sm:left-8 lg:right-0 lg:left-0">
                   <div className="w-full max-w-[340px] rounded-2xl border border-white/30 bg-white/20 px-5 py-3 shadow-2xl shadow-black/20 backdrop-blur-md sm:max-w-[400px] md:px-6 md:py-3.5">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
@@ -280,14 +287,14 @@ export function StorytellingScroll() {
               {/* Visual 5: Transport Routes Card */}
               <motion.div
                 style={{ opacity: vOp5, pointerEvents: pView5 as MotionStyle["pointerEvents"], zIndex: z5 }}
-                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
+                className="absolute inset-y-0 right-0 left-10 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <div className="w-full max-w-[340px] sm:max-w-[400px]">
                   {/* Header */}
                   <div className="mb-4 flex items-center gap-2.5 px-1">
                     <MapPin className="h-5 w-5 text-indigo-400" />
                     <span className="font-bold text-lg text-white">Supply Chain Routes</span>
-                    <span className="ml-auto font-bold text-xs text-slate-400">3 legs</span>
+                    <span className="ml-auto font-bold text-slate-400 text-xs">3 legs</span>
                   </div>
 
                   {/* Route legs */}
@@ -348,7 +355,9 @@ export function StorytellingScroll() {
                           >
                             {leg.icon}
                           </div>
-                          <span className={`mt-1 text-[10px] font-medium uppercase tracking-wide ${leg.modeColorClassName}`}>
+                          <span
+                            className={`mt-1 font-medium text-[10px] uppercase tracking-wide ${leg.modeColorClassName}`}
+                          >
                             {leg.mode}
                           </span>
                         </div>
@@ -356,11 +365,11 @@ export function StorytellingScroll() {
                         <div className="flex min-w-0 flex-1 flex-col">
                           <div className="mb-2 flex items-center justify-between">
                             <div>
-                              <p className="text-xs text-slate-300">{leg.from}</p>
-                              <p className="font-medium text-xs text-white">{leg.to}</p>
+                              <p className="text-slate-300 text-xs">{leg.from}</p>
+                              <p className="font-medium text-white text-xs">{leg.to}</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-semibold text-xs text-white">{leg.dist}</p>
+                              <p className="font-semibold text-white text-xs">{leg.dist}</p>
                               <p className="text-[11px] text-slate-400">{leg.time}</p>
                             </div>
                           </div>
@@ -414,7 +423,7 @@ export function StorytellingScroll() {
               {/* Visual 6: LCA Engine */}
               <motion.div
                 style={{ opacity: vOp6, pointerEvents: pView6 as MotionStyle["pointerEvents"], zIndex: z6 }}
-                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
+                className="absolute inset-y-0 right-0 left-10 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <LcaEngineVisual />
               </motion.div>
@@ -422,28 +431,28 @@ export function StorytellingScroll() {
               {/* Visual 7: DPP mini-card */}
               <motion.div
                 style={{ opacity: vOp7, pointerEvents: pView7 as MotionStyle["pointerEvents"], zIndex: z7 }}
-                className="absolute inset-y-0 left-10 right-0 flex items-center justify-center sm:left-12 lg:inset-0"
+                className="absolute inset-y-0 right-0 left-10 flex items-center justify-center sm:left-12 lg:inset-0"
               >
                 <div className="w-full max-w-[340px] sm:max-w-[400px]">
                   {/* Header */}
                   <div className="mb-3 flex items-center justify-between">
-                    <span className="text-lg font-bold text-white">Digital Product Passport</span>
-                    <span className="rounded-lg bg-indigo-500/20 px-2.5 py-1 text-xs font-bold text-indigo-300">
+                    <span className="font-bold text-lg text-white">Digital Product Passport</span>
+                    <span className="rounded-lg bg-indigo-500/20 px-2.5 py-1 font-bold text-indigo-300 text-xs">
                       ESPR 2026
                     </span>
                   </div>
                   {/* Product info card */}
                   <div className="rounded-2xl border border-white/30 bg-white/20 px-4 py-3.5 shadow-2xl shadow-black/20 backdrop-blur-md">
-                    <p className="text-base font-bold leading-tight text-white">
-                      West Elm Slope Leather Chair
-                    </p>
-                    <p className="mt-1 font-mono text-xs text-slate-400">DPP-2024-WE-SL-0042</p>
+                    <p className="font-bold text-base text-white leading-tight">West Elm Slope Leather Chair</p>
+                    <p className="mt-1 font-mono text-slate-400 text-xs">DPP-2024-WE-SL-0042</p>
                   </div>
                   {/* Sustainability bar */}
                   <div className="mt-3 rounded-2xl border border-white/30 bg-white/20 px-4 py-3.5 shadow-2xl shadow-black/20 backdrop-blur-md">
                     <div className="mb-2 flex justify-between">
-                      <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">Sustainability</span>
-                      <span className="text-sm font-bold text-emerald-400">94 / 100</span>
+                      <span className="font-semibold text-slate-300 text-xs uppercase tracking-wide">
+                        Sustainability
+                      </span>
+                      <span className="font-bold text-emerald-400 text-sm">94 / 100</span>
                     </div>
                     <div className="h-1.5 overflow-hidden rounded-full bg-slate-700">
                       <motion.div
@@ -463,7 +472,7 @@ export function StorytellingScroll() {
                         key={s.label}
                         className="flex-1 rounded-2xl border border-white/30 bg-white/20 py-3 text-center shadow-2xl shadow-black/20 backdrop-blur-md"
                       >
-                        <p className="text-base font-bold text-white">{s.value}</p>
+                        <p className="font-bold text-base text-white">{s.value}</p>
                         <p className="mt-0.5 text-[11px] text-slate-400">{s.label}</p>
                       </div>
                     ))}
@@ -472,8 +481,8 @@ export function StorytellingScroll() {
                   <div className="mt-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-brand-darkest px-4 py-3">
                     <QrCode className="h-9 w-9 shrink-0 text-white" />
                     <div>
-                      <p className="text-sm font-semibold text-white">Scan to verify</p>
-                      <p className="text-xs text-slate-400">GS1-compliant · Verified</p>
+                      <p className="font-semibold text-sm text-white">Scan to verify</p>
+                      <p className="text-slate-400 text-xs">GS1-compliant · Verified</p>
                     </div>
                   </div>
                 </div>
@@ -510,7 +519,7 @@ export function StorytellingScroll() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-dark/60 bg-brand-dark/80 text-indigo-400">
                   <Sparkles className="h-4.5 w-4.5" />
                 </div>
-                <h2 className="font-display font-semibold text-2xl text-balance tracking-tight sm:text-4xl md:text-5xl">
+                <h2 className="text-balance font-display font-semibold text-2xl tracking-tight sm:text-4xl md:text-5xl">
                   Your Intelligent Product
                 </h2>
               </div>

@@ -138,7 +138,7 @@ export function IntegrationSection() {
     <section className="relative overflow-hidden bg-brand-deep py-16 text-white sm:py-24 md:py-32">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 max-w-3xl sm:mb-16 md:mb-24">
-          <h2 className="mb-6 font-display font-semibold text-3xl text-balance tracking-tight sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 text-balance font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
             Connect to existing systems.
           </h2>
           <p className="text-pretty text-base text-slate-400 leading-relaxed sm:text-lg md:text-xl">

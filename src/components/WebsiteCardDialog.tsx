@@ -139,7 +139,7 @@ export function WebsiteCardDialog({
                   </div>
                 )}
                 <motion.div layoutId={`title-${identifier}`}>
-                  <h3 className="mb-6 pr-12 font-display font-semibold text-2xl text-balance text-brand-darkest sm:text-3xl">
+                  <h3 className="mb-6 text-balance pr-12 font-display font-semibold text-2xl text-brand-darkest sm:text-3xl">
                     {title}
                   </h3>
                 </motion.div>

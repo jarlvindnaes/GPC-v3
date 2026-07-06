@@ -96,7 +96,10 @@ export function Navbar() {
             </a>
           </div>
           <div className="hidden items-center gap-4 md:flex">
-            <a href={withBase("/login")} className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark">
+            <a
+              href={withBase("/login")}
+              className="font-medium text-brand-text text-sm transition-colors hover:text-brand-dark"
+            >
               Sign in
             </a>
             <a

@@ -5,22 +5,22 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const TYPED_FIELDS = [
   { label: "Material Composition", value: "FSC oak · 94%" },
-  { label: "Manufacturing Origin", value: "Gdańsk, Poland" },
+  { label: "Manufacturing Origin", value: "Gdańsk, Poland" }
 ] as const;
 
 const CALCULATED_FIELD = { label: "CO₂ per unit", value: "12.4 kg CO₂e" };
 
-const TYPE_SPEED = 55;          // ms per character
-const PAUSE_BETWEEN = 600;      // ms pause between fields
-const PAUSE_BEFORE_CALC = 500;  // ms before CO₂ fades in
-const HOLD_DURATION = 2400;     // ms to hold final state before restart
+const TYPE_SPEED = 55; // ms per character
+const PAUSE_BETWEEN = 600; // ms pause between fields
+const PAUSE_BEFORE_CALC = 500; // ms before CO₂ fades in
+const HOLD_DURATION = 2400; // ms to hold final state before restart
 
 export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boolean } = {}) {
-  const [fieldIndex, setFieldIndex] = useState(0);   // which field is typing (0 or 1)
-  const [charIndex, setCharIndex] = useState(0);      // chars revealed in current field
-  const [showCalc, setShowCalc] = useState(false);    // CO₂ faded in?
+  const [fieldIndex, setFieldIndex] = useState(0); // which field is typing (0 or 1)
+  const [charIndex, setCharIndex] = useState(0); // chars revealed in current field
+  const [showCalc, setShowCalc] = useState(false); // CO₂ faded in?
   const [phase, setPhase] = useState<"typing" | "pause" | "calc" | "hold">("typing");
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const reset = useCallback(() => {
     setFieldIndex(0);
@@ -30,7 +30,9 @@ export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boole
   }, []);
 
   useEffect(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
 
     if (phase === "typing") {
       const fullText = TYPED_FIELDS[fieldIndex].value;
@@ -58,15 +60,19 @@ export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boole
       timerRef.current = setTimeout(reset, HOLD_DURATION);
     }
 
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [phase, charIndex, fieldIndex, reset]);
 
   const content = (
     <div className="w-full max-w-[340px] sm:max-w-[400px]">
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-lg font-bold text-white">Supplier Data Entry</span>
-        <span className="rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-400">
+        <span className="font-bold text-lg text-white">Supplier Data Entry</span>
+        <span className="rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2.5 py-1 font-bold text-emerald-400 text-xs">
           Live
         </span>
       </div>
@@ -74,21 +80,29 @@ export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boole
       <div className="space-y-3">
         {TYPED_FIELDS.map((f, i) => {
           const isActive = i === fieldIndex && phase === "typing";
-          const isDone = i < fieldIndex || (i === fieldIndex && phase !== "typing") || phase === "calc" || phase === "hold";
+          const isDone =
+            i < fieldIndex || (i === fieldIndex && phase !== "typing") || phase === "calc" || phase === "hold";
           const revealed = i === fieldIndex ? f.value.slice(0, charIndex) : isDone ? f.value : "";
 
           return (
-            <div key={f.label} className="rounded-2xl border border-white/30 bg-white/20 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-md">
-              <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                {f.label}
-              </p>
-              <p className="text-sm font-medium text-white">
+            <div
+              key={f.label}
+              className="rounded-2xl border border-white/30 bg-white/20 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-md"
+            >
+              <p className="mb-0.5 font-semibold text-[11px] text-slate-400 uppercase tracking-wide">{f.label}</p>
+              <p className="font-medium text-sm text-white">
                 {revealed}
                 {isActive && (
-                  <span className="ml-px inline-block w-[2px] animate-pulse bg-white" style={{ height: "1em", verticalAlign: "text-bottom" }} />
+                  <span
+                    className="ml-px inline-block w-[2px] animate-pulse bg-white"
+                    style={{ height: "1em", verticalAlign: "text-bottom" }}
+                  />
                 )}
                 {!isDone && !isActive && (
-                  <span className="ml-px inline-block w-[2px] bg-white/30" style={{ height: "1em", verticalAlign: "text-bottom" }} />
+                  <span
+                    className="ml-px inline-block w-[2px] bg-white/30"
+                    style={{ height: "1em", verticalAlign: "text-bottom" }}
+                  />
                 )}
               </p>
             </div>
@@ -101,23 +115,23 @@ export function SupplierDataEntryVisual({ alignTop = false }: { alignTop?: boole
           animate={{ opacity: showCalc ? 1 : 0.3 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          <p className="mb-0.5 font-semibold text-[11px] text-slate-400 uppercase tracking-wide">
             {CALCULATED_FIELD.label}
           </p>
-          <p className="text-sm font-medium text-white">
-            {showCalc ? CALCULATED_FIELD.value : ""}
-          </p>
+          <p className="font-medium text-sm text-white">{showCalc ? CALCULATED_FIELD.value : ""}</p>
         </motion.div>
 
         {/* Submit button */}
         <div className="flex h-11 cursor-pointer items-center justify-center rounded-2xl border border-white/10 bg-indigo-600/80 transition-colors hover:bg-indigo-500/80">
-          <span className="text-sm font-semibold text-white">Submit & Verify</span>
+          <span className="font-semibold text-sm text-white">Submit & Verify</span>
         </div>
       </div>
     </div>
   );
 
-  if (!alignTop) return content;
+  if (!alignTop) {
+    return content;
+  }
 
   return (
     <div className="h-full w-full" style={{ containerType: "size" }}>

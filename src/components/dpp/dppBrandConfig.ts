@@ -6,7 +6,7 @@
 export const brandConfig = {
   colors: {
     primary: "#105c7a",
-    primaryRGB: "16,92,122",
+    primaryRgb: "16,92,122",
     textPrimary: "rgba(0,7,19,0.89)",
     textSecondary: "rgba(0,7,19,0.62)"
   },

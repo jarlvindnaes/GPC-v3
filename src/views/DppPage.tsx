@@ -36,7 +36,7 @@ export function DPP() {
             <QrCode className="h-4 w-4" />
             Digital Product Passports
           </div>
-          <h1 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest leading-[1.1] tracking-tight sm:text-5xl md:text-7xl">
+          <h1 className="mb-6 text-balance font-display font-semibold text-3xl text-brand-darkest leading-[1.1] tracking-tight sm:text-5xl md:text-7xl">
             The secure link to your end user.
           </h1>
           <p className="mb-10 max-w-2xl text-pretty text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
@@ -57,7 +57,9 @@ export function DPP() {
         <div className="grid gap-8 md:grid-cols-3">
           <WebsiteCard>
             <WebsiteCardIcon icon={ShieldCheck} />
-            <h3 className="mb-4 font-display font-semibold text-balance text-brand-darkest text-xl sm:text-2xl">ESPR Compliant</h3>
+            <h3 className="mb-4 text-balance font-display font-semibold text-brand-darkest text-xl sm:text-2xl">
+              ESPR Compliant
+            </h3>
             <p className="text-pretty text-brand-text">
               Built from the ground up to meet the strict requirements of the Ecodesign for Sustainable Products
               Regulation coming in 2026.
@@ -65,7 +67,9 @@ export function DPP() {
           </WebsiteCard>
           <WebsiteCard>
             <WebsiteCardIcon icon={Smartphone} />
-            <h3 className="mb-4 font-display font-semibold text-balance text-brand-darkest text-xl sm:text-2xl">Consumer Facing</h3>
+            <h3 className="mb-4 text-balance font-display font-semibold text-brand-darkest text-xl sm:text-2xl">
+              Consumer Facing
+            </h3>
             <p className="text-pretty text-brand-text">
               A beautiful, mobile-optimized experience that tells your product's story, shows its impact, and builds
               brand trust.
@@ -73,7 +77,7 @@ export function DPP() {
           </WebsiteCard>
           <WebsiteCard>
             <WebsiteCardIcon icon={Link2} />
-            <h3 className="mb-4 font-display font-semibold text-balance text-brand-darkest text-xl sm:text-2xl">
+            <h3 className="mb-4 text-balance font-display font-semibold text-brand-darkest text-xl sm:text-2xl">
               Direct Connection
             </h3>
             <p className="text-pretty text-brand-text">
@@ -87,7 +91,7 @@ export function DPP() {
       <section className="bg-brand-deep py-32 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-20 max-w-3xl text-center">
-            <h2 className="mb-6 font-display font-semibold text-3xl text-balance tracking-tight sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 text-balance font-display font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
               Value for everyone in the chain.
             </h2>
             <p className="text-pretty text-base text-slate-400 sm:text-lg md:text-xl">
@@ -205,7 +209,7 @@ export function DPP() {
               <BarChart3 className="h-4 w-4" />
               DPP Analytics
             </div>
-            <h2 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 text-balance font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
               Intelligence from every scan.
             </h2>
             <p className="text-pretty text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
@@ -225,7 +229,7 @@ export function DPP() {
             <div className="mb-8 flex items-center justify-between">
               <div>
                 <h3 className="font-semibold text-lg text-white">Product Analytics</h3>
-                <p className="text-slate-500 text-sm">Last 30 days across all passports</p>
+                <p className="text-slate-400 text-sm">Last 30 days across all passports</p>
               </div>
               <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
@@ -242,7 +246,7 @@ export function DPP() {
                   change: "+18%",
                   icon: ScanLine,
                   iconClassName: "text-indigo-400",
-                  badgeClassName: "text-indigo-400 bg-indigo-400/10"
+                  badgeClassName: "text-indigo-300 bg-indigo-400/10"
                 },
                 {
                   label: "Unique Visitors",
@@ -250,7 +254,7 @@ export function DPP() {
                   change: "+24%",
                   icon: Eye,
                   iconClassName: "text-violet-400",
-                  badgeClassName: "text-violet-400 bg-violet-400/10"
+                  badgeClassName: "text-violet-300 bg-violet-400/10"
                 },
                 {
                   label: "Spare Parts Orders",
@@ -273,7 +277,7 @@ export function DPP() {
                   <metric.icon className={`mb-3 h-5 w-5 ${metric.iconClassName}`} />
                   <div className="mb-1 font-bold text-white text-xl sm:text-2xl">{metric.value}</div>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-500 text-xs">{metric.label}</span>
+                    <span className="text-slate-400 text-xs">{metric.label}</span>
                     <span className={`rounded-full px-1.5 py-0.5 font-bold text-[10px] ${metric.badgeClassName}`}>
                       {metric.change}
                     </span>
@@ -286,7 +290,7 @@ export function DPP() {
             <div className="rounded-2xl border border-brand-dark/30 bg-brand-dark/20 p-4 sm:p-6">
               <div className="mb-6 flex items-center justify-between">
                 <span className="font-medium text-slate-400 text-sm">Scan Activity</span>
-                <div className="flex gap-4 text-brand-text text-xs">
+                <div className="flex gap-4 text-slate-300 text-xs">
                   <span className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-indigo-500" /> Scans
                   </span>
@@ -403,7 +407,7 @@ export function DPP() {
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-surface px-3 py-1 font-medium text-brand text-sm">
               Extend Your Platform
             </div>
-            <h2 className="mb-6 font-display font-semibold text-3xl text-balance text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 text-balance font-display font-semibold text-3xl text-brand-darkest tracking-tight sm:text-4xl md:text-5xl">
               Extend with powerful modules.
             </h2>
             <p className="text-pretty text-base text-brand-text leading-relaxed sm:text-lg md:text-xl">
@@ -505,7 +509,9 @@ export function DPP() {
                 <h3 className="mb-2 font-display font-semibold text-brand-darkest text-lg sm:text-xl">
                   {platformModule.title}
                 </h3>
-                <p className="mb-6 flex-1 text-pretty text-brand-text text-sm leading-relaxed">{platformModule.description}</p>
+                <p className="mb-6 flex-1 text-pretty text-brand-text text-sm leading-relaxed">
+                  {platformModule.description}
+                </p>
               </WebsiteCard>
             ))}
           </div>

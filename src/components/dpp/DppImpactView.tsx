@@ -8,12 +8,12 @@ const data = slopeChair;
 
 /** Simple inline divider */
 function Divider() {
-  return <div aria-hidden="true" className="w-full h-px bg-[#d5d5d5] shrink-0" />;
+  return <div aria-hidden="true" className="h-px w-full shrink-0 bg-[#d5d5d5]" />;
 }
 
 function PefcLogo() {
   return (
-    <div className="h-[79px] relative shrink-0 w-[66px]" data-name="PEFC_Logo">
+    <div className="relative h-[79px] w-[66px] shrink-0" data-name="PEFC_Logo">
       <svg
         className="block size-full"
         fill="none"
@@ -125,7 +125,7 @@ function PefcLogo() {
 function Chart() {
   return (
     <figure
-      className="relative shrink-0 size-[150px] m-0"
+      className="relative m-0 size-[150px] shrink-0"
       data-name="chart"
       aria-label="Material distribution donut chart"
     >
@@ -154,7 +154,7 @@ function Chart() {
 
 function Chart1() {
   return (
-    <figure className="relative shrink-0 size-[150px] m-0" data-name="chart" aria-label="Carbon footprint donut chart">
+    <figure className="relative m-0 size-[150px] shrink-0" data-name="chart" aria-label="Carbon footprint donut chart">
       <svg
         className="block size-full"
         fill="none"
@@ -178,124 +178,9 @@ function Chart1() {
   );
 }
 
-function Chart2() {
-  return (
-    <figure
-      className="h-[75px] relative shrink-0 w-[150px] m-0"
-      data-name="chart"
-      aria-label="Recyclability gauge chart"
-    >
-      <svg
-        className="block size-full"
-        fill="none"
-        preserveAspectRatio="none"
-        viewBox="0 0 150 75"
-        role="img"
-        aria-label="95% recyclable content, 5% non-recyclable"
-      >
-        <g clipPath="url(#clip0_dpp_impact_57126)" id="chart">
-          <path d={certIcons.p29a1c500} fill="var(--fill-0, #B5F7D5)" id="segment 2" />
-          <path d={certIcons.p30413180} fill="var(--fill-0, #FCBFBF)" id="segment 1" />
-        </g>
-        <defs>
-          <clipPath id="clip0_dpp_impact_57126">
-            <rect fill="white" height="75" width="150" />
-          </clipPath>
-        </defs>
-      </svg>
-    </figure>
-  );
-}
-
-function EcoLabel() {
-  return (
-    <div className="relative shrink-0 size-[80px]" data-name="EcoLabel">
-      <svg
-        className="block size-full"
-        fill="none"
-        preserveAspectRatio="none"
-        viewBox="0 0 80 80"
-        role="img"
-        aria-label="EU Ecolabel certified"
-      >
-        <g id="EcoLabel">
-          <path d={certIcons.p3465ec00} fill="var(--fill-0, white)" id="Vector" />
-          <path d={certIcons.p17cafb80} fill="var(--fill-0, #2B689D)" id="Vector_2" />
-          <g id="Union">
-            <path d={certIcons.p29504bf0} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p1faa1e00} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p52b0a80} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p23b48400} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p3c1a2700} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p9e98580} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p14091b40} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p3f266500} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.pf0a1d00} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p114c36f0} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p24adde00} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p24c93e80} fill="var(--fill-0, #2B689D)" />
-          </g>
-          <g id="Group 20">
-            <path d={certIcons.p4860580} id="Vector_3" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p709db00} id="Vector_4" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p46a2700} id="Vector_5" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p269437f2} id="Vector_6" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p276fe70} id="Vector_7" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p2e5f100} fill="var(--fill-0, #53AE47)" id="Vector_8" />
-            <path d={certIcons.p3e23f400} id="Vector_9" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p3ae744f0} id="Vector_10" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p37c77600} id="Vector_11" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p2064a000} id="Vector_12" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p38ea8580} id="Vector_13" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p17da8200} id="Vector_14" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p1da6180} id="Vector_15" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p13fb3f00} id="Vector_16" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.pd63f300} id="Vector_17" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p4860580} fill="var(--fill-0, #53AE47)" id="Vector_18" />
-            <path d={certIcons.p709db00} fill="var(--fill-0, #53AE47)" id="Vector_19" />
-            <path d={certIcons.p46a2700} fill="var(--fill-0, #53AE47)" id="Vector_20" />
-            <path d={certIcons.p269437f2} fill="var(--fill-0, #53AE47)" id="Vector_21" />
-            <path d={certIcons.p276fe70} fill="var(--fill-0, #53AE47)" id="Vector_22" />
-            <path d={certIcons.p2c199980} id="Vector_23" stroke="var(--stroke-0, #53AE47)" strokeWidth="0.13" />
-            <path d={certIcons.p1ab04f00} fill="var(--fill-0, #53AE47)" id="Vector_24" />
-            <path d={certIcons.p3ae744f0} fill="var(--fill-0, #53AE47)" id="Vector_25" />
-            <path d={certIcons.p37c77600} fill="var(--fill-0, #53AE47)" id="Vector_26" />
-            <path d={certIcons.p25e91500} fill="var(--fill-0, #53AE47)" id="Vector_27" />
-            <path d={certIcons.p38ea8580} fill="var(--fill-0, #53AE47)" id="Vector_28" />
-            <path d={certIcons.p17da8200} fill="var(--fill-0, #53AE47)" id="Vector_29" />
-            <path d={certIcons.p1da6180} fill="var(--fill-0, #53AE47)" id="Vector_30" />
-            <path d={certIcons.p13fb3f00} fill="var(--fill-0, #53AE47)" id="Vector_31" />
-            <path d={certIcons.pd63f300} fill="var(--fill-0, #53AE47)" id="Vector_32" />
-          </g>
-          <g id="Union_2">
-            <path d={certIcons.p23dd8580} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.pf385af2} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.p667fe00} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.p6eb4000} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.p150da800} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.p26d5d600} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.p36a76700} fill="var(--fill-0, #53AE47)" />
-            <path d={certIcons.pa789500} fill="var(--fill-0, #53AE47)" />
-          </g>
-          <g id="Union_3">
-            <path d={certIcons.p3214c280} fill="var(--fill-0, #2B689D)" />
-            <path d={certIcons.p2eea9640} fill="var(--fill-0, #2B689D)" />
-            <path clipRule="evenodd" d={certIcons.p3b0dc00} fill="var(--fill-0, #2B689D)" fillRule="evenodd" />
-            <path d={certIcons.pd4effb0} fill="var(--fill-0, #2B689D)" />
-            <path clipRule="evenodd" d={certIcons.p2f188d00} fill="var(--fill-0, #2B689D)" fillRule="evenodd" />
-            <path clipRule="evenodd" d={certIcons.p24984f00} fill="var(--fill-0, #2B689D)" fillRule="evenodd" />
-            <path clipRule="evenodd" d={certIcons.p261f0cf0} fill="var(--fill-0, #2B689D)" fillRule="evenodd" />
-            <path d={certIcons.p3e4f0b30} fill="var(--fill-0, #2B689D)" />
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-}
-
 function RedListLogo() {
   return (
-    <div className="relative shrink-0 size-[80px]" data-name="Red List">
+    <div className="relative size-[80px] shrink-0" data-name="Red List">
       <svg
         className="block size-full"
         fill="none"
@@ -335,7 +220,7 @@ function RedListLogo() {
 
 function EpDverified() {
   return (
-    <div className="relative shrink-0 size-[80px]" data-name="EPDverified">
+    <div className="relative size-[80px] shrink-0" data-name="EPDverified">
       <div className="absolute inset-[-40%_-49.96%_-59.96%_-50%]">
         <svg
           className="block size-full"
@@ -436,23 +321,23 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
   return (
     <div className="relative w-full pb-[80px]">
       {/* Hero Image */}
-      <div className="shrink-0 w-full" data-name="hero image">
+      <div className="w-full shrink-0" data-name="hero image">
         <img
           alt={`${data.materialsAndComponents.primaryMaterial} — sustainably sourced material`}
-          className="w-full block pointer-events-none"
+          className="pointer-events-none block w-full"
           src={data.commerce.photographs.materialSource}
         />
       </div>
 
       {/* Title Section */}
-      <div className="relative shrink-0 w-full">
-        <div className="flex flex-row items-end overflow-clip rounded-[inherit] size-full">
-          <div className="box-border content-stretch flex items-end pb-[40px] pl-0 pr-[20px] pt-[10px] relative w-full">
-            <div className="basis-0 grow min-h-px min-w-px relative shrink-0" data-name="Title">
-              <div className="flex flex-row items-center overflow-clip rounded-[inherit] size-full">
-                <div className="box-border content-stretch flex items-center px-[16px] py-[10px] relative w-full">
-                  <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,4,24,0.58)] text-nowrap whitespace-pre font-width-normal">
-                    <h1 className="font-['SF_Pro:Bold',sans-serif] font-bold mb-0 text-[rgba(0,7,19,0.62)] font-width-normal">
+      <div className="relative w-full shrink-0">
+        <div className="flex size-full flex-row items-end overflow-clip rounded-[inherit]">
+          <div className="relative box-border flex w-full content-stretch items-end pt-[10px] pr-[20px] pb-[40px] pl-0">
+            <div className="relative min-h-px min-w-px shrink-0 grow basis-0" data-name="Title">
+              <div className="flex size-full flex-row items-center overflow-clip rounded-[inherit]">
+                <div className="relative box-border flex w-full content-stretch items-center px-[16px] py-[10px]">
+                  <div className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,4,24,0.58)] leading-[24px]">
+                    <h1 className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[rgba(0,7,19,0.62)]">
                       {data.categorization.displayName}
                     </h1>
                     <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -473,29 +358,29 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
         onToggle={() => setMaterialDistributionOpen(!materialDistributionOpen)}
       >
         <div
-          className="box-border content-stretch flex flex-col gap-[8px] items-center overflow-clip px-0 py-[8px] relative shrink-0 w-full"
+          className="relative box-border flex w-full shrink-0 flex-col content-stretch items-center gap-[8px] overflow-clip px-0 py-[8px]"
           data-name="Graph"
         >
-          <div className="relative shrink-0 w-full" data-name="Chart-Parts">
-            <div className="flex flex-col items-center size-full">
-              <div className="box-border content-stretch flex flex-col gap-[24px] items-center p-[12px] relative w-full">
+          <div className="relative w-full shrink-0" data-name="Chart-Parts">
+            <div className="flex size-full flex-col items-center">
+              <div className="relative box-border flex w-full flex-col content-stretch items-center gap-[24px] p-[12px]">
                 <div
-                  className="bg-[rgba(255,255,255,0)] content-stretch flex items-start relative shrink-0 w-full"
+                  className="relative flex w-full shrink-0 content-stretch items-start bg-[rgba(255,255,255,0)]"
                   data-name="Heading"
                 >
-                  <h3 className="basis-0 font-['SF_Pro:Bold',sans-serif] font-bold grow leading-[20px] min-h-px min-w-px relative shrink-0 text-[#1c2024] text-[14px] text-center font-width-normal">
+                  <h3 className="relative min-h-px min-w-px shrink-0 grow basis-0 text-center font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[#1c2024] text-[14px] leading-[20px]">
                     What it's made from
                   </h3>
                 </div>
                 <Chart />
                 <div
-                  className="content-center flex flex-wrap gap-[13px] items-center justify-between relative shrink-0 w-full"
+                  className="relative flex w-full shrink-0 flex-wrap content-center items-center justify-between gap-[13px]"
                   data-name="Part types"
                 >
                   {data.materialsAndComponents.materialComposition.map((mat) => (
-                    <div key={mat.material} className="content-stretch flex gap-[8px] items-center relative shrink-0">
-                      <div className="rounded-[3px] shrink-0 size-[16px]" style={{ backgroundColor: mat.chartColor }} />
-                      <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] leading-[16px] relative shrink-0 text-[12px] text-[rgba(0,7,19,0.62)] text-nowrap tracking-[0.04px] whitespace-pre font-width-normal">
+                    <div key={mat.material} className="relative flex shrink-0 content-stretch items-center gap-[8px]">
+                      <div className="size-[16px] shrink-0 rounded-[3px]" style={{ backgroundColor: mat.chartColor }} />
+                      <p className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(0,7,19,0.62)] leading-[16px] tracking-[0.04px]">
                         {`${mat.label} ${mat.percentage}%`}
                       </p>
                     </div>
@@ -506,16 +391,16 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           </div>
         </div>
         <div
-          className="box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip pb-[20px] pt-[8px] px-0 relative shrink-0 w-full"
+          className="relative box-border flex w-full shrink-0 content-stretch items-center justify-center gap-[8px] overflow-clip px-0 pt-[8px] pb-[20px]"
           data-name="Sub Info"
         >
-          <p className="basis-0 font-['SF_Pro:Light',sans-serif] font-[274.315] grow leading-[24px] min-h-px min-w-px relative shrink-0 text-[0px] text-[14px] text-[rgba(0,7,19,0.62)] text-right whitespace-pre-wrap font-width-normal">
+          <p className="relative min-h-px min-w-px shrink-0 grow basis-0 whitespace-pre-wrap text-right font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[0px] text-[14px] text-[rgba(0,7,19,0.62)] leading-[24px]">
             <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">{`${data.materialsAndComponents.totalWeight.value} `}</span>
             <span>{" kilograms"}</span>
           </p>
         </div>
 
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
+        <div className="relative w-full shrink-0 px-[16px] pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
           {data.materialsAndComponents.materialDescriptions.map((mat) => (
             <p key={mat.material} className="mb-4">
               <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">
@@ -554,32 +439,32 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
         onToggle={() => setCarbonFootprintOpen(!carbonFootprintOpen)}
       >
         <div
-          className="box-border content-stretch flex flex-col gap-[8px] items-center overflow-clip px-0 py-[8px] relative shrink-0 w-full"
+          className="relative box-border flex w-full shrink-0 flex-col content-stretch items-center gap-[8px] overflow-clip px-0 py-[8px]"
           data-name="Graph"
         >
-          <div className="relative shrink-0 w-full" data-name="Chart-Parts">
-            <div className="flex flex-col items-center size-full">
-              <div className="box-border content-stretch flex flex-col gap-[24px] items-center p-[12px] relative w-full">
+          <div className="relative w-full shrink-0" data-name="Chart-Parts">
+            <div className="flex size-full flex-col items-center">
+              <div className="relative box-border flex w-full flex-col content-stretch items-center gap-[24px] p-[12px]">
                 <div
-                  className="bg-[rgba(255,255,255,0)] content-stretch flex items-start relative shrink-0 w-full"
+                  className="relative flex w-full shrink-0 content-stretch items-start bg-[rgba(255,255,255,0)]"
                   data-name="Heading"
                 >
-                  <h3 className="basis-0 font-['SF_Pro:Bold',sans-serif] font-bold grow leading-[20px] min-h-px min-w-px relative shrink-0 text-[#1c2024] text-[14px] text-center font-width-normal">
+                  <h3 className="relative min-h-px min-w-px shrink-0 grow basis-0 text-center font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[#1c2024] text-[14px] leading-[20px]">
                     Where emissions come from
                   </h3>
                 </div>
                 <Chart1 />
                 <div
-                  className="content-center flex flex-wrap gap-[13px] items-center justify-between relative shrink-0 w-full"
+                  className="relative flex w-full shrink-0 flex-wrap content-center items-center justify-between gap-[13px]"
                   data-name="Part types"
                 >
                   {data.sustainabilityAndImpact.carbonFootprintByStage.map((stage) => (
-                    <div key={stage.stage} className="content-stretch flex gap-[8px] items-center relative shrink-0">
+                    <div key={stage.stage} className="relative flex shrink-0 content-stretch items-center gap-[8px]">
                       <div
-                        className="rounded-[3px] shrink-0 size-[16px]"
+                        className="size-[16px] shrink-0 rounded-[3px]"
                         style={{ backgroundColor: stage.chartColor }}
                       />
-                      <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] leading-[16px] relative shrink-0 text-[12px] text-[rgba(0,7,19,0.62)] text-nowrap tracking-[0.04px] whitespace-pre font-width-normal">
+                      <p className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(0,7,19,0.62)] leading-[16px] tracking-[0.04px]">
                         {`${stage.label} ${stage.percentage}%`}
                       </p>
                     </div>
@@ -590,11 +475,11 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           </div>
         </div>
         <div
-          className="box-border content-stretch flex flex-col gap-[4px] items-end overflow-clip pb-[20px] pt-[8px] px-[12px] relative shrink-0 w-full"
+          className="relative box-border flex w-full shrink-0 flex-col content-stretch items-end gap-[4px] overflow-clip px-[12px] pt-[8px] pb-[20px]"
           data-name="Sub Info"
         >
-          <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] leading-[24px] relative shrink-0 text-[14px] text-[rgba(0,7,19,0.62)] text-right font-width-normal">
-            <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[14px] font-width-normal">
+          <p className="relative shrink-0 text-right font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[14px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+            <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[14px]">
               {data.sustainabilityAndImpact.carbonFootprintTotal.value}
             </span>
             <span className="text-[14px]">{" kg CO"}</span>
@@ -603,7 +488,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             <span className="text-[14px]">equivalent</span>
           </p>
           {data.sustainabilityAndImpact.carbonFootprintScope && (
-            <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] leading-[16px] relative shrink-0 text-[12px] text-[rgba(0,7,19,0.58)] text-right font-width-normal">
+            <p className="relative shrink-0 text-right font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(0,7,19,0.58)] leading-[16px]">
               {`Scope: ${data.sustainabilityAndImpact.carbonFootprintScope}`}
             </p>
           )}
@@ -614,7 +499,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
 
       {/* Toxicity Section */}
       <DppCollapsibleSection title="Toxicity" isOpen={toxicityOpen} onToggle={() => setToxicityOpen(!toxicityOpen)}>
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
+        <div className="relative w-full shrink-0 px-[16px] pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
           <p className="mb-4">
             <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">VOC emissions:</span>
             {` ${data.sustainabilityAndImpact.vocData}`}
@@ -634,23 +519,23 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
         isOpen={recyclabilityOpen}
         onToggle={() => setRecyclabilityOpen(!recyclabilityOpen)}
       >
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[16px] text-[rgba(0,7,19,0.62)] w-full px-[16px] pb-[20px] font-width-normal">
+        <div className="relative w-full shrink-0 px-[16px] pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
           {/* Key circularity metrics */}
-          <div className="flex gap-[12px] mb-6">
+          <div className="mb-6 flex gap-[12px]">
             {data.sustainabilityAndImpact.recyclableContentPercent != null && (
-              <div className="flex-1 bg-[rgba(173,245,209,0.18)] border border-[rgba(173,245,209,0.50)] rounded-[8px] p-[12px] text-center">
-                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[24px] text-[#2D7A4F] mb-0 leading-[28px] font-width-normal">
+              <div className="flex-1 rounded-[8px] border border-[rgba(173,245,209,0.50)] bg-[rgba(173,245,209,0.18)] p-[12px] text-center">
+                <p className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[#2D7A4F] text-[24px] leading-[28px]">
                   {`${data.sustainabilityAndImpact.recyclableContentPercent}%`}
                 </p>
-                <p className="text-[12px] text-[rgba(0,7,19,0.58)] mb-0 leading-[16px]">Recyclable</p>
+                <p className="mb-0 text-[12px] text-[rgba(0,7,19,0.58)] leading-[16px]">Recyclable</p>
               </div>
             )}
             {data.sustainabilityAndImpact.recycledContentPercent != null && (
-              <div className="flex-1 bg-[rgba(182,212,252,0.22)] border border-[rgba(182,212,252,0.55)] rounded-[8px] p-[12px] text-center">
-                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[24px] text-[#3560A0] mb-0 leading-[28px] font-width-normal">
+              <div className="flex-1 rounded-[8px] border border-[rgba(182,212,252,0.55)] bg-[rgba(182,212,252,0.22)] p-[12px] text-center">
+                <p className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[#3560A0] text-[24px] leading-[28px]">
                   {`${data.sustainabilityAndImpact.recycledContentPercent}%`}
                 </p>
-                <p className="text-[12px] text-[rgba(0,7,19,0.58)] mb-0 leading-[16px]">Recycled content</p>
+                <p className="mb-0 text-[12px] text-[rgba(0,7,19,0.58)] leading-[16px]">Recycled content</p>
               </div>
             )}
           </div>
@@ -678,9 +563,9 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
         isOpen={certificationsOpen}
         onToggle={() => setCertificationsOpen(!certificationsOpen)}
       >
-        <div className="relative shrink-0 w-full pb-[16px] px-[16px]" data-name="content">
+        <div className="relative w-full shrink-0 px-[16px] pb-[16px]" data-name="content">
           {data.certificationsAndCompliance.buildingRatingContributions && (
-            <p className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[24px] text-[16px] text-[rgba(0,7,19,0.62)] mb-4 font-width-normal">
+            <p className="mb-4 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
               {data.certificationsAndCompliance.buildingRatingContributions}
             </p>
           )}
@@ -688,17 +573,17 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             {data.certificationsAndCompliance.certifications.map((cert) => (
               <div
                 key={cert.name}
-                className="bg-[rgba(0,0,0,0.02)] border border-[rgba(0,0,0,0.05)] rounded-[8px] p-[12px]"
+                className="rounded-[8px] border border-[rgba(0,0,0,0.05)] bg-[rgba(0,0,0,0.02)] p-[12px]"
               >
-                <p className="font-['SF_Pro:Bold',sans-serif] font-bold text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px] mb-[2px] font-width-normal">
+                <p className="mb-[2px] font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px]">
                   {cert.name}
                 </p>
                 {cert.issuingBody && (
-                  <p className="font-['SF_Pro:Light',sans-serif] font-[274.315] text-[11px] text-[rgba(0,7,19,0.58)] leading-[14px] mb-[6px] font-width-normal">
+                  <p className="mb-[6px] font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[11px] text-[rgba(0,7,19,0.58)] leading-[14px]">
                     {cert.issuingBody}
                   </p>
                 )}
-                <p className="font-['SF_Pro:Regular',sans-serif] font-normal text-[13px] text-[rgba(0,7,19,0.56)] leading-[20px] mb-0 font-width-normal">
+                <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[13px] text-[rgba(0,7,19,0.56)] leading-[20px]">
                   {cert.description}
                 </p>
               </div>
@@ -706,10 +591,10 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           </div>
 
           {/* Additional ESPR-required compliance data */}
-          <div className="font-['SF_Pro:Regular',sans-serif] font-normal leading-[22px] text-[13px] text-[rgba(0,7,19,0.58)] mt-[14px] font-width-normal">
+          <div className="mt-[14px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[13px] text-[rgba(0,7,19,0.58)] leading-[22px]">
             {data.sustainabilityAndImpact.epdReference && (
               <p className="mb-[6px]">
-                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[rgba(0,7,19,0.62)] font-width-normal">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[rgba(0,7,19,0.62)]">
                   EPD reference:{" "}
                 </span>
                 {data.sustainabilityAndImpact.epdReference}
@@ -720,7 +605,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             )}
             {data.certificationsAndCompliance.fireSafety && (
               <p className="mb-[6px]">
-                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[rgba(0,7,19,0.62)] font-width-normal">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[rgba(0,7,19,0.62)]">
                   Fire safety:{" "}
                 </span>
                 {data.certificationsAndCompliance.fireSafety}
@@ -728,7 +613,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             )}
             {data.certificationsAndCompliance.indoorAirQuality && (
               <p className="mb-0">
-                <span className="font-['SF_Pro:Bold',sans-serif] font-bold text-[rgba(0,7,19,0.62)] font-width-normal">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[rgba(0,7,19,0.62)]">
                   Indoor air quality:{" "}
                 </span>
                 {data.certificationsAndCompliance.indoorAirQuality}
@@ -737,19 +622,18 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           </div>
         </div>
 
-        <div className="relative shrink-0 w-full" data-name="Logos">
-          <div className="box-border content-stretch flex items-start justify-between overflow-clip pb-[20px] pt-[30px] px-0 relative rounded-[inherit] w-full">
+        <div className="relative w-full shrink-0" data-name="Logos">
+          <div className="relative box-border flex w-full content-stretch items-start justify-between overflow-clip rounded-[inherit] px-0 pt-[30px] pb-[20px]">
             <PefcLogo />
             <RedListLogo />
             <EpDverified />
           </div>
           <div
             aria-hidden="true"
-            className="absolute border-[#d5d5d5] border-[1px_0px_0px] border-solid inset-0 pointer-events-none"
+            className="pointer-events-none absolute inset-0 border-[#d5d5d5] border-[1px_0px_0px] border-solid"
           />
         </div>
       </DppCollapsibleSection>
-
     </div>
   );
 }

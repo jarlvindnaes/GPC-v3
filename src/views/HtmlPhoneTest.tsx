@@ -24,7 +24,9 @@ function PhoneModel() {
     });
 
     cloned.traverse((child) => {
-      if (child.name.includes("002")) child.visible = false;
+      if (child.name.includes("002")) {
+        child.visible = false;
+      }
       if (child.name === "Glass_over_display001_Glass_0" && (child as Three.Mesh).isMesh) {
         const mesh = child as Three.Mesh;
         const mat = mesh.material as Three.MeshPhysicalMaterial;
@@ -42,14 +44,16 @@ function PhoneModel() {
           color: new Three.Color(0x000000),
           roughness: 1.0,
           metalness: 0,
-          envMapIntensity: 0.0,
+          envMapIntensity: 0.0
         });
       }
     });
 
     const visibleBox = new Three.Box3();
     cloned.traverse((child) => {
-      if ((child as Three.Mesh).isMesh && child.visible) visibleBox.expandByObject(child);
+      if ((child as Three.Mesh).isMesh && child.visible) {
+        visibleBox.expandByObject(child);
+      }
     });
     const center = visibleBox.getCenter(new Three.Vector3());
 
@@ -57,7 +61,7 @@ function PhoneModel() {
       scene: cloned,
       offset: [-center.x, -center.y, -center.z] as [number, number, number],
       screenCenter: [displayCenter.x, displayCenter.y, displayCenter.z + 0.003] as [number, number, number],
-      displayW: dW,
+      displayW: dW
     };
   }, [originalScene]);
 
@@ -65,19 +69,14 @@ function PhoneModel() {
     <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
       <group position={offset}>
         <primitive object={scene} />
-        <Html
-          transform
-          position={screenCenter}
-          distanceFactor={displayW * 1.09}
-          center
-        >
+        <Html transform={true} position={screenCenter} distanceFactor={displayW * 1.09} center={true}>
           <div
             style={{
               width: 375,
               height: 812,
               overflow: "hidden",
               borderRadius: 62,
-              background: "#fff",
+              background: "#fff"
             }}
             onPointerDown={(e) => e.stopPropagation()}
           >
@@ -98,12 +97,11 @@ export function HtmlPhoneTest() {
           <spotLight position={[5, 10, 5]} angle={0.2} penumbra={1} intensity={2.5} color="#fff8f0" />
           <directionalLight position={[-3, 5, -3]} intensity={0.5} color="#c7d2fe" />
           <PresentationControls
-            global
+            global={true}
             snap={false}
             rotation={[0.05, 0, 0]}
             polar={[-Math.PI / 6, Math.PI / 6]}
             azimuth={[-Math.PI / 4, Math.PI / 4]}
-            config={{ mass: 4, tension: 120, friction: 40 }}
           >
             <PhoneModel />
           </PresentationControls>

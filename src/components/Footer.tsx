@@ -98,12 +98,12 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-4 border-slate-100 border-t pt-8 md:flex-row">
-          <p className="text-pretty text-slate-400 text-sm">&copy; 2026 Product Connect. All rights reserved.</p>
+          <p className="text-pretty text-slate-600 text-sm">&copy; 2026 Product Connect. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="https://example.com" className="text-slate-400 text-sm hover:text-brand-dark">
+            <a href="https://example.com" className="text-slate-600 text-sm hover:text-brand-dark">
               Privacy Policy
             </a>
-            <a href="https://example.com" className="text-slate-400 text-sm hover:text-brand-dark">
+            <a href="https://example.com" className="text-slate-600 text-sm hover:text-brand-dark">
               Terms of Service
             </a>
           </div>

@@ -11,7 +11,7 @@ interface DppCollapsibleSectionProps {
 
 function ArrowsCaretDown({ className }: { className?: string }) {
   return (
-    <div className={`relative shrink-0 size-[24px] ${className || ""}`} data-name="Arrows / caret-down">
+    <div className={`relative size-[24px] shrink-0 ${className || ""}`} data-name="Arrows / caret-down">
       <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="M 6 9 L 12 15 L 18 9"
@@ -38,25 +38,26 @@ export function DppCollapsibleSection({
 
   return (
     <section
-      className={`box-border content-stretch flex flex-col gap-[18px] items-start overflow-clip px-[20px] py-[12px] relative w-full ${className}`}
+      className={`relative box-border flex w-full flex-col content-stretch items-start gap-[18px] overflow-clip px-[20px] py-[12px] ${className}`}
       aria-labelledby={headingId}
     >
       <button
+        type="button"
         onClick={onToggle}
-        className="h-[51px] relative shrink-0 w-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6C7254]"
+        className="relative h-[51px] w-full shrink-0 focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
         data-name="section header"
         aria-expanded={isOpen}
         aria-controls={panelId}
       >
-        <div className="content-stretch flex h-[51px] items-center justify-between overflow-clip relative rounded-[inherit] w-full">
+        <div className="relative flex h-[51px] w-full content-stretch items-center justify-between overflow-clip rounded-[inherit]">
           <h2
             id={headingId}
-            className="[white-space-collapse:collapse] basis-0 font-['SF_Pro:Medium',sans-serif] font-[510] grow leading-[24px] min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[16px] text-[rgba(0,4,29,0.58)] text-nowrap text-left m-0 flex items-center font-width-normal"
+            className="relative m-0 flex min-h-px min-w-px shrink-0 grow basis-0 items-center overflow-hidden overflow-ellipsis text-nowrap text-left font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[16px] text-[rgba(0,4,29,0.58)] leading-[24px] [white-space-collapse:collapse]"
           >
             {title}
           </h2>
           <div
-            className={`flex items-center justify-center relative shrink-0 transition-transform duration-300 ${isOpen ? "" : "-rotate-90"}`}
+            className={`relative flex shrink-0 items-center justify-center transition-transform duration-300 ${isOpen ? "" : "-rotate-90"}`}
             aria-hidden="true"
           >
             <ArrowsCaretDown />
@@ -73,7 +74,7 @@ export function DppCollapsibleSection({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden w-full pb-[20px]"
+            className="w-full overflow-hidden pb-[20px]"
           >
             {children}
           </motion.div>

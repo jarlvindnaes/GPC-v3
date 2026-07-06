@@ -2,7 +2,7 @@ import type { ProductPassport } from "./dppTypes";
 
 // ── Dynamic product history dates (relative to today) ──────────────
 const today = new Date();
-const toISO = (d: Date) => d.toISOString().slice(0, 10);
+const toIso = (d: Date) => d.toISOString().slice(0, 10);
 
 // Product Created: exactly 3 years ago
 const createdDate = new Date(today.getFullYear() - 3, today.getMonth(), today.getDate());
@@ -70,10 +70,25 @@ export const slopeChair: ProductPassport = {
 
   materialsAndComponents: {
     components: [
-      { name: "Seat Cushion", replaceable: true, material: "Full-grain leather / HR foam", weight: { value: 2.4, unit: "kg" } },
-      { name: "Back Cushion", replaceable: true, material: "Full-grain leather / HR foam", weight: { value: 1.6, unit: "kg" } },
+      {
+        name: "Seat Cushion",
+        replaceable: true,
+        material: "Full-grain leather / HR foam",
+        weight: { value: 2.4, unit: "kg" }
+      },
+      {
+        name: "Back Cushion",
+        replaceable: true,
+        material: "Full-grain leather / HR foam",
+        weight: { value: 1.6, unit: "kg" }
+      },
       { name: "Seat Frame", replaceable: true, material: "Powder-coated steel", weight: { value: 1.8, unit: "kg" } },
-      { name: "Backrest Frame", replaceable: true, material: "Powder-coated steel", weight: { value: 1.2, unit: "kg" } },
+      {
+        name: "Backrest Frame",
+        replaceable: true,
+        material: "Powder-coated steel",
+        weight: { value: 1.2, unit: "kg" }
+      },
       { name: "Front Leg", replaceable: true, material: "Solid American Walnut", weight: { value: 0.6, unit: "kg" } },
       { name: "Rear Leg", replaceable: true, material: "Solid American Walnut", weight: { value: 0.7, unit: "kg" } },
       { name: "Armrest", replaceable: true, material: "Solid American Walnut", weight: { value: 0.5, unit: "kg" } },
@@ -205,10 +220,10 @@ export const slopeChair: ProductPassport = {
     endOfLife:
       "The chair disassembles into individual parts. Walnut components are recyclable or biodegradable; steel frames enter standard metal recycling; leather can be repurposed or industrially composted.",
     productHistory: [
-      { title: "Product Created", date: toISO(createdDate), icon: "star" },
-      { title: "Product Shipped", date: toISO(shippedDate), icon: "archive" },
-      { title: "Product Scanned", date: toISO(scannedDate), icon: "qr" },
-      { title: "Floor Pads Ordered", date: toISO(orderedDate), icon: "add-to-basket" }
+      { title: "Product Created", date: toIso(createdDate), icon: "star" },
+      { title: "Product Shipped", date: toIso(shippedDate), icon: "archive" },
+      { title: "Product Scanned", date: toIso(scannedDate), icon: "qr" },
+      { title: "Floor Pads Ordered", date: toIso(orderedDate), icon: "add-to-basket" }
     ],
     productAgeStatement: "Your product is 3 years old"
   },

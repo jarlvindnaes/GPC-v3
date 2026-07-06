@@ -17,7 +17,7 @@ function readGridLineColor(): string {
 
 const GRID_SPACING = 48;
 
-export function InteractiveGrid({ mouseRef }: { mouseRef: RefObject<{ x: number; y: number; active: boolean }> }) {
+export function InteractiveGrid({ mouseRef }: { mouseRef?: RefObject<{ x: number; y: number; active: boolean }> }) {
   const canvasReference = useRef<HTMLCanvasElement>(null);
   const isNearViewport = useIsNearViewport(canvasReference);
   const nodesReference = useRef<GridNode[]>([]);
@@ -106,7 +106,7 @@ export function InteractiveGrid({ mouseRef }: { mouseRef: RefObject<{ x: number;
 
       const nodes = nodesReference.current;
       const columns = gridColumnsReference.current;
-      const mouse = mouseRef.current;
+      const mouse = mouseRef?.current;
 
       // Skip per-node mouse physics on touch devices
       if (!isMobile) {
@@ -115,7 +115,7 @@ export function InteractiveGrid({ mouseRef }: { mouseRef: RefObject<{ x: number;
           let pushX = 0;
           let pushY = 0;
 
-          if (mouse.active) {
+          if (mouse?.active) {
             const dx = mouse.x - node.baseX;
             const dy = mouse.y - node.baseY;
             const dist = Math.sqrt(dx * dx + dy * dy);
