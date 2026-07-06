@@ -75,22 +75,27 @@ const base = import.meta.env.BASE_URL;
   </div>
 
   <div class="container hero__support">
-    <div class="chat-card before" style="margin-bottom:40px">
-      <span class="label">Today</span>
-      <div class="bubble q">What's your CO2 footprint?</div>
-      <div class="bubble a">Uhh.....</div>
-      <span class="who">— Every piece of furniture, when the EU comes asking</span>
+    <div class="hero__support-grid">
+      <div class="chat-card before">
+        <span class="label">Today</span>
+        <div class="bubble q">What's your CO2 footprint?</div>
+        <div class="bubble a">Uhh.....</div>
+        <span class="who">- Every piece of furniture, when the EU comes asking</span>
+      </div>
+      <div class="hero__support-copy">
+        <span class="kicker">Product data for furniture makers</span>
+        <h2>Collect once. <span class="hl">Pass every audit.</span></h2>
+        <p class="sub">
+          Product Connect turns the furniture you already make into verified
+          digital twins - CO₂ footprint, bill of materials, and an ESPR-ready passport, all from data you already have.
+        </p>
+        <div class="btns">
+          <a class="btn btn--primary" href="#cta">Book a demo</a>
+          <a class="btn btn--ghost" href="#how">See how it works</a>
+        </div>
+        <p class="note">Self-service · No consultants required · And when the EU's documentation rules land, you're already done.</p>
+      </div>
     </div>
-    <span class="kicker">Product data for furniture makers</span>
-    <p class="sub">
-      <b>Measure once. Prove anything.</b> Product Connect turns the furniture you already make into verified
-      digital twins - CO₂ footprint, bill of materials, and an ESPR-ready passport, all from data you already have.
-    </p>
-    <div class="btns">
-      <a class="btn btn--primary" href="#cta">Book a demo</a>
-      <a class="btn btn--ghost" href="#how">See how it works</a>
-    </div>
-    <p class="note">Self-service · No consultants required · And when the EU's documentation rules land, you're already done.</p>
   </div>
 </header>
 
@@ -121,7 +126,7 @@ const base = import.meta.env.BASE_URL;
         <div class="logo-group">
           {brands.map((b) => (
             <div class="brand">
-              <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />
+              {b.photo !== false && <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />}
               <img class:list={["logo-img", { "logo-img--wide": b.wide }]} src={`${base}wireframes/logos/${b.slug}.svg`} alt={b.name} />
             </div>
           ))}
@@ -129,7 +134,7 @@ const base = import.meta.env.BASE_URL;
         <div class="logo-group" aria-hidden="true">
           {brands.map((b) => (
             <div class="brand">
-              <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />
+              {b.photo !== false && <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />}
               <img class:list={["logo-img", { "logo-img--wide": b.wide }]} src={`${base}wireframes/logos/${b.slug}.svg`} alt="" />
             </div>
           ))}
@@ -137,10 +142,9 @@ const base = import.meta.env.BASE_URL;
       </div>
     </div>
     <div class="chat-card after" style="margin-top:36px">
-      <span class="label">With Product Connect</span>
       <div class="bubble q">What's your CO2 footprint?</div>
       <div class="bubble a">32.3 kg. Precisely.<br />Want it broken down by component?</div>
-      <span class="who">— Your furniture, smarter than you think</span>
+      <span class="who">- Your furniture with Product Connect, smarter than you think</span>
     </div>
   </div>
 </section>
@@ -256,10 +260,12 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ COMPONENT-LEVEL (light) - reuse + 3D auto-detect + exploded scroll video ============ -->
 <section class="section" id="components">
+  <div class="components-photo" aria-hidden="true"></div>
+  <div class="components-fade" aria-hidden="true"></div>
   <div class="container">
     <div class="section__head">
       <span class="kicker">Component-level by design</span>
-      <h2>Measure a component once. <span class="hl">Reuse it everywhere.</span></h2>
+      <h2>Collect component data once. <span class="hl">Reuse it everywhere.</span></h2>
       <p class="sub">We gather data and calculate LCA at the <b>component</b> level - a leg, a screw, a fabric - not just the finished product. So the work compounds: every product that shares a component inherits its data automatically, with nothing re-typed.</p>
     </div>
 
@@ -271,7 +277,7 @@ const base = import.meta.env.BASE_URL;
         <!-- Live scroll-scrubbed exploded assembly (real 3D model); breaks out behind the copy on desktop -->
         <ExplodingChair client:visible={{ rootMargin: "1200px" }} />
       </div>
-      <div>
+      <div class="components-card">
         <h3 style="margin-bottom:6px">No re-typing. No re-calculating. No starting over.</h3>
         <p class="lead" style="font-size:16px">Your data compounds - the more you add, the less work each new product becomes.</p>
         <ul class="ticks" style="margin-top:18px">
@@ -287,6 +293,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ VALUE (light) - 3 gains + 1 vision (trimmed per April feedback) ============ -->
 <section class="section" id="value">
+  <div class="value-photo" aria-hidden="true"></div>
   <div class="container">
     <div class="section__head">
       <span class="kicker">What you get</span>
@@ -309,13 +316,6 @@ const base = import.meta.env.BASE_URL;
         <h3>Products that sell themselves</h3>
         <p>Scan-or-tap passport pages - QR code or NFC tag - turn compliance data into a customer experience, and open a direct channel for spare parts and services.</p>
       </div>
-    </div>
-
-    <!-- 1 future vision, set apart -->
-    <div class="card" style="margin-top:20px; border-style:dashed; border-color:var(--clay); background:#fbf3ec">
-      <span class="kicker" style="color:var(--clay-ink)">Where this is going</span>
-      <h3>Every product, connected for life.</h3>
-      <p>As suppliers verify their components, your data sharpens with every product you add. The long-term goal: every product you've ever made, traceable and serviceable for its entire life.</p>
     </div>
   </div>
 </section>
@@ -469,6 +469,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ PRICING (light) ============ -->
 <section class="section" id="pricing">
+  <div class="pricing-photo" aria-hidden="true"></div>
   <div class="container">
     <div class="section__head">
       <span class="kicker">Pricing</span>

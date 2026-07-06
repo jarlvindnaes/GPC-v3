@@ -153,7 +153,7 @@ export function ExplodingChair() {
             if (m.map) {
               m.roughnessMap = null;
               m.roughness = 0.85;
-              m.color = new Three.Color(0xffe6c6); // warm honey oak
+              m.color = new Three.Color(0xeeca9d); // warm oak (browner than honey, eased back ~10%)
             }
             if (mesh.name.startsWith("Metal_Screw")) {
               m.color = new Three.Color(0xa0a3a8);

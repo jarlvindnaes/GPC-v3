@@ -66,7 +66,7 @@ const base = import.meta.env.BASE_URL;
         <div class="logo-group">
           {brands.map((b) => (
             <div class="brand">
-              <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />
+              {b.photo !== false && <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />}
               <img class:list={["logo-img", { "logo-img--wide": b.wide }]} src={`${base}wireframes/logos/${b.slug}.svg`} alt={b.name} />
             </div>
           ))}
@@ -74,7 +74,7 @@ const base = import.meta.env.BASE_URL;
         <div class="logo-group" aria-hidden="true">
           {brands.map((b) => (
             <div class="brand">
-              <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />
+              {b.photo !== false && <img class="brand__photo" src={`${base}wireframes/product-images/${b.slug}.jpg`} alt="" />}
               <img class:list={["logo-img", { "logo-img--wide": b.wide }]} src={`${base}wireframes/logos/${b.slug}.svg`} alt="" />
             </div>
           ))}
@@ -195,6 +195,7 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ============ CAPABILITIES (light) ============ -->
 <section class="section" id="capabilities">
+  <div class="capabilities-photo" aria-hidden="true"></div>
   <div class="container">
     <div class="section__head">
       <span class="kicker">Capabilities</span>
@@ -204,10 +205,10 @@ const base = import.meta.env.BASE_URL;
     <div class="grid grid--3">
       <div class="card"><div class="ic"><Boxes /></div><h3>Component-level LCA &amp; reuse</h3><p>Impact calculated per component and reused across every product that shares it. Upload a 3D model and shared components are detected automatically. EN 15804-aligned.</p></div>
       <div class="card"><div class="ic"><Plug /></div><h3>ERP &amp; PIM integration</h3><p>Two-way sync with the systems you run - Business Central, SAP, your PIM - over a documented API. Mint Digital Product Passports straight from your ERP.</p></div>
-      <div class="card"><div class="ic"><BadgeCheck /></div><h3>Supplier verification at scale</h3><p>Invite multi-tier suppliers to verify their own components through guided surveys - first-hand, primary data, with provenance tracked on every value.</p></div>
+      <div class="card"><div class="ic"><BadgeCheck /></div><h3>Supplier verification at scale</h3><p>Invite multi-tier suppliers to verify their own components through a guided interface - first-hand, primary data, with provenance tracked on every value.</p></div>
       <div class="card"><div class="ic"><FlaskConical /></div><h3>Impact simulator</h3><p>Swap suppliers, materials, or origins and see the environmental impact before you commit.</p></div>
       <div class="card"><div class="ic"><TrendingUp /></div><h3>Supply-chain analytics</h3><p>Concentration risk, geopolitical exposure, and alerts when a route or material gets vulnerable.</p></div>
-      <div class="card"><div class="ic"><PackageCheck /></div><h3>Customs &amp; cross-border</h3><p>Auto-generate HS codes, origin certificates, and duty calculations from your product graph.</p></div>
+      <div class="card"><div class="ic"><PackageCheck /></div><h3>Customs &amp; cross-border</h3><p>Pull the data for HS codes, origin certificates, and duty calculations from your product graph.</p></div>
     </div>
   </div>
 </section>
@@ -309,7 +310,7 @@ const base = import.meta.env.BASE_URL;
       <div>
         <div class="when">Phase 3 · Operate</div>
         <h3>Mint &amp; report</h3>
-        <p style="color:var(--ink-soft); font-size:15px; margin-top:8px">Mint DPPs from ERP, publish verified EPDs, automate ESG &amp; compliance reporting at scale.</p>
+        <p style="color:var(--ink-soft); font-size:15px; margin-top:8px">Mint DPPs from ERP, publish verified EPDs, streamline ESG &amp; compliance reporting at scale.</p>
       </div>
       <div>
         <div class="when">Ongoing · Partner</div>

@@ -27,6 +27,9 @@ const relativePath = Astro.url.pathname.startsWith(base)
   : Astro.url.pathname.replace(/^\//, "");
 const canonical = `${SITE_ORIGIN}/${relativePath}`;
 const ogImage = image ?? `${SITE_ORIGIN}/wireframes/hero-commercial-poster.jpg`;
+// wireframe.css ships from public/ with a fixed filename (no content hash), so browsers cache it across
+// deploys and can show stale styles. Stamp a build-time version query to force a fresh fetch each deploy.
+const assetVersion = Date.now();
 ---
 
 <!doctype html>
@@ -68,7 +71,7 @@ const ogImage = image ?? `${SITE_ORIGIN}/wireframes/hero-commercial-poster.jpg`;
     <link rel="preload" href={`${base}fonts/plus-jakarta-sans-latin.woff2`} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={`${base}fonts/space-grotesk-latin.woff2`} as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href={`${base}wireframes/wireframe.css`} />
+    <link rel="stylesheet" href={`${base}wireframes/wireframe.css?v=${assetVersion}`} />
   </head>
   <body class="bg-white font-sans text-brand-text">
     <a
