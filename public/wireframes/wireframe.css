@@ -387,17 +387,22 @@ h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .passport-phone-m { display: none; }
 @media (max-width: 820px) {
   /* Mobile: show only the top slot, with a DEFINITE height so the phone canvas fills it
-     (a percentage h-full needs a definite parent height; min-height alone collapses it). */
-  .passport-phone-m { display: flex; height: 600px; }
+     (a percentage h-full needs a definite parent height; min-height alone collapses it).
+     Column layout so the interaction caption sits under the phone. */
+  .passport-phone-m { display: flex; flex-direction: column; height: 600px; }
+  .passport-phone-m > astro-island { flex: 1; min-height: 0; width: 100%; }
   .passport-phone-d { display: none; }
 }
 @media (min-width: 821px) {
   /* Desktop: show only the right-column slot and stretch it to the copy's height.
-     Scoped to desktop so it can't override the mobile display:none above (equal specificity). */
+     Scoped to desktop so it can't override the mobile display:none above (equal specificity).
+     Column layout so the interaction caption sits under the phone. */
   #passport .split { align-items: stretch; }
-  .passport-phone-d { display: flex; align-items: stretch; }
-  .passport-phone-d > astro-island { display: block; width: 100%; }
+  .passport-phone-d { display: flex; flex-direction: column; align-items: center; }
+  .passport-phone-d > astro-island { display: block; width: 100%; flex: 1; min-height: 0; }
 }
+/* caption below the passport phone, inviting interaction (matches the chat-card .who caption) */
+.phone-caption { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 10px; max-width: 300px; margin-inline: auto; line-height: 1.5; }
 
 /* The DPP phone content (.dpp-phone) ships its own Tailwind styling in @layer utilities.
    wireframe.css is loaded unlayered, so its global reset (* { margin/padding: 0 }) and bare
