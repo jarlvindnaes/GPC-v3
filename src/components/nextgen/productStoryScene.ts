@@ -12,7 +12,8 @@ export async function createProductScene(
   onReady: () => void,
   onError: () => void,
   isCancelled: () => boolean,
-  reduceMotion: () => boolean
+  reduceMotion: () => boolean,
+  cinematic = false
 ) {
   let renderer: Three.WebGLRenderer;
   try {
@@ -25,15 +26,15 @@ export async function createProductScene(
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = Three.SRGBColorSpace;
   renderer.toneMapping = Three.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.25;
+  renderer.toneMappingExposure = cinematic ? 1.05 : 1.25;
   host.appendChild(renderer.domElement);
   renderer.domElement.style.touchAction = "pan-y";
   const scene = new Three.Scene();
-  scene.add(new Three.HemisphereLight(0xf5f8ff, 0x7e8da7, 2.5));
-  const key = new Three.DirectionalLight(0xffefd8, 3.2);
+  scene.add(new Three.HemisphereLight(0xdfe8ff, 0x11141c, cinematic ? 0.55 : 2.5));
+  const key = new Three.DirectionalLight(0xffefd8, cinematic ? 5.0 : 3.2);
   key.position.set(4, 6, 5);
   scene.add(key);
-  const rim = new Three.DirectionalLight(0xc6d3ff, 2);
+  const rim = new Three.DirectionalLight(0xc6d3ff, cinematic ? 3.5 : 2);
   rim.position.set(-4, 2, -3);
   scene.add(rim);
   const camera = new Three.PerspectiveCamera(33, 1, 0.01, 100);
@@ -53,7 +54,7 @@ export async function createProductScene(
   let visible = true;
   let radius = 1;
   let center = new Three.Vector3();
-  let currentAmount = 0;
+  let currentAmount = cinematic ? getStoryFrame(getProgress()).separation : 0;
   const size = () => {
     const width = Math.max(1, host.clientWidth),
       height = Math.max(1, host.clientHeight);

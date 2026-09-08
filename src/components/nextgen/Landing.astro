@@ -1,6 +1,7 @@
 ---
 import '../../styles/nextgen.css';
 import ProductStory from './ProductStory';
+import CinematicHero from './CinematicHero';
 interface Props { enterprise?: boolean }
 const { enterprise = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
@@ -24,16 +25,16 @@ const enterpriseUrl = `${base}enterprise/`;
 <a class="nav-cta" href="#contact">Let’s talk <span aria-hidden="true">↗</span></a>
 </header>
 <main id="main">
-<section class="hero">
+<section class="hero cinematic-hero">
 <div class="hero-topline"><span><i></i> {enterprise ? 'PRODUCT INTELLIGENCE, CONNECTED' : 'PHYSICAL PRODUCTS. CONNECTED INTELLIGENCE.'}</span><span class="edition">PRODUCT INTELLIGENCE / MADE VISIBLE</span></div>
 <div class="hero-layout">
 <div class="hero-copy"><p class="eyebrow">{enterprise ? 'PRODUCT CONNECT / ENTERPRISE' : 'CO₂ CALCULATIONS + DIGITAL PRODUCT PASSPORTS'}</p>
-<h1>{enterprise ? <>Product intelligence.<br/><em>Built on<br/>connected data.</em></> : <>Beautiful furniture.<br/>A clearer<br/><em>footprint.</em></>}</h1>
+<h1>{enterprise ? <>Product intelligence.<br/><em>Built on<br/>connected data.</em></> : <>Beautiful outside.<br/><em>Intelligent<br/>inside.</em></>}</h1>
 <p class="hero-description">{enterprise ? 'Connect your components, suppliers and product data. Turn a fragmented portfolio into a shared foundation for better decisions.' : 'You make the furniture. We help you understand its impact — and turn your product data into a Digital Product Passport.'}</p>
 <div class="hero-actions"><a class="button lime" href="#contact">{enterprise ? 'Discuss your portfolio' : 'See it with your products'} <span aria-hidden="true">↗</span></a><a class="text-link" href="#inside">See what’s inside <span aria-hidden="true">↓</span></a></div>
 </div>
 <div class="hero-stage">
-{enterprise ? <div class="product-graph" aria-label="Supplier and component data connects through Product Connect to products and passports"><div class="graph-caption">YOUR PRODUCT ECOSYSTEM</div><div class="graph-row"><span>Supplier data</span><span>ERP / PIM / PLM</span></div><div class="graph-stem"></div><div class="graph-core"><span class="brandmark">pc<span>·</span></span><strong>One product graph</strong><small>Components · Materials · Relationships</small></div><div class="graph-stem"></div><div class="graph-row outputs"><span>Product A</span><span>Product B</span><span>Product C</span></div><div class="graph-stem"></div><div class="graph-result">LCA <b>↗</b> Product passports <b>↗</b> Documentation</div><p class="stage-caption">ONE COMPONENT. EVERY PRODUCT CONNECTED.</p></div> : <><img class="hero-chair" src={`${base}nextgen/chair.png`} alt="Sculptural oak dining chair with a curved back and a cream upholstered seat" width="1536" height="1024" fetchpriority="high"/><div class="data-label label-material"><span class="pin"></span><div><small>MATERIAL IDENTITY</small><strong>Oak. Wool. Every detail.</strong></div></div><div class="passport-label"><div class="passport-heading"><span class="status-dot"></span> DIGITAL PRODUCT PASSPORT <span>↗</span></div><div class="passport-line"><span>01 / Material composition</span><b>Connected</b></div><div class="passport-line"><span>02 / Carbon footprint</span><b>Calculated</b></div><div class="passport-line"><span>03 / Care & repair</span><b>Accessible</b></div><p>Illustrative product passport</p></div><p class="stage-caption">THE PHYSICAL PRODUCT. ITS DIGITAL IDENTITY.</p></>}
+<CinematicHero base={base} client:load />
 </div>
 </div>
 <div class="hero-bottom"><span>From the smallest component to the complete story.</span><a href="#foundation">Discover the connection <span aria-hidden="true">↓</span></a></div>
