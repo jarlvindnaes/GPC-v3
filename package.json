@@ -12,7 +12,8 @@
     "clean": "rm -rf dist",
     "check": "biome check --error-on-warnings",
     "lint": "biome check --fix",
-    "typecheck": "astro check && tsc --noEmit"
+    "typecheck": "astro check && tsc --noEmit",
+    "dev:4399": "astro dev --port=4399 --host"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",

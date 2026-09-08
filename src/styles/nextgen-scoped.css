@@ -1,0 +1,198 @@
+/* Scoped extract of nextgen.css for Astra bands on the wireframes page. Generated - do not hand-edit. */
+.ng .ng-hero{padding:25px 4.2% 0;overflow:hidden}
+.ng .hero-topline{display:flex;justify-content:space-between;color:#b6bdb5;font-size:12px;letter-spacing:1.5px}
+.ng .hero-topline>span:first-child{display:flex;align-items:center;gap:9px}
+.ng i,.ng .status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#d6ef8c}
+.ng .hero-layout{display:grid;grid-template-columns:1.08fr 1fr;min-height:640px;position:relative}
+.ng .hero-copy{position:relative;z-index:2;padding:80px 0 80px}
+.ng .eyebrow{font-size:12px;letter-spacing:1.7px;font-weight:500;margin:0 0 27px;line-height:1.5}
+.ng .hero-copy>.eyebrow{color:#aab29f}
+.ng h1{font-size:clamp(55px,5.5vw,91px);line-height:1.02;font-weight:430;letter-spacing:-5px;margin:0 0 29px}
+.ng em{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.055em}
+.ng h1 em{color:#d6ef8c}
+.ng .hero-description{max-width:440px;line-height:1.65;color:#b8beb9;font-size:16px;margin:0 0 33px}
+.ng .hero-actions{display:flex;gap:25px;align-items:center;flex-wrap:wrap}
+.ng .button{display:inline-flex;align-items:center;justify-content:space-between;gap:30px;padding:18px 23px;font-size:14px;font-weight:550;transition:transform .2s,background .2s;border-radius:3px}
+.ng .button:hover{transform:translateY(-3px)}
+.ng .lime{background:#d6ef8c;color:#182012}
+.ng .button>span{font-size:20px}
+.ng .text-link{display:inline-flex;align-items:center;gap:18px;font-size:14px;border-bottom:1px solid #87917e;padding:10px 0}
+.ng .hero-stage{position:relative;min-width:0}
+.ng .hero-chair{position:absolute;height:100%;width:165%;max-width:none;left:-37%;object-fit:cover;object-position:55% 50%;mask-image:linear-gradient(to right,transparent,#000 19%,#000 90%,transparent)}
+.ng .hero-bottom{display:flex;justify-content:space-between;padding:22px 0;border-top:1px solid #ffffff24;color:#aeb6ae;font-size:12px;gap:20px}
+.ng .hero-bottom a{display:flex;gap:40px}
+.ng .intro>.eyebrow{color:#5f7055}
+.ng h2{font-size:clamp(38px,4.2vw,66px);font-weight:430;line-height:1.07;letter-spacing:-2.8px;margin:0}
+.ng h2 em{color:#62794c}
+.ng .feature .eyebrow{color:#a5b895}
+.ng .feature-copy>p:not(.eyebrow){max-width:390px;color:#b6c0b2;line-height:1.8;margin:28px 0}
+.ng .audience{background:#202a22;border-top:1px solid #ffffff20}
+.ng .audience>div{display:flex;justify-content:space-between;gap:45px;align-items:center}
+.ng .audience h2 em{color:#b9ce99}
+.ng .outline{border:1px solid #87997e;white-space:nowrap}
+.ng .audience>p:last-child{color:#b2bfaa;max-width:620px;line-height:1.7;margin:28px 0 0}
+.ng .contact{background:#d6ef8c;color:#19220f}
+.ng .contact h2{font-size:clamp(46px,6vw,90px)}
+.ng .contact h2 em{color:#506336}
+.ng .contact-bottom{display:flex;justify-content:space-between;gap:40px;align-items:center;margin-top:40px}
+.ng .contact-bottom>p{max-width:465px;line-height:1.75;color:#455630;font-size:16px}
+.ng .dark{background:#202b19;color:#f1f6e9}
+.ng .contact-email{font-size:12px;margin-top:25px;color:#4b5f30}
+@media(min-width:1600px){
+  .ng .hero-layout{min-height:760px}
+  .ng .hero-copy{padding-top:110px}
+  .ng .hero-stage{max-height:760px}
+}
+@media(max-width:1000px){
+  .ng .hero-layout{grid-template-columns:1.2fr 1fr;min-height:580px}
+  .ng .hero-copy{padding-top:65px}
+  .ng h1{font-size:61px;letter-spacing:-3.5px}
+  .ng .hero-stage .passport-label{width:255px;bottom:75px}
+  .ng .hero-chair{width:200%;left:-70%}
+  .ng .hero-actions{gap:10px}
+}
+@media(max-width:700px){
+  .ng .ng-hero{padding:23px 6% 0}
+  .ng .hero-topline{font-size:12px;letter-spacing:1px}
+  .ng .hero-layout{display:flex;flex-direction:column}
+  .ng .hero-copy{padding:48px 0 0}
+  .ng .eyebrow{font-size:12px;letter-spacing:1.4px}
+  .ng h1{font-size:clamp(45px,10.5vw,68px);letter-spacing:-3px;line-height:1.03}
+  .ng .hero-description{font-size:15px;max-width:95%}
+  .ng .hero-actions{gap:20px}
+  .ng .button{font-size:12px;padding:16px 18px;gap:18px}
+  .ng .text-link{font-size:12px}
+  .ng .hero-stage{height:410px;margin-top:15px}
+  .ng .hero-chair{width:140%;left:-20%;object-position:70% 50%}
+  .ng .hero-stage .passport-label{bottom:40px;width:245px;padding:14px;right:0}
+  .ng .hero-bottom{font-size:12px;line-height:1.5;gap:15px}
+  .ng .hero-bottom a{gap:10px;min-width:110px}
+  .ng h2{font-size:43px;letter-spacing:-2px}
+  .ng .audience>div,.ng .contact-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:25px}
+  .ng .audience h2{font-size:38px}
+  .ng .contact h2{font-size:49px}
+  .ng .contact-bottom{margin-top:20px;gap:15px}
+  .ng .contact-bottom>p{font-size:15px}
+  .ng .enterprise .hero-stage{height:auto;margin-bottom:30px}
+  .ng .enterprise .hero-bottom>span{max-width:170px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ng .button{transition:none}
+}
+.ng .ng-hero{background:linear-gradient(120deg,#101d25 20%,#172823 100%)}
+.ng h1{font-weight:650;letter-spacing:-4.8px}
+.ng h1 em,.ng h2 em{font-family:Inter,Arial,sans-serif;font-style:normal;font-weight:650;letter-spacing:inherit}
+.ng h2{font-weight:620;letter-spacing:-2.8px}
+.ng .hero-copy{padding-top:72px}
+.ng .ng-hero h1{font-size:clamp(52px,5.25vw,84px)}
+.ng .enterprise .ng-hero h1{font-size:clamp(50px,4.7vw,76px)}
+.ng .hero-chair{mask-image:linear-gradient(to right,transparent,#000 24%,#000 85%,transparent)}
+.ng .hero-description{font-size:17px}
+.ng .button{border-radius:6px;font-weight:650}
+.ng .passport-label .status-dot{background:#447b45}
+.ng .audience{background:#1b3547}
+.ng .contact{position:relative}
+.ng .contact h2 em{color:#385339}
+.ng .foundation-heading .eyebrow{margin:0;color:#496c78}
+.ng .foundation-foot .status-dot{background:#507c66}
+@media(max-width:1000px){
+  .ng .ng-hero .hero-description{font-size:16px}
+}
+@media(max-width:700px){
+  .ng .ng-hero h1,.ng .enterprise .ng-hero h1{font-size:clamp(43px,10vw,64px);letter-spacing:-2.7px}
+  .ng .hero-copy{padding-top:45px}
+  .ng h2{letter-spacing:-2px}
+  .ng .foundation-foot .status-dot{flex-shrink:0;margin-top:7px}
+}
+.ng .ng-hero{background:radial-gradient(ellipse at 5% 0%,#23364d80,transparent 60%),#101a2a}
+.ng .hero-topline{color:#94a5ba;letter-spacing:1.15px}
+.ng .hero-copy>.eyebrow{color:#d4ee9c}
+.ng .ng-hero h1{font-weight:580;letter-spacing:-4.4px;line-height:1.025}
+.ng .ng-hero h1 em{font-weight:580}
+.ng .hero-description{color:#abb8ca}
+.ng .hero-bottom{border-color:#ffffff1c}
+.ng .hero-stage:after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 65px 15px #101a2a;opacity:.4}
+.ng .hero-chair{opacity:.9}
+.ng .passport-label .status-dot{background:#697cf5}
+.ng .hero-bottom a,.ng .text-link{color:#d1dcf2}
+.ng .lime{background:var(--pc-signal)}
+.ng .eyebrow{letter-spacing:1.4px;font-weight:550}
+.ng .intro>.eyebrow,.ng .process .eyebrow,.ng .provenance .eyebrow{color:#596dd5}
+.ng .feature .eyebrow{color:#a0aff7}
+.ng .audience{background:#1b2b45}
+.ng .audience h2 em{color:#a8b8d5}
+.ng .contact{background:#e1edcc}
+.ng .contact h2{color:#172b2d}
+.ng .contact h2 em{color:#5e7663}
+.ng .contact .dark{background:#15243a}
+.ng .foundation-heading .eyebrow{color:#5a6dc8}
+.ng .story-heading .eyebrow{display:flex;align-items:center;gap:12px;margin:0;color:#5269cd}
+@media(max-width:700px){
+  .ng .ng-hero h1{letter-spacing:-2.6px}
+  .ng .story-heading .eyebrow{font-size:12px}
+}
+.ng material. */
+.cinematic-hero{background:radial-gradient(ellipse at 74% 40%,#28312e66 0%,#10182020 43%,transparent 67%),#0a1017;padding-top:28px}
+.ng .cinematic-hero .hero-layout{grid-template-columns:1fr 1.18fr;min-height:710px;align-items:center}
+.ng .cinematic-hero .hero-copy{padding:80px 0 90px;z-index:3}
+.ng .cinematic-hero h1{font-size:clamp(52px,5.6vw,91px);font-weight:480;letter-spacing:-4.8px;line-height:1.035}
+.ng .cinematic-hero h1 em{color:#c5d1c0;font-weight:480}
+.ng .cinematic-hero .hero-copy>.eyebrow{color:#c7d0bb;letter-spacing:1.8px;font-size:12px;margin-bottom:30px}
+.ng .cinematic-hero .hero-description{max-width:390px;color:#98a4b0;font-size:16px;line-height:1.8}
+.ng .cinematic-hero .hero-topline{font-size:12px;color:#7c8a96}
+.ng .cinematic-hero .hero-stage{height:710px;width:100%;align-self:stretch}
+.ng .cinematic-hero .hero-stage:after{display:none}
+.ng .cinematic-hero .hero-bottom{border-color:#ffffff17;color:#7f8c98;padding:24px 0}
+.ng .cinematic-hero .button.lime{background:#d7e4c5;color:#1e2a22;font-weight:550;border-radius:3px}
+.ng .cinematic-hero .text-link{color:#a5b2bd;border-color:#53616c}
+.ng .cinema-product{position:absolute;inset:0 -3% 0 -7%}
+.ng .cinema-model{position:absolute;inset:5px 0 45px;cursor:grab;touch-action:pan-y}
+.ng .cinema-model:active{cursor:grabbing}
+.ng .cinema-model canvas{display:block;width:100%;height:100%}
+.ng .cinema-caption{position:absolute;bottom:86px;right:4%;display:flex;align-items:center;gap:18px;pointer-events:none;color:#81919b;font-size:12px;line-height:1.7}
+.ng .cinema-caption strong{color:#b9c4ca;font-weight:450}
+.ng .cinema-index{font-size:24px;letter-spacing:-1px;color:#cad4c4;font-weight:350;border-right:1px solid #ffffff21;padding-right:18px}
+.ng .cinema-controls{position:absolute;bottom:20px;left:8%;right:4%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.ng .cinema-controls>span{font-family:monospace;font-size:12px;letter-spacing:1px;color:#71808c}
+.ng .cinema-controls button{font:inherit;font-size:12px;color:#a2afba;padding:9px 15px;border:1px solid #ffffff25;border-radius:3px;background:#101820cc;cursor:pointer}
+.ng .cinema-controls button:hover{border-color:#b9c6b6;color:#d8e2d8}
+.ng .cinema-controls button:focus-visible{outline:2px solid #d7e4c5;outline-offset:4px}
+.ng .cinema-controls button:disabled{opacity:.4;cursor:wait}
+.ng .cinema-loading{position:absolute;left:18%;right:12%;top:47%;font-size:14px;color:#94a1ac;text-align:center}
+.ng .enterprise .cinematic-hero h1{font-size:clamp(48px,4.8vw,78px)}
+@media(min-width:1550px){
+  .ng .cinematic-hero .hero-layout,.ng .cinematic-hero .hero-stage{min-height:790px;height:790px}
+  .ng .cinematic-hero .hero-copy{padding-top:100px}
+}
+@media(max-width:1000px){
+  .ng .cinematic-hero .hero-layout{grid-template-columns:1fr 1fr;min-height:650px}
+  .ng .cinematic-hero .hero-stage{height:650px}
+  .ng .cinematic-hero h1{font-size:61px;letter-spacing:-3.5px}
+  .ng .cinematic-hero .hero-copy{padding:60px 0}
+  .ng .cinema-product{inset:0 -8% 0 -12%}
+  .ng .cinema-controls>span{max-width:160px;line-height:1.7}
+  .ng .cinema-caption{right:8%;bottom:92px}
+}
+@media(max-width:700px){
+  .ng .cinematic-hero .hero-layout{display:flex;flex-direction:column;min-height:0}
+  .ng .cinematic-hero .hero-copy{padding:48px 0 14px;width:100%}
+  .ng .cinematic-hero h1,.ng .enterprise .cinematic-hero h1{font-size:clamp(46px,11vw,67px);letter-spacing:-2.8px}
+  .ng .cinematic-hero .hero-copy>.eyebrow{font-size:12px;letter-spacing:1px;margin-bottom:24px}
+  .ng .cinematic-hero .hero-description{font-size:15px;max-width:370px}
+  .ng .cinematic-hero .hero-stage{height:460px;margin-top:0}
+  .ng .cinema-product{inset:0 -7%}
+  .ng .cinema-model{inset:0 0 45px}
+  .ng .cinema-caption{bottom:76px;right:8%;font-size:12px}
+  .ng .cinema-index{font-size:21px}
+  .ng .cinema-controls{left:7%;right:7%;bottom:15px}
+  .ng .cinema-controls>span{font-size:12px;max-width:215px}
+  .ng .cinematic-hero .hero-bottom{font-size:12px}
+  .ng .cinematic-hero .hero-topline{font-size:12px;line-height:1.6}
+  .ng .cinematic-hero .hero-bottom>span{max-width:190px}
+}
+.ng .audience,.ng .contact{padding:104px 7%}
+/* Hand-added: base text color/font the nextgen body rule provided (body itself is not scoped in). */
+.ng{color:#f5f6f0;font-family:Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.ng a{color:inherit;text-decoration:none}
+.ng .contact{background:#e1edcc}
+.ng #cta.contact{background:#e1edcc}
