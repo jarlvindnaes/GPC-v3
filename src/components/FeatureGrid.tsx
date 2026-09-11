@@ -92,7 +92,7 @@ const features = [
   },
   {
     id: "commerce",
-    title: "Spare Parts & Commerce",
+    title: "Spare Parts & Commerce · Coming this fall",
     shortDescription: "Convert unknown product owners into life-long customers. Embed a web-shop in every product.",
     longDescription:
       "Don't let the customer relationship end at the retailer. Use the DPP as a direct-to-consumer channel. When a customer scans their product, offer them the exact spare parts, compatible accessories, and care products they need.",

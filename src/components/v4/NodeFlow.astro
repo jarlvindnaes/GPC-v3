@@ -1,0 +1,16 @@
+---
+const nodes=[
+['cad','CAD files','Geometry',8,12],['bom','Bill of materials','Product structure',8,30],['source','Supplier records','Primary data',8,50],['docs','Documents','Certificates',8,70],['spec','Specifications','Materials',8,88],
+['files','Product files','CAD · BOM',29,25],['suppliers','Supply chain','Suppliers · Sources',29,50],['materials','Components','Materials · Parts',29,75],
+['pc','Product Connect','One connected product model',50,50],
+['impact','Impact insights','Understand & improve',71,25],['passport','Product passports','Publish & share',71,50],['evidence','Product evidence','Trace & document',71,75],
+['carbon','Carbon footprint','Product impact',92,12],['compare','Comparisons','Better decisions',92,30],['care','Care & repair','Product knowledge',92,50],['shop','Spare parts','Coming this fall',92,70],['trace','Traceability','Source evidence',92,88]
+];
+const edges=[['cad','files'],['bom','files'],['source','suppliers'],['docs','suppliers'],['spec','materials'],['bom','materials'],['files','pc'],['suppliers','pc'],['materials','pc'],['pc','impact'],['pc','passport'],['pc','evidence'],['impact','carbon'],['impact','compare'],['passport','care'],['passport','shop'],['evidence','trace']];
+---
+<div class="node-diagram" data-node-diagram><div class="diagram-toolbar"><span>YOUR DATA</span><span>CONNECTED KNOWLEDGE</span><span>PUT TO WORK</span></div><div class="node-scroll"><div class="node-stage"><svg class="node-wires" aria-hidden="true"><defs><linearGradient id="flow-stroke"><stop stop-color="#c6cfdf"/><stop offset=".5" stop-color="#859dd0"/><stop offset="1" stop-color="#c6cfdf"/></linearGradient></defs>{edges.map(([from,to])=> <path data-from={from} data-to={to} stroke="url(#flow-stroke)" fill="none"/>)}</svg>{nodes.map(([id,title,subtitle,x,y])=><button type="button" class:list={['flow-node',{'flow-hub':id==='pc','flow-leaf':['cad','bom','source','docs','spec','carbon','compare','care','shop','trace'].includes(String(id))}]} data-node={id} data-x={x} data-y={y} style={`left:${x}%;top:${y}%`} aria-label={`${title}. Drag to move, or use arrow keys.`} aria-describedby="node-help"><span class="node-symbol" aria-hidden="true">{id==='pc'?'pc·':id==='files'?'▤':id==='suppliers'?'◎':id==='materials'?'◈':id==='impact'?'⌁':id==='passport'?'▥':'✓'}</span><strong>{title}</strong><small>{subtitle}</small></button>)}</div></div><div class="diagram-footer"><p id="node-help">Drag a node to explore the connections. You can also use the arrow keys.</p><button type="button" class="diagram-reset">Reset layout ↺</button></div></div>
+<script>
+import { initNodeFlow } from './node-flow';
+const cleanup=initNodeFlow();
+document.addEventListener('astro:before-swap',cleanup,{once:true});
+</script>

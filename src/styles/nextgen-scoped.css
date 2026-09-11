@@ -131,7 +131,7 @@
   .ng .ng-hero h1{letter-spacing:-2.6px}
   .ng .story-heading .eyebrow{font-size:12px}
 }
-.ng material. */
+/* Cinematic product portrait: light, space, material. */
 .cinematic-hero{background:radial-gradient(ellipse at 74% 40%,#28312e66 0%,#10182020 43%,transparent 67%),#0a1017;padding-top:28px}
 .ng .cinematic-hero .hero-layout{grid-template-columns:1fr 1.18fr;min-height:710px;align-items:center}
 .ng .cinematic-hero .hero-copy{padding:80px 0 90px;z-index:3}

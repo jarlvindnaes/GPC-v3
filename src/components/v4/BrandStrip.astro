@@ -1,0 +1,36 @@
+---
+const base = import.meta.env.BASE_URL;
+const brands = [
+  { id: 'takt', name: 'TAKT', url: 'https://taktcph.com/' },
+  { id: 'mater', name: 'Mater', url: 'https://materdesign.com/' },
+  { id: 'muuto', name: 'Muuto', url: 'https://www.muuto.com/' },
+  { id: 'new-works', name: 'New Works', url: 'https://newworks.dk/' },
+  { id: 'benchmark', name: 'Benchmark', url: 'https://benchmarkfurniture.com/' },
+];
+---
+<div class="brand-strip frame" aria-label="Product Connect community">
+  {brands.map(brand => (
+    <a class="brand-panel" href={brand.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${brand.name} (opens in a new tab)`}>
+      <img class="brand-photo" src={`${base}v4/brands/${brand.id}.webp`} alt="" width="1000" height="1000" loading="lazy" decoding="async" />
+      <span class="brand-shade" aria-hidden="true"></span>
+      <img class="brand-logo" src={`${base}wireframes/logos/${brand.id}.svg`} alt={brand.name} width="130" height="40" loading="lazy" />
+    </a>
+  ))}
+</div>
+<style>
+  .brand-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-block: 1px solid #e9eaec; }
+  .brand-panel { position: relative; display: grid; place-items: center; height: 220px; overflow: hidden; isolation: isolate; background: #b6afa4; }
+  .brand-panel + .brand-panel { border-left: 1px solid rgba(255,255,255,.25); }
+  .brand-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.58); transition: transform 1.2s cubic-bezier(.2,.65,.3,1), filter .8s; z-index: -2; }
+  .brand-shade { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(19,23,25,.15),rgba(19,23,25,.43) 55%,rgba(19,23,25,.23)); z-index: -1; }
+  .brand-logo { width: min(130px, 68%); height: 40px; object-fit: contain; filter: brightness(0) invert(1); opacity: .95; }
+  .brand-panel:hover .brand-photo, .brand-panel:focus-visible .brand-photo { transform: scale(1.035); filter: saturate(.9); }
+  .brand-panel:focus-visible { outline: 3px solid #869cf7; outline-offset: -5px; }
+  @media(max-width: 700px) {
+    .brand-strip { grid-template-columns: repeat(6, minmax(0,1fr)); }
+    .brand-panel { grid-column: span 2; height: 156px; }
+    .brand-panel:nth-child(n+4) { grid-column: span 3; border-top: 1px solid rgba(255,255,255,.25); }
+    .brand-logo { width: min(110px,70%); height: 32px; }
+  }
+  @media(prefers-reduced-motion: reduce) { .brand-photo { transition: none; } .brand-panel:hover .brand-photo, .brand-panel:focus-visible .brand-photo { transform: none; } }
+</style>

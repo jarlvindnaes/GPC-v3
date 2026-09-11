@@ -1,108 +1,62 @@
-# Product Connect — Marketing Frontpage
+# Product Connect website
 
-The public-facing marketing website for **Product Connect**, a SaaS platform that helps furniture manufacturers digitise their products, manage supply chain data, calculate environmental impact (LCA), and generate ESPR-compliant Digital Product Passports (DPP).
+The current Product Connect marketing site. The main experience is an Astro page with lightweight canvas animation, interactive product-data diagrams, an embedded 3D Digital Product Passport, and responsive layouts.
 
-**Live site:** [jarlvindnaes.github.io/GPC-v3](https://jarlvindnaes.github.io/GPC-v3/)
+## Start the project
 
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | React 19 + TypeScript |
-| Build | Vite 6 |
-| Styling | Tailwind CSS 4 |
-| Animation | Motion (Framer Motion) |
-| 3D | React Three Fiber + Drei + Three.js |
-| Icons | Lucide React |
-| Deployment | GitHub Pages (`gh-pages`) |
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── Hero.tsx                # Hero banner with floating network canvas
-│   ├── StorytellingScroll.tsx  # 7-step sticky scroll "How it works" section
-│   ├── Native3DModels.tsx      # All 3D model components (Chair, Bolt, Emerald, DPP chair)
-│   ├── IntegrationSection.tsx  # System integration diagram with dynamic SVG paths
-│   ├── StatsSection.tsx        # Stats with interactive network visualization
-│   ├── CountdownBanner.tsx     # ESPR 2027 countdown timer
-│   ├── FeatureGrid.tsx         # Feature cards grid
-│   ├── Testimonials.tsx        # Customer testimonials carousel
-│   ├── Pricing.tsx             # Pricing tiers
-│   ├── ProductBreakdown.tsx    # Product journey breakdown
-│   ├── Navbar.tsx              # Global navigation with mobile menu
-│   ├── Footer.tsx              # Site footer
-│   ├── TrustLogos.tsx          # Partner/trust logos
-│   └── BackToTop.tsx           # Scroll-to-top button
-├── pages/
-│   ├── Home.tsx                # Main landing page
-│   ├── DPP.tsx                 # Digital Product Passport page
-│   ├── Platform.tsx            # Platform features page
-│   ├── PricingPage.tsx         # Dedicated pricing page
-│   └── About.tsx               # About page
-├── App.tsx                     # Router and layout
-└── main.tsx                    # Entry point
-public/
-├── models/                     # GLB 3D model files
-└── screenshots/                # Product screenshot assets
-```
-
-## Key Features
-
-### Interactive 3D Models
-- West Elm Slope Leather Chair, Steel Bolt, Emerald crystal
-- Drag-to-rotate via `PresentationControls` with softened spring physics
-- Float animations, contact shadows, studio lighting
-
-### Storytelling Scroll
-- 7-step sticky scroll section explaining the product digitisation flow
-- Each step has animated text + a visual panel (3D model, data card, or animated graphic)
-- Metro line progress indicator that extends into a grand finale section
-- Finale features an interactive 3D chair with a hoverable/tappable QR tag
-
-### Dynamic Integration Diagram
-- SVG paths computed at runtime from actual DOM element positions via `getBoundingClientRect`
-- Automatically adapts to any viewport size — no hardcoded coordinates
-- Animated flowing gradients along connection lines
-- `ResizeObserver` for live recalculation
-
-### Hero Network Canvas
-- HTML5 Canvas with ~55 floating nodes representing the supply chain ecosystem
-- Node categories: Components (blue), Suppliers (orange), Products (purple), Consumers (orange), Certifications (indigo)
-- Mouse-reactive parallax repulsion, inter-node connections, subtle drift animation
-- Labels appear on foreground nodes
-
-### Stats Network Visualization
-- Canvas-based circular node distribution with lines converging to anchor point
-- Mouse gravitation: nodes within radius are pulled toward cursor
-- Idle drift animation on each node
-
-### Mobile Responsive
-- Full mobile support with responsive breakpoints
-- 3D models render on all screen sizes
-- Touch support for QR tag interaction on finale chair
-
-## Development
+Requires Node.js 20 or newer.
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server
 npm run dev
-
-# Build for production
-npm run build
-
-# Deploy to GitHub Pages
-npm run deploy
 ```
 
-## Deployment
+The development server runs at `http://localhost:3000` by default.
 
-The site deploys to GitHub Pages via the `gh-pages` package. Running `npm run deploy` builds the project and pushes the `dist/` folder to the `gh-pages` branch.
+```bash
+npm run build       # production build
+npm run typecheck   # Astro and TypeScript checks
+node --test tests/*.test.mjs
+```
 
-**Repository:** [github.com/jarlvindnaes/GPC-v3](https://github.com/jarlvindnaes/GPC-v3)
+## Current pages
+
+- `/` — V4 Product Connect homepage
+- `/how-it-works/` — detailed product workflow
+- `/passport-preview/` — embedded interactive DPP used by the homepage
+- `/platform/`, `/pricing/`, `/enterprise/`, `/about/`, `/dpp/` — supporting pages from the existing site
+- `/emballage/` — separate packaging calculator prototype
+
+## V4 structure
+
+- `src/components/v4/Home.astro` — homepage content and composition
+- `src/components/v4/home.css` — homepage layout and visual system
+- `src/components/v4/BrandStrip.astro` — photographic customer/brand banner
+- `src/components/v4/NodeFlow.astro` — draggable connected-data diagram
+- `src/components/v4/data-scenes.ts` — Dynamic Product Model and Input interface canvases
+- `src/components/v4/McpGraphic.astro` — database-to-MCP-to-AI illustration
+- `src/components/v4/Scale.astro` — animated infrastructure section
+- `src/components/v4/BenefitProof.astro` — draft proof panels for the five benefits
+- `src/components/v4/PassportPhone.tsx` — interactive 3D passport phone
+- `src/components/v4/Footer.astro` — shared V4 footer
+- `public/v4/` — optimized V4 imagery
+
+## Content status
+
+The five benefit quotes, names, and evidence panels are clearly marked as illustrative drafts. Replace them with approved customer quotes and measured outcomes before publishing them as customer proof. The testimonial portrait, person, and company are fictional placeholders. Brand-strip images came from the brands’ public websites; their source URLs are recorded in `public/v4/brands/sources.json`.
+
+## Working conventions
+
+- Prefix public asset paths with `import.meta.env.BASE_URL` so branch and GitHub Pages builds work.
+- Keep animation subtle and respect `prefers-reduced-motion`.
+- Preserve keyboard controls, labels, and focus states on interactive diagrams.
+- Run `npm run build` before committing.
+- The type checker currently includes generated and draft files, so it can print many non-blocking hints even when it finishes with zero errors.
+- `npm run check` currently reports formatting debt in older V3 files; treat that as a cleanup task rather than a V4 regression.
+- Read `CLAUDE.md` before continuing substantial work in Claude Code.
+
+## GitHub
+
+Repository: [github.com/jarlvindnaes/GPC-v3](https://github.com/jarlvindnaes/GPC-v3)
+
+The V4 design is maintained on the `product-connect-v4` branch.
