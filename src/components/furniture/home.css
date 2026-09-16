@@ -17,7 +17,7 @@
 .model-atmosphere{position:relative;height:680px;overflow:hidden}.model-atmosphere .model-title{position:relative;z-index:1;padding-top:85px;pointer-events:none;text-shadow:0 2px 20px #111214,0 0 45px #111214}.model-atmosphere .model-title h2{font-size:clamp(34px,4.5vw,60px)}.model-atmosphere .model-horizon.data-sphere{position:absolute;inset:0;height:100%;width:100%}.model-atmosphere .model-title p{color:#b1b6bf}@media(max-width:1000px){.model-atmosphere{height:590px}.model-atmosphere .model-title{padding-top:65px}}@media(max-width:720px){.model-atmosphere{height:430px}.model-atmosphere .model-title{padding:45px 20px 0}.model-atmosphere .model-title h2{font-size:34px}}
 
 /* Two deliberate headline lines, while preserving the clear space beside the chair. */
-.hero-chair h1{font-size:clamp(25px,3.15vw,44px);letter-spacing:-.045em;text-wrap:initial;max-width:none}.hero-chair h1>span{display:block;white-space:nowrap}.hero-editorial{width:52%;max-width:620px}.time-value-copy{padding:48px 0 40px}.getting-started>.node-diagram{margin-top:0}.getting-started{padding-top:36px}@media(max-width:720px){.hero-editorial{width:100%}.hero-chair h1{font-size:clamp(21px,5.7vw,39px);max-width:none}.time-value-copy{padding:35px 10px}.getting-started{padding-top:22px}}
+.hero-chair h1{font-size:clamp(36px,4.3vw,64px);letter-spacing:-.045em;text-wrap:initial;max-width:none}.hero-chair h1>span{display:block;white-space:nowrap}.hero-editorial{width:52%;max-width:720px}.time-value-copy{padding:48px 0 40px}.getting-started>.node-diagram{margin-top:0}.getting-started{padding-top:36px}@media(max-width:720px){.hero-editorial{width:100%}.hero-chair h1{font-size:clamp(32px,9vw,46px);max-width:none}.time-value-copy{padding:35px 10px}.getting-started{padding-top:22px}}
 
 .chair-passport-trigger{position:absolute;left:74%;top:55%;display:flex;align-items:center;gap:10px;cursor:pointer;border:1px solid #ffffffb0;border-radius:30px;background:#ffffffed;color:#323a49;padding:10px 16px 10px 10px;font:500 12px Inter,sans-serif;box-shadow:0 5px 25px #17263d25;z-index:2;transform:translateX(-50%)}.chair-passport-trigger>span:first-child{font-size:25px;border-radius:50%;padding:3px 9px;background:#667cbe;color:white}.chair-passport-trigger:focus-visible{outline:3px solid #667cbe;outline-offset:5px}.chair-passport-dialog{border:1px solid #d8dee8;border-radius:22px;padding:0;background:#fff;width:409px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);color:#333;box-shadow:0 25px 100px #0005}.chair-passport-dialog::backdrop{background:#11192588;backdrop-filter:blur(7px)}.passport-dialog-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #eee;font-size:11px}.passport-close{border:0;background:#f1f3f6;border-radius:50%;width:32px;height:32px;font-size:24px;cursor:pointer}.passport-embed-shell{width:375px;height:812px;margin:auto;overflow:hidden}.passport-embed-shell iframe{display:block;border:0;width:375px;height:812px}.passport-demo-note{font-size:10px;text-align:center;padding:8px}.enterprise-invite{background:#1b2b43;color:#f7f8f3}.enterprise-invite{padding:70px 50px}.enterprise-invite>.eyebrow{color:#e0e6ee;font-size:12px;font-weight:600}.enterprise-invite>div{display:flex;align-items:center;justify-content:space-between;gap:30px;margin:30px 0}.enterprise-invite h2{font-size:clamp(30px,4vw,52px);font-weight:600}.enterprise-invite h2 span{color:#a9bbd7}.enterprise-invite .button{background:transparent;color:#f5f7f8;border-color:#98aa81;padding:18px 25px}.enterprise-invite>p:last-child{color:#b4c0a6;font-size:17px}.enterprise-invite .button:hover{background:#ffffff0b}@media(max-height:950px){.passport-embed-shell{width:300px;height:650px}.passport-embed-shell iframe{transform:scale(.8);transform-origin:top left}}@media(max-height:780px){.passport-embed-shell{width:263px;height:569px}.passport-embed-shell iframe{transform:scale(.7)}}@media(max-width:720px){.chair-passport-trigger{left:68%;top:auto;bottom:110px;font-size:10px;white-space:nowrap}.enterprise-invite{padding:45px 24px}.enterprise-invite>div{display:block}.enterprise-invite .button{margin-top:24px}.enterprise-invite>p:last-child{font-size:15px}.enterprise-invite br{display:none}.enterprise-invite h2 span{display:block}.passport-embed-shell{width:263px;height:569px}.passport-embed-shell iframe{transform:scale(.7);transform-origin:top left}}
 
@@ -32,3 +32,83 @@
 .model-title h2{font-size:clamp(42px,6.5vw,82px);font-weight:750;letter-spacing:-.055em;line-height:1.02;max-width:1100px;margin-inline:auto}.api.api-reference{min-height:460px;padding:65px 45px;display:flex;align-items:center;gap:20px}.api-reference .api-copy{position:relative;flex:1;min-width:0}.api-reference .api-copy h2{font-size:clamp(28px,3.3vw,41px)}@media(max-width:720px){.api.api-reference{display:block;padding:65px 24px 35px}.model-title h2{font-size:clamp(38px,8vw,56px);padding-inline:16px}.model-title{padding-top:45px}}
 .quote-portrait{width:80px;height:80px;object-fit:cover;border-radius:50%;margin:0 auto 12px;filter:saturate(.65);border:1px solid #e1e4e9}.closing h2{max-width:1060px}
 .epd-process-note{display:block;margin-top:12px;font-size:11px;line-height:1.5;color:#858c98}
+
+/* Lounge-chair banner: keep the cutout to the right of the headline on wider screens */
+@media(min-width:721px){.hero-chair .hero-backdrop{left:36%;width:64%;object-fit:cover;object-position:left center}}
+
+/* ---------- Live supply-chain visual (replaces the static globe screenshot) ---------- */
+/* SupplyChainGlobe reads its palette from these root variables; mapped to the Signal identity */
+:root{--color-brand-light:#697CF5;--color-brand-dark:#1b2450;--color-brand-deep:#0a0f22;--color-brand-accent:#D4EE9C;--color-brand-cyan:#8fd8f5;--color-brand-amber:#f2c46b;--color-brand-violet:#b39cff}
+.hero-visual.live-visual{height:auto;padding:56px 45px 64px}
+.live-window{border-radius:14px;border-color:#dfe3ec;box-shadow:0 30px 90px #1d2a5026,0 2px 0 #fff inset}
+.live-window .live{display:inline-flex;align-items:center;gap:8px;color:#5d806d}
+.live-window .live i{width:7px;height:7px;border-radius:50%;background:#56b27f;box-shadow:0 0 0 0 #56b27f80;animation:pc-pulse 2.4s infinite}
+.globe-stage{position:relative;height:460px;overflow:hidden;background:radial-gradient(ellipse at 55% 45%,#1d2754 0%,#0e1430 48%,#070a17 100%)}
+.globe-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#070a17d9 0%,#070a1766 26%,transparent 48%)}
+.stage-copy{position:absolute;left:36px;bottom:34px;z-index:2;max-width:360px;color:#eef1fb}
+.stage-copy span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#D4EE9C;margin-bottom:12px}
+.stage-copy strong{display:block;font-size:24px;line-height:1.25;font-weight:500;letter-spacing:-.025em}
+/* minimal shim for the Tailwind utility classes the globe component uses (Tailwind is not loaded here) */
+.globe-stage .absolute{position:absolute}.globe-stage .inset-0{inset:0}.globe-stage .top-0{top:0}.globe-stage .left-0{left:0}.globe-stage .pointer-events-none{pointer-events:none}
+.globe-stage .flex{display:flex}.globe-stage .items-center{align-items:center}.globe-stage .gap-2{gap:8px}.globe-stage .rounded-full{border-radius:999px}
+.globe-stage .border{border-width:1px;border-style:solid}.globe-stage .border-white\/30{border-color:#ffffff4d}.globe-stage .bg-white\/20{background:#ffffff26}
+.globe-stage .px-3\.5{padding-left:14px;padding-right:14px}.globe-stage .py-2\.5{padding-top:9px;padding-bottom:9px}.globe-stage .backdrop-blur-md{backdrop-filter:blur(12px)}
+.globe-stage .h-2\.5{height:9px}.globe-stage .w-2\.5{width:9px}.globe-stage .shrink-0{flex-shrink:0}.globe-stage .whitespace-nowrap{white-space:nowrap}
+.globe-stage .font-semibold{font-weight:600}.globe-stage .text-\[13px\]{font-size:12px}.globe-stage .text-white{color:#fff}
+.globe-stage canvas{display:block;cursor:grab}
+.data-card{position:absolute;z-index:3;background:#ffffffeb;backdrop-filter:blur(14px);border:1px solid #e3e6ee;border-radius:12px;padding:16px 18px;box-shadow:0 18px 48px #1d2a5024;color:#242528;animation:pc-float 7s ease-in-out infinite alternate}
+.data-card strong{display:block;font-size:20px;font-weight:500;letter-spacing:-.02em;margin-top:6px}
+.data-card strong em{font-style:normal;font-size:12px;color:#8a909b;margin-left:3px}
+.data-card small{display:block;font-size:11px;color:#8a909b;margin-top:10px}
+.card-label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7b8394}
+.card-chain{left:10px;top:150px;width:200px;animation-delay:-2s}
+.card-tiers{display:flex;gap:5px;margin-top:12px}.card-tiers i{height:6px;flex:1;border-radius:3px;background:#697CF5}.card-tiers i:nth-child(2){opacity:.65}.card-tiers i:nth-child(3){opacity:.35}
+.card-impact{right:10px;top:118px;width:220px}
+.card-split{display:flex;gap:3px;margin-top:12px;height:6px}.card-split i{border-radius:3px;background:#697CF5}.card-split i:nth-child(2){background:#a9b5f8}.card-split i:nth-child(3){background:#D4EE9C}
+.card-passport{right:70px;bottom:96px;display:flex;align-items:center;gap:12px;padding:12px 18px 12px 12px;animation-delay:-4s}
+.card-passport strong{font-size:15px;margin-top:3px}
+.visual-note{position:absolute;right:52px;bottom:34px;font-size:10px;color:#9aa0ab;margin:0}
+@keyframes pc-float{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+@keyframes pc-pulse{0%{box-shadow:0 0 0 0 #56b27f80}70%{box-shadow:0 0 0 8px #56b27f00}100%{box-shadow:0 0 0 0 #56b27f00}}
+@media(max-width:1000px){.globe-stage{height:400px}.card-chain{top:130px;width:180px}.card-impact{top:100px;width:196px}.card-passport{right:44px;bottom:90px}}
+@media(max-width:720px){.hero-visual.live-visual{padding:20px 14px 44px}.globe-stage{height:320px}.globe-stage::after{background:linear-gradient(0deg,#070a17e6 0%,transparent 55%)}.stage-copy{left:18px;right:18px;bottom:18px}.stage-copy strong{font-size:17px}.stage-copy br{display:none}.card-chain,.card-impact{display:none}.card-passport{right:22px;top:66px;bottom:auto;padding:8px 12px 8px 8px}.card-passport strong{font-size:13px}.visual-note{right:18px;bottom:18px}.live-window .window-bar span:nth-child(2){font-size:9px}}
+@media(prefers-reduced-motion:reduce){.data-card,.live-window .live i{animation:none}}
+/* place the globe right of the caption; the component fills its nearest positioned ancestor */
+.globe-stage astro-island{position:absolute;inset:0 0 0 30%;display:block}
+.stage-copy{max-width:470px;top:50%;bottom:auto;transform:translateY(-50%)}
+.stage-copy strong{font-size:28px}
+@media(max-width:1000px){.globe-stage astro-island{left:22%}.stage-copy{max-width:380px}.stage-copy strong{font-size:22px}}
+@media(max-width:720px){.globe-stage astro-island{inset:0 -20% 25% -20%}.stage-copy{top:auto;bottom:18px;transform:none}.stage-copy strong{font-size:17px}}
+@media(max-width:720px){.card-passport{display:none}}
+
+/* ---------- Node diagram: data packets flowing left to right ---------- */
+.node-packets .packet{fill:#697CF5;filter:drop-shadow(0 0 3px #697cf580)}
+.node-packets .packet-c2,.node-packets .packet-c3{fill:#7ea653;filter:drop-shadow(0 0 3px #a8d06f99)}
+.flow-node{transition:box-shadow .45s ease,border-color .45s ease}
+.flow-node.is-receiving{border-color:#aebbf2;box-shadow:0 0 0 4px #697cf51c,0 8px 24px #5876aa20}
+.flow-hub.is-receiving{border-color:#202731;box-shadow:0 0 0 6px #697cf533,0 12px 34px #22395933}
+@media(prefers-reduced-motion:reduce){.node-packets{display:none}}
+
+/* Benefit links land with the chapter directly under the sticky header (html has scroll-padding-top:100px) */
+.chapters>.chapter{scroll-margin-top:-20px}
+
+/* "Live from day one": a little more breathing room */
+@media(min-width:721px){.time-value-copy{padding:150px 24px 145px}}
+.time-value-copy h2{line-height:1.4;margin-top:32px}
+.time-value-copy .button{margin-top:44px}
+@media(max-width:720px){.time-value-copy{padding:95px 14px}.time-value-copy h2{margin-top:24px}.time-value-copy .button{margin-top:32px}}
+
+/* Signals: short explainer under the headline */
+.signals-lead{max-width:430px;margin:22px 0 30px;font-size:16px;line-height:1.65;color:#a2a8b3}
+
+/* No gap between "Built to scale" and the enterprise invite */
+.enterprise-invite{margin-top:0}
+
+/* Mobile hero: copy first, then a cropped close-up of the product instead of a tiny image under empty space */
+@media(max-width:720px){
+.hero-chair{flex-direction:column;align-items:stretch;min-height:0;padding:36px 24px 0}
+.hero-chair::before{background:none}
+.hero-chair .hero-editorial{order:1}
+.hero-chair .hero-backdrop{position:relative;inset:auto;order:2;z-index:0;display:block;width:calc(100% + 48px);max-width:none;height:min(92vw,380px);margin:30px -24px 0;object-fit:cover;object-position:70% 58%;background:transparent}
+.hero-chair .chair-passport-trigger{top:auto;bottom:22px;left:auto;right:18px;transform:none}
+}

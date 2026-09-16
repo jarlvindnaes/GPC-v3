@@ -1,0 +1,39 @@
+---
+const curve = (x:number) => 590 - 570 * (x/1200)**2.35;
+const points = Array.from({length:121},(_,i)=>`${i===0?'M':'L'}${i*10},${curve(i*10)}`).join(' ');
+// Milestones along the growth curve (positioned in HTML so they are not stretched by the SVG).
+const milestones = [
+  { x: 250, label: 'Your first product' },
+  { x: 560, label: 'A product line' },
+  { x: 860, label: 'Your portfolio' },
+  { x: 1110, label: 'The whole company', flip: true }
+].map((m, i) => ({ ...m, left: (m.x / 1200) * 100, top: (curve(m.x) / 650) * 100, delay: 0.35 + (m.x / 1200) * 2.1, pulse: i * 0.9 }));
+---
+<section class="scale-section frame" aria-labelledby="scale-title">
+ <svg viewBox="0 0 1200 650" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="scale-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#718de4" stop-opacity=".12"/><stop offset="1" stop-color="#718de4" stop-opacity="0"/></linearGradient><linearGradient id="scale-bars" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop stop-color="#c9d3ee"/><stop offset="1" stop-color="#e7ebf4" stop-opacity=".2"/></linearGradient></defs>
+  {[150,300,450].map((y)=><line class="scale-grid" x1="0" x2="1200" y1={y} y2={y}/>)}
+  <g class="scale-reveal"><path d={`${points} L1200,650 L0,650 Z`} fill="url(#scale-fill)"/>{Array.from({length:101},(_,i)=><line x1={i*12} x2={i*12} y1={curve(i*12)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path class="scale-line" d={points} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  <circle class="scale-trail" r="7" fill="#7089d9"><animateMotion dur="7s" begin="-0.18s" repeatCount="indefinite" path={points}/></circle>
+  <circle class="scale-spark" r="4" fill="#7089d9"><animateMotion dur="7s" repeatCount="indefinite" path={points}/></circle></g></svg>
+ <div class="scale-marks" aria-hidden="true">{milestones.map((m)=><span class:list={['scale-mark',{flip:m.flip}]} style={`left:${m.left}%;top:${m.top}%;--delay:${m.delay}s;--pulse:${m.pulse}s`}><i></i><b>{m.label}</b></span>)}</div>
+ <div class="scale-copy"><span class="tag">Built to scale</span><h2 id="scale-title">Built for your team.<br/><span>Ready for your entire company.</span></h2><div class="scale-details"><p><strong>Tenant isolation</strong><span>Designed to keep each organisation’s data separate</span></p><p><strong>Elastic architecture</strong><span>Built to grow with your data and workloads</span></p><p><strong>Multi-tenant core</strong><span>Shared infrastructure. Distinct company workspaces.</span></p><p><strong>API &amp; MCP</strong><span>Structured access for systems and AI tools</span></p></div></div>
+</section>
+<style>
+.scale-section{position:relative;min-height:660px;overflow:hidden;background:#fff;border-top:1px solid #e9eaec;border-bottom:1px solid #e9eaec}.scale-section svg,.scale-marks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.scale-copy{position:relative;z-index:1;padding:85px 50px 160px;max-width:770px}.scale-copy h2{font-size:clamp(32px,4vw,48px);line-height:1.13;margin-top:27px}.scale-copy h2 span{color:#8a909b}.scale-details{display:grid;grid-template-columns:1fr 1fr;gap:28px 32px;margin-top:48px;max-width:540px}.scale-details p{border-left:2px solid #8295d1;padding-left:18px;line-height:1.4}.scale-details strong{display:block;font-size:21px;font-weight:500;color:#242528}.scale-details p span{display:block;font-size:13px;margin-top:5px;color:#72777e}
+.scale-grid{stroke:#eef1f6;stroke-width:1;stroke-dasharray:2 6;vector-effect:non-scaling-stroke}
+.scale-reveal{clip-path:inset(0 100% 0 0);transition:clip-path 2.4s cubic-bezier(.22,1,.36,1)}.scale-section.is-visible .scale-reveal{clip-path:inset(0)}
+.scale-spark{filter:drop-shadow(0 0 6px #7089d9);opacity:0}.scale-trail{opacity:0}.scale-section.is-visible .scale-spark{opacity:1;transition:opacity 1s 2s}.scale-section.is-visible .scale-trail{opacity:.14;transition:opacity 1s 2s}
+.scale-mark{position:absolute;z-index:2;opacity:0;transform:translateY(6px);transition:opacity .6s var(--delay),transform .6s var(--delay)}
+.scale-section.is-visible .scale-mark{opacity:1;transform:none}
+.scale-mark i{position:absolute;left:0;top:0;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;border:2px solid #7089d9;box-sizing:border-box}
+.scale-mark i::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:1px solid #7089d9;opacity:0}
+.scale-section.is-visible .scale-mark i::after{animation:scale-ping 3.6s var(--pulse) infinite}
+.scale-mark b{position:absolute;left:12px;top:10px;white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:.01em;color:#5d6b92;background:#ffffffd9;border:1px solid #e3e8f3;border-radius:999px;padding:4px 9px;backdrop-filter:blur(4px)}
+.scale-mark.flip b{left:auto;right:12px}
+@keyframes scale-ping{0%{transform:scale(1);opacity:.6}70%,100%{transform:scale(3.2);opacity:0}}
+@media(max-width:720px){.scale-copy{padding:60px 24px 180px}.scale-section{min-height:640px}.scale-details{gap:24px 20px}.scale-details strong{font-size:18px}.scale-section svg,.scale-marks{top:160px;height:calc(100% - 160px)}.scale-mark b{display:none}}
+@media(prefers-reduced-motion:reduce){.scale-reveal{clip-path:none;transition:none}.scale-spark,.scale-trail{display:none}.scale-mark{opacity:1;transform:none;transition:none}.scale-section.is-visible .scale-mark i::after{animation:none}}
+</style>
+<script>
+const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting)entry.target.classList.add('is-visible');const svg=entry.target.querySelector('svg');if(entry.isIntersecting)svg?.unpauseAnimations();else svg?.pauseAnimations();}},{threshold:.15});document.querySelectorAll('.scale-section').forEach(section=>observer.observe(section));document.addEventListener('astro:before-swap',()=>observer.disconnect(),{once:true});
+</script>

@@ -1,0 +1,18 @@
+---
+const {index} = Astro.props;
+const stories = [
+ {name:'Sofie Lind',role:'Supply Chain Manager',initials:'SL',quote:'I want our team spending less time chasing supplier files and more time doing something useful with the data.'},
+ {name:'Anders Holm',role:'Sustainability Lead',initials:'AH',quote:'I need numbers I can hand to an auditor without holding my breath.'},
+ {name:'Mikkel Sørensen',role:'Head of Design',initials:'MS',quote:'Show me which material or supplier actually moves the needle, while we’re still designing.'},
+ {name:'Camilla Friis',role:'Sales Director',initials:'CF',quote:'Customers ask for the story behind the product. I want to show it in one scan.'},
+ {name:'Frederikke Møller',role:'ESG Manager',initials:'FM',quote:'I’d rather be ready early than rush when the rules land.'},
+ {name:'Jonas Berg',role:'Aftercare Director',initials:'JB',quote:'When someone needs a spare part, I want them to find the right one straight from the product they already own.'}
+];
+const story=stories[index];
+---
+<aside class="benefit-proof" aria-label={`${story.role} perspective, illustrative draft`}>
+ <div class="proof-voice"><span class="proof-status">Illustrative persona · draft quote</span><blockquote>“{story.quote}”</blockquote><div class="proof-person"><span class="proof-avatar" aria-hidden="true">{story.initials}</span><div><strong>{story.name}</strong><small>{story.role} · fictional persona</small></div></div></div>
+</aside>
+<style>
+.benefit-proof{display:block;padding:28px 36px;background:#fff;border-top:1px solid #e7eaf0}.proof-status{font:10px Inter,Arial,sans-serif;letter-spacing:.04em;color:#8b93a2}.proof-voice blockquote{font:400 18px/1.45 Georgia,serif;letter-spacing:-.015em;color:#424a56;margin:12px 0 18px}.proof-person{display:flex;align-items:center;gap:10px}.proof-avatar{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#eef1f8;color:#7b8bae;font:11px Inter,sans-serif;flex-shrink:0}.proof-person strong{font-size:11px;font-weight:500}.proof-person small{display:block;font-size:10px;color:#959baa;margin-top:3px}@media(max-width:720px){.benefit-proof{grid-template-columns:1fr;padding:24px;gap:20px}.proof-voice blockquote{font-size:17px}}
+</style>

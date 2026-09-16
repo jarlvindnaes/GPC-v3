@@ -3,12 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { FeatureGrid } from '../components/FeatureGrid';
 import { StorytellingScroll } from '../components/StorytellingScroll';
 import { TrustLogos } from '../components/TrustLogos';
-import Footer from '../components/v4/Footer.astro';
+import Footer from '../components/furniture/Footer.astro';
 const base=import.meta.env.BASE_URL;
 ---
 <BaseLayout title="How it works — Product Connect" description="From 3D models and supplier data to impact insights and next-generation Digital Product Passports. See how Product Connect works.">
 <a class="how-skip" href="#main">Skip to content</a>
-<header class="how-header"><a class="how-brand" href={base}><span>pc</span> Product Connect</a><nav aria-label="Main navigation"><a href={base}>Platform</a><a href={`${base}how-it-works/`} aria-current="page">How it works</a><a href={`${base}pricing/`}>Pricing</a></nav><a class="how-button" href="mailto:hello@getproductconnect.com">Talk to sales ↗</a></header>
+<header class="how-header"><a class="how-brand" href={base}><span>pc</span> Product Connect</a><nav aria-label="Main navigation"><a href={`${base}#benefits`}>Platform</a><a href={base}>Furniture</a><a href={`${base}construction/`}>Construction</a><a href={`${base}how-it-works/`} aria-current="page">How it works</a><a href={`${base}pricing/`}>Pricing</a></nav><a class="how-button" href="mailto:hello@getproductconnect.com">Talk to sales ↗</a></header>
 <main id="main">
 <section class="how-intro"><p class="how-eyebrow">PRODUCT CONNECT</p><h1>How it works.</h1><p>Bring your data. Map your supply chain, uncover insights, and publish your first Digital Product Passports — all on day one.</p><a class="how-button" href="#workflow">Explore the steps ↓</a></section>
 <TrustLogos client:visible /><section class="how-savings"><p class="how-eyebrow">SAVE TIME</p><h2>Less data chasing.<br/><span>Your team’s time, back.</span></h2><p>Bring supplier and component data together, so your team can spend more time improving products.</p><div><article><h3>Bring your data.</h3><p>Start with the product files and supplier information you already have.</p></article><article><h3>Connect the knowledge.</h3><p>Materials, components and suppliers, together in one product model.</p></article><article><h3>Put it to work.</h3><p>Use the same foundation for impact insights and product passports.</p></article></div></section>

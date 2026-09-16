@@ -1,0 +1,210 @@
+---
+// "Product memory": one product's CO₂ over time, versus a static EPD. All figures and people are illustrative.
+const start = Date.UTC(2024, 1, 20);
+const end = Date.UTC(2026, 8, 16);
+const staticEpd = 31.4;
+const VW = 1200, VH = 340, X0 = 24, XW = 1060;
+const toX = (frac: number) => X0 + frac * XW;
+const toY = (v: number) => 40 + ((33 - v) / 10) * 260;
+const raw = [
+ { date: '2024-03-12', change: 'CAD model imported', who: 'Nora Vik', value: 31.4 },
+ { date: '2024-05-02', change: 'Supplier alloy data added', who: 'Profile supplier', value: 29.8 },
+ { date: '2024-08-19', change: 'Low-carbon aluminium', who: 'Mikkel Sørensen', value: 27.9 },
+ { date: '2024-11-07', change: 'Road → rail transport', who: 'Sofie Lind', value: 27.2 },
+ { date: '2025-02-14', change: 'Recycled insulation core', who: 'Insulation supplier', value: 25.9 },
+ { date: '2025-06-03', change: 'Calculation verified', who: 'Anders Holm', value: 25.9 },
+ { date: '2025-10-22', change: 'Replaceable gaskets', who: 'Jonas Berg', value: 25.3 },
+ { date: '2026-07-08', change: 'Recycled packaging', who: 'Emil Dahl', value: 24.8 }
+];
+const events = raw.map((e) => {
+  const frac = (Date.parse(e.date) - start) / (end - start);
+  const d = new Date(e.date);
+  return { ...e, frac, x: toX(frac), y: toY(e.value), label: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }), short: d.toLocaleDateString('en-GB', { month: 'short', year: '2-digit', timeZone: 'UTC' }), delta: Math.round(((e.value - staticEpd) / staticEpd) * 100) };
+});
+const lastX = toX(1);
+let line = `M ${events[0].x} ${events[0].y}`;
+for (const e of events.slice(1)) line += ` H ${e.x} V ${e.y}`;
+line += ` H ${lastX}`;
+const area = `${line} V 320 H ${events[0].x} Z`;
+const staticY = toY(staticEpd);
+const first = events[0];
+const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac, x, y, label, change, who, value, delta }) => ({ frac, x, y, label, change, who, value, delta })) };
+---
+<section class="memory" aria-labelledby="memory-title" data-memory data-config={JSON.stringify(config)}>
+  <span class="memory-tag">Product memory</span>
+  <h2 id="memory-title">An EPD is a snapshot.<br/><span>Your product model remembers.</span></h2>
+  <p class="memory-lead">A traditional EPD is calculated once, so every improvement you make afterwards goes unseen. In Product Connect, each change is time-stamped and reflected in your numbers straight away. Your figures get better as your products do, while others are stuck with yesterday’s.</p>
+
+  <div class="memory-chart">
+    <svg viewBox={`0 0 ${VW} ${VH}`} role="img" aria-label="The static EPD stays at 31.4 kilograms CO₂e while the living product model improves to 24.8 as changes are recorded over time">
+      <defs>
+        <linearGradient id="memory-area" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#D4EE9C" stop-opacity=".07"/><stop offset="1" stop-color="#D4EE9C" stop-opacity="0"/></linearGradient>
+        <linearGradient id="memory-line" x1="0" x2="1"><stop stop-color="#9db0ff"/><stop offset="1" stop-color="#D4EE9C"/></linearGradient>
+        <clipPath id="memory-reveal"><rect class="reveal-rect" x="0" y="0" width={first.x} height={VH}/></clipPath>
+      </defs>
+      <line class="static-line" x1={first.x} x2={lastX} y1={staticY} y2={staticY}/>
+      <text class="static-label" x={lastX + 14} y={staticY + 5}>Static EPD</text>
+      <path class="ghost-line" d={line}/>
+      <g clip-path="url(#memory-reveal)"><path class="area" d={area}/><path class="live-line" d={line}/></g>
+      {events.map((e) => <circle class="event-mark" cx={e.x} cy={e.y} r="3.5"/>)}
+      <g class="playhead" transform={`translate(${first.x} 0)`}>
+        <line class="gap-line" x1="0" x2="0" y1={staticY} y2={first.y}/>
+        <circle class="head-dot" cx="0" cy={first.y} r="6"/>
+      </g>
+      <text class="live-label" x={lastX + 14} y={events.at(-1)!.y + 5}>Living model</text>
+    </svg>
+    <div class="memory-bubble" style={`left:${(first.x / VW) * 100}%;top:${(first.y / VH) * 100}%`}>
+      <strong data-k="change">{first.change}</strong>
+      <span><b data-k="value">{first.value}</b> kg CO₂e <em data-k="delta"></em></span>
+    </div>
+  </div>
+
+  <div class="memory-track">
+    <div class="track-line"><i class="track-fill"></i></div>
+    <span class="track-end track-start">2024</span><span class="track-end track-today">Today</span>
+    <input class="memory-range" type="range" min="0" max="1000" step="1" value="0" aria-label="Travel through the product's history" aria-valuetext={first.label} style={`left:${(X0 / VW) * 100}%;width:${(XW / VW) * 100}%`}/>
+  </div>
+
+  <div class="memory-foot">
+    <button type="button" class="memory-play" aria-pressed="true" aria-label="Pause"><span aria-hidden="true">❚❚</span></button>
+    <span class="memory-note">Illustrative data</span>
+  </div>
+</section>
+
+<style>
+.memory{border-top:1px solid #292a2d;padding:100px 50px 64px;color:#f8f9fc}
+.memory-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
+.memory h2{font-size:clamp(32px,3.8vw,52px);line-height:1.1;letter-spacing:-.035em;font-weight:500;margin:26px 0 0}
+.memory h2 span{color:#8b919c}
+.memory-lead{max-width:600px;margin:22px 0 0;font-size:17px;line-height:1.65;color:#a2a8b3}
+.memory-chart{position:relative;margin-top:56px}
+.memory-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.static-line{stroke:#5f6570;stroke-width:1.5;stroke-dasharray:6 8}
+.static-label,.live-label{font:500 16px Inter,sans-serif;fill:#8b919c}
+.live-label{fill:#D4EE9C}
+.ghost-line{fill:none;stroke:#ffffff0a;stroke-width:1.5}
+.area{fill:url(#memory-area)}
+.live-line{fill:none;stroke:url(#memory-line);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.event-mark{fill:#111214;stroke:#3a3e46;stroke-width:1.5;transition:stroke .3s}
+.event-mark.is-past{stroke:#D4EE9C}
+.gap-line{stroke:#D4EE9C;stroke-width:1.5;stroke-dasharray:2 5;opacity:.45}
+.head-dot{fill:#D4EE9C;filter:drop-shadow(0 0 6px #d4ee9c66)}
+.memory-bubble{position:absolute;transform:translate(20px,-50%);display:flex;flex-direction:column;gap:2px;min-width:0;white-space:nowrap;padding:11px 14px;border:1px solid #ffffff14;border-radius:12px;background:#17191df2;box-shadow:0 12px 32px #0006;backdrop-filter:blur(8px);pointer-events:none;transition:transform .35s cubic-bezier(.2,.7,.3,1)}
+.memory-bubble.flip{transform:translate(calc(-100% - 20px),-50%)}
+.memory-bubble time{font-size:11px;color:#8b919c}
+.memory-bubble strong{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.memory-bubble span{font-size:12px;color:#a2a8b3}
+.memory-bubble b{font-size:18px;font-weight:500;color:#f8f9fc}
+.memory-bubble em{font-style:normal;color:#D4EE9C;margin-left:4px}
+.memory-bubble small{font-size:11px;color:#6d737d}
+.memory-track{position:relative;height:50px;margin-top:24px}
+.track-line{position:absolute;left:2%;right:9.67%;top:16px;height:1px;background:#2a2d33;overflow:hidden}
+.track-fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#9db0ff,#D4EE9C)}
+.track-event{position:absolute;top:12px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;background:none;border:0;padding:0;color:#6d737d;cursor:pointer;z-index:2;font:inherit}
+.track-dot{width:7px;height:7px;border-radius:50%;background:#3a3e46;transition:all .3s}
+.track-date{font-size:11px;white-space:nowrap;color:#5f6570;transition:color .3s}
+.track-event.is-past .track-dot{background:#8a9a6a}
+.track-event.is-active .track-dot{background:#D4EE9C;box-shadow:0 0 0 4px #d4ee9c1a}
+.track-event.is-active .track-date{color:#f8f9fc}
+.track-event:focus-visible{outline:2px solid #9db0ff;outline-offset:4px;border-radius:6px}
+.memory-range{position:absolute;top:2px;height:28px;margin:0;background:transparent;appearance:none;-webkit-appearance:none;cursor:grab;z-index:1}
+.memory-range::-webkit-slider-runnable-track{height:28px;background:transparent}
+.memory-range::-moz-range-track{height:28px;background:transparent}
+.memory-range::-webkit-slider-thumb{-webkit-appearance:none;width:2px;height:22px;border-radius:1px;background:#f8f9fc}
+.memory-range::-moz-range-thumb{width:2px;height:22px;border:0;border-radius:1px;background:#f8f9fc}
+.memory-range:focus-visible{outline:2px solid #9db0ff;outline-offset:4px;border-radius:6px}
+.track-end{position:absolute;top:30px;font-size:11px;color:#5f6570}.track-start{left:2%}.track-today{right:9.67%;transform:translateX(50%)}
+.memory-foot{display:flex;align-items:center;gap:12px;margin-top:8px;font-size:12px;color:#6d737d}
+.memory-play{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1d2026;border:1px solid #33363d;color:#e6e9ef;font-size:9px;cursor:pointer}
+.memory-play:hover{background:#252932}
+.memory-note{margin-left:auto}
+@media(max-width:720px){.memory{padding:64px 22px 48px}.memory-chart{margin-top:36px;margin-right:64px}.static-label,.live-label{font-size:26px}.memory-bubble{min-width:140px;padding:9px 11px}.memory-bubble strong{font-size:13px}.track-date{display:none}.track-event.is-active .track-date{display:block;position:absolute;top:22px}}
+@media(prefers-reduced-motion:reduce){.memory-bubble,.track-dot,.event-mark{transition:none}}
+</style>
+
+<script>
+type MemoryEvent = { frac: number; x: number; y: number; label: string; change: string; who: string; value: number; delta: number };
+type MemoryConfig = { start: number; end: number; VW: number; VH: number; X0: number; XW: number; staticY: number; events: MemoryEvent[] };
+
+const memoryCleanups: (() => void)[] = [];
+document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
+  const cfg: MemoryConfig = JSON.parse(root.dataset.config!);
+  const { events } = cfg;
+  const range = root.querySelector<HTMLInputElement>(".memory-range")!;
+  const playhead = root.querySelector<SVGGElement>(".playhead")!;
+  const headDot = root.querySelector<SVGCircleElement>(".head-dot")!;
+  const gapLine = root.querySelector<SVGLineElement>(".gap-line")!;
+  const reveal = root.querySelector<SVGRectElement>(".reveal-rect")!;
+  const marks = Array.from(root.querySelectorAll<SVGCircleElement>(".event-mark"));
+  const dots = Array.from(root.querySelectorAll<HTMLButtonElement>(".track-event"));
+  const fill = root.querySelector<HTMLElement>(".track-fill")!;
+  const bubble = root.querySelector<HTMLElement>(".memory-bubble")!;
+  const k = Object.fromEntries(Array.from(bubble.querySelectorAll<HTMLElement>("[data-k]")).map((el) => [el.dataset.k!, el]));
+  const play = root.querySelector<HTMLButtonElement>(".memory-play")!;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const DURATION = 14000, HOLD = 3000;
+  let t = 0, active = -1, playing = !reduced.matches, visible = false, frame = 0, last = 0, hold = 0;
+
+  function render(next: number) {
+    t = Math.max(0, Math.min(1, next));
+    let idx = 0;
+    events.forEach((e, i) => { if (e.frac <= t) idx = i; });
+    const e = events[idx];
+    const x = cfg.X0 + Math.max(t, events[0].frac) * cfg.XW;
+    playhead.setAttribute("transform", `translate(${x} 0)`);
+    headDot.setAttribute("cy", String(e.y));
+    gapLine.setAttribute("y2", String(e.y));
+    reveal.setAttribute("width", String(x));
+    fill.style.width = `${Math.max(t, events[0].frac) * 100}%`;
+    range.value = String(Math.round(t * 1000));
+    range.setAttribute("aria-valuetext", `${e.label}: ${e.change}`);
+    bubble.style.left = `${(x / cfg.VW) * 100}%`;
+    bubble.style.top = `${(e.y / cfg.VH) * 100}%`;
+    bubble.classList.toggle("flip", x / cfg.VW > 0.62);
+    marks.forEach((m, i) => m.classList.toggle("is-past", i <= idx));
+    dots.forEach((d, i) => { d.classList.toggle("is-past", i <= idx); d.classList.toggle("is-active", i === idx); });
+    if (idx !== active) {
+      active = idx;
+      k.change.textContent = e.change;
+      k.value.textContent = e.value.toFixed(1);
+      k.delta.textContent = e.delta < 0 ? `${e.delta}%` : "";
+    }
+  }
+  function tick(ts: number) {
+    frame = requestAnimationFrame(tick);
+    if (ts - last < 30) return;
+    const dt = last ? ts - last : 0;
+    last = ts;
+    if (t >= 1) {
+      hold += dt;
+      if (hold >= HOLD) { hold = 0; render(0); }
+      return;
+    }
+    render(t + dt / DURATION);
+  }
+  function start() {
+    if (frame || !playing || !visible || document.hidden || reduced.matches) return;
+    last = 0;
+    frame = requestAnimationFrame(tick);
+  }
+  function stop() { cancelAnimationFrame(frame); frame = 0; }
+  function setPlaying(next: boolean) {
+    playing = next;
+    play.setAttribute("aria-pressed", String(next));
+    play.setAttribute("aria-label", next ? "Pause" : "Play");
+    play.firstElementChild!.textContent = next ? "❚❚" : "▶";
+    if (next) { if (t >= 1) render(0); start(); } else stop();
+  }
+  const onInput = () => { setPlaying(false); render(Number(range.value) / 1000); };
+  range.addEventListener("input", onInput);
+  dots.forEach((d) => d.addEventListener("click", () => { setPlaying(false); render(events[Number(d.dataset.i)].frac); }));
+  play.addEventListener("click", () => setPlaying(!playing));
+  const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) start(); else stop(); }, { threshold: 0.25 });
+  io.observe(root);
+  const onVis = () => (document.hidden ? stop() : start());
+  document.addEventListener("visibilitychange", onVis);
+  if (reduced.matches) { setPlaying(false); render(1); } else render(0);
+  memoryCleanups.push(() => { stop(); io.disconnect(); document.removeEventListener("visibilitychange", onVis); range.removeEventListener("input", onInput); });
+});
+document.addEventListener("astro:before-swap", () => memoryCleanups.forEach((c) => c()), { once: true });
+</script>
