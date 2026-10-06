@@ -1,0 +1,290 @@
+---
+// The one site header, used by every page (homepage and How it works), so menu changes happen in one
+// place. Full-width bar, sticky, and it slides away on scroll-down / returns on a deliberate scroll-up
+// (ported from our wireframes' NavAutoHide). `theme` matches the page: light (homepage) or dark
+// (How it works). `current` marks the active link.
+interface Props {
+  theme?: 'light' | 'dark';
+  current?: 'how-it-works';
+}
+const { theme = 'light', current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const links = [
+  { label: 'What we solve', href: base, key: 'home' },
+  { label: 'The product model', href: `${base}#product-model` },
+  { label: 'Integrations', href: `${base}#integrations` },
+  { label: 'How it works', href: `${base}how-it-works/`, key: 'how-it-works' },
+];
+---
+<header class:list={['site-header', `is-${theme}`]} data-site-header>
+  <a class="site-brand" href={base} aria-label="Product Connect home">
+    <span class="site-mark" aria-hidden="true">pc<span>·</span></span>
+    <span>product<br />connect</span>
+  </a>
+  <nav aria-label="Main navigation">
+    {links.map((link) => (
+      <a href={link.href} class:list={{ active: link.key && link.key === current }} aria-current={link.key && link.key === current ? 'page' : undefined}>{link.label}</a>
+    ))}
+  </nav>
+  <a class="site-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗</span></a>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    height: 102px;
+    /* Bar runs edge to edge; its contents keep to the page's 1240px max width (4.2% margins below). */
+    padding: 0 max(4.2%, calc((100% - 1240px) / 2));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    font-family: Inter, Arial, sans-serif;
+    border-bottom: 1px solid var(--sh-rule);
+    background: var(--sh-bg);
+    color: var(--sh-ink);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: transform 0.3s ease;
+  }
+  /* slid away on scroll-down (see script) */
+  .site-header.is-hidden {
+    transform: translateY(-100%);
+  }
+  .is-light {
+    --sh-bg: #ffffffed;
+    --sh-ink: #242528;
+    --sh-soft: #4a4f57;
+    --sh-hover: #5c70bf;
+    --sh-rule: #e9eaec;
+    --sh-accent: #7887d8;
+    --sh-cta-border: #dedfe2;
+    --sh-cta-bg: #fff;
+  }
+  .is-dark {
+    --sh-bg: #101a2aed;
+    --sh-ink: #fff;
+    --sh-soft: #a8aeaa;
+    --sh-hover: #fff;
+    --sh-rule: #ffffff14;
+    --sh-accent: #d6ef8c;
+    --sh-cta-border: #68788c;
+    --sh-cta-bg: transparent;
+  }
+  .site-header a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 17px;
+    line-height: 0.98;
+    letter-spacing: -0.7px;
+    font-weight: 550;
+  }
+  .site-mark {
+    font-size: 48px;
+    font-weight: 600;
+    letter-spacing: -7px;
+    line-height: 1;
+    padding-right: 5px;
+  }
+  .site-mark > span {
+    color: var(--sh-accent);
+    letter-spacing: -3px;
+  }
+  nav {
+    display: flex;
+    gap: 34px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sh-soft);
+  }
+  nav a {
+    position: relative;
+    padding: 12px 0;
+    white-space: nowrap;
+  }
+  nav a:hover,
+  nav a.active {
+    color: var(--sh-hover);
+  }
+  nav a.active {
+    color: var(--sh-ink);
+  }
+  nav a.active::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--sh-accent);
+  }
+  .site-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 17px;
+    border: 1px solid var(--sh-cta-border);
+    border-radius: 7px;
+    background: var(--sh-cta-bg);
+    white-space: nowrap;
+  }
+  .site-header a:focus-visible {
+    outline: 3px solid #627de7;
+    outline-offset: 5px;
+  }
+  @media (max-width: 1080px) {
+    nav {
+      gap: 18px;
+      font-size: 13px;
+    }
+  }
+  /* Narrow screens: compact bar; the links move to a second row. */
+  @media (max-width: 940px) {
+    .site-header {
+      height: auto;
+      min-height: 68px;
+      flex-wrap: wrap;
+      padding: 14px 5%;
+      gap: 10px 16px;
+    }
+    .site-brand {
+      font-size: 14px;
+    }
+    .site-mark {
+      font-size: 40px;
+    }
+    nav {
+      order: 3;
+      width: 100%;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      overflow-x: auto;
+    }
+    nav a {
+      padding: 6px 0 10px;
+    }
+    .site-cta {
+      font-size: 12px;
+      padding: 9px 13px;
+      gap: 14px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Hide on scroll-down, reveal on a deliberate scroll-up; always shown near the top.
+  // (Same thresholds as our wireframes' NavAutoHide.)
+  for (const header of document.querySelectorAll<HTMLElement>('[data-site-header]')) {
+    let lastY = window.scrollY;
+    let anchor = window.scrollY;
+    let direction: 'up' | 'down' = 'down';
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      const next = y > lastY ? 'down' : 'up';
+      if (next !== direction) {
+        anchor = y;
+        direction = next;
+      }
+      if (y <= 64) {
+        header.classList.remove('is-hidden');
+      } else if (next === 'down' && y - anchor > 10) {
+        header.classList.add('is-hidden');
+      } else if (next === 'up' && anchor - y > 40) {
+        header.classList.remove('is-hidden');
+      }
+      lastY = y;
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    // Keyboard users tabbing into the menu always get it back.
+    header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+
+    // Active dot on this page: links to sections of the current page (e.g. #benefits on the homepage)
+    // get the dot while that section is being read. A link to the page itself (How it works) keeps
+    // its fixed `active` from the server.
+    const here = window.location.pathname;
+    const links = [...header.querySelectorAll<HTMLAnchorElement>('nav a')];
+    // A link to this page's top (What we solve → homepage): scroll up smoothly instead of reloading,
+    // and it holds the dot from the top until another section's link takes over.
+    const topLink = links.find((link) => {
+      const url = new URL(link.href, window.location.href);
+      return url.pathname === here && !url.hash;
+    });
+    topLink?.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    const spied = links
+      .map((link) => {
+        const url = new URL(link.href, window.location.href);
+        const target = url.pathname === here && url.hash ? document.getElementById(url.hash.slice(1)) : null;
+        return target ? { link, target } : null;
+      })
+      .filter((item): item is { link: HTMLAnchorElement; target: HTMLElement } => item !== null);
+    if (spied.length || topLink) {
+      let spyTicking = false;
+      const spy = () => {
+        spyTicking = false;
+        const line = window.innerHeight * 0.4;
+        let current: HTMLAnchorElement | null = null;
+        for (const { link, target } of spied) {
+          const r = target.getBoundingClientRect();
+          if (r.top <= line && r.bottom > line) {
+            current = link;
+          }
+        }
+        // The top link owns everything above the first linked section.
+        const firstTop = Math.min(...spied.map(({ target }) => target.getBoundingClientRect().top));
+        if (!current && topLink && firstTop > line) {
+          current = topLink;
+        }
+        for (const link of [...spied.map((item) => item.link), ...(topLink ? [topLink] : [])]) {
+          const on = link === current;
+          link.classList.toggle('active', on);
+          if (on) {
+            link.setAttribute('aria-current', 'location');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        }
+      };
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (!spyTicking) {
+            spyTicking = true;
+            requestAnimationFrame(spy);
+          }
+        },
+        { passive: true },
+      );
+      spy();
+    }
+  }
+</script>

@@ -85,7 +85,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
           <div className="absolute top-[62px] left-[64px] flex h-[304px] w-[243px] flex-col content-stretch items-start justify-between overflow-clip">
             {data.lifecycleAndMaintenance.productHistory.map((event) => (
               <div
-                key={event.date}
+                key={event.title}
                 className="relative h-[52px] w-full shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Medium',sans-serif] font-[510]"
               >
                 <p className="absolute top-[6px] left-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">

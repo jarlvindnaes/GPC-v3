@@ -112,3 +112,73 @@
 .hero-chair .hero-backdrop{position:relative;inset:auto;order:2;z-index:0;display:block;width:calc(100% + 48px);max-width:none;height:min(92vw,380px);margin:30px -24px 0;object-fit:cover;object-position:70% 58%;background:transparent}
 .hero-chair .chair-passport-trigger{top:auto;bottom:22px;left:auto;right:18px;transform:none}
 }
+
+/* Live inline passport phone (ported from our wireframes) */
+.ui-stage.stage-3{height:auto;min-height:540px}
+.phone-live{flex:none;width:280px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.phone-live>astro-island{display:block;width:100%;height:460px}
+.phone-caption{text-align:center;font-size:12px;color:#8c929d;line-height:1.5;max-width:280px;margin:0}
+
+/* Hero: animated exploding chair (tuned on /chair-lab/) replaces the photo from 721px up;
+   phones keep the photo below the copy. The canvas spans the full hero so parts are never
+   clipped; the chair is placed via the component's view offset. */
+.hero-chair-3d{display:none}
+@media(min-width:721px){
+  .hero-chair .hero-backdrop{display:none}
+  .hero-chair-3d{display:block;position:absolute;inset:0;z-index:-2}
+  .hero-chair-3d .chair-explode{position:absolute;inset:0}
+}
+
+/* Main menu: keep each label on one line; tighten on narrower desktops and hide it once it no
+   longer fits beside the logo and button (the page already hides it at ≤720px). */
+.header nav a{white-space:nowrap}
+@media(max-width:1080px){.header nav{gap:18px;font-size:13px}}
+@media(max-width:940px){.header nav{display:none}}
+
+
+/* Let drags pass through the hero's light wash to the 3D chair underneath. */
+.hero-chair::before{pointer-events:none}
+.hero-chair-3d canvas{cursor:grab}
+.hero-chair-3d canvas:active{cursor:grabbing}
+
+/* The passport phone is styled with Tailwind (layered CSS). This page's unlayered element rules
+   (h2 sizes, heading letter-spacing, p colour and line-height…) would otherwise override its
+   utilities, e.g. blowing its 16px section titles up to page-headline size. revert-layer drops
+   those page rules inside the passport, so only its own classes and inline styles apply. */
+.passport-scope *{all:revert-layer}
+
+/* Passport pill: a real QR code pattern (encodes https://productconnect.com), white on the blue badge. */
+.chair-passport-trigger>span.qr-badge{display:grid;place-items:center;width:38px;height:38px;padding:0;border-radius:50%;background:#667cbe;font-size:0}
+.chair-passport-trigger .qr{display:block;width:20px;height:20px;color:#fff}
+
+/* "Explore the passport" opens the passport overlay (a button styled like the former text link). */
+.passport-copy button{font:inherit;font-size:12px;color:inherit;display:inline-block;margin-top:25px;padding:0 0 7px;background:none;border:0;border-bottom:1px solid #c4cbd8;cursor:pointer}
+.passport-copy button:focus-visible{outline:3px solid #627de7;outline-offset:5px}
+
+/* Brand lock-up matching the Enterprise site ("pc·" mark + two-line "product connect"), in this
+   page's colours. */
+.brand{font-size:17px;line-height:.98;letter-spacing:-.7px;font-weight:550}
+.mark{display:inline-block;font-size:48px;font-weight:600;letter-spacing:-7px;line-height:1;padding-right:5px;width:auto;transform:none}
+.mark span{color:#7887d8;letter-spacing:-3px}
+@media(max-width:720px){.header .brand{font-size:14px}.header .mark{font-size:40px}}
+
+/* No side rails: the content column keeps its width, but without the grey borders down both sides
+   (matching the How it works page). The header keeps only its bottom rule. */
+.frame{border-left:0;border-right:0}
+.header{border-left:0;border-right:0}
+/* Hero: 12px rounded corners, matching the How it works hero and the chair viewer. */
+.hero-chair{border-radius:12px;overflow:hidden}
+
+/* Header spans the full width like on How it works: same 4.2% side padding and 102px height, with
+   the bottom rule running edge to edge. Phones keep their compact header. */
+@media(min-width:721px){.header{max-width:none;height:102px;padding:0 4.2%}}
+
+/* Hero width matches the How it works hero (and the shared header): 4.2% side margins instead of the
+   1240px column, so both pages' heroes line up with the logo and the button. */
+@media(min-width:721px){.hero.frame{max-width:none;padding-left:4.2%;padding-right:4.2%}}
+/* Same 28px gap above the hero as on How it works. */
+@media(min-width:721px){.hero.frame{padding-top:28px}}
+/* Page max width: the hero keeps to the same 1240px as the content below (and the header contents),
+   with 4.2% side margins on smaller screens. */
+@media(min-width:721px){.hero.frame{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2))}}
+.live-window{border-radius:12px} /* same 12px corners as the heroes, brand strip and viewers */

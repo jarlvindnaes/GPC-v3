@@ -1,38 +1,145 @@
+import type React from "react";
+import { Factory, FileCheck2, Leaf, Route, Wrench } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ReuseChart } from "./ReuseChart";
+import { OreThumb } from "./OreThumb";
 import { getStoryFrame } from "./productStoryMath";
 
+// Copy follows our "Component-level by design" section: one idea per step of the chair story.
 const chapters = [
   {
     label: "The product",
-    title: "More than meets the eye.",
-    text: "A chair is the sum of many decisions. Its shape is visible. The knowledge behind it should be, too.",
-    details: [
-      ["Product", "Cross Chair"],
-      ["Structure", "13 modelled parts"],
-      ["Explore", "Drag to turn the chair"]
-    ]
+    title: "Upload a product. We find its parts.",
+    text: "Upload a 3D model and we detect its components automatically: a leg, a screw, a fabric.",
+    points: [
+      "Components detected from the 3D model",
+      "Work at the component level, not just the finished product",
+      "Shared parts recognised across your models",
+    ],
   },
   {
     label: "The components",
-    title: "Every part has a story.",
-    text: "A seat. A back. A fixing. Connect each component to its materials, its source and the data behind its impact.",
-    details: [
-      ["01 / Seat & back", "Materials + manufacturing"],
-      ["02 / Frame & legs", "Origin + shared components"],
-      ["03 / Fixings", "Assembly + repair"]
-    ]
+    title: "Collect component data once.",
+    text: "We gather data and calculate LCA per component, not product by product.",
+    points: [
+      "LCA calculated per component",
+      "Suppliers verify the data on their own parts",
+      "Every value tagged with its source",
+    ],
   },
   {
     label: "The connection",
-    title: "One product. All its knowledge.",
-    text: "Bring the parts back together. Their information stays connected — ready for carbon calculations, product passports and the next chapter of the product’s life.",
-    details: [
-      ["Understand", "Carbon footprint"],
-      ["Communicate", "Digital Product Passport"],
-      ["Keep in use", "Care + repair knowledge"]
-    ]
-  }
+    title: "Reuse it everywhere.",
+    text: "Every product that shares a component inherits its data automatically, with nothing re-typed.",
+    points: [
+      "Add data once; every product using it updates",
+      "Coverage grows with every upload",
+      "No re-typing. No re-calculating. No starting over.",
+    ],
+  },
 ];
+
+// Labels around the close-up screw (step 2). `anchor` is the point on the screw its leader line ends
+// at; all lines currently meet at the screw's centre (point 0). Lines are drawn above the 3D view.
+// `points` are the small grey bullets under each label's title, taken from copy on our other site
+// versions (FeatureGrid, wireframes, NodeFlow, V4 home); packaging is translated from the Danish
+// packaging demo. Spare-part sales are flagged "coming this fall" as elsewhere on the site.
+const FACTS: {
+  key: string;
+  text: string;
+  anchor: number;
+  extra: boolean;
+  points: string[];
+}[] = [
+  {
+    key: "supplier",
+    text: "Supplier data",
+    anchor: 0,
+    extra: false,
+    points: [
+      "Primary data from the people who make it",
+      "Supplier-verified, first-hand data",
+      "Provenance tracked on every value",
+    ],
+  },
+  {
+    key: "material",
+    text: "Material",
+    anchor: 0,
+    extra: false,
+    points: [
+      "Origin",
+      "Automatic weight calculation",
+      "Recycled content",
+      "Waste in production",
+    ],
+  },
+  {
+    key: "chain",
+    text: "Supply chain calculated",
+    anchor: 0,
+    extra: false,
+    points: [
+      "Automatic transport distance calculation",
+      "Distances, modes and emissions per leg",
+      "Trade routes and origins verified",
+    ],
+  },
+  {
+    key: "co2",
+    text: "Impact data",
+    anchor: 0,
+    extra: true,
+    points: [
+      "CO₂ emissions from manufacturing\nand transport",
+      "Water consumption",
+      "Energy used in manufacturing",
+      "And much more",
+    ],
+  },
+  {
+    key: "certs",
+    text: "Certificates & documents",
+    anchor: 0,
+    extra: true,
+    points: [
+      "Certificates & test reports",
+      "Eco labels and verification certificates",
+      "EPD and DPP documentation",
+    ],
+  },
+  {
+    key: "packaging",
+    text: "Packaging",
+    anchor: 0,
+    extra: true,
+    points: [
+      "Each packaging material registered",
+      "Weight per product",
+      "Included in the product’s impact",
+    ],
+  },
+  {
+    key: "spare",
+    text: "Spare part available",
+    anchor: 0,
+    extra: true,
+    points: [
+      "Matched to the exact product",
+      "Care and repair information",
+      "Spare part sales: coming this fall",
+    ],
+  },
+];
+
+// Icons for the labels without a 3D thumbnail (Material and Packaging show a model instead).
+const FACT_ICONS: Record<string, typeof Factory> = {
+  supplier: Factory,
+  chain: Route,
+  co2: Leaf,
+  certs: FileCheck2,
+  spare: Wrench,
+};
 
 export default function ProductStory({ base }: { base: string }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -45,6 +152,142 @@ export default function ProductStory({ base }: { base: string }) {
   const [status, setStatus] = useState("Loading the product model…");
   const [ready, setReady] = useState(false);
   const { chapter, separation } = getStoryFrame(progress);
+  // Labels around the screw while it is centre stage (step 2, fully apart); gone again in step 3.
+  const showFacts = chapter === 1 && separation > 0.85;
+  const factsRef = useRef<HTMLDivElement>(null);
+  const leadersRef = useRef<SVGSVGElement>(null);
+  // Measure each label's bullet list at its natural size, so the open animation runs exactly to it
+  // (one smooth motion instead of overshooting a fixed max and "settling"). Re-measured on resize.
+  useEffect(() => {
+    const box = factsRef.current;
+    if (!box) {
+      return;
+    }
+    const measure = () => {
+      for (const label of box.querySelectorAll<HTMLElement>(".screw-fact")) {
+        measureFact(label);
+      }
+    };
+    measure();
+    // Web fonts can arrive after the first measure and change the text width.
+    document.fonts?.ready.then(measure).catch(() => {});
+    const resize = new ResizeObserver(measure);
+    resize.observe(box);
+    return () => resize.disconnect();
+  }, []);
+  const showFactsRef = useRef(showFacts);
+  showFactsRef.current = showFacts;
+  // Called by the 3D scene every frame with the screw's screen points: draw each label's leader line
+  // from behind the label to its point on the screw (straight DOM updates, no re-render).
+  // Labels can be dragged around inside the viewer; their lines follow (drawn from the live label
+  // position). Offsets are kept for the visit, applied through --dx/--dy so the fade-in still works.
+  const dragRef = useRef<{
+    el: HTMLElement;
+    x: number;
+    y: number;
+    dx: number;
+    dy: number;
+  } | null>(null);
+  const onFactDown = (event: React.PointerEvent<HTMLElement>) => {
+    const el = event.currentTarget;
+    measureFact(el);
+    try {
+      el.setPointerCapture(event.pointerId);
+    } catch {
+      // Pointer already released (e.g. a synthetic event); dragging still works while over the label.
+    }
+    el.classList.add("is-dragging");
+    dragRef.current = {
+      el,
+      x: event.clientX,
+      y: event.clientY,
+      dx: Number.parseFloat(el.style.getPropertyValue("--dx")) || 0,
+      dy: Number.parseFloat(el.style.getPropertyValue("--dy")) || 0,
+    };
+    event.stopPropagation();
+  };
+  const onFactMove = (event: React.PointerEvent<HTMLElement>) => {
+    const drag = dragRef.current;
+    const box = factsRef.current;
+    if (!drag || !box || drag.el !== event.currentTarget) {
+      return;
+    }
+    // Keep the label inside the viewer.
+    const b = box.getBoundingClientRect();
+    const r = drag.el.getBoundingClientRect();
+    const curDx =
+      Number.parseFloat(drag.el.style.getPropertyValue("--dx")) || 0;
+    const curDy =
+      Number.parseFloat(drag.el.style.getPropertyValue("--dy")) || 0;
+    const baseLeft = r.left - curDx;
+    const baseTop = r.top - curDy;
+    const dx = Math.min(
+      Math.max(drag.dx + event.clientX - drag.x, b.left - baseLeft),
+      b.right - r.width - baseLeft,
+    );
+    const dy = Math.min(
+      Math.max(drag.dy + event.clientY - drag.y, b.top - baseTop),
+      b.bottom - r.height - baseTop,
+    );
+    drag.el.style.setProperty("--dx", `${dx}px`);
+    drag.el.style.setProperty("--dy", `${dy}px`);
+  };
+  const onFactUp = (event: React.PointerEvent<HTMLElement>) => {
+    const el = event.currentTarget;
+    const drag = dragRef.current;
+    el.classList.remove("is-dragging");
+    dragRef.current = null;
+    // A click/tap (no real drag) opens this label's bullets and closes any other open one.
+    if (
+      event.type === "pointerup" &&
+      drag &&
+      Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 4
+    ) {
+      const open = !el.classList.contains("is-open");
+      for (const other of factsRef.current?.querySelectorAll(
+        ".screw-fact.is-open",
+      ) ?? []) {
+        other.classList.remove("is-open");
+      }
+      el.classList.toggle("is-open", open);
+    }
+  };
+  const drawLeaders = (points: [number, number][]) => {
+    const box = factsRef.current;
+    if (!box || !showFactsRef.current) {
+      return;
+    }
+    const boxRect = box.getBoundingClientRect();
+    for (const fact of FACTS) {
+      const label = box.querySelector<HTMLElement>(`[data-fact="${fact.key}"]`);
+      const leader = leadersRef.current?.querySelector<SVGGElement>(
+        `[data-leader="${fact.key}"]`,
+      );
+      const point = points[fact.anchor];
+      if (!label || !leader || !point) {
+        continue;
+      }
+      const hidden = label.offsetParent === null;
+      leader.style.display = hidden ? "none" : "";
+      if (hidden) {
+        continue;
+      }
+      const [px, py] = point;
+      // Start at the label's centre (the line runs behind it), measured with its current transform,
+      // so the line always comes out of the label, with no gap, as the screw turns.
+      const r = label.getBoundingClientRect();
+      const x = r.left - boxRect.left + r.width / 2;
+      const y = r.top - boxRect.top + r.height / 2;
+      const line = leader.querySelector("line");
+      const dot = leader.querySelector("circle");
+      line?.setAttribute("x1", String(x));
+      line?.setAttribute("y1", String(y));
+      line?.setAttribute("x2", String(px));
+      line?.setAttribute("y2", String(py));
+      dot?.setAttribute("cx", String(px));
+      dot?.setAttribute("cy", String(py));
+    }
+  };
   const current = chapters[chapter];
 
   useEffect(() => {
@@ -76,12 +319,14 @@ export default function ProductStory({ base }: { base: string }) {
     };
     window.addEventListener("scroll", scroll, { passive: true });
     scroll();
-    import("./productStoryScene")
-      .then(async ({ createProductScene }) => {
+    // Our exploding chair (copied from the hero, then tweaked for the story); Jarl's original scene
+    // stays in productStoryScene.ts.
+    import("./chairStoryScene")
+      .then(async ({ createChairStoryScene }) => {
         if (cancelled) {
           return;
         }
-        cleanup = await createProductScene(
+        cleanup = await createChairStoryScene(
           host,
           base,
           () => progressRef.current,
@@ -108,11 +353,14 @@ export default function ProductStory({ base }: { base: string }) {
           () => {
             if (!cancelled) {
               setReady(false);
-              setStatus("The 3D view is unavailable. You can still explore the component story below.");
+              setStatus(
+                "The 3D view is unavailable. You can still explore the component story below.",
+              );
             }
           },
           () => cancelled,
-          () => reducedRef.current
+          () => reducedRef.current,
+          drawLeaders,
         );
         if (cancelled) {
           cleanup?.();
@@ -120,7 +368,9 @@ export default function ProductStory({ base }: { base: string }) {
       })
       .catch(() => {
         if (!cancelled) {
-          setStatus("The 3D view is unavailable. Explore the component story below.");
+          setStatus(
+            "The 3D view is unavailable. Explore the component story below.",
+          );
         }
       });
     return () => {
@@ -131,119 +381,220 @@ export default function ProductStory({ base }: { base: string }) {
     };
   }, [base]);
 
-  const seek = (value: number) => {
-    modeRef.current = "manual";
-    setMode("manual");
+  // Slider and tabs stay in sync with scrolling: seeking scrolls the page to the matching point in
+  // the (sticky) section, so the user can mix scrolling and dragging freely. With reduced motion the
+  // story is driven by the controls only.
+  const seek = (value: number, behavior: ScrollBehavior = "instant") => {
     progressRef.current = value;
     setProgress(value);
-  };
-  const togglePlay = () => {
-    if (modeRef.current === "play") {
+    const section = sectionRef.current;
+    if (reducedRef.current || !section) {
       modeRef.current = "manual";
       setMode("manual");
       return;
     }
-    if (progressRef.current >= 0.98) {
-      progressRef.current = 0;
-    }
-    modeRef.current = "play";
-    setMode("play");
+    const top = window.scrollY + section.getBoundingClientRect().top;
+    const travel = Math.max(1, section.offsetHeight - window.innerHeight);
+    window.scrollTo({ top: top + value * travel, behavior });
   };
 
   return (
-    <section className="product-story" id="inside" ref={sectionRef} aria-labelledby="inside-heading">
+    <section
+      className="product-story"
+      id="inside"
+      ref={sectionRef}
+      aria-labelledby="inside-heading"
+    >
       <div className="story-sticky">
-        <div className="story-heading">
-          <p className="eyebrow">
-            <span className="signal-mark" aria-hidden="true">
-              ✳
-            </span>{" "}
-            THE INTELLIGENCE INSIDE
-          </p>
-          <span className="story-edition">INTERACTIVE PRODUCT STUDY / 001</span>
-        </div>
         <div className="story-layout">
-          <div className="story-viewer">
-            <div className="story-viewer-top">
-              <span>Cross Chair / Component study</span>
-              <span className="viewer-state">{separation > 0.2 ? "COMPONENT VIEW" : "ASSEMBLED VIEW"}</span>
-            </div>
-            <div
-              className="story-canvas"
-              ref={hostRef}
-              role="img"
-              aria-label="Interactive Cross Chair model separating into its seat, back, legs, support and fixings, then assembling again"
-            />
-            {!ready && <output className="story-loading">{status}</output>}
-            <div className="part-legend" style={{ opacity: separation > 0.5 ? 1 : 0 }} aria-hidden={separation <= 0.5}>
-              <span>
-                <b>01</b> Seat + back
-              </span>
-              <span>
-                <b>02</b> Structure
-              </span>
-              <span>
-                <b>03</b> Fixings
-              </span>
-            </div>
-            <div className="viewer-bottom">
-              <span>3D study · Supplied product model</span>
-              <span>↔ Drag to rotate</span>
+          <div className="story-visual">
+            <p className="eyebrow">COMPONENT-LEVEL BY DESIGN</p>
+            <div className="story-viewer">
+              <div className="story-viewer-top">
+                <span
+                  className={`viewer-pill ${separation > 0.2 ? "is-components" : "is-assembled"}`}
+                  aria-live="polite"
+                >
+                  <i aria-hidden="true" />
+                  Cross Chair /{" "}
+                  <b>
+                    {separation > 0.2 ? "Component view" : "Assembled view"}
+                  </b>
+                </span>
+              </div>
+              {/* Leader lines sit UNDER the (transparent) 3D canvas, so the screw and chair parts are drawn
+                  on top of them; the cards are above both. */}
+              <svg
+                className={`screw-leaders${showFacts ? " is-on" : ""}`}
+                aria-hidden="true"
+                ref={leadersRef}
+              >
+                {FACTS.map((fact) => (
+                  <g key={fact.key} data-leader={fact.key}>
+                    <line />
+                    <circle r="3.5" />
+                  </g>
+                ))}
+              </svg>
+              <div
+                className="story-canvas"
+                ref={hostRef}
+                role="img"
+                aria-label="Interactive Cross Chair model separating into its seat, back, legs, support and fixings, then assembling again"
+              />
+              {!ready && <output className="story-loading">{status}</output>}
+              <div
+                className={`screw-facts${showFacts ? " is-on" : ""}`}
+                aria-hidden={!showFacts}
+                ref={factsRef}
+              >
+                <p
+                  className={`facts-hint in-viewer${showFacts ? " is-on" : ""}`}
+                  aria-hidden="true"
+                >
+                  <span className="hint-hover">
+                    Hover the cards for more information
+                  </span>
+                  <span className="hint-touch">
+                    Tap the cards for more information
+                  </span>
+                </p>
+                {FACTS.map((fact) => (
+                  <span
+                    key={fact.key}
+                    data-fact={fact.key}
+                    className={`screw-fact fact-${fact.key}${fact.extra ? " is-extra" : ""}`}
+                    onPointerEnter={(event) => measureFact(event.currentTarget)}
+                    onPointerDown={onFactDown}
+                    onPointerMove={onFactMove}
+                    onPointerUp={onFactUp}
+                    onPointerCancel={onFactUp}
+                  >
+                    {fact.key === "material" ? (
+                      <OreThumb base={base} active={showFacts} />
+                    ) : fact.key === "packaging" ? (
+                      <OreThumb
+                        base={base}
+                        active={showFacts}
+                        model="models/cardboard-box-open.glb"
+                      />
+                    ) : (
+                      <FactIcon kind={fact.key} />
+                    )}
+                    <span className="fact-body">
+                      <b>{fact.text}</b>
+                      {fact.points.length > 0 && (
+                        <ul>
+                          {fact.points.map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </span>
+                  </span>
+                ))}
+              </div>
+              {/* Hidden for now: in the component step the camera is close on a screw and the legend would cover it. */}
+              <div
+                className="part-legend"
+                style={{ opacity: 0 }}
+                aria-hidden={true}
+              >
+                <span>
+                  <b>01</b> Seat + back
+                </span>
+                <span>
+                  <b>02</b> Structure
+                </span>
+                <span>
+                  <b>03</b> Fixings
+                </span>
+              </div>
             </div>
           </div>
           <div className="story-narrative">
-            <fieldset className="chapter-tabs" aria-label="Product story chapters">
-              {chapters.map((item, index) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  className={chapter === index ? "selected" : ""}
-                  aria-pressed={chapter === index}
-                  onClick={() => seek([0, 0.52, 1][index])}
-                >
-                  <span>0{index + 1}</span>
-                  {item.label}
-                </button>
-              ))}
-            </fieldset>
+            {/* "Scroll to explore", the chapter tabs, and the line under them is the slider: it fills
+                up as the story progresses and can be dragged or clicked. */}
+            <div className="chapter-nav">
+              <span className="chapter-hint">
+                {mode === "scroll"
+                  ? "Scroll to explore"
+                  : "You control the story"}
+              </span>
+              <fieldset
+                className="chapter-tabs"
+                aria-label="Product story chapters"
+              >
+                {chapters.map((item, index) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    className={chapter === index ? "selected" : ""}
+                    aria-pressed={chapter === index}
+                    onClick={() => seek([0, 0.52, 1][index], "smooth")}
+                  >
+                    <span>0{index + 1}</span>
+                    {item.label}
+                  </button>
+                ))}
+              </fieldset>
+              <input
+                id="assembly-progress"
+                aria-label="Product story progress: product, components, connected product"
+                className="chapter-progress"
+                type="range"
+                min="0"
+                max="100"
+                value={Math.round(progress * 100)}
+                style={{ "--p": `${progress * 100}%` } as React.CSSProperties}
+                onChange={(event) => seek(Number(event.target.value) / 100)}
+                aria-valuetext={`${current.label}, ${Math.round(progress * 100)} percent of story`}
+              />
+            </div>
             <div className="chapter-copy">
-              <p className="chapter-kicker">
-                0{chapter + 1} / {current.label}
-              </p>
               <h2 id="inside-heading">{current.title}</h2>
               <p>{current.text}</p>
             </div>
-            <dl className="chapter-data">
-              {current.details.map(([label, value]) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </div>
+            <ul className="chapter-points">
+              {current.points.map((point) => (
+                <li key={point}>{point}</li>
               ))}
-            </dl>
-            <div className="story-controls">
-              <button type="button" onClick={togglePlay} disabled={!ready}>
-                {mode === "play" ? "Ⅱ Pause" : progress >= 0.98 ? "↻ Replay story" : "▶ Play story"}
-              </button>
-              <span>{mode === "scroll" ? "Or scroll to explore" : "You control the story"}</span>
-            </div>
-            <label className="scrubber-label" htmlFor="assembly-progress">
-              Product → Components → Connected product
-            </label>
-            <input
-              id="assembly-progress"
-              className="assembly-scrubber"
-              type="range"
-              min="0"
-              max="100"
-              value={Math.round(progress * 100)}
-              onChange={(event) => seek(Number(event.target.value) / 100)}
-              aria-valuetext={`${current.label}, ${Math.round(progress * 100)} percent of story`}
-            />
-            <p className="story-note">Illustrative data relationships; no measured footprint is claimed.</p>
+            </ul>
+            {chapter === 2 && <ReuseChart />}
+            <p
+              className={`facts-hint${showFacts ? " is-on" : ""}`}
+              aria-hidden={!showFacts}
+            >
+              <span className="hint-hover">
+                Hover the cards for more information
+              </span>
+              <span className="hint-touch">
+                Tap the cards for more information
+              </span>
+            </p>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+// Natural size of a label's bullet list, used as the open-animation target. Measured on load, on
+// resize, and again right before the label opens, so the card always fits its current text.
+function measureFact(label: HTMLElement) {
+  const list = label.querySelector<HTMLElement>(".fact-body ul");
+  if (!list) {
+    return;
+  }
+  list.style.setProperty("--open-w", `${list.scrollWidth}px`);
+  list.style.setProperty("--open-h", `${list.scrollHeight}px`);
+}
+
+function FactIcon({ kind }: { kind: string }) {
+  const Icon = FACT_ICONS[kind];
+  return (
+    <span className="fact-icon" aria-hidden="true">
+      {Icon ? <Icon size={15} strokeWidth={2} /> : null}
+    </span>
   );
 }

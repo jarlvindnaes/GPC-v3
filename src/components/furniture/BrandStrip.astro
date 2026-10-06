@@ -18,7 +18,8 @@ const brands = [
   ))}
 </div>
 <style>
-  .brand-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-block: 1px solid #e9eaec; }
+  /* Rounded like the heroes and viewers (12px); the photos are clipped to the corners. */
+  .brand-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-radius: 12px; overflow: hidden; }
   .brand-panel { position: relative; display: grid; place-items: center; height: clamp(280px, 26vw, 400px); overflow: hidden; isolation: isolate; background: #b6afa4; }
   .brand-panel + .brand-panel { border-left: 1px solid rgba(255,255,255,.25); }
   .brand-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.58); transition: transform 1.2s cubic-bezier(.2,.65,.3,1), filter .8s; z-index: -2; }

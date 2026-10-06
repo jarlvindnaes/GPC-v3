@@ -1,4 +1,15 @@
 ---
-import Landing from '../components/nextgen/Landing.astro';
+// The former Enterprise page is now the How it works page; keep old links working.
+const target = `${import.meta.env.BASE_URL}how-it-works/`;
 ---
-<Landing enterprise />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    <title>How it works — Product Connect</title>
+  </head>
+  <body><a href={target}>How it works</a></body>
+</html>

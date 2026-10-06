@@ -18,7 +18,7 @@ body{background:var(--pc-ink)}.header{background:#101a2a;border-color:#ffffff14}
 .product-story{height:230vh;min-height:1500px;background:#f7f8fc;color:#14223b;position:relative;border-bottom:1px solid var(--pc-rule)}.story-sticky{position:sticky;top:0;min-height:700px;height:100svh;max-height:980px;display:flex;flex-direction:column;justify-content:center;padding:38px 5.5%;overflow:hidden}.story-heading{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #dce2ed;padding-bottom:22px;margin-bottom:30px;gap:20px}.story-heading .eyebrow{display:flex;align-items:center;gap:12px;margin:0;color:#5269cd}.signal-mark{font-size:26px;color:#6278eb}.story-edition{font-family:monospace;font-size:12px;color:#8290a5;letter-spacing:1px}.story-layout{display:grid;grid-template-columns:1.25fr 1fr;gap:6%;align-items:center}.story-viewer{height:560px;max-height:69svh;min-height:380px;position:relative;border:1px solid #dfe5ef;border-radius:12px;background:radial-gradient(ellipse at 50% 42%,#ffffff 0%,#f0f3fa 62%,#e8edf7 100%);overflow:hidden;box-shadow:0 20px 70px #354b7210}.story-viewer:before{content:'';position:absolute;inset:0;background-image:linear-gradient(#7586a308 1px,transparent 1px),linear-gradient(90deg,#7586a308 1px,transparent 1px);background-size:40px 40px;pointer-events:none}.story-viewer-top,.viewer-bottom{position:absolute;left:22px;right:22px;display:flex;justify-content:space-between;gap:15px;font-size:12px;color:#71809a;z-index:2;pointer-events:none}.story-viewer-top{top:20px}.viewer-state{color:#596ed0;font-family:monospace;font-size:12px}.viewer-bottom{bottom:19px;font-size:12px}.story-canvas{position:absolute;inset:45px 0 42px;cursor:grab;touch-action:pan-y}.story-canvas:active{cursor:grabbing}.story-canvas canvas{width:100%;height:100%;display:block}.story-loading{position:absolute;top:45%;left:15%;right:15%;text-align:center;line-height:1.6;color:#647590;font-size:14px;pointer-events:none}.part-legend{position:absolute;bottom:54px;left:18px;right:18px;display:flex;justify-content:center;gap:8px;transition:opacity .35s;pointer-events:none}.part-legend>span{background:#ffffffea;border:1px solid #dce4f0;padding:8px 10px;border-radius:4px;font-size:12px;color:#63738c;box-shadow:0 6px 20px #182d4e08}.part-legend b{color:#596ed0;font-weight:500;margin-right:5px}.story-narrative{padding:10px 0;max-width:490px}.chapter-tabs{display:flex;gap:0;border-bottom:1px solid #dce2ee;margin-bottom:35px}.chapter-tabs button{font:inherit;font-size:12px;color:#8490a4;background:transparent;border:0;border-bottom:2px solid transparent;padding:10px 12px 14px 0;margin-right:15px;cursor:pointer;text-align:left;line-height:1.5}.chapter-tabs button>span{display:block;font-family:monospace;font-size:12px;color:#929fb4;margin-bottom:5px}.chapter-tabs button.selected{color:#263b76;border-color:#6378e8}.chapter-tabs button.selected>span{color:#6276d9}.chapter-copy{min-height:215px}.chapter-kicker{font-size:12px;text-transform:uppercase;letter-spacing:1.1px;color:#6579d0;margin:0 0 13px}.chapter-copy h2{font-size:clamp(32px,3vw,49px);letter-spacing:-1.8px;line-height:1.08;font-weight:550;max-width:430px}.chapter-copy>p:last-child{font-size:15px;line-height:1.7;color:#6a7890;max-width:430px;margin-top:20px}.chapter-data{margin:20px 0 24px;font-size:13px}.chapter-data>div{border-top:1px solid #e0e5ee;display:flex;justify-content:space-between;gap:20px;padding:11px 0}.chapter-data dt{color:#77849b}.chapter-data dd{margin:0;text-align:right;color:#354966;font-weight:500}.story-controls{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:20px}.story-controls button{font:inherit;font-size:13px;font-weight:550;background:#18283f;color:#fff;border:1px solid #263b55;border-radius:5px;padding:11px 18px;cursor:pointer;min-width:124px}.story-controls button:disabled{opacity:.45;cursor:wait}.story-controls>span{font-size:12px;color:#8994a6}.scrubber-label{display:block;font-size:12px;color:#72829a;margin-bottom:10px}.assembly-scrubber{width:100%;accent-color:#6479e8;height:20px;cursor:ew-resize;margin:0}.story-note{font-size:12px;line-height:1.6;color:#8490a4;margin:12px 0 0}.story-narrative button:focus-visible,.assembly-scrubber:focus-visible{outline:3px solid #6378e8;outline-offset:4px}
 @media(min-width:1500px){.story-layout{max-width:1450px;width:100%;margin:auto}.story-viewer{height:640px;max-height:70svh}.chapter-copy{min-height:220px}}
 @media(max-width:1000px){.story-sticky{padding:30px 5%;min-height:680px}.story-layout{gap:4%;grid-template-columns:1.05fr 1fr}.story-viewer{height:490px}.story-viewer-top{flex-direction:column;gap:8px}.chapter-tabs button{margin-right:8px;padding-right:8px}.chapter-copy h2{font-size:36px}.chapter-copy{min-height:220px}.chapter-data{font-size:12px}.part-legend{flex-wrap:wrap}.story-edition{display:none}}
-@media(max-width:700px){.hero h1{letter-spacing:-2.6px}.product-story{height:220vh;min-height:1350px}.story-sticky{padding:18px 6%;height:100svh;min-height:650px;justify-content:flex-start}.story-heading{padding-bottom:10px;margin-bottom:10px}.story-heading .eyebrow{font-size:12px}.story-layout{grid-template-columns:1fr;gap:12px;width:100%;min-height:0}.story-viewer{height:32svh;min-height:200px;max-height:300px}.story-canvas{inset:28px 0 26px}.story-viewer-top{top:10px;left:12px;right:12px;flex-direction:row;font-size:12px}.viewer-state{display:none}.viewer-bottom{bottom:9px;left:12px;right:12px;font-size:12px}.viewer-bottom>span:first-child{display:none}.part-legend{bottom:30px;gap:4px}.part-legend>span{padding:5px 6px;font-size:12px}.story-narrative{max-width:none;padding:0}.chapter-tabs{margin-bottom:12px;justify-content:space-between}.chapter-tabs button{font-size:12px;padding:4px 4px 8px;margin:0}.chapter-tabs button>span{display:inline;margin-right:6px}.chapter-kicker{display:none}.chapter-copy{min-height:115px}.chapter-copy h2{font-size:29px;letter-spacing:-1px;max-width:none}.chapter-copy>p:last-child{font-size:13px;line-height:1.6;margin:10px 0 0;max-width:none}.chapter-data{display:none}.story-controls{margin:12px 0}.story-controls button{font-size:12px;padding:9px 12px}.scrubber-label{font-size:12px;margin-bottom:3px}.story-note{font-size:12px;margin-top:5px}.assembly-scrubber{height:20px}.story-controls>span{font-size:12px}}
+@media(max-width:700px){.hero h1{letter-spacing:-2.6px}.product-story{height:220vh;min-height:1350px}.story-sticky{padding:18px 6%;height:100svh;min-height:650px;justify-content:flex-start}.story-heading{padding-bottom:10px;margin-bottom:10px}.story-heading .eyebrow{font-size:12px}.story-layout{grid-template-columns:1fr;gap:12px;width:100%;min-height:0}.story-viewer{height:32svh;min-height:200px;max-height:300px}.story-canvas{inset:28px 0 26px}.story-viewer-top{top:10px;left:12px;right:12px;flex-direction:row;font-size:12px}.viewer-state{display:none}.viewer-bottom{bottom:9px;left:12px;right:12px;font-size:12px}.part-legend{bottom:30px;gap:4px}.part-legend>span{padding:5px 6px;font-size:12px}.story-narrative{max-width:none;padding:0}.chapter-tabs{margin-bottom:12px;justify-content:space-between}.chapter-tabs button{font-size:12px;padding:4px 4px 8px;margin:0}.chapter-tabs button>span{display:inline;margin-right:6px}.chapter-kicker{display:none}.chapter-copy{min-height:115px}.chapter-copy h2{font-size:29px;letter-spacing:-1px;max-width:none}.chapter-copy>p:last-child{font-size:13px;line-height:1.6;margin:10px 0 0;max-width:none}.chapter-data{display:none}.story-controls{margin:12px 0}.story-controls button{font-size:12px;padding:9px 12px}.scrubber-label{font-size:12px;margin-bottom:3px}.story-note{font-size:12px;margin-top:5px}.assembly-scrubber{height:20px}.story-controls>span{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.product-story{height:auto;min-height:0}.story-sticky{position:relative;height:auto;min-height:0;padding-top:55px;padding-bottom:55px}.part-legend{transition:none}.story-viewer{max-height:none}}
 @media(max-height:650px){.story-sticky{position:relative;height:auto;min-height:0;max-height:none;padding-top:45px;padding-bottom:45px}.product-story{height:auto;min-height:0}.story-viewer{max-height:none}.story-heading{margin-bottom:25px}}
 fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-width:0;margin-left:0;margin-right:0}
@@ -28,3 +28,252 @@ fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-wid
 @media(min-width:1550px){.cinematic-hero .hero-layout,.cinematic-hero .hero-stage{min-height:790px;height:790px}.cinematic-hero .hero-copy{padding-top:100px}}
 @media(max-width:1000px){.cinematic-hero .hero-layout{grid-template-columns:1fr 1fr;min-height:650px}.cinematic-hero .hero-stage{height:650px}.cinematic-hero h1{font-size:61px;letter-spacing:-3.5px}.cinematic-hero .hero-copy{padding:60px 0}.cinema-product{inset:0 -8% 0 -12%}.cinema-controls>span{max-width:160px;line-height:1.7}.cinema-caption{right:8%;bottom:92px}}
 @media(max-width:700px){.cinematic-hero .hero-layout{display:flex;flex-direction:column;min-height:0}.cinematic-hero .hero-copy{padding:48px 0 14px;width:100%}.cinematic-hero h1,.enterprise .cinematic-hero h1{font-size:clamp(46px,11vw,67px);letter-spacing:-2.8px}.cinematic-hero .hero-copy>.eyebrow{font-size:12px;letter-spacing:1px;margin-bottom:24px}.cinematic-hero .hero-description{font-size:15px;max-width:370px}.cinematic-hero .hero-stage{height:460px;margin-top:0}.cinema-product{inset:0 -7%}.cinema-model{inset:0 0 45px}.cinema-caption{bottom:76px;right:8%;font-size:12px}.cinema-index{font-size:21px}.cinema-controls{left:7%;right:7%;bottom:15px}.cinema-controls>span{font-size:12px;max-width:215px}.cinematic-hero .hero-bottom{font-size:12px}.cinematic-hero .hero-topline{font-size:12px;line-height:1.6}.cinematic-hero .hero-bottom>span{max-width:190px}}
+
+/* Enterprise hero: the exploding chair shared with the V4 homepage. Like there, the canvas spans the
+   whole hero (behind the copy) and uses the same framing props, so camera distance, zoom and angle
+   match; the chair is placed on the right via the component's view offset. Desktop only, as on the
+   homepage. */
+.enterprise .cinematic-hero .hero-layout{position:relative}
+.hero-chair-stage{position:absolute;inset:0;z-index:1} /* above the empty stage column, below the copy (z 3) */
+.hero-chair-stage .chair-explode{position:absolute;inset:0;cursor:grab}
+.hero-chair-stage .chair-explode:active{cursor:grabbing}
+@media(max-width:720px){.hero-chair-stage{display:none}.enterprise .cinematic-hero .hero-stage{display:none}}
+/* Enterprise hero: the subtle rule under the hero becomes a frame around the whole chair/copy area. */
+.enterprise .cinematic-hero .hero-layout{border:1px solid #ffffff17;overflow:hidden}
+.enterprise .cinematic-hero .hero-copy{padding-left:4%}
+.enterprise .cinematic-hero .hero-bottom{border-top:0}
+/* Enterprise hero: brighter glow, raised so the black backrest screws read against it. */
+.enterprise .cinematic-hero{background:radial-gradient(ellipse 55% 60% at 72% 26%,#56605bbf 0%,#2b3431a6 38%,#10182033 62%,transparent 80%),#0a1017}
+/* Story viewer: the chair canvas fills the whole box; the "Cross Chair / Component study" and
+   "Drag to rotate" labels float over it (they're already z-index 2 and click-through). */
+.product-story .story-canvas{inset:0}
+/* Story viewer: one pill top-left naming the product and the current view. */
+.product-story .story-viewer-top{flex-direction:row;justify-content:flex-start}
+.viewer-pill{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border:1px solid #dfe5ef;border-radius:999px;background:#ffffffd9;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#41506b;font-size:12px;line-height:1;white-space:nowrap;box-shadow:0 4px 16px #354b7212}
+.viewer-pill i{width:6px;height:6px;border-radius:50%;background:#596ed0;flex:none}
+/* The view name (and dot) changes colour with the state: blue assembled, amber components. */
+.viewer-pill b{font-weight:600;transition:color .35s}
+.viewer-pill i{transition:background .35s}
+.viewer-pill.is-assembled b{color:#4d63c9}
+.viewer-pill.is-components b{color:#c2611a}
+.viewer-pill.is-components i{background:#e07a2e}
+/* Story chapters: tick bullets (from our "Component-level by design" section). */
+.chapter-points{list-style:none;margin:20px 0 24px;padding:0;font-size:14px}
+.chapter-points li{position:relative;padding:11px 0 11px 28px;border-top:1px solid #e0e5ee;color:#354966;line-height:1.45}
+.chapter-points li:before{content:'';position:absolute;left:2px;top:14px;width:16px;height:16px;border-radius:50%;background:#e8ecfb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.3 2.3 4.7-5' fill='none' stroke='%23596ed0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
+/* Story nav: hint on top, chapter tabs, and the rule under the tabs is the progress slider. */
+.chapter-nav{margin-bottom:35px}
+.chapter-hint{display:block;font-size:12px;color:#8994a6;margin-bottom:6px}
+.chapter-nav .chapter-tabs{border-bottom:0;margin-bottom:0}
+.chapter-nav .chapter-tabs button,.chapter-nav .chapter-tabs button.selected{border-bottom-color:transparent}
+.chapter-progress{--track:#dce2ee;--fill:#6378e8;display:block;width:100%;height:16px;margin:-6px 0 0;padding:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+.chapter-progress::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:linear-gradient(90deg,var(--fill) var(--p,0%),var(--track) var(--p,0%))}
+.chapter-progress::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:13px;height:13px;margin-top:-5px;border-radius:50%;background:var(--fill);border:2px solid #fff;box-shadow:0 1px 4px #263b7633}
+.chapter-progress::-moz-range-track{height:3px;border-radius:3px;background:var(--track)}
+.chapter-progress::-moz-range-progress{height:3px;border-radius:3px;background:var(--fill)}
+.chapter-progress::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--fill);border:2px solid #fff;box-shadow:0 1px 4px #263b7633}
+.chapter-progress:focus-visible{outline:3px solid #6378e8;outline-offset:4px}
+.product-story .chapter-copy{min-height:0} /* the shorter component-level copy no longer needs reserved height; bullets follow the text */
+/* "COMPONENT-LEVEL BY DESIGN" label sits on top of the chair viewer, inside the sticky story. */
+.story-visual{min-width:0}
+.story-visual>.eyebrow{color:#596dd5;margin:0 0 18px}
+/* Pin the chapter text to the top of the chair box (not vertically centred), so switching chapters
+   with different text lengths doesn't make it jump. 26px + its 10px padding = the label above the box + its gap. */
+.story-visual{align-self:center}
+.story-narrative{align-self:start;margin-top:26px}
+@media(max-width:700px){.story-narrative{margin-top:0}}
+/* Step 2: labels around the screw (globe-label pills, in a light-glass version for this viewer).
+   They fade in one after another once the camera is on the screw, and leave in step 3. */
+.screw-facts{position:absolute;inset:0;z-index:3;pointer-events:none}
+.screw-fact{position:absolute;display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border:1px solid #dfe5ef;border-radius:999px;background:#ffffffd9;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#26344d;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 8px 24px #354b7218;opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+.screw-fact>i{width:10px;height:10px;border-radius:50%;flex:none}
+.screw-facts.is-on .screw-fact{opacity:1;transform:none}
+.fact-supplier{top:20%;left:7%}
+.fact-supplier>i{background:#0eb5d4}
+.fact-material{top:44%;right:6%;padding:6px 16px 6px 6px;border-radius:18px}
+.fact-chain{bottom:16%;left:12%}
+.fact-chain>i{background:#8b5cf6}
+.screw-facts.is-on .fact-material{transition-delay:.15s}
+.screw-facts.is-on .fact-chain{transition-delay:.3s}
+.ore-thumb{width:56px;height:56px;flex:none;border-radius:12px;background:radial-gradient(circle at 50% 40%,#fff 0%,#eef1f8 75%);overflow:hidden}
+@media(max-width:700px){.screw-fact{font-size:11px;padding:6px 10px}.ore-thumb{width:40px;height:40px}.fact-material{padding:4px 12px 4px 4px}}
+@media(prefers-reduced-motion:reduce){.screw-fact{transition:none}}
+/* Desktop: a bigger Material label so the ore reads clearly, nudged clear of the screw head. */
+@media(min-width:701px){.fact-material{top:auto;bottom:26%;right:4%;gap:14px;padding:8px 22px 8px 8px;border-radius:22px;font-size:15px}.fact-material .ore-thumb{width:104px;height:104px;border-radius:16px}}
+/* More screw labels (step 2). Placed around the edges, clear of the screw in the middle; they come
+   in after the first three. Phones keep only supplier, material and supply chain. */
+.fact-co2{top:12%;right:6%}
+.fact-co2>i{background:#1f9d6b}
+.fact-certs{top:40%;left:4%}
+.fact-certs>i{background:#4d63c9}
+.fact-packaging{top:26%;right:10%}
+.fact-packaging>i{background:#b8864b}
+.fact-spare{bottom:6%;left:34%}
+.fact-spare>i{background:#f5a623}
+.screw-facts.is-on .fact-co2{transition-delay:.45s}
+.screw-facts.is-on .fact-certs{transition-delay:.6s}
+.screw-facts.is-on .fact-packaging{transition-delay:.75s}
+.screw-facts.is-on .fact-spare{transition-delay:.9s}
+@media(max-width:700px){.screw-fact.is-extra{display:none}}
+/* Leader lines from each screw label to the screw, ending in a small white dot. Behind the labels. */
+.screw-leaders{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:0;transition:opacity .45s ease .2s}
+.screw-leaders.is-on{opacity:1}
+.screw-leaders line{stroke:#fff;stroke-width:1.5}
+.screw-leaders circle{fill:#fff}
+/* Desktop: keep the big Material label in the bottom-right corner, clear of the screw. */
+@media(min-width:701px){.fact-material{bottom:16px;right:16px}.fact-chain{bottom:22%;left:5%}.fact-spare{bottom:7%;left:8%}}
+/* Draggable screw labels: offset via --dx/--dy (kept through the fade), grab cursor when shown. */
+.screw-fact{transform:translate(var(--dx,0px),calc(var(--dy,0px) + 8px))}
+.screw-facts.is-on .screw-fact{transform:translate(var(--dx,0px),var(--dy,0px));pointer-events:auto;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.screw-facts.is-on .screw-fact.is-dragging{cursor:grabbing;transition:opacity .45s ease;z-index:2}
+/* Screw labels with sub-points: title + small grey bullets inside the pill, shown when the label is
+   hovered or tapped (it then becomes a rounded card). The dot stays level with the title. */
+.screw-fact{align-items:flex-start}
+.screw-fact>i{margin-top:3px}
+.fact-material{align-items:center}
+.fact-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fact-body>b{font-weight:600}
+.fact-body ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:2px}
+.fact-body li{position:relative;padding-left:10px;font-size:11px;font-weight:450;line-height:1.35;color:#7a869b;white-space:normal}
+.fact-body li:before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:#a7b1c2}
+.fact-body ul{display:none}
+/* Bullets open on hover (mouse) or when tapped (.is-open); the open card sits above the others. */
+@media(hover:hover){.screw-facts.is-on .screw-fact:hover .fact-body ul{display:flex}.screw-facts.is-on .screw-fact:hover:has(li){border-radius:14px;padding:9px 14px 10px;max-width:250px;white-space:normal;z-index:4}}
+.screw-facts.is-on .screw-fact.is-open .fact-body ul{display:flex}
+.screw-facts.is-on .screw-fact.is-open:has(li){border-radius:14px;padding:9px 14px 10px;max-width:250px;white-space:normal;z-index:4}
+.fact-material:is(:hover,.is-open){padding-right:16px}
+/* Animated open state: the bullet list grows in width and height and fades in, the pill eases into
+   a card. (Overrides the instant display toggle above.) Radius 20px ≈ fully round for the closed
+   pill, so the corner change animates smoothly. */
+.screw-fact{border-radius:20px;transition:opacity .45s ease,transform .45s ease,border-radius .3s ease,padding .3s ease,box-shadow .3s ease}
+.screw-fact .fact-body ul,
+.screw-facts.is-on .screw-fact .fact-body ul{display:flex;width:auto;max-width:0;max-height:0;margin-top:0;opacity:0;overflow:hidden;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .2s ease}
+.screw-facts.is-on .screw-fact.is-open .fact-body ul{max-width:280px;max-height:140px;margin-top:4px;opacity:1;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .25s ease .12s}
+@media(hover:hover){.screw-facts.is-on .screw-fact:hover .fact-body ul{max-width:280px;max-height:140px;margin-top:4px;opacity:1;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .25s ease .12s}}
+.screw-facts.is-on .screw-fact.is-open:has(li),.screw-facts.is-on .screw-fact:has(li):hover{max-width:none;white-space:nowrap;border-radius:14px;box-shadow:0 12px 32px #354b7226}
+.fact-material{border-radius:22px}
+.screw-fact .fact-body li{white-space:nowrap} /* one line each, so the card grows evenly while opening */
+@media(prefers-reduced-motion:reduce){.screw-fact,.screw-fact .fact-body ul{transition:none!important}}
+/* Packaging label gets a 3D thumbnail too (the open cardboard box), styled like Material. On desktop
+   it sits above Material in the right column. */
+.fact-packaging{align-items:center;padding:6px 16px 6px 6px;border-radius:18px}
+.fact-packaging:is(:hover,.is-open){padding-right:16px}
+@media(min-width:701px){.fact-packaging{top:auto;right:16px;bottom:150px;gap:14px;padding:8px 22px 8px 8px;border-radius:22px;font-size:15px}.fact-packaging .ore-thumb{width:104px;height:104px;border-radius:16px}}
+/* Desktop: Packaging (with the box) takes the top-left spot; Supplier moves to the right column above
+   Material. Phones keep Supplier top-left (Packaging is hidden there). */
+@media(min-width:701px){.fact-packaging{top:64px;left:16px;right:auto;bottom:auto}.fact-supplier{top:auto;left:auto;right:16px;bottom:158px}}
+/* Desktop: Material (ore) and Packaging (box) swap — Material top-left, Packaging bottom-right. */
+@media(min-width:701px){.fact-material{top:64px;left:16px;right:auto;bottom:auto}.fact-packaging{top:auto;left:auto;right:16px;bottom:16px}}
+/* One smooth open/close: every property shares one duration and easing, the list animates to its
+   measured natural size (--open-w/--open-h), and the card keeps the same padding in both states. */
+.screw-facts.is-on .screw-fact{transition:opacity .45s ease,transform .45s ease,border-radius .4s cubic-bezier(.2,.7,.3,1),box-shadow .4s cubic-bezier(.2,.7,.3,1)}
+.screw-facts.is-on .screw-fact.is-dragging{transition:opacity .45s ease,border-radius .4s cubic-bezier(.2,.7,.3,1),box-shadow .4s cubic-bezier(.2,.7,.3,1)}
+.screw-facts.is-on .screw-fact .fact-body ul{transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}
+.screw-facts.is-on .screw-fact.is-open .fact-body ul{max-width:var(--open-w,280px);max-height:var(--open-h,140px);transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}
+@media(hover:hover){.screw-facts.is-on .screw-fact:hover .fact-body ul{max-width:var(--open-w,280px);max-height:var(--open-h,140px);transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}}
+/* same padding open and closed (no padding jump) */
+.screw-facts.is-on .screw-fact.is-open:has(li),.screw-facts.is-on .screw-fact:has(li):hover{padding:8px 14px}
+.screw-facts.is-on .fact-material:is(.is-open,:hover),.screw-facts.is-on .fact-packaging:is(.is-open,:hover){padding:6px 16px 6px 6px}
+@media(min-width:701px){.screw-facts.is-on .fact-material:is(.is-open,:hover),.screw-facts.is-on .fact-packaging:is(.is-open,:hover){padding:8px 22px 8px 8px}}
+/* Label icons (in place of the coloured dots): the icon in its label colour on a soft tint of it. */
+.fact-icon{--c:#596dd5;width:26px;height:26px;margin:-3px 0 -3px -6px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--c);background:color-mix(in srgb,var(--c) 14%,#fff)}
+.fact-supplier .fact-icon{--c:#0a9fbd}
+.fact-chain .fact-icon{--c:#7c4ddb}
+.fact-co2 .fact-icon{--c:#1f9d6b}
+.fact-certs .fact-icon{--c:#4d63c9}
+.fact-spare .fact-icon{--c:#d98a0b}
+@media(max-width:700px){.fact-icon{width:22px;height:22px;margin:-2px 0 -2px -4px}.fact-icon svg{width:13px;height:13px}}
+/* Bullet text and dots a step darker for readability. */
+.fact-body li{color:#5d697e}
+.fact-body li:before{background:#8592a7}
+/* Caption under the chapter bullets (step 2 only) telling people the screw cards open up; fades in
+   after the cards. Tap wording on touch screens. */
+.facts-hint{margin:14px 0 0;font-size:12px;color:#71809a;opacity:0;transition:opacity .45s ease}
+.facts-hint.is-on{opacity:1;transition-delay:.9s}
+.hint-touch{display:none}
+@media(hover:none){.hint-hover{display:none}.hint-touch{display:inline}}
+/* The same caption also inside the viewer, in the lower-left corner. */
+.facts-hint.in-viewer{position:absolute;left:22px;bottom:14px;margin:0;pointer-events:none}
+@media(max-width:700px){.facts-hint.in-viewer{left:12px;bottom:8px;font-size:11px}}
+/* Bigger card bullets. */
+.fact-body li{font-size:12.5px;line-height:1.4}
+.fact-body li:before{top:.6em}
+@media(max-width:700px){.fact-body li{font-size:11.5px}}
+/* Leader lines + end dots in a light grey: visible on the light viewer and on the black screw. */
+.screw-leaders line{stroke:#a9b3c3}
+.screw-leaders circle{fill:#a9b3c3}
+/* Leader lines in a light tint of our blue (#6378e8 family): reads on the light viewer and the black screw. */
+.screw-leaders line{stroke:#8293ee}
+.screw-leaders circle{fill:#8293ee}
+/* Leader lines in the slider track's grey (#dce2ee), matching the progress line on the right. */
+.screw-leaders line{stroke:#dce2ee}
+.screw-leaders circle{fill:#dce2ee}
+/* All lines meet at the screw's centre: a slightly bigger shared end dot, drawn above the 3D view. */
+.screw-leaders circle{r:4.5px}
+/* Leader lines live under the 3D canvas now (see ProductStory): keep them out of pointer events. */
+.screw-leaders{pointer-events:none}
+/* Desktop card layout (from the agreed mock-up, as % of the viewer); Certificates and Spare part
+   swapped. Overrides the earlier per-card positions. */
+@media(min-width:701px){
+  .fact-material{top:15%;left:4%;right:auto;bottom:auto}
+  .fact-spare{top:47%;left:1.5%;right:auto;bottom:auto}
+  .fact-chain{top:66%;left:4.5%;right:auto;bottom:auto}
+  .fact-certs{top:81%;left:17.5%;right:auto;bottom:auto}
+  .fact-co2{top:25%;left:74.5%;right:auto;bottom:auto}
+  .fact-supplier{top:49.5%;right:1.5%;left:auto;bottom:auto}
+  .fact-packaging{bottom:5.5%;right:2.5%;top:auto;left:auto}
+}
+/* Certificates is wider than Spare part was in this spot: start it a bit further left so it clears
+   Packaging on narrower desktop viewers too. */
+@media(min-width:701px){.fact-certs{left:6%}}
+/* Step 3: "Time to add each product" — bars grow one by one, then a dashed blue→green curve draws
+   through their tops ending in a glowing dot. Jarl's Product memory styling, light version. */
+.reuse-chart{margin:22px 0 0;padding:14px 16px 8px;border:1px solid #e0e5ee;border-radius:12px;background:#fff;animation:rc-in .5s ease both}
+.reuse-chart figcaption{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.reuse-chart-title{font-size:13px;font-weight:550;color:#26344d}
+.reuse-chart-note{font-size:11px;color:#8994a6}
+.reuse-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.rc-base{stroke:#e0e5ee;stroke-width:1}
+.rc-bar{fill:url(#rc-reuse);stroke:#7ccaa6;stroke-width:1;transform-box:fill-box;transform-origin:50% 100%;animation:rc-grow .7s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--i) * .22s + .15s)}
+.rc-bar.is-first{fill:url(#rc-first);stroke:#97a6ef}
+.rc-value{font:600 12px Inter,sans-serif;fill:#26344d;text-anchor:middle;animation:rc-fade .4s ease both;animation-delay:calc(var(--i) * .22s + .6s)}
+.rc-label{font:500 11px Inter,sans-serif;fill:#8994a6;text-anchor:middle}
+.rc-curve{fill:none;stroke:url(#rc-curve);stroke-width:2;stroke-dasharray:5 6;stroke-linecap:round}
+.rc-reveal{fill:none;stroke:#fff;stroke-width:8;stroke-dasharray:1;stroke-dashoffset:1;animation:rc-draw 1.2s cubic-bezier(.4,0,.2,1) 1.4s forwards}
+.rc-head{fill:#1f9d6b;filter:drop-shadow(0 0 5px #1f9d6b66);transform-box:fill-box;transform-origin:center;animation:rc-pop .4s ease 2.5s both}
+@keyframes rc-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes rc-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes rc-fade{from{opacity:0}to{opacity:1}}
+@keyframes rc-draw{to{stroke-dashoffset:0}}
+@keyframes rc-pop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.reuse-chart,.rc-bar,.rc-value,.rc-head{animation:none}.rc-reveal{animation:none;stroke-dashoffset:0}}
+/* Narrow bars in flat colours (no gradient), square at the baseline. */
+.rc-bar{fill:#bfe6d4;stroke:none}
+.rc-bar.is-first{fill:#cdd5f7;stroke:none}
+/* Start dot on the curve (Product 1), in the curve's starting blue; pops in as the line starts. */
+.rc-start{fill:#6378e8;filter:drop-shadow(0 0 5px #6378e866);transform-box:fill-box;transform-origin:center;animation:rc-pop .4s ease 1.3s both}
+@media(prefers-reduced-motion:reduce){.rc-start{animation:none}}
+/* Calmer: all label icons in the one brand blue (overrides the per-label colours above). */
+.screw-fact .fact-icon{--c:#596dd5}
+.enterprise .cinematic-hero .hero-layout{border-radius:12px} /* rounded frame (matches the 12px story viewer) around the chair + headline (canvas is clipped by its overflow:hidden) */
+/* Hero frame: a faint see-through white wash so it reads slightly brighter than the page behind it,
+   and the same dark space below as above so its bottom border shows again. */
+.enterprise .cinematic-hero .hero-layout{background:rgba(255,255,255,.05)}
+.enterprise .cinematic-hero{padding-bottom:28px}
+/* Card bullets keep to one line, except where the copy has an explicit line break (\n). */
+.screw-fact .fact-body li{white-space:pre}
+/* Impact data is anchored from the right (≈ where its right edge sits in the mock-up) so the open
+   card grows leftwards and stays inside the viewer. */
+@media(min-width:701px){.fact-co2{left:auto;right:4.5%}}
+/* Lines leave quickly when scrolling out of step 2 (they stop following the screw at that point);
+   they still fade in gently after the cards. */
+.screw-leaders{transition:opacity .12s ease}
+.screw-leaders.is-on{transition:opacity .45s ease .2s}
+/* Page max width: the How it works hero keeps to the same 1240px as the homepage (4.2% margins below). */
+.enterprise .cinematic-hero{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2))}
+/* Page max width on How it works: every section's content keeps to the same 1240px as the header and
+   the homepage (backgrounds still run edge to edge); 4.2% side margins on smaller desktops. */
+@media(min-width:701px){
+  .enterprise .section,.enterprise .story-sticky,.enterprise .footer{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2))}
+  .enterprise .story-layout{max-width:none}
+}

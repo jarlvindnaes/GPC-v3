@@ -1,0 +1,63 @@
+---
+import { ExplodingChair } from '../components/wireframe/ExplodingChair';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Chair animation lab</title>
+    <style is:global>
+      html,
+      body {
+        margin: 0;
+      }
+      /* Page chrome mirrors Jarl's prototype (white page, framed layout). */
+      body {
+        background: #fff;
+        padding: 28px 32px;
+        font-family: Inter, Arial, sans-serif;
+      }
+      /* .frame — same bordered, max-width wrapper as the hero on the homepage. */
+      .hero-frame {
+        max-width: 1240px;
+        margin: auto;
+        border-left: 1px solid #e9eaec;
+        border-right: 1px solid #e9eaec;
+        overflow: hidden;
+      }
+      /* .hero-chair — same size and background as Jarl's hero as it actually renders
+         (the winning rules: #ddd9d3 base, 650px, plus the light wash from the left). */
+      .chair-stage {
+        position: relative;
+        isolation: isolate;
+        min-height: 650px;
+        background: #ddd9d3;
+        overflow: hidden; /* lets us zoom / crop the chair inside */
+      }
+      .chair-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none; /* keep the chair drag-rotatable through the wash */
+        background: linear-gradient(90deg, #f4f2ede6 0%, #f4f2edb3 25%, #f4f2ed00 55%);
+      }
+      /* The 3D chair sits where the hero photo sits (behind the wash). Tweak inset /
+         transform: scale()/translate() here to experiment with zoom and cropping. */
+      .chair-stage .chair-explode {
+        position: absolute;
+        inset: 0; /* full hero width, so exploding parts are never clipped by the canvas edge */
+        z-index: -2;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero-frame">
+      <div class="chair-stage">
+        <ExplodingChair client:only="react" framePad={0.4} autoRotate={false} offsetX={0.26} offsetY={0.16} explodeAmount={0.15} view={[1.6, 0.7, 1]} depthOfField={0.007} />
+      </div>
+    </section>
+  </body>
+</html>

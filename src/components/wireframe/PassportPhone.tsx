@@ -42,11 +42,21 @@ function PhoneLoadingOverlay() {
   );
 }
 
+// `passport-scope` marks the passport's DOM so host pages with element-level styles (e.g. the V4
+// homepage's h2 sizes) can hand it back to its own Tailwind styling.
 // 3D iPhone showing the Digital Product Passport, ported from the main site's ChairPhoneShowcase
 // but without the click-to-open chair: the phone is shown open, with the same expand-to-fullscreen
 // control (a portalled overlay that escapes all stacking contexts and locks body scroll).
 export function PassportPhone() {
   const [expanded, setExpanded] = useState(false);
+
+  // Allow other parts of the page (e.g. the hero "Explore its passport" link) to open the
+  // fullscreen passport by dispatching a window event.
+  useEffect(() => {
+    const open = () => setExpanded(true);
+    window.addEventListener("passport:open", open);
+    return () => window.removeEventListener("passport:open", open);
+  }, []);
 
   useEffect(() => {
     if (expanded) {
@@ -75,7 +85,7 @@ export function PassportPhone() {
   }, [expanded]);
 
   return (
-    <div className="relative mx-auto h-full min-h-[460px] w-full max-w-[500px]">
+    <div className="passport-scope relative mx-auto h-full min-h-[460px] w-full max-w-[500px]">
       <HtmlPhoneCanvas noChrome={true} rotation={[0.05, 0.4, 0]}>
         <DppPhoneScreen />
       </HtmlPhoneCanvas>
@@ -108,7 +118,7 @@ export function PassportPhone() {
 
       {expanded &&
         createPortal(
-          <div className="fixed inset-0 z-[99999] flex flex-col items-center" style={{ paddingTop: 8 }}>
+          <div className="passport-scope fixed inset-0 z-[99999] flex flex-col items-center" style={{ paddingTop: 8 }}>
             <button
               type="button"
               aria-label="Close fullscreen passport"
