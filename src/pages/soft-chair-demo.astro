@@ -1,0 +1,43 @@
+---
+// Playground: the How it works hero animation (ExplodingChair) with the Soft Lounge Chair from the
+// passport instead of the Cross Chair. Not linked from the menu; noindex.
+import '../styles/nextgen.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import { ExplodingChair } from '../components/wireframe/ExplodingChair';
+const base = import.meta.env.BASE_URL;
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Soft Lounge Chair demo — Product Connect</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#141816" />
+<link rel="icon" href={`${base}nextgen/favicon.svg`} type="image/svg+xml" />
+</head>
+<body class="enterprise">
+<a class="skip" href="#main">Skip to content</a>
+<SiteHeader theme="dark" />
+<main id="main">
+<section class="hero cinematic-hero">
+<div class="hero-layout">
+<div class="hero-chair-stage" aria-hidden="true"><ExplodingChair client:only="react" variant="soft" framePad={0.4} autoRotate={false} offsetX={0.26} offsetY={0.16} explodeAmount={0.15} view={[1.6, 0.7, 1]} media="(min-width: 721px)" depthOfField={0.007} /></div>
+<div class="demo-stage-phone" aria-hidden="true"><ExplodingChair client:only="react" variant="soft" framePad={0.45} autoRotate={false} offsetX={0.08} offsetY={0.1} explodeAmount={0.15} view={[1.6, 0.7, 1]} media="(max-width: 720px)" depthOfField={0.007} /></div>
+<div class="hero-copy"><p class="eyebrow">PLAYGROUND / SOFT LOUNGE CHAIR</p>
+<h1>Every part, <em>accounted for.</em></h1>
+<p class="hero-description">The How it works hero animation, played with the Soft Lounge Chair from the passport demo: the connector bolts back out first, then the leather seat, shell and frame come apart and settle back.</p>
+</div>
+<div class="hero-stage"></div>
+</div>
+</section>
+</main>
+<style is:global>
+  /* The How it works hero hides its chair on phones; the playground shows it, centred, below the copy. */
+  .demo-stage-phone { display: none; }
+  @media (max-width: 720px) {
+    .demo-stage-phone { display: block; position: relative; width: 100%; height: 440px; order: 2; }
+    .demo-stage-phone .chair-explode { position: absolute; inset: 0; }
+  }
+</style>
+</body>
+</html>

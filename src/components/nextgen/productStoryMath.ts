@@ -2,9 +2,12 @@
 export function getStoryFrame(progress: number) {
   const p = Math.max(0, Math.min(1, progress));
   const smooth = (value: number) => value * value * (3 - 2 * value);
+  // Opening starts almost as soon as the section is reached and moves at full pace from the first
+  // scroll (ease-out), so the chair visibly responds right away; closing eases as before.
+  const easeOut = (value: number) => value * (2 - value);
   let separation = 0;
-  if (p > 0.12 && p < 0.42) {
-    separation = smooth((p - 0.12) / 0.3);
+  if (p > 0.03 && p < 0.42) {
+    separation = easeOut((p - 0.03) / 0.39);
   } else if (p >= 0.42 && p <= 0.62) {
     separation = 1;
   } else if (p > 0.62 && p < 0.93) {

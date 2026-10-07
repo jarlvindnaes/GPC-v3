@@ -5,6 +5,10 @@ import { createPortal } from "react-dom";
 import * as Three from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { DppPartThumb } from "./DppPartThumb";
 import { brandConfig } from "./dppBrandConfig";
 import { CHAIR_MODEL, partForPiece } from "./dppChairModel";
@@ -42,6 +46,8 @@ function useChairCanvas(
 
   // Each purchasable part's meshes get their own material copies, so one part can glow on its own.
   const partMaterialsRef = useRef<Map<string, Three.MeshStandardMaterial[]>>(new Map());
+  const partMeshesRef = useRef<Map<string, Three.Mesh[]>>(new Map());
+  const outlineRef = useRef<OutlinePass | null>(null);
   const [modelReady, setModelReady] = useState(false);
 
   // Stable callback ref so the effect doesn't re-run when onPartClick changes
@@ -124,6 +130,9 @@ function useChairCanvas(
           const list = partMaterialsRef.current.get(partId) ?? [];
           list.push(mat);
           partMaterialsRef.current.set(partId, list);
+          const meshes = partMeshesRef.current.get(partId) ?? [];
+          meshes.push(mesh);
+          partMeshesRef.current.set(partId, meshes);
         });
       }
       setModelReady(true);
@@ -165,10 +174,46 @@ function useChairCanvas(
     shadowPlane.position.y = -0.6;
     scene.add(shadowPlane);
 
+    // ── Selection outline ──
+    // Brand-coloured outline around the selected part, also traced faintly where other pieces hide it.
+    // Post-processing runs only while something is selected; otherwise the plain render is used.
+    const composer = new EffectComposer(
+      renderer,
+      new Three.WebGLRenderTarget(width, height, { type: Three.HalfFloatType, samples: 4 })
+    );
+    composer.setPixelRatio(renderer.getPixelRatio());
+    composer.setSize(width, height);
+    composer.addPass(new RenderPass(scene, camera));
+    const outline = new OutlinePass(new Three.Vector2(width, height), scene, camera);
+    outline.visibleEdgeColor.set(brandConfig.colors.primary);
+    outline.hiddenEdgeColor.set(brandConfig.colors.primary).multiplyScalar(0.45);
+    outline.edgeStrength = 6;
+    outline.edgeThickness = 1.6;
+    outline.edgeGlow = 0;
+    outline.pulsePeriod = 0;
+    composer.addPass(outline);
+    outlineRef.current = outline;
+    // Tone map + sRGB like a plain render, un-premultiplying so edges over the transparent canvas
+    // don't darken (same patch as the chair story scene).
+    const output = new OutputPass();
+    const fs = output.material.fragmentShader;
+    const end = fs.lastIndexOf("}");
+    output.material.fragmentShader = `${fs
+      .slice(0, end)
+      .replace(
+        "gl_FragColor = texture2D( tDiffuse, vUv );",
+        "gl_FragColor = texture2D( tDiffuse, vUv );\n\t\t\tfloat coverage = gl_FragColor.a;\n\t\t\tif ( coverage > 0.0 ) gl_FragColor.rgb /= coverage;"
+      )}\tgl_FragColor.rgb *= coverage;\n}`;
+    composer.addPass(output);
+
     // ── Render loop ──
     const animate = () => {
       animFrameRef.current = requestAnimationFrame(animate);
-      renderer.render(scene, camera);
+      if (outline.selectedObjects.length) {
+        composer.render();
+      } else {
+        renderer.render(scene, camera);
+      }
     };
     animFrameRef.current = requestAnimationFrame(animate);
 
@@ -279,6 +324,10 @@ function useChairCanvas(
       canvas.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerup", onPointerUp);
       canvas.removeEventListener("click", onClick);
+      composer.dispose();
+      outline.dispose();
+      output.dispose();
+      outlineRef.current = null;
       renderer.dispose();
       dracoLoader.dispose();
       if (container.contains(renderer.domElement)) {
@@ -287,8 +336,8 @@ function useChairCanvas(
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Tint the selected part in the brand colour (pale oak needs a colour shift, a glow alone doesn't
-  // show); everything else returns to its own finish.
+  // Tint and outline the selected part in the brand colour (pale oak needs a colour shift, a glow alone
+  // doesn't show); everything else returns to its own finish.
   // biome-ignore lint/correctness/useExhaustiveDependencies: modelReady is an intentional trigger — apply the highlight once the model has loaded
   useEffect(() => {
     const brand = new Three.Color(brandConfig.colors.primary);
@@ -298,11 +347,14 @@ function useChairCanvas(
         const on = partId === selectedPartId;
         mat.color.copy(original);
         if (on) {
-          mat.color.lerp(brand, 0.55);
+          mat.color.lerp(brand, 0.7);
         }
         mat.emissive.set(on ? brand : 0x000000);
-        mat.emissiveIntensity = on ? 0.18 : 0;
+        mat.emissiveIntensity = on ? 0.35 : 0;
       }
+    }
+    if (outlineRef.current) {
+      outlineRef.current.selectedObjects = selectedPartId ? (partMeshesRef.current.get(selectedPartId) ?? []) : [];
     }
   }, [selectedPartId, modelReady]);
 }

@@ -12,6 +12,8 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { ChairDofShader } from "./chair-dof";
+import { placeStaged, SOFT_EXPLODE_SECONDS, softMovesFor } from "./softChairStages";
+import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
 
 // Exploded-assembly of the TAKT Cross Chair for the #components section. Adapted from
 // Drafts/wireframes/chair-scroll.js (vanilla three.js + CDN importmap) to a hydrated React island.
@@ -36,7 +38,10 @@ interface PartUserData {
   basePos: Three.Vector3;
   dir: Three.Vector3;
   leads: boolean; // moves over the full cycle (out first, back last); others move inside the LEAD margin
+  // Soft chair only: staged moves [start, end, dx, dy, dz] over the disassembly (0..1), in metres.
+  moves?: number[][];
 }
+
 
 // `framePad` overrides FRAME_PAD per placement (smaller = camera closer = chair larger).
 // `offsetX` / `offsetY` shift the rendered chair as a fraction of the canvas size (offsetX 0.2 = 20%
@@ -51,6 +56,7 @@ export function ExplodingChair({
   view = [0.55, 0.28, 1],
   media,
   depthOfField = 0,
+  variant = "cross",
 }: {
   framePad?: number;
   autoRotate?: boolean;
@@ -62,6 +68,10 @@ export function ExplodingChair({
   // Depth of field: largest blur radius as a fraction of the canvas width (e.g. 0.007). Everything up
   // to the chair's centre is sharp; parts about one chair-radius further away reach full blur. 0 = off.
   depthOfField?: number;
+  // Which chair: the TAKT Cross Chair (default) or the Soft Lounge Chair from the passport, split
+  // into named pieces (see dppChairModel.ts). The Soft chair keeps its own textures; its bolts back
+  // out sideways and the leather seat lifts off the shell.
+  variant?: "cross" | "soft";
 } = {}) {
   const hostRef = useRef<HTMLDivElement>(null);
   const isNear = useIsNearViewport(hostRef);
@@ -190,7 +200,7 @@ export function ExplodingChair({
     fill.position.set(-4, 6, -4);
     scene.add(fill);
 
-    const parts: Three.Mesh[] = [];
+    const parts: Three.Object3D[] = [];
     let ready = false;
     let modelRef: Three.Object3D | null = null;
 
@@ -205,6 +215,10 @@ export function ExplodingChair({
       const k = EXPLODE_FACTOR * EXPLODE_START;
       for (const part of parts) {
         const data = part.userData as PartUserData;
+        if (data.moves) {
+          placeStaged(part, data.basePos, data.moves, 1, explodeAmount / 0.15);
+          continue;
+        }
         const b = data.basePos;
         const d = data.dir;
         part.position.set(b.x + d.x * k, b.y + d.y * k, b.z + d.z * k);
@@ -249,7 +263,9 @@ export function ExplodingChair({
     let disposed = false;
 
     loader.load(
-      `${import.meta.env.BASE_URL}wireframes/cross-chair-04.glb`,
+      variant === "soft"
+        ? SOFT_CHAIR_MODEL // same split model as the passport's parts viewer and thumbnails
+        : `${import.meta.env.BASE_URL}wireframes/cross-chair-04.glb`,
       (gltf) => {
         if (disposed) {
           return;
@@ -273,6 +289,11 @@ export function ExplodingChair({
             m.depthWrite = true;
             m.alphaTest = 0;
             m.side = Three.DoubleSide;
+            if (variant === "soft") {
+              m.envMapIntensity = 0.55; // its own oak, leather and steel finishes, just set in this light
+              m.needsUpdate = true;
+              continue;
+            }
             if (m.normalMap) {
               m.normalScale.set(0.4, 0.4);
             }
@@ -310,7 +331,24 @@ export function ExplodingChair({
         // Per-part base position + 3D explode direction (offset of its centre from the chair's centre)
         const mBox = new Three.Box3().setFromObject(model);
         const mCenter = mBox.getCenter(new Three.Vector3());
+        if (variant === "soft") {
+          // One moving part per named piece (a piece can hold several meshes).
+          const root = model.getObjectByName("Soft_Lounge_Chair");
+          for (const piece of root?.children ?? []) {
+            const name = piece.name.replace(/_/g, " ");
+            const c = new Three.Box3().setFromObject(piece).getCenter(new Three.Vector3());
+            const outward = Math.sign(c.x - mCenter.x) || 1;
+            const moves = softMovesFor(name, outward);
+            const dir = new Three.Vector3();
+            const leads = false;
+            piece.userData = { basePos: piece.position.clone(), dir, leads, moves } satisfies PartUserData;
+            parts.push(piece);
+          }
+        }
         model.traverse((object) => {
+          if (variant === "soft") {
+            return;
+          }
           const mesh = object as Three.Mesh;
           if (!mesh.isMesh) {
             return;
@@ -360,7 +398,8 @@ export function ExplodingChair({
     // extreme. Time only advances while the chair is on-screen, so it never jumps after being away.
     const clock = new Three.Clock();
     let elapsed = 0;
-    const loopSeconds = HOLD_ASSEMBLED + EXPLODE_SECONDS;
+    const explodeSeconds = variant === "soft" ? SOFT_EXPLODE_SECONDS : EXPLODE_SECONDS;
+    const loopSeconds = HOLD_ASSEMBLED + explodeSeconds;
 
     let raf = 0;
     const animate = () => {
@@ -379,7 +418,7 @@ export function ExplodingChair({
         const phase = elapsed % loopSeconds;
         const m =
           phase > HOLD_ASSEMBLED
-            ? (phase - HOLD_ASSEMBLED) / EXPLODE_SECONDS
+            ? (phase - HOLD_ASSEMBLED) / explodeSeconds
             : 0;
         const ease = (t: number) =>
           (explodeAmount *
@@ -387,8 +426,15 @@ export function ExplodingChair({
           2;
         const kLead = EXPLODE_FACTOR * ease(m);
         const kRest = EXPLODE_FACTOR * ease((m - LEAD) / (1 - 2 * LEAD));
+        // Staged (Soft chair): progress goes 0 -> 1 -> 0 over the cycle, so it comes apart step by
+        // step and goes back together in reverse.
+        const progress = (1 - Math.cos(Math.min(Math.max(m, 0), 1) * Math.PI * 2)) / 2;
         for (const part of parts) {
           const data = part.userData as PartUserData;
+          if (data.moves) {
+            placeStaged(part, data.basePos, data.moves, progress, explodeAmount / 0.15);
+            continue;
+          }
           const b = data.basePos;
           const d = data.dir;
           const k = data.leads ? kLead : kRest;
@@ -483,6 +529,7 @@ export function ExplodingChair({
     offsetY,
     explodeAmount,
     depthOfField,
+    variant,
     ...view,
   ]);
 

@@ -361,6 +361,7 @@ export default function ProductStory({ base }: { base: string }) {
           () => cancelled,
           () => reducedRef.current,
           drawLeaders,
+          "soft", // the passport's Soft Lounge Chair; "cross" brings back the Cross Chair
         );
         if (cancelled) {
           cleanup?.();
@@ -416,7 +417,7 @@ export default function ProductStory({ base }: { base: string }) {
                   aria-live="polite"
                 >
                   <i aria-hidden="true" />
-                  Cross Chair /{" "}
+                  Soft Lounge Chair /{" "}
                   <b>
                     {separation > 0.2 ? "Component view" : "Assembled view"}
                   </b>
@@ -440,7 +441,7 @@ export default function ProductStory({ base }: { base: string }) {
                 className="story-canvas"
                 ref={hostRef}
                 role="img"
-                aria-label="Interactive Cross Chair model separating into its seat, back, legs, support and fixings, then assembling again"
+                aria-label="Interactive Soft Lounge Chair model separating into its leather seat, shells, legs, rails, armrests and bolts, then assembling again"
               />
               {!ready && <output className="story-loading">{status}</output>}
               <div

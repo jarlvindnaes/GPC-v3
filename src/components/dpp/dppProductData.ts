@@ -193,7 +193,7 @@ export const slopeChair: ProductPassport = {
         material: "Stainless steel",
         price: "6 \u20AC",
         priceValue: { value: 6, currency: "EUR" },
-        modelPieces: ["Connector bolt", "Joint fitting"]
+        modelPieces: ["Connector bolt"]
       }
     ],
     primaryMaterial: "Solid oak",

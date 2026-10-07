@@ -7,6 +7,8 @@ import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { ChairDofShader } from "../wireframe/chair-dof";
+import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
+import { placeStaged, softMovesFor } from "../wireframe/softChairStages";
 import { getStoryFrame } from "./productStoryMath";
 
 // "The intelligence inside" story, driven by scroll / the slider (same contract as productStoryScene).
@@ -17,6 +19,9 @@ import { getStoryFrame } from "./productStoryMath";
 //                                which slowly turns around the vertical axis while the step is held.
 //   03 One product…            — back to the starting point.
 // `separation` (0..1, from getStoryFrame) drives both the explosion and the camera move.
+// `variant` "soft" plays the Soft Lounge Chair from the passport instead (same split model, same
+// collision-free staged disassembly as the hero), with the connector bolt nearest the camera taking
+// the screw's role in the close-up. The Cross Chair stays available as "cross".
 
 const DRACO_DECODER_PATH =
   "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
@@ -32,11 +37,12 @@ const CLOSE_DISTANCE = 2.6; // close-up camera distance, in screw lengths
 const SPIN_SPEED = 0.45; // rad/s while the close-up is held
 
 interface Part {
-  mesh: Three.Mesh;
+  mesh: Three.Object3D; // a mesh (Cross Chair) or a named piece holding meshes (Soft chair)
   basePos: Three.Vector3;
   baseQuat: Three.Quaternion;
   dir: Three.Vector3;
   leads: boolean;
+  moves?: number[][]; // Soft chair: staged moves (see softChairStages.ts)
 }
 
 const smooth = (a: number, b: number, x: number) => {
@@ -56,6 +62,7 @@ export async function createChairStoryScene(
   // Screen position (canvas px) of the close-up screw's centre, every frame. The labels' leader lines
   // all end there and follow the turning screw.
   onAnchors?: (points: [number, number][]) => void,
+  variant: "cross" | "soft" = "cross",
 ) {
   let renderer: Three.WebGLRenderer;
   try {
@@ -156,6 +163,11 @@ export async function createChairStoryScene(
 
   const placeParts = (amountLead: number, amountRest: number) => {
     for (const part of parts) {
+      if (part.moves) {
+        // Soft chair: staged, driven by the separation itself (amountLead carries it).
+        placeStaged(part.mesh, part.basePos, part.moves, amountLead, 1);
+        continue;
+      }
       const k =
         EXPLODE_FACTOR *
         EXPLODE_AMOUNT *
@@ -191,7 +203,7 @@ export async function createChairStoryScene(
   let disposed = false;
 
   loader.load(
-    `${base}wireframes/cross-chair-04.glb`,
+    variant === "soft" ? SOFT_CHAIR_MODEL : `${base}wireframes/cross-chair-04.glb`,
     (gltf) => {
       if (disposed || isCancelled()) {
         return;
@@ -210,6 +222,11 @@ export async function createChairStoryScene(
           m.depthWrite = true;
           m.alphaTest = 0;
           m.side = Three.DoubleSide;
+          if (variant === "soft") {
+            m.envMapIntensity = 0.55; // its own oak, leather and steel finishes (as in the hero)
+            m.needsUpdate = true;
+            continue;
+          }
           if (m.normalMap) {
             m.normalScale.set(0.4, 0.4);
           }
@@ -247,9 +264,34 @@ export async function createChairStoryScene(
       const mCenter = new Three.Box3()
         .setFromObject(loaded)
         .getCenter(new Three.Vector3());
+      if (variant === "soft") {
+        // One part per named piece, with the hero's staged moves.
+        let best = -Infinity;
+        for (const piece of loaded.getObjectByName("Soft_Lounge_Chair")?.children ?? []) {
+          const name = piece.name.replace(/_/g, " ");
+          const c = new Three.Box3().setFromObject(piece).getCenter(new Three.Vector3());
+          const part: Part = {
+            mesh: piece,
+            basePos: piece.position.clone(),
+            baseQuat: piece.quaternion.clone(),
+            dir: new Three.Vector3(),
+            leads: false,
+            moves: softMovesFor(name, Math.sign(c.x - mCenter.x) || 1),
+          };
+          parts.push(part);
+          // The close-up visits the connector bolt nearest the camera.
+          if (name.startsWith("Connector bolt")) {
+            const towardCamera = c.clone().sub(mCenter).dot(VIEW);
+            if (towardCamera > best) {
+              best = towardCamera;
+              hero = part;
+            }
+          }
+        }
+      }
       loaded.traverse((object) => {
         const mesh = object as Three.Mesh;
-        if (!mesh.isMesh) {
+        if (!mesh.isMesh || variant === "soft") {
           return;
         }
         const dir = new Three.Box3()
@@ -286,7 +328,24 @@ export async function createChairStoryScene(
       });
 
       model = loaded;
-      if (hero) {
+      if (hero && variant === "soft") {
+        // The bolt fully backed out: its centre, size (it is a short head, so its diameter sets the
+        // close-up distance) and a three-quarter view onto its hex socket from the hero's side.
+        const h: Part = hero;
+        placeParts(1, 1);
+        pivot.updateMatrixWorld(true);
+        const boltBox = new Three.Box3().setFromObject(h.mesh);
+        const worldCenter = boltBox.getCenter(new Three.Vector3());
+        close.center.copy(pivot.worldToLocal(worldCenter.clone()));
+        const extent = boltBox.getSize(new Three.Vector3());
+        // The close-up distance is CLOSE_DISTANCE "screw lengths"; the bolt head is short and wide,
+        // so count it as ~2.6 diameters long to show the whole head with room around it.
+        close.length = Math.max(extent.x, extent.y, extent.z) * 2.6;
+        heroCenter.copy(h.mesh.worldToLocal(worldCenter.clone()));
+        heroAnchors.push(heroCenter.clone());
+        close.dir.copy(VIEW);
+        placeParts(0, 0);
+      } else if (hero) {
         // Where the screw ends up when fully exploded, its shaft direction and its length
         // (all in pivot space, so a drag turn carries the close-up with it).
         const h: Part = hero;
@@ -299,7 +358,7 @@ export async function createChairStoryScene(
         const shaft = new Three.Vector3(0, 1, 0).applyQuaternion(
           h.mesh.getWorldQuaternion(new Three.Quaternion()),
         );
-        const geo = h.mesh.geometry;
+        const geo = (h.mesh as Three.Mesh).geometry;
         geo.computeBoundingBox();
         const scaleY = h.mesh.getWorldScale(new Three.Vector3()).y;
         close.length =
@@ -381,11 +440,16 @@ export async function createChairStoryScene(
         ? goal
         : Three.MathUtils.damp(separation, goal, 9, dt);
       const s = separation;
-      // Screws lead on the way out and trail on the way back (as in the hero).
-      placeParts(
-        Math.min(s / (1 - LEAD), 1),
-        Math.max((s - LEAD) / (1 - LEAD), 0),
-      );
+      // Screws lead on the way out and trail on the way back (as in the hero); the Soft chair's
+      // staged moves carry their own order.
+      if (variant === "soft") {
+        placeParts(s, s);
+      } else {
+        placeParts(
+          Math.min(s / (1 - LEAD), 1),
+          Math.max((s - LEAD) / (1 - LEAD), 0),
+        );
+      }
 
       yaw = Three.MathUtils.damp(yaw, yawTarget, 8, dt);
       pivot.rotation.y = yaw;

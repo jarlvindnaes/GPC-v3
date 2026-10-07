@@ -61,7 +61,7 @@ function getShared() {
 }
 
 /** One piece of the part, centred on the origin: the part's main piece (its first `modelPieces`
- * prefix, e.g. the bolt rather than the fittings around it), preferring the left-hand piece of a pair. */
+ * prefix), preferring the left-hand piece of a pair. */
 function cutPiece(model: Three.Object3D, partId: string) {
   const main = slopeChair.materialsAndComponents.purchasableParts.find((p) => p.id === partId)?.modelPieces?.[0];
   if (!main) {

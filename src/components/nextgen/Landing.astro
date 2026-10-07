@@ -29,7 +29,7 @@ const howItWorks = `${base}how-it-works/`;
 <section class="hero cinematic-hero">
 {!enterprise && <div class="hero-topline"><span><i></i> PHYSICAL PRODUCTS. CONNECTED INTELLIGENCE.</span><span class="edition">PRODUCT INTELLIGENCE / MADE VISIBLE</span></div>}
 <div class="hero-layout">
-{enterprise && <div class="hero-chair-stage" aria-hidden="true"><ExplodingChair client:only="react" framePad={0.4} autoRotate={false} offsetX={0.26} offsetY={0.16} explodeAmount={0.15} view={[1.6, 0.7, 1]} media="(min-width: 721px)" depthOfField={0.007} /></div>}
+{enterprise && <div class="hero-chair-stage" aria-hidden="true"><ExplodingChair client:only="react" variant="soft" framePad={0.45} autoRotate={false} offsetX={0.26} offsetY={0.2} explodeAmount={0.15} view={[-0.4, 0.78, 1]} media="(min-width: 721px)" depthOfField={0.007} /></div>}
 <div class="hero-copy"><p class="eyebrow">{enterprise ? 'PRODUCT CONNECT / HOW IT WORKS' : 'CO₂ CALCULATIONS + DIGITAL PRODUCT PASSPORTS'}</p>
 <h1>{enterprise ? <>Every product.<br/><em>Taken apart.<br/>Connected.</em></> : <>Beautiful outside.<br/><em>Intelligent<br/>inside.</em></>}</h1>
 <p class="hero-description">{enterprise ? 'See how Product Connect breaks a product down to its components, connects the data behind each one, and puts it to work for calculations, passports and the teams who need them.' : 'You make the furniture. We help you understand its impact — and turn your product data into a Digital Product Passport.'}</p>
