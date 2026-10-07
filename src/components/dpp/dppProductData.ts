@@ -14,8 +14,8 @@ const scannedDate = new Date(today.getFullYear() - 2, today.getMonth() - 1, toda
 const orderedDate = new Date(scannedDate);
 
 // Image paths — served from public/images/dpp/ via GitHub Pages base URL.
-// Soft Lounge Chair photos (from the /passport folder, optimised): studio hero, room setting, close-up
-// detail, and TAKT's dimensions drawing (t04dimensions, flattened onto white). The oak-tree material-source image is shared.
+// Soft Lounge Chair photos (from the /passport folder, optimised): room setting (hero), studio shot from behind, close-up
+// detail, and the dimensions drawing (flattened onto white). The oak-tree material-source image is shared.
 const base = `${import.meta.env.BASE_URL}images/dpp/`;
 const heroImage = `${base}soft-hero.jpg`;
 const lifestyleImage = `${base}soft-lifestyle.jpg`;
@@ -39,8 +39,8 @@ export const slopeChair: ProductPassport = {
     description:
       "A light, generous lounge chair with soft curves in both back and seat. A shell of moulded oak veneer wraps the solid-oak frame like a cloth, and its double curves strengthen the whole construction. Every part stays visible, and the leather seat adds comfort and warmth. Designed for disassembly, so parts can be identified, repaired and replaced.",
     photographs: {
-      hero: heroImage,
-      lifestyle: lifestyleImage,
+      hero: lifestyleImage, // living-room shot leads; the studio shot from behind sits further down
+      lifestyle: heroImage,
       dimensionsDiagram: dimensionsDiagram,
       detail: detailImage,
       materialSource: materialSourceImage
@@ -193,7 +193,7 @@ export const slopeChair: ProductPassport = {
         material: "Stainless steel",
         price: "6 \u20AC",
         priceValue: { value: 6, currency: "EUR" },
-        modelPieces: ["Connector bolt"]
+        modelPieces: ["Connector bolt", "Joint fitting"]
       }
     ],
     primaryMaterial: "Solid oak",

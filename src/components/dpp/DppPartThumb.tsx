@@ -60,16 +60,15 @@ function getShared() {
   return shared;
 }
 
-/** One piece of the part, centred on the origin. Prefers the left-hand piece of a pair. */
+/** One piece of the part, centred on the origin: the part's main piece (its first `modelPieces`
+ * prefix, e.g. the bolt rather than the fittings around it), preferring the left-hand piece of a pair. */
 function cutPiece(model: Three.Object3D, partId: string) {
-  const prefixes = slopeChair.materialsAndComponents.purchasableParts.find((p) => p.id === partId)?.modelPieces;
-  if (!prefixes) {
+  const main = slopeChair.materialsAndComponents.purchasableParts.find((p) => p.id === partId)?.modelPieces?.[0];
+  if (!main) {
     return null;
   }
   const root = model.getObjectByName("Soft_Lounge_Chair");
-  const candidates = (root?.children ?? []).filter((piece) =>
-    prefixes.some((prefix) => pieceName(piece).startsWith(prefix))
-  );
+  const candidates = (root?.children ?? []).filter((piece) => pieceName(piece).startsWith(main));
   const source = candidates.find((piece) => pieceName(piece).includes("left")) ?? candidates[0];
   if (!source) {
     return null;
