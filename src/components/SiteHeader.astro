@@ -47,8 +47,6 @@ const links = [
     border-bottom: 1px solid var(--sh-rule);
     background: var(--sh-bg);
     color: var(--sh-ink);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     transition: transform 0.3s ease;
   }
   /* slid away on scroll-down (see script) */
@@ -56,7 +54,7 @@ const links = [
     transform: translateY(-100%);
   }
   .is-light {
-    --sh-bg: #ffffffed;
+    --sh-bg: #fffffffa; /* near-solid, no backdrop blur: a blur layer over the 3D canvases flickers while scrolling */
     --sh-ink: #242528;
     --sh-soft: #4a4f57;
     --sh-hover: #5c70bf;
@@ -66,7 +64,7 @@ const links = [
     --sh-cta-bg: #fff;
   }
   .is-dark {
-    --sh-bg: #101a2aed;
+    --sh-bg: #101a2afa;
     --sh-ink: #fff;
     --sh-soft: #a8aeaa;
     --sh-hover: #fff;

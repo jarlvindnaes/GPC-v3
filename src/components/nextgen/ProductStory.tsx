@@ -39,22 +39,19 @@ const chapters = [
   },
 ];
 
-// Labels around the close-up screw (step 2). `anchor` is the point on the screw its leader line ends
-// at; all lines currently meet at the screw's centre (point 0). Lines are drawn above the 3D view.
+// Labels around the close-up bolt (step 2), in two columns (see FACT_COLUMNS).
 // `points` are the small grey bullets under each label's title, taken from copy on our other site
 // versions (FeatureGrid, wireframes, NodeFlow, V4 home); packaging is translated from the Danish
 // packaging demo. Spare-part sales are flagged "coming this fall" as elsewhere on the site.
 const FACTS: {
   key: string;
   text: string;
-  anchor: number;
   extra: boolean;
   points: string[];
 }[] = [
   {
     key: "supplier",
     text: "Supplier data",
-    anchor: 0,
     extra: false,
     points: [
       "Primary data from the people who make it",
@@ -65,7 +62,6 @@ const FACTS: {
   {
     key: "material",
     text: "Material",
-    anchor: 0,
     extra: false,
     points: [
       "Origin",
@@ -77,7 +73,6 @@ const FACTS: {
   {
     key: "chain",
     text: "Supply chain calculated",
-    anchor: 0,
     extra: false,
     points: [
       "Automatic transport distance calculation",
@@ -88,7 +83,6 @@ const FACTS: {
   {
     key: "co2",
     text: "Impact data",
-    anchor: 0,
     extra: true,
     points: [
       "CO₂ emissions from manufacturing\nand transport",
@@ -100,7 +94,6 @@ const FACTS: {
   {
     key: "certs",
     text: "Certificates & documents",
-    anchor: 0,
     extra: true,
     points: [
       "Certificates & test reports",
@@ -111,7 +104,6 @@ const FACTS: {
   {
     key: "packaging",
     text: "Packaging",
-    anchor: 0,
     extra: true,
     points: [
       "Each packaging material registered",
@@ -122,7 +114,6 @@ const FACTS: {
   {
     key: "spare",
     text: "Spare part available",
-    anchor: 0,
     extra: true,
     points: [
       "Matched to the exact product",
@@ -131,6 +122,20 @@ const FACTS: {
     ],
   },
 ];
+
+// Desktop label layout: a left and a right column, each aligned to its own edge, with equal gaps
+// between the labels (measured from their closed sizes, so a label opening doesn't push the others).
+// Material and Packaging head their columns at the same height; Certificates sits centred on the
+// bottom line, below both columns (the columns end one gap above it).
+const FACT_COLUMNS = {
+  left: ["material", "spare", "chain"],
+  right: ["packaging", "co2", "supplier"],
+  center: ["certs"],
+};
+const COLUMN_TOP = 0.12; // fractions of the viewer height (clears the model pill at the top)
+const COLUMN_BOTTOM = 0.1; // leaves room for the "Hover the cards" hint
+const COLUMN_SIDE = 0.04; // fraction of the viewer width
+const COLUMN_GAP = 0.05; // space between the columns and Certificates below them (viewer height)
 
 // Icons for the labels without a 3D thumbnail (Material and Packaging show a model instead).
 const FACT_ICONS: Record<string, typeof Factory> = {
@@ -155,7 +160,6 @@ export default function ProductStory({ base }: { base: string }) {
   // Labels around the screw while it is centre stage (step 2, fully apart); gone again in step 3.
   const showFacts = chapter === 1 && separation > 0.85;
   const factsRef = useRef<HTMLDivElement>(null);
-  const leadersRef = useRef<SVGSVGElement>(null);
   // Measure each label's bullet list at its natural size, so the open animation runs exactly to it
   // (one smooth motion instead of overshooting a fixed max and "settling"). Re-measured on resize.
   useEffect(() => {
@@ -163,10 +167,74 @@ export default function ProductStory({ base }: { base: string }) {
     if (!box) {
       return;
     }
+    const layout = () => {
+      const desktop = window.matchMedia("(min-width: 701px)").matches;
+      const H = box.clientHeight;
+      const W = box.clientWidth;
+      const find = (key: string) => box.querySelector<HTMLElement>(`[data-fact="${key}"]`);
+      const column = (keys: string[]) => keys.map(find).filter((el): el is HTMLElement => el !== null);
+      const left = column(FACT_COLUMNS.left);
+      const right = column(FACT_COLUMNS.right);
+      const center = column(FACT_COLUMNS.center);
+      const all = [...left, ...right, ...center];
+      if (!desktop) {
+        // Phones keep their own stylesheet positions.
+        for (const el of all) {
+          for (const prop of ["top", "left", "right", "bottom", "scale", "transform-origin"]) {
+            el.style.removeProperty(prop);
+          }
+        }
+        return;
+      }
+      // On a narrow viewer the two columns would collide: shrink every label by the same factor until
+      // the widest row (left label + right label + margins) fits. Sizes below are the unscaled ones.
+      const side = W * COLUMN_SIDE;
+      let widestRow = 0;
+      for (let i = 0; i < Math.max(left.length, right.length); i++) {
+        widestRow = Math.max(widestRow, (left[i]?.offsetWidth ?? 0) + (right[i]?.offsetWidth ?? 0));
+      }
+      const k = Math.min(1, (W - side * 2 - 16) / Math.max(1, widestRow));
+      const certs = center[0];
+      const certsH = certs ? certs.offsetHeight * k : 0;
+      const columnsBottom = H * (1 - COLUMN_BOTTOM) - (certs ? certsH + H * COLUMN_GAP : 0);
+      const place = (el: HTMLElement, y: number, x: "left" | "right" | "center") => {
+        el.style.top = `${Math.round(y)}px`;
+        el.style.bottom = "auto";
+        el.style.left =
+          x === "left" ? `${Math.round(side)}px` : x === "center" ? `${Math.round((W - el.offsetWidth) / 2)}px` : "auto";
+        el.style.right = x === "right" ? `${Math.round(side)}px` : "auto";
+        if (k < 1) {
+          el.style.scale = String(k);
+          el.style.transformOrigin = x === "left" ? "0 0" : x === "right" ? "100% 0" : "50% 0";
+        } else {
+          el.style.removeProperty("scale");
+          el.style.removeProperty("transform-origin");
+        }
+      };
+      for (const [labels, x] of [
+        [left, "left"],
+        [right, "right"],
+      ] as const) {
+        const heights = labels.map((el) => el.offsetHeight * k);
+        const top = H * COLUMN_TOP;
+        const avail = columnsBottom - top;
+        const gap =
+          labels.length > 1 ? (avail - heights.reduce((a, b) => a + b, 0)) / (labels.length - 1) : 0;
+        let y = top;
+        labels.forEach((el, i) => {
+          place(el, y, x);
+          y += heights[i] + gap;
+        });
+      }
+      if (certs) {
+        place(certs, H * (1 - COLUMN_BOTTOM) - certsH, "center");
+      }
+    };
     const measure = () => {
       for (const label of box.querySelectorAll<HTMLElement>(".screw-fact")) {
         measureFact(label);
       }
+      layout();
     };
     measure();
     // Web fonts can arrive after the first measure and change the text width.
@@ -175,12 +243,8 @@ export default function ProductStory({ base }: { base: string }) {
     resize.observe(box);
     return () => resize.disconnect();
   }, []);
-  const showFactsRef = useRef(showFacts);
-  showFactsRef.current = showFacts;
-  // Called by the 3D scene every frame with the screw's screen points: draw each label's leader line
-  // from behind the label to its point on the screw (straight DOM updates, no re-render).
-  // Labels can be dragged around inside the viewer; their lines follow (drawn from the live label
-  // position). Offsets are kept for the visit, applied through --dx/--dy so the fade-in still works.
+  // Labels can be dragged around inside the viewer. Offsets are kept for the visit, applied through
+  // --dx/--dy so the fade-in still works.
   const dragRef = useRef<{
     el: HTMLElement;
     x: number;
@@ -250,42 +314,6 @@ export default function ProductStory({ base }: { base: string }) {
         other.classList.remove("is-open");
       }
       el.classList.toggle("is-open", open);
-    }
-  };
-  const drawLeaders = (points: [number, number][]) => {
-    const box = factsRef.current;
-    if (!box || !showFactsRef.current) {
-      return;
-    }
-    const boxRect = box.getBoundingClientRect();
-    for (const fact of FACTS) {
-      const label = box.querySelector<HTMLElement>(`[data-fact="${fact.key}"]`);
-      const leader = leadersRef.current?.querySelector<SVGGElement>(
-        `[data-leader="${fact.key}"]`,
-      );
-      const point = points[fact.anchor];
-      if (!label || !leader || !point) {
-        continue;
-      }
-      const hidden = label.offsetParent === null;
-      leader.style.display = hidden ? "none" : "";
-      if (hidden) {
-        continue;
-      }
-      const [px, py] = point;
-      // Start at the label's centre (the line runs behind it), measured with its current transform,
-      // so the line always comes out of the label, with no gap, as the screw turns.
-      const r = label.getBoundingClientRect();
-      const x = r.left - boxRect.left + r.width / 2;
-      const y = r.top - boxRect.top + r.height / 2;
-      const line = leader.querySelector("line");
-      const dot = leader.querySelector("circle");
-      line?.setAttribute("x1", String(x));
-      line?.setAttribute("y1", String(y));
-      line?.setAttribute("x2", String(px));
-      line?.setAttribute("y2", String(py));
-      dot?.setAttribute("cx", String(px));
-      dot?.setAttribute("cy", String(py));
     }
   };
   const current = chapters[chapter];
@@ -360,7 +388,7 @@ export default function ProductStory({ base }: { base: string }) {
           },
           () => cancelled,
           () => reducedRef.current,
-          drawLeaders,
+          undefined, // no leader lines from the labels to the bolt
           "soft", // the passport's Soft Lounge Chair; "cross" brings back the Cross Chair
         );
         if (cancelled) {
@@ -423,20 +451,6 @@ export default function ProductStory({ base }: { base: string }) {
                   </b>
                 </span>
               </div>
-              {/* Leader lines sit UNDER the (transparent) 3D canvas, so the screw and chair parts are drawn
-                  on top of them; the cards are above both. */}
-              <svg
-                className={`screw-leaders${showFacts ? " is-on" : ""}`}
-                aria-hidden="true"
-                ref={leadersRef}
-              >
-                {FACTS.map((fact) => (
-                  <g key={fact.key} data-leader={fact.key}>
-                    <line />
-                    <circle r="3.5" />
-                  </g>
-                ))}
-              </svg>
               <div
                 className="story-canvas"
                 ref={hostRef}

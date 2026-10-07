@@ -399,7 +399,9 @@ export function ExplodingChair({
     const clock = new Three.Clock();
     let elapsed = 0;
     const explodeSeconds = variant === "soft" ? SOFT_EXPLODE_SECONDS : EXPLODE_SECONDS;
-    const loopSeconds = HOLD_ASSEMBLED + explodeSeconds;
+    // The Soft chair rests only briefly assembled, so it visibly starts coming apart right away.
+    const holdSeconds = variant === "soft" ? 0.3 : HOLD_ASSEMBLED;
+    const loopSeconds = holdSeconds + explodeSeconds;
 
     let raf = 0;
     const animate = () => {
@@ -417,8 +419,8 @@ export function ExplodingChair({
         // the hold is seamless. reduceMotion never advances elapsed, so it stays assembled.
         const phase = elapsed % loopSeconds;
         const m =
-          phase > HOLD_ASSEMBLED
-            ? (phase - HOLD_ASSEMBLED) / explodeSeconds
+          phase > holdSeconds
+            ? (phase - holdSeconds) / explodeSeconds
             : 0;
         const ease = (t: number) =>
           (explodeAmount *
@@ -428,7 +430,13 @@ export function ExplodingChair({
         const kRest = EXPLODE_FACTOR * ease((m - LEAD) / (1 - 2 * LEAD));
         // Staged (Soft chair): progress goes 0 -> 1 -> 0 over the cycle, so it comes apart step by
         // step and goes back together in reverse.
-        const progress = (1 - Math.cos(Math.min(Math.max(m, 0), 1) * Math.PI * 2)) / 2;
+        // Coming apart starts at pace and settles as it opens (ease-out); going back together eases in
+        // and out (cosine).
+        const mm = Math.min(Math.max(m, 0), 1);
+        const progress =
+          mm < 0.5
+            ? 1 - (1 - mm * 2) ** 2
+            : (1 - Math.cos(mm * Math.PI * 2)) / 2;
         for (const part of parts) {
           const data = part.userData as PartUserData;
           if (data.moves) {

@@ -8,7 +8,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { ChairDofShader } from "../wireframe/chair-dof";
 import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
-import { placeStaged, softMovesFor } from "../wireframe/softChairStages";
+import { placeStaged, SOFT_RETURN_STAGES, softMovesFor } from "../wireframe/softChairStages";
 import { getStoryFrame } from "./productStoryMath";
 
 // "The intelligence inside" story, driven by scroll / the slider (same contract as productStoryScene).
@@ -43,6 +43,7 @@ interface Part {
   dir: Three.Vector3;
   leads: boolean;
   moves?: number[][]; // Soft chair: staged moves (see softChairStages.ts)
+  returnMoves?: number[][]; // Soft chair: the story's own order back together
 }
 
 const smooth = (a: number, b: number, x: number) => {
@@ -161,11 +162,18 @@ export async function createChairStoryScene(
     frameStart();
   };
 
-  const placeParts = (amountLead: number, amountRest: number) => {
+  const placeParts = (amountLead: number, amountRest: number, returning = false) => {
     for (const part of parts) {
       if (part.moves) {
-        // Soft chair: staged, driven by the separation itself (amountLead carries it).
-        placeStaged(part.mesh, part.basePos, part.moves, amountLead, 1);
+        // Soft chair: staged, driven by the separation itself (amountLead carries it); on the way
+        // back it uses the return order, which ends in the same places.
+        placeStaged(
+          part.mesh,
+          part.basePos,
+          (returning && part.returnMoves) || part.moves,
+          amountLead,
+          1,
+        );
         continue;
       }
       const k =
@@ -277,6 +285,7 @@ export async function createChairStoryScene(
             dir: new Three.Vector3(),
             leads: false,
             moves: softMovesFor(name, Math.sign(c.x - mCenter.x) || 1),
+            returnMoves: softMovesFor(name, Math.sign(c.x - mCenter.x) || 1, SOFT_RETURN_STAGES),
           };
           parts.push(part);
           // The close-up visits the connector bolt nearest the camera.
@@ -339,8 +348,9 @@ export async function createChairStoryScene(
         close.center.copy(pivot.worldToLocal(worldCenter.clone()));
         const extent = boltBox.getSize(new Three.Vector3());
         // The close-up distance is CLOSE_DISTANCE "screw lengths"; the bolt head is short and wide,
-        // so count it as ~2.6 diameters long to show the whole head with room around it.
-        close.length = Math.max(extent.x, extent.y, extent.z) * 2.6;
+        // so count it as ~4.4 diameters long: the whole head with room around it, and far enough that
+        // the faceted edge of the round hole in the leg doesn't show.
+        close.length = Math.max(extent.x, extent.y, extent.z) * 4.4;
         heroCenter.copy(h.mesh.worldToLocal(worldCenter.clone()));
         heroAnchors.push(heroCenter.clone());
         close.dir.copy(VIEW);
@@ -411,6 +421,10 @@ export async function createChairStoryScene(
   renderer.domElement.addEventListener("pointercancel", onUp);
 
   let separation = getStoryFrame(getProgress()).separation;
+  let closeUp = getStoryFrame(getProgress()).focus;
+  // Which order the Soft chair is in: switches only when it is fully apart or fully together, so
+  // scrolling back mid-way never swaps orders with pieces in flight.
+  let returning = getStoryFrame(getProgress()).returning;
   let spin = 0;
   const axisY = new Three.Vector3(0, 1, 0);
   const spinQuat = new Three.Quaternion();
@@ -435,15 +449,22 @@ export async function createChairStoryScene(
     }
     onTick(dt);
     if (model) {
-      const goal = getStoryFrame(getProgress()).separation;
+      const storyFrame = getStoryFrame(getProgress());
+      const goal = storyFrame.separation;
       separation = reduceMotion()
         ? goal
         : Three.MathUtils.damp(separation, goal, 9, dt);
+      closeUp = reduceMotion()
+        ? storyFrame.focus
+        : Three.MathUtils.damp(closeUp, storyFrame.focus, 9, dt);
       const s = separation;
       // Screws lead on the way out and trail on the way back (as in the hero); the Soft chair's
       // staged moves carry their own order.
       if (variant === "soft") {
-        placeParts(s, s);
+        if (s > 0.995 || s < 0.005) {
+          returning = storyFrame.returning;
+        }
+        placeParts(s, s, returning);
       } else {
         placeParts(
           Math.min(s / (1 - LEAD), 1),
@@ -455,9 +476,25 @@ export async function createChairStoryScene(
       pivot.rotation.y = yaw;
       pivot.updateMatrixWorld(true);
 
-      // Camera: hero framing -> close-up on the screw once the chair is mostly apart.
-      const e = smooth(0.35, 1, s);
-      closeCenter.copy(close.center).applyMatrix4(pivot.matrixWorld);
+      // Camera: hero framing -> close-up on the screw once the chair is mostly apart. The Soft chair
+      // follows the bolt wherever it is and, on the way back, stays on it until it has slotted back
+      // into the leg before zooming out (the story's `focus`).
+      const e = variant === "soft" ? closeUp : smooth(0.35, 1, s);
+      if (variant === "soft" && hero) {
+        // The bolt's centre from its placed position and unturned orientation: its slow turn spins
+        // it about this centre, so the camera target must not include the turn (it would circle).
+        const hb: Part = hero;
+        closeCenter
+          .copy(heroCenter)
+          .applyQuaternion(hb.baseQuat)
+          .add(hb.mesh.position);
+        hb.mesh.parent?.updateMatrixWorld(true);
+        if (hb.mesh.parent) {
+          closeCenter.applyMatrix4(hb.mesh.parent.matrixWorld);
+        }
+      } else {
+        closeCenter.copy(close.center).applyMatrix4(pivot.matrixWorld);
+      }
       closePos
         .copy(close.dir)
         .applyQuaternion(pivot.quaternion)
@@ -481,7 +518,9 @@ export async function createChairStoryScene(
       // slots back in cleanly.
       if (hero) {
         const h: Part = hero;
-        if (e > 0.97 && !reduceMotion()) {
+        // (The Soft chair's bolt only turns while it is fully out, so it is square again before it
+        // slides back in.)
+        if (e > 0.97 && !reduceMotion() && (variant !== "soft" || s > 0.98)) {
           spin += SPIN_SPEED * dt;
         } else {
           spin = Three.MathUtils.damp(
