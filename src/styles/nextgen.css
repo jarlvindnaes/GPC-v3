@@ -277,3 +277,6 @@ fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-wid
   .enterprise .section,.enterprise .story-sticky,.enterprise .footer{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2))}
   .enterprise .story-layout{max-width:none}
 }
+/* Vector "pc·" mark (PcMark) in the footer and the product-model diagram hub; lime dot as before. */
+svg.pc-mark.brandmark-svg{height:34px;--pc-mark-dot:#d6ef8c}
+@media(max-width:700px){svg.pc-mark.brandmark-svg{height:29px}}

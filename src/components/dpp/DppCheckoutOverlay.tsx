@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { DppPartThumb } from "./DppPartThumb";
 import { brandConfig } from "./dppBrandConfig";
 import type { CartItem, PurchasablePart } from "./dppTypes";
 
@@ -148,7 +149,11 @@ function StepBasket({
                 return (
                   <div key={item.partId} className="flex items-center gap-[12px]">
                     <div className="size-[60px] shrink-0 rounded-[8px] border border-[rgba(1,6,47,0.12)] p-[3px]">
-                      <img src={part.image} alt={part.name} className="size-full rounded-[6px] object-contain" />
+                      {part.image ? (
+                        <img src={part.image} alt={part.name} className="size-full rounded-[6px] object-contain" />
+                      ) : (
+                        <DppPartThumb partId={part.id} label={`3D view of the ${part.name}`} />
+                      )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p

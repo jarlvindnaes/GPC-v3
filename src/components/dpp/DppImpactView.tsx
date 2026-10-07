@@ -504,10 +504,12 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">VOC emissions:</span>
             {` ${data.sustainabilityAndImpact.vocData}`}
           </p>
-          <p className="mb-0">
-            <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">Red List Free:</span>
-            {` ${data.sustainabilityAndImpact.redListFreeStatement}`}
-          </p>
+          {data.sustainabilityAndImpact.redListFreeStatement && (
+            <p className="mb-0">
+              <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">Red List Free:</span>
+              {` ${data.sustainabilityAndImpact.redListFreeStatement}`}
+            </p>
+          )}
         </div>
       </DppCollapsibleSection>
 
@@ -573,8 +575,17 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
             {data.certificationsAndCompliance.certifications.map((cert) => (
               <div
                 key={cert.name}
-                className="rounded-[8px] border border-[rgba(0,0,0,0.05)] bg-[rgba(0,0,0,0.02)] p-[12px]"
+                className="flex items-center gap-[14px] rounded-[8px] border border-[rgba(0,0,0,0.05)] bg-[rgba(0,0,0,0.02)] p-[12px]"
               >
+                {cert.logo && (
+                  <img
+                    src={cert.logo}
+                    alt={`${cert.name} logo`}
+                    className="h-[52px] w-[52px] shrink-0 object-contain"
+                    loading="lazy"
+                  />
+                )}
+                <div className="min-w-0">
                 <p className="mb-[2px] font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[14px] text-[rgba(0,7,19,0.72)] leading-[20px]">
                   {cert.name}
                 </p>
@@ -586,6 +597,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
                 <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[13px] text-[rgba(0,7,19,0.56)] leading-[20px]">
                   {cert.description}
                 </p>
+                </div>
               </div>
             ))}
           </div>
@@ -622,17 +634,6 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
           </div>
         </div>
 
-        <div className="relative w-full shrink-0" data-name="Logos">
-          <div className="relative box-border flex w-full content-stretch items-start justify-between overflow-clip rounded-[inherit] px-0 pt-[30px] pb-[20px]">
-            <PefcLogo />
-            <RedListLogo />
-            <EpDverified />
-          </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 border-[#d5d5d5] border-[1px_0px_0px] border-solid"
-          />
-        </div>
       </DppCollapsibleSection>
     </div>
   );

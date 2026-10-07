@@ -5,7 +5,9 @@ import { createPortal } from "react-dom";
 import * as Three from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DppPartThumb } from "./DppPartThumb";
 import { brandConfig } from "./dppBrandConfig";
+import { CHAIR_MODEL, partForPiece } from "./dppChairModel";
 import { slopeChair } from "./dppProductData";
 import type { PurchasablePart } from "./dppTypes";
 
@@ -16,21 +18,7 @@ for (const part of data.materialsAndComponents.purchasableParts) {
   parts[part.id] = part;
 }
 
-const CHAIR_MODEL = `${import.meta.env.BASE_URL}models/west_elm_slope_leather_chair.glb`;
 const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
-
-// Pre-baked texture variants: default, seat highlighted, legs highlighted
-const TEX_DEFAULT = `${import.meta.env.BASE_URL}models/chair_default.jpg`;
-const TEX_SEAT = `${import.meta.env.BASE_URL}models/chair_seat_selected.jpg`;
-const TEX_LEGS = `${import.meta.env.BASE_URL}models/chair_legs_selected.jpg`;
-
-/**
- * World-space Y threshold for splitting the chair into upper (seat) and
- * lower (legs) halves. Set well above the geometric midpoint so the legs
- * clickable area extends up to the seat surface level — only the top
- * face of the cushion counts as "seat", everything below is "leg".
- */
-const CHAIR_Y_MIDPOINT = 0.35;
 
 /* ------------------------------------------------------------------ */
 /*  Imperative Three.js chair viewer (avoids R3F StrictMode ctx loss)  */
@@ -51,12 +39,10 @@ function useChairCanvas(
   const isDraggingRef = useRef(false);
   const prevPointerRef = useRef({ x: 0, y: 0 });
   const animFrameRef = useRef(0);
-  const floatTimeRef = useRef(0);
 
-  // Pre-loaded texture variants keyed by part id (null = default)
-  const texturesRef = useRef<Map<string | null, Three.Texture>>(new Map());
-  const chairMaterialRef = useRef<Three.MeshStandardMaterial | null>(null);
-  const [texturesReady, setTexturesReady] = useState(false);
+  // Each purchasable part's meshes get their own material copies, so one part can glow on its own.
+  const partMaterialsRef = useRef<Map<string, Three.MeshStandardMaterial[]>>(new Map());
+  const [modelReady, setModelReady] = useState(false);
 
   // Stable callback ref so the effect doesn't re-run when onPartClick changes
   const onPartClickRef = useRef(onPartClick);
@@ -87,15 +73,15 @@ function useChairCanvas(
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = Three.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
+    renderer.toneMappingExposure = 0.8; // pale white-oiled oak washes out at 1.0
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
     // ── Lights ──
-    const ambient = new Three.AmbientLight(0xffffff, 0.8);
+    const ambient = new Three.AmbientLight(0xffffff, 0.35);
     scene.add(ambient);
 
-    const spot = new Three.SpotLight(0xfff8f0, 3, 0, 0.2, 1);
+    const spot = new Three.SpotLight(0xfff8f0, 1.8, 0, 0.2, 1);
     spot.position.set(6, 10, 6);
     scene.add(spot);
 
@@ -121,37 +107,26 @@ function useChairCanvas(
       model.position.set(0, -0.5, 0);
       chairGroup.add(model);
 
-      // Grab the material for texture swapping
-      model.traverse((child) => {
-        if ((child as Three.Mesh).isMesh) {
-          const mesh = child as Three.Mesh;
-          const mat = mesh.material as Three.MeshStandardMaterial;
-          chairMaterialRef.current = mat;
-
-          // Preload texture variants
-          const texLoader = new Three.TextureLoader();
-          const variants: [string | null, string][] = [
-            [null, TEX_DEFAULT],
-            ["seat-cushion", TEX_SEAT],
-            ["leg", TEX_LEGS]
-          ];
-          let loaded = 0;
-          for (const [key, url] of variants) {
-            texLoader.load(url, (tex) => {
-              // Match encoding & settings from the original
-              tex.colorSpace = Three.SRGBColorSpace;
-              tex.flipY = mat.map?.flipY ?? false;
-              tex.wrapS = mat.map?.wrapS ?? Three.RepeatWrapping;
-              tex.wrapT = mat.map?.wrapT ?? Three.RepeatWrapping;
-              texturesRef.current.set(key, tex);
-              loaded++;
-              if (loaded === variants.length) {
-                setTexturesReady(true);
-              }
-            });
-          }
+      // Tag every mesh with its purchasable part and give that part its own materials.
+      for (const piece of model.getObjectByName("Soft_Lounge_Chair")?.children ?? []) {
+        const partId = partForPiece(piece);
+        if (!partId) {
+          continue;
         }
-      });
+        piece.traverse((child) => {
+          const mesh = child as Three.Mesh;
+          if (!mesh.isMesh) {
+            return;
+          }
+          const mat = (mesh.material as Three.MeshStandardMaterial).clone();
+          mesh.material = mat;
+          mesh.userData.partId = partId;
+          const list = partMaterialsRef.current.get(partId) ?? [];
+          list.push(mat);
+          partMaterialsRef.current.set(partId, list);
+        });
+      }
+      setModelReady(true);
     });
 
     // ── Load HDR environment ──
@@ -160,6 +135,7 @@ function useChairCanvas(
       rgbeLoader.load(STUDIO_HDR, (texture) => {
         texture.mapping = Three.EquirectangularReflectionMapping;
         scene.environment = texture;
+        scene.environmentIntensity = 0.75;
       });
     });
 
@@ -192,14 +168,6 @@ function useChairCanvas(
     // ── Render loop ──
     const animate = () => {
       animFrameRef.current = requestAnimationFrame(animate);
-      floatTimeRef.current += 0.016;
-
-      // Gentle float oscillation
-      if (chairGroup.children.length > 0) {
-        const model = chairGroup.children[0];
-        model.position.y = -0.5 + Math.sin(floatTimeRef.current * 1.5) * 0.02;
-      }
-
       renderer.render(scene, camera);
     };
     animFrameRef.current = requestAnimationFrame(animate);
@@ -257,33 +225,26 @@ function useChairCanvas(
       prevPointerRef.current = { x: e.clientX, y: e.clientY };
     };
 
-    const doRaycast = (clientX: number, clientY: number) => {
+    // offsetX/Y are in the canvas's own (untransformed) pixels, so taps stay accurate while the
+    // passport sits inside the tilted, scaled 3D phone; client coords + getBoundingClientRect don't.
+    const doRaycast = (offsetX: number, offsetY: number) => {
       if (Date.now() - mountTime < MountGuardMs) {
         return;
       }
       if (chairGroup.children.length === 0) {
         return;
       }
-      const rect = canvas.getBoundingClientRect();
-      const ndcX = ((clientX - rect.left) / rect.width) * 2 - 1;
-      const ndcY = -((clientY - rect.top) / rect.height) * 2 + 1;
+      const ndcX = (offsetX / canvas.clientWidth) * 2 - 1;
+      const ndcY = -(offsetY / canvas.clientHeight) * 2 + 1;
       pointerRef.current.set(ndcX, ndcY);
 
       raycasterRef.current.setFromCamera(pointerRef.current, camera);
       const intersects = raycasterRef.current.intersectObjects(chairGroup.children, true);
 
-      if (intersects.length > 0) {
-        // Direct hit on geometry — use 3D intersection point
-        const hitY = intersects[0].point.y;
-        onPartClickRef.current(hitY > CHAIR_Y_MIDPOINT ? "seat-cushion" : "leg");
-      } else {
-        // No geometry hit (thin legs are hard to raycast).
-        // Fall back to 2D screen position: lower ~55% of canvas → legs.
-        const ScreenLegThreshold = 0.3; // NDC y below this → legs
-        if (ndcY < ScreenLegThreshold) {
-          onPartClickRef.current("leg");
-        }
-        // If above threshold but missed geometry, ignore (empty space above chair)
+      // Every piece belongs to a purchasable part; a tap on empty space selects nothing.
+      const partId = intersects[0]?.object.userData.partId as string | undefined;
+      if (partId) {
+        onPartClickRef.current(partId);
       }
     };
 
@@ -293,7 +254,7 @@ function useChairCanvas(
       canvas.style.cursor = "grab";
       if (!isDraggingRef.current) {
         handledByPointerUp = true;
-        doRaycast(e.clientX, e.clientY);
+        doRaycast(e.offsetX, e.offsetY);
       }
     };
 
@@ -303,7 +264,7 @@ function useChairCanvas(
         handledByPointerUp = false;
         return; // Already handled by pointerup
       }
-      doRaycast(e.clientX, e.clientY);
+      doRaycast(e.offsetX, e.offsetY);
     };
 
     canvas.addEventListener("pointerdown", onPointerDown);
@@ -326,20 +287,24 @@ function useChairCanvas(
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Swap base-color texture when selection changes (or when textures finish loading).
-  // When selectedPartId is null (deselected), revert to the default texture.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: texturesReady is an intentional trigger — re-apply the texture once the async textures finish loading
+  // Tint the selected part in the brand colour (pale oak needs a colour shift, a glow alone doesn't
+  // show); everything else returns to its own finish.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: modelReady is an intentional trigger — apply the highlight once the model has loaded
   useEffect(() => {
-    const mat = chairMaterialRef.current;
-    if (!mat) {
-      return;
+    const brand = new Three.Color(brandConfig.colors.primary);
+    for (const [partId, materials] of partMaterialsRef.current) {
+      for (const mat of materials) {
+        const original: Three.Color = (mat.userData.baseColor ??= mat.color.clone());
+        const on = partId === selectedPartId;
+        mat.color.copy(original);
+        if (on) {
+          mat.color.lerp(brand, 0.55);
+        }
+        mat.emissive.set(on ? brand : 0x000000);
+        mat.emissiveIntensity = on ? 0.18 : 0;
+      }
     }
-    const tex = texturesRef.current.get(selectedPartId) ?? texturesRef.current.get(null);
-    if (tex && mat.map !== tex) {
-      mat.map = tex;
-      mat.needsUpdate = true;
-    }
-  }, [selectedPartId, texturesReady]);
+  }, [selectedPartId, modelReady]);
 }
 
 /* ------------------------------------------------------------------ */
@@ -467,7 +432,7 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
               style={{ backgroundColor: `${brandConfig.colors.primary}cc` }}
             >
               <div className="size-[6px] animate-pulse rounded-full bg-white" />
-              {selectedPartId === "seat-cushion" ? "Seat" : "Legs"} selected
+              {parts[selectedPartId]?.name} selected
             </div>
           </motion.div>
         )}
@@ -562,7 +527,11 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
                     <div className="mb-[20px] flex items-start gap-[16px]">
                       {/* Part Image */}
                       <div className="relative size-[80px] shrink-0 overflow-hidden rounded-[10px] p-[4px]">
-                        <img src={part.image} alt={part.name} className="size-full rounded-[8px] object-contain" />
+                        {part.image ? (
+                          <img src={part.image} alt={part.name} className="size-full rounded-[8px] object-contain" />
+                        ) : (
+                          <DppPartThumb partId={part.id} label={`3D view of the ${part.name}`} />
+                        )}
                         <div
                           aria-hidden="true"
                           className="pointer-events-none absolute inset-0 rounded-[10px] border border-[rgba(1,6,47,0.12)]"

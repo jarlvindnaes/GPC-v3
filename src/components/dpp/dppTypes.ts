@@ -112,7 +112,10 @@ export interface PurchasablePart {
   material: string;
   price: string;
   priceValue?: Price;
-  image: string;
+  /** Photo of the part; when absent, a turning 3D thumbnail is drawn from the product model. */
+  image?: string;
+  /** Node-name prefixes of this part's pieces in the product's 3D model. */
+  modelPieces?: string[];
 }
 
 export interface MaterialComposition {
@@ -201,6 +204,8 @@ export interface Certification {
   expiryDate?: string;
   verificationUrl?: string;
   description: string;
+  /** Certification mark shown beside the card text (image URL). */
+  logo?: string;
 }
 
 export interface DataCarrier {

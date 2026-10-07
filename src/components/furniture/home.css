@@ -119,15 +119,6 @@
 .phone-live>astro-island{display:block;width:100%;height:460px}
 .phone-caption{text-align:center;font-size:12px;color:#8c929d;line-height:1.5;max-width:280px;margin:0}
 
-/* Hero: animated exploding chair (tuned on /chair-lab/) replaces the photo from 721px up;
-   phones keep the photo below the copy. The canvas spans the full hero so parts are never
-   clipped; the chair is placed via the component's view offset. */
-.hero-chair-3d{display:none}
-@media(min-width:721px){
-  .hero-chair .hero-backdrop{display:none}
-  .hero-chair-3d{display:block;position:absolute;inset:0;z-index:-2}
-  .hero-chair-3d .chair-explode{position:absolute;inset:0}
-}
 
 /* Main menu: keep each label on one line; tighten on narrower desktops and hide it once it no
    longer fits beside the logo and button (the page already hides it at ≤720px). */
@@ -136,10 +127,8 @@
 @media(max-width:940px){.header nav{display:none}}
 
 
-/* Let drags pass through the hero's light wash to the 3D chair underneath. */
+/* Keep the hero's light wash out of pointer events. */
 .hero-chair::before{pointer-events:none}
-.hero-chair-3d canvas{cursor:grab}
-.hero-chair-3d canvas:active{cursor:grabbing}
 
 /* The passport phone is styled with Tailwind (layered CSS). This page's unlayered element rules
    (h2 sizes, heading letter-spacing, p colour and line-height…) would otherwise override its
@@ -182,3 +171,14 @@
    with 4.2% side margins on smaller screens. */
 @media(min-width:721px){.hero.frame{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2))}}
 .live-window{border-radius:12px} /* same 12px corners as the heroes, brand strip and viewers */
+
+/* Hero image: the close-up chair cut-out (public/v4/hero-chair-closeup.webp) replaces the 3D chair.
+   Desktop/tablet: anchored bottom-right at the full hero height, running off the right and bottom
+   edges like the photo; it never takes more than ~62% of the width (crops on the right instead).
+   Phones keep the existing layout: the image sits below the copy. */
+@media(min-width:721px){
+  .hero-chair .hero-backdrop{display:block;left:auto;right:0;top:auto;bottom:0;width:auto;height:100%;max-width:62%;object-fit:cover;object-position:left top;background:transparent}
+}
+@media(max-width:720px){
+  .hero-chair .hero-backdrop{object-fit:cover;object-position:30% 20%}
+}

@@ -103,8 +103,8 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
                 </span>
               </div>
               <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
-                With regular care. Leather cushions can be re-dyed or replaced, and the walnut frame can be sanded and
-                re-oiled to extend functional life.
+                With regular care. The oiled oak develops a patina over time, and surface marks can be repaired with
+                light sanding and a new coat of oil.
               </p>
             </div>
           )}
@@ -119,8 +119,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
                 </span>
               </div>
               <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
-                Warranty against defective materials and workmanship. Lifetime Repair Promise ensures replacement parts
-                remain available.
+                Spare parts are available through support, and the leather seat can be bought on its own.
               </p>
             </div>
           )}

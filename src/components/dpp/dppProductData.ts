@@ -13,17 +13,18 @@ const scannedDate = new Date(today.getFullYear() - 2, today.getMonth() - 1, toda
 // Floor Pads Ordered: same date as scanned
 const orderedDate = new Date(scannedDate);
 
-// Image paths — served from public/images/dpp/ via GitHub Pages base URL
+// Image paths — served from public/images/dpp/ via GitHub Pages base URL.
+// Soft Lounge Chair photos (from the /passport folder, optimised): studio hero, room setting, close-up
+// detail, and TAKT's dimensions drawing (t04dimensions, flattened onto white). The oak-tree material-source image is shared.
 const base = `${import.meta.env.BASE_URL}images/dpp/`;
-const heroImage = `${base}chair-hero.jpg`;
-const lifestyleImage = `${base}chair-detail.jpg`;
-const dimensionsDiagram = `${base}chair-dimensions.jpg`;
-const detailImage = `${base}chair-lifestyle.jpg`;
+const heroImage = `${base}soft-hero.jpg`;
+const lifestyleImage = `${base}soft-lifestyle.jpg`;
+const dimensionsDiagram = `${base}soft-dimensions.jpg`;
+const detailImage = `${base}soft-detail.jpg`;
 const materialSourceImage = `${base}chair-material-source.jpg`;
-const seatCushionImage = `${base}chair-seat-component.jpg`;
-const armrestImage = `${base}table-bar-component.png`;
-const legImage = `${base}chair-legs-component.jpg`;
 
+// Demo passport: Soft Lounge Chair by Thomas Bentzen. Figures are illustrative.
+// (Export name kept so the passport views need no changes.)
 export const slopeChair: ProductPassport = {
   granularityLevel: "model",
 
@@ -36,7 +37,7 @@ export const slopeChair: ProductPassport = {
 
   commerce: {
     description:
-      "A modern dining chair with a gently angled backrest and clean sculptural lines. The solid walnut frame is hand-finished with a low VOC oil, while the seat and back are upholstered in full-grain vegetable-tanned leather over high-resilience foam. Designed for disassembly so every part can be repaired, replaced, or recycled.",
+      "A light, generous lounge chair with soft curves in both back and seat. A shell of moulded oak veneer wraps the solid-oak frame like a cloth, and its double curves strengthen the whole construction. Every part stays visible, and the leather seat adds comfort and warmth. Designed for disassembly, so parts can be identified, repaired and replaced.",
     photographs: {
       hero: heroImage,
       lifestyle: lifestyleImage,
@@ -51,109 +52,175 @@ export const slopeChair: ProductPassport = {
     category: "Furniture",
     subCategory: "Chair",
     dimensions: {
-      height: { value: 82, unit: "cm" },
-      width: { value: 58, unit: "cm" },
-      depth: { value: 60, unit: "cm" }
+      height: { value: 72.7, unit: "cm" }, // product spec sheet: H 727, W 646, D 762 mm; seat height 381 mm
+      width: { value: 64.6, unit: "cm" },
+      depth: { value: 76.2, unit: "cm" }
     },
-    color: "Saddle brown leather / Oiled walnut",
-    designer: "YOUR COMPANY",
-    modelName: "Slope",
-    displayName: "West Elm Slope Leather Chair"
+    color: "Oak, natural white-pigmented oil / leather seat",
+    designer: "Thomas Bentzen",
+    modelName: "Soft",
+    displayName: "Soft Lounge Chair"
   },
 
   production: {
-    countryOfOrigin: "Denmark",
-    countryOfOriginCode: "DK",
+    countryOfOrigin: "Latvia",
+    countryOfOriginCode: "LV",
     facilityName: "Your Company",
-    manufacturingLocation: "Horsens, Central Jutland, DK"
+    manufacturingLocation: "Latvia, EU"
   },
 
   materialsAndComponents: {
     components: [
-      {
-        name: "Seat Cushion",
-        replaceable: true,
-        material: "Full-grain leather / HR foam",
-        weight: { value: 2.4, unit: "kg" }
-      },
-      {
-        name: "Back Cushion",
-        replaceable: true,
-        material: "Full-grain leather / HR foam",
-        weight: { value: 1.6, unit: "kg" }
-      },
-      { name: "Seat Frame", replaceable: true, material: "Powder-coated steel", weight: { value: 1.8, unit: "kg" } },
-      {
-        name: "Backrest Frame",
-        replaceable: true,
-        material: "Powder-coated steel",
-        weight: { value: 1.2, unit: "kg" }
-      },
-      { name: "Front Leg", replaceable: true, material: "Solid American Walnut", weight: { value: 0.6, unit: "kg" } },
-      { name: "Rear Leg", replaceable: true, material: "Solid American Walnut", weight: { value: 0.7, unit: "kg" } },
-      { name: "Armrest", replaceable: true, material: "Solid American Walnut", weight: { value: 0.5, unit: "kg" } },
-      { name: "Cross Brace", replaceable: true, material: "Powder-coated steel", weight: { value: 0.4, unit: "kg" } },
-      { name: "M6 x 20mm Hex Bolt", replaceable: true, material: "Stainless steel" },
-      { name: "M6 x 15mm Threaded Insert", replaceable: true, material: "Stainless steel" },
+      { name: "Leather Seat", replaceable: true, material: "Leather / HR foam", weight: { value: 1.4, unit: "kg" } },
+      { name: "Back & Seat Shell", replaceable: true, material: "Moulded oak veneer", weight: { value: 2.1, unit: "kg" } },
+      { name: "Front Leg", replaceable: true, material: "Solid oak", weight: { value: 0.6, unit: "kg" } },
+      { name: "Rear Leg", replaceable: true, material: "Solid oak", weight: { value: 0.7, unit: "kg" } },
+      { name: "Armrest", replaceable: true, material: "Solid oak", weight: { value: 0.5, unit: "kg" } },
+      { name: "Seat Rail", replaceable: true, material: "Solid oak", weight: { value: 0.4, unit: "kg" } },
+      { name: "Front & Back Rail", replaceable: true, material: "Solid oak", weight: { value: 0.4, unit: "kg" } },
+      { name: "Armrest Cover", replaceable: true, material: "Moulded oak veneer", weight: { value: 0.2, unit: "kg" } },
+      { name: "Connector Bolt", replaceable: true, material: "Stainless steel" },
       { name: "Felt Floor Pad", replaceable: true, material: "Recycled wool felt" }
     ],
+    // One part per piece type in the 3D model; modelPieces are node-name prefixes in soft-lounge-chair.glb
+    // (pairs such as left/right armrests share one part). Weights and prices are illustrative.
     purchasableParts: [
       {
         id: "seat-cushion",
-        name: "Seat Cushion",
-        weight: "2.4 kg",
-        weightValue: { value: 2.4, unit: "kg" },
+        name: "Leather Seat",
+        weight: "1.4 kg",
+        weightValue: { value: 1.4, unit: "kg" },
         material: "Leather",
         price: "95 \u20AC",
         priceValue: { value: 95, currency: "EUR" },
-        image: seatCushionImage
+        modelPieces: ["Leather seat"]
+      },
+      {
+        id: "back-shell",
+        name: "Back Shell",
+        weight: "1.2 kg",
+        weightValue: { value: 1.2, unit: "kg" },
+        material: "Moulded oak veneer",
+        price: "120 \u20AC",
+        priceValue: { value: 120, currency: "EUR" },
+        modelPieces: ["Shell back"]
+      },
+      {
+        id: "seat-shell",
+        name: "Seat Shell",
+        weight: "0.9 kg",
+        weightValue: { value: 0.9, unit: "kg" },
+        material: "Moulded oak veneer",
+        price: "110 \u20AC",
+        priceValue: { value: 110, currency: "EUR" },
+        modelPieces: ["Shell seat"]
+      },
+      {
+        id: "arm-cover",
+        name: "Armrest Cover",
+        weight: "0.2 kg",
+        weightValue: { value: 0.2, unit: "kg" },
+        material: "Moulded oak veneer",
+        price: "36 \u20AC",
+        priceValue: { value: 36, currency: "EUR" },
+        modelPieces: ["Shell arm wrap"]
       },
       {
         id: "armrest",
         name: "Armrest",
         weight: "0.5 kg",
         weightValue: { value: 0.5, unit: "kg" },
-        material: "Walnut",
+        material: "Solid oak",
         price: "42 \u20AC",
         priceValue: { value: 42, currency: "EUR" },
-        image: armrestImage
+        modelPieces: ["Armrest"]
       },
       {
-        id: "leg",
-        name: "Legs",
-        weight: "0.7 kg",
-        weightValue: { value: 0.7, unit: "kg" },
-        material: "Walnut",
+        id: "front-leg",
+        name: "Front Leg",
+        weight: "0.6 kg",
+        weightValue: { value: 0.6, unit: "kg" },
+        material: "Solid oak",
         price: "38 \u20AC",
         priceValue: { value: 38, currency: "EUR" },
-        image: legImage
+        modelPieces: ["Front leg"]
+      },
+      {
+        id: "back-leg",
+        name: "Rear Leg",
+        weight: "0.7 kg",
+        weightValue: { value: 0.7, unit: "kg" },
+        material: "Solid oak",
+        price: "44 \u20AC",
+        priceValue: { value: 44, currency: "EUR" },
+        modelPieces: ["Back leg"]
+      },
+      {
+        id: "seat-rail",
+        name: "Side Seat Rail",
+        weight: "0.4 kg",
+        weightValue: { value: 0.4, unit: "kg" },
+        material: "Solid oak",
+        price: "28 \u20AC",
+        priceValue: { value: 28, currency: "EUR" },
+        modelPieces: ["Side seat rail"]
+      },
+      {
+        id: "front-rail",
+        name: "Front Rail",
+        weight: "0.4 kg",
+        weightValue: { value: 0.4, unit: "kg" },
+        material: "Solid oak",
+        price: "28 \u20AC",
+        priceValue: { value: 28, currency: "EUR" },
+        modelPieces: ["Front rail"]
+      },
+      {
+        id: "back-rail",
+        name: "Back Rail",
+        weight: "0.4 kg",
+        weightValue: { value: 0.4, unit: "kg" },
+        material: "Solid oak",
+        price: "28 \u20AC",
+        priceValue: { value: 28, currency: "EUR" },
+        modelPieces: ["Back rail"]
+      },
+      {
+        id: "bolt",
+        name: "Connector Bolt",
+        weight: "40 g",
+        weightValue: { value: 0.04, unit: "kg" },
+        material: "Stainless steel",
+        price: "6 \u20AC",
+        priceValue: { value: 6, currency: "EUR" },
+        modelPieces: ["Connector bolt"]
       }
     ],
-    primaryMaterial: "Full-grain vegetable-tanned leather",
+    primaryMaterial: "Solid oak",
     materialComposition: [
-      { material: "leather", label: "Leather", percentage: 35, chartColor: "#ADF5D1" },
-      { material: "steel", label: "Steel", percentage: 30, chartColor: "#B6D4FC" },
-      { material: "walnut", label: "Walnut", percentage: 25, chartColor: "#C4B5FD" },
-      { material: "foam", label: "Foam", percentage: 8, chartColor: "#A9F1FA" },
-      { material: "other", label: "Other", percentage: 2, chartColor: "#FDE68A" }
+      { material: "oak", label: "Solid oak", percentage: 52, chartColor: "#C4B5FD" },
+      { material: "veneer", label: "Oak veneer", percentage: 27, chartColor: "#B6D4FC" },
+      { material: "leather", label: "Leather", percentage: 13, chartColor: "#ADF5D1" },
+      { material: "foam", label: "Foam", percentage: 5, chartColor: "#A9F1FA" },
+      { material: "other", label: "Other", percentage: 3, chartColor: "#FDE68A" }
     ],
-    finish: "Low VOC hand-applied natural walnut oil",
+    finish: "Natural white-pigmented oil",
     adhesive: "Water-based adhesives",
-    fasteners: "Mechanical fixings (hex bolts, threaded inserts)",
-    totalWeight: { value: 11.8, unit: "kg" },
+    fasteners: "Stainless connector bolts",
+    totalWeight: { value: 8, unit: "kg" },
     materialDescriptions: [
-      { material: "Leather", description: "Vegetable-tanned full-grain cowhide" },
-      { material: "Steel", description: "Powder-coated recycled steel" },
-      { material: "Walnut", description: "FSC American Walnut" },
-      { material: "Foam", description: "CertiPUR-US certified HR foam" },
-      { material: "Other", description: "Recycled wool felt pads & water-based adhesives" }
+      { material: "Solid oak", description: "FSC™-certified solid oak frame; natural variation between light and dark grain" },
+      { material: "Oak veneer", description: "Moulded oak veneer back and seat shell with double curves" },
+      { material: "Leather", description: "Leather seat, also available on its own as an upgrade" },
+      { material: "Foam", description: "Seat padding under the leather" },
+      { material: "Other", description: "Stainless fixings, felt floor pads and water-based adhesives" }
     ],
     packaging: {
-      summary: "No plastic wrapping",
+      summary: "Flat-packed in separate components",
       domestic:
-        "For domestic deliveries, the Slope Leather Chair is protected with recycled cardboard corners and wrapped in a reusable fabric sleeve.",
+        "The Soft Lounge Chair ships as separate components in flat boxes, which keeps the volume small and makes each part easy to identify.",
       international:
-        "For international deliveries, the Slope Leather Chair is packed in a recycled cardboard carton with cornstarch cushioning inserts."
+        "International orders ship the same way: separate components in flat boxes, assembled at home."
     }
   },
 
@@ -174,51 +241,48 @@ export const slopeChair: ProductPassport = {
     recycledContentPercent: 30,
     recyclableContentPercent: 88,
     recyclabilityAssessment:
-      "88% of the chair by weight is recyclable. Walnut and steel components enter standard recycling streams; leather can be repurposed or composted under industrial conditions.",
+      "88% of the chair by weight is recyclable. Oak and plywood parts enter standard wood recycling streams and stainless fixings standard metal recycling; leather can be repurposed or composted under industrial conditions.",
     substancesOfConcern:
       "No substances of very high concern (SVHC) above 0.1% w/w per REACH Article 33. No SCIP notification required.",
-    vocData: "Low VOC natural walnut oil finish; CertiPUR-US certified foam",
-    epdReference: "S-P-04781",
-    lcaMethodology: "EN 15804+A2",
-    toxicitySummary: "Low VOC walnut oil finish with chrome-free leather tanning",
-    redListFreeStatement:
-      "The West Elm Slope Leather Chair contains no harmful chemicals and meets strict health and safety standards for indoor environments."
+    vocData: "Natural white-pigmented oil finish",
+    toxicitySummary: "Eco-certified with the EU Ecolabel",
+    redListFreeStatement: ""
   },
 
   lifecycleAndMaintenance: {
     expectedLifetime: "25+ years",
     expectedLifetimeValue: { value: 25, unit: "years" },
-    warranty: "10-year warranty against defective materials and workmanship",
-    warrantyDuration: { value: 10, unit: "years" },
+    warranty: "5-year warranty",
+    warrantyDuration: { value: 5, unit: "years" },
     lifespanDetails: [
       {
         label: "Material",
-        text: "Full-grain leather develops a rich patina with age, while solid walnut is naturally resistant to wear and structural fatigue."
+        text: "The oiled oak develops a characterful patina over time, and surface damage can be repaired with light sanding and a new coat of oil, again and again."
       },
       {
         label: "Expected lifespan",
-        text: "25+ years with regular care. Leather cushions can be re-dyed or replaced, and the walnut frame can be sanded and re-oiled to extend functional life."
+        text: "Built for everyday life. Designed for disassembly, so individual parts are easy to identify and replace when needed."
       },
       {
         label: "Warranty & Support",
-        text: "10-year warranty against defective materials and workmanship. Lifetime Repair Promise ensures replacement parts remain available."
+        text: "5-year warranty. Spare parts are available through support, and the leather seat can be bought on its own."
       }
     ],
     maintenanceInstructions: [
-      "Wipe leather surfaces with a soft, dry cloth. Condition every 6\u201312 months with a quality leather balm.",
-      "Avoid prolonged direct sunlight to prevent uneven patina development.",
-      "Periodically inspect and tighten bolts at the leg-to-frame joints.",
-      "Re-oil walnut components annually to maintain finish and protect against moisture."
+      "Treat the oiled wood with a new layer of oil at least once a year to protect and strengthen the surface.",
+      "Repair marks and scratches by sanding lightly and applying a new oil treatment.",
+      "Wipe the leather seat with a soft, dry cloth.",
+      "Periodically check and tighten the connector bolts."
     ],
     refurbishAndRepair: [
-      "The Slope Leather Chair is designed for easy disassembly using standard hex tools. Every joint uses mechanical fixings rather than glue.",
-      "Leather cushions are secured with concealed zips, allowing simple swap-outs for re-upholstery or replacement.",
-      "Supported by a Lifetime Repair Promise — replacement parts are stocked for the full production life of the chair."
+      "The Soft Lounge Chair is designed for disassembly, making individual parts easier to identify and replace when needed.",
+      "The leather seat is a separate component: it can be added later as an upgrade or replaced on its own.",
+      "Spare parts are available on request through support."
     ],
     takeBackProgram:
-      "The Slope Leather Chair is built for circular lifecycle management. When you no longer need it, return it through our Take Back Programme. Returned chairs are inspected, refurbished, and resold or donated, keeping materials in use and out of landfill.",
+      "The Soft Lounge Chair is built for circular lifecycle management. When you no longer need it, return it through our Take Back Programme. Returned chairs are inspected, refurbished, and resold or donated, keeping materials in use and out of landfill.",
     endOfLife:
-      "The chair disassembles into individual parts. Walnut components are recyclable or biodegradable; steel frames enter standard metal recycling; leather can be repurposed or industrially composted.",
+      "The chair disassembles into individual parts. Oak and plywood components are recyclable or biodegradable; stainless fixings enter standard metal recycling; leather can be repurposed or industrially composted.",
     productHistory: [
       { title: "Product Created", date: toIso(createdDate), icon: "star" },
       { title: "Product Shipped", date: toIso(shippedDate), icon: "archive" },
@@ -231,39 +295,28 @@ export const slopeChair: ProductPassport = {
   certificationsAndCompliance: {
     certifications: [
       {
-        name: "FSC",
+        name: "FSC™",
         issuingBody: "Forest Stewardship Council",
-        description:
-          "FSC-Certified Walnut \u2013 sourced from responsibly managed forests certified by the Forest Stewardship Council."
+        description: "FSC™-certified wood from responsibly managed forests.",
+        logo: `${base}certs/fsc.svg`
       },
       {
-        name: "EPD",
-        issuingBody: "EPD International",
-        description:
-          "EPD (Environmental Product Declaration) \u2013 verified environmental impact data for transparency and lifecycle assessment."
-      },
-      {
-        name: "Red List Free / Declare Label",
-        issuingBody: "International Living Future Institute",
-        description:
-          "Red List Free / Declare Label \u2013 free from harmful chemicals and substances of concern, supporting healthy indoor environments."
+        name: "EU Ecolabel",
+        issuingBody: "European Commission",
+        description: "Eco-certified with the EU Ecolabel, the EU's official label for environmental excellence.",
+        logo: `${base}certs/ecolabel.svg`
       }
     ],
-    fireSafety: "BS 5852 (Ignition Source 0) \u2014 meets flammability requirements for upholstered seating",
-    indoorAirQuality: "Low VOC \u2014 compliant with AgBB/CDPH VOC emission standards",
-    buildingRatingContributions: "Meets the criteria for leading Building Ratings including BREEAM, LEED and WELL",
     certificationsText: [
-      "Meets the criteria for leading Building Ratings including BREEAM, LEED and WELL:",
-      "FSC-Certified Walnut \u2013 sourced from responsibly managed forests certified by the Forest Stewardship Council.",
-      "EPD (Environmental Product Declaration) \u2013 verified environmental impact data for transparency and lifecycle assessment.",
-      "Red List Free / Declare Label \u2013 free from harmful chemicals and substances of concern, supporting healthy indoor environments."
+      "FSC™-certified wood from responsibly managed forests.",
+      "Eco-certified with the EU Ecolabel."
     ]
   },
 
   dataCarrier: {
     type: "qr-code",
     material: "Laser-engraved stainless steel tag",
-    locationOnProduct: "Underside of seat frame, near front-left leg bracket"
+    locationOnProduct: "Underside of the seat frame, near the front-left leg"
   },
 
   company: {
