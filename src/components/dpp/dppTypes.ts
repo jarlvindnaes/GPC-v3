@@ -145,6 +145,10 @@ export interface SustainabilityAndImpact {
   recyclabilityAssessment?: string;
   substancesOfConcern?: string;
   vocData: string;
+  /** Carbon stored in the product's biogenic materials (negative CO₂e). */
+  carbonStorage?: Measurement;
+  /** Shown under the footprint, e.g. to mark example figures or their source. */
+  carbonFootprintNote?: string;
   epdReference?: string;
   lcaMethodology?: string;
   en15804Modules?: Record<string, Measurement>;

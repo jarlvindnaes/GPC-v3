@@ -5,6 +5,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as Three from "three";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { WebsiteButton } from "./WebsiteButton";
+import { DRACO_DECODER_PATH } from "../utilities/draco";
+
+// drei's useGLTF decodes Draco models with our own copy of the decoder (it defaults to Google's CDN).
+useGLTF.setDecoderPath(DRACO_DECODER_PATH);
 
 /**
  * Drives rendering for a demand-mode Canvas. Uses its own rAF loop to call
@@ -1222,7 +1226,19 @@ export function HtmlPhoneCanvas({
   const hasPlayingProp = isPlaying !== undefined;
   const isActiveRef = useRef(false);
   isActiveRef.current = hasPlayingProp ? isPlaying : true;
-  const effectiveActiveRef = hasPlayingProp ? (isActiveRef as React.RefObject<boolean>) : isNearRef;
+  // A phone placed in the page (no isPlaying) also pauses while the full-screen passport overlay is
+  // open: it would otherwise keep redrawing under the overlay's blurred backdrop and make it flicker.
+  const inPageActiveRef = useMemo(
+    () => ({
+      get current() {
+        return Boolean(isNearRef.current) && !document.documentElement.dataset.overlayOpen;
+      }
+    }),
+    [isNearRef]
+  );
+  const effectiveActiveRef = hasPlayingProp
+    ? (isActiveRef as React.RefObject<boolean>)
+    : (inPageActiveRef as React.RefObject<boolean>);
 
   // Camera: start orbited when isPlaying is used, front-on otherwise
   const cameraPosition = hasPlayingProp ? PHONE_CAM_START : PHONE_CAM_END;

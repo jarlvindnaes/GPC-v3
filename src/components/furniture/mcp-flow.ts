@@ -287,6 +287,7 @@ export function initMcpFlow() {
     function loop(now: number) {
       frame = requestAnimationFrame(loop);
       if (now - last < 30) return; // ~33 fps cap
+      if (document.documentElement.dataset.overlayOpen) return; // hold still under the full-screen passport
       const dt = last ? Math.min((now - last) / 1000, 0.06) : 0;
       last = now;
       step(dt);

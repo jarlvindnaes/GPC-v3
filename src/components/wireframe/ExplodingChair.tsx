@@ -14,6 +14,8 @@ import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { ChairDofShader } from "./chair-dof";
 import { placeStaged, SOFT_EXPLODE_SECONDS, softMovesFor } from "./softChairStages";
 import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
+import { DRACO_DECODER_PATH } from "../../utilities/draco";
+import { SOFT_LIGHT } from "./softChairLight";
 
 // Exploded-assembly of the TAKT Cross Chair for the #components section. Adapted from
 // Drafts/wireframes/chair-scroll.js (vanilla three.js + CDN importmap) to a hydrated React island.
@@ -31,8 +33,6 @@ const EXPLODE_SECONDS = 6; // seconds for one explode-out-and-back
 // end: they start backing out first, and are the last to go back in. Everything else moves inside it.
 const LEAD = 0.14;
 const FRAME_PAD = 0.85; // < 1 zooms the camera in (the chair fills the frame)
-const DRACO_DECODER_PATH =
-  "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
 
 interface PartUserData {
   basePos: Three.Vector3;
@@ -192,11 +192,11 @@ export function ExplodingChair({
     controls.autoRotateSpeed = 0.9;
 
     // High-key studio fill (near-shadowless, matches the manufacturer shot)
-    scene.add(new Three.AmbientLight(0xffffff, 0.78));
-    const key = new Three.DirectionalLight(0xfff8f0, 0.18);
+    scene.add(new Three.AmbientLight(variant === "soft" ? SOFT_LIGHT.ambient : 0xffffff, 0.78));
+    const key = new Three.DirectionalLight(variant === "soft" ? SOFT_LIGHT.key : 0xfff8f0, 0.18);
     key.position.set(5, 3.5, 4);
     scene.add(key);
-    const fill = new Three.DirectionalLight(0xffe9d5, 0.35);
+    const fill = new Three.DirectionalLight(variant === "soft" ? SOFT_LIGHT.fill : 0xffe9d5, 0.35);
     fill.position.set(-4, 6, -4);
     scene.add(fill);
 

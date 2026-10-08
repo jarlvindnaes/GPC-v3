@@ -7,7 +7,7 @@ function BrandLogo() {
       src={`${import.meta.env.BASE_URL}wireframes/logos/takt.svg`}
       alt="TAKT"
       style={{
-        height: 30,
+        height: 20,
         width: "auto",
         display: "block",
         flexShrink: 0
@@ -36,7 +36,7 @@ export function DppHeader({ isScrolled = false }: { isScrolled?: boolean }) {
           left: 0,
           right: 0,
           height: 60,
-          background: "linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
+          background: "linear-gradient(to bottom, rgba(248,247,245,1) 0%, rgba(248,247,245,0) 100%)", // TAKT off-white
           pointerEvents: "none",
           zIndex: 0
         }}
@@ -61,12 +61,14 @@ export function DppHeader({ isScrolled = false }: { isScrolled?: boolean }) {
               borderRadius: "inherit",
               backdropFilter: "blur(4px)",
               WebkitBackdropFilter: "blur(4px)",
-              backgroundColor: brandConfig.header.backgroundColor,
-              border: "1px solid white",
+              // At the top of the page the card is invisible (no background, border or shadow); once the
+              // content scrolls under it, all three fade in together.
+              backgroundColor: isScrolled ? brandConfig.header.backgroundColor : "rgba(248, 247, 245, 0)",
+              border: `1px solid ${isScrolled ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)"}`,
               boxShadow: isScrolled
                 ? "0 2px 12px rgba(0, 0, 0, 0.15), 0 4px 24px rgba(0, 0, 0, 0.1)"
                 : "0 2px 12px rgba(0, 0, 0, 0), 0 4px 24px rgba(0, 0, 0, 0)",
-              transition: "box-shadow 300ms ease"
+              transition: "box-shadow 300ms ease, background-color 300ms ease, border-color 300ms ease"
             }}
           />
           {/* Logo — sits outside the compositing layer for crisp SVG rendering.
@@ -78,7 +80,8 @@ export function DppHeader({ isScrolled = false }: { isScrolled?: boolean }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: "12px 12px"
+              minHeight: 58, // the card's height, so the logo sits in its vertical centre
+              padding: "0 12px"
             }}
           >
             <BrandLogo />

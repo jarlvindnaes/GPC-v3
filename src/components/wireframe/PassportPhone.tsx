@@ -130,7 +130,11 @@ export function PassportPhone() {
               onClick={() => {
                 setExpanded(false);
               }}
-              className="absolute inset-0 cursor-default border-0 bg-black/40 backdrop-blur-xl"
+              className="absolute cursor-default border-0 bg-black/40 backdrop-blur-xl"
+              // Reaches 96px past every screen edge (more than the 24px blur's reach): Chrome guesses the pixels beyond a backdrop
+              // blur's edges, and those guesses flicker as the page changes; this keeps them
+              // off-screen. Its own GPU layer avoids re-rasterising it.
+              style={{ inset: -96, transform: "translateZ(0)" }}
             />
             <div
               className="relative z-10 cursor-grab active:cursor-grabbing"

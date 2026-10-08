@@ -10,7 +10,7 @@ const createdDate = new Date(today.getFullYear() - 3, today.getMonth(), today.ge
 const shippedDate = new Date(createdDate.getTime() + 8 * 86_400_000);
 // Product Scanned: 2 years, 1 month, and 2 days ago
 const scannedDate = new Date(today.getFullYear() - 2, today.getMonth() - 1, today.getDate() - 2);
-// Floor Pads Ordered: same date as scanned
+// Care Kit Ordered: same date as scanned
 const orderedDate = new Date(scannedDate);
 
 // Image paths — served from public/images/dpp/ via GitHub Pages base URL.
@@ -32,7 +32,8 @@ export const slopeChair: ProductPassport = {
     protocolVersion: "1.0",
     productIdSystem: "product-connect",
     productIdValue: "7820194536",
-    brandName: "Your Company"
+    brandName: "TAKT",
+    economicOperatorId: "CVR 39194104"
   },
 
   commerce: {
@@ -45,7 +46,7 @@ export const slopeChair: ProductPassport = {
       detail: detailImage,
       materialSource: materialSourceImage
     },
-    productPageUrl: "#"
+    productPageUrl: "https://taktcph.com/products/soft-lounge-chair/"
   },
 
   categorization: {
@@ -65,7 +66,9 @@ export const slopeChair: ProductPassport = {
   production: {
     countryOfOrigin: "Latvia",
     countryOfOriginCode: "LV",
-    facilityName: "Your Company",
+    // Manufacturer named on the EU Ecolabel and FSC certificates; its FSC scope lists the Latvian
+    // factories in Mālpils and Liepāja.
+    facilityName: "Kvist Industries (SIA Kvist)",
     manufacturingLocation: "Latvia, EU"
   },
 
@@ -79,8 +82,7 @@ export const slopeChair: ProductPassport = {
       { name: "Seat Rail", replaceable: true, material: "Solid oak", weight: { value: 0.4, unit: "kg" } },
       { name: "Front & Back Rail", replaceable: true, material: "Solid oak", weight: { value: 0.4, unit: "kg" } },
       { name: "Armrest Cover", replaceable: true, material: "Moulded oak veneer", weight: { value: 0.2, unit: "kg" } },
-      { name: "Connector Bolt", replaceable: true, material: "Stainless steel" },
-      { name: "Felt Floor Pad", replaceable: true, material: "Recycled wool felt" }
+      { name: "Connector Bolt", replaceable: true, material: "Steel" }
     ],
     // One part per piece type in the 3D model; modelPieces are node-name prefixes in soft-lounge-chair.glb
     // (pairs such as left/right armrests share one part). Weights and prices are illustrative.
@@ -190,7 +192,7 @@ export const slopeChair: ProductPassport = {
         name: "Connector Bolt",
         weight: "40 g",
         weightValue: { value: 0.04, unit: "kg" },
-        material: "Stainless steel",
+        material: "Steel",
         price: "6 \u20AC",
         priceValue: { value: 6, currency: "EUR" },
         modelPieces: ["Connector bolt"]
@@ -205,15 +207,14 @@ export const slopeChair: ProductPassport = {
       { material: "other", label: "Other", percentage: 3, chartColor: "#FDE68A" }
     ],
     finish: "Natural white-pigmented oil",
-    adhesive: "Water-based adhesives",
-    fasteners: "Stainless connector bolts",
+    fasteners: "Steel connector bolts",
     totalWeight: { value: 8, unit: "kg" },
     materialDescriptions: [
       { material: "Solid oak", description: "FSC™-certified solid oak frame; natural variation between light and dark grain" },
       { material: "Oak veneer", description: "Moulded oak veneer back and seat shell with double curves" },
       { material: "Leather", description: "Leather seat, also available on its own as an upgrade" },
       { material: "Foam", description: "Seat padding under the leather" },
-      { material: "Other", description: "Stainless fixings, felt floor pads and water-based adhesives" }
+      { material: "Other", description: "Steel connector bolts" }
     ],
     packaging: {
       summary: "Flat-packed in separate components",
@@ -225,33 +226,36 @@ export const slopeChair: ProductPassport = {
   },
 
   sustainabilityAndImpact: {
-    carbonFootprintTotal: { value: 24, unit: "kg CO\u2082e" },
-    carbonFootprintScope: "cradle-to-gate",
+    // Estimate built on TAKT's only fully published product footprint, the Cross Chair (same factory,
+    // oak, steel bolts and flat-pack; PEF, third-party verified, 5 kg): materials 5.95, surface
+    // treatment 3.01, production 0.45, production waste 1.98, packaging 2.20, transport 4.22, use 0.66,
+    // disposal 3.61 = 22.08 kg CO2e. Scaled to this chair's ~6.6 kg of wood and bolts (x1.32); transport
+    // and disposal by total weight (8 kg, x1.6); plus ~8 kg CO2e for the leather seat (~0.45 m2 of
+    // finished bovine leather at typical published values, and foam). Carbon storage is TAKT's own
+    // published figure for this chair.
+    carbonFootprintTotal: { value: 39.4, unit: "kg CO\u2082e" },
+    carbonFootprintScope: "cradle-to-grave",
+    carbonStorage: { value: -1.82, unit: "kg CO\u2082e" },
+    carbonFootprintNote:
+      "Estimate, until TAKT publishes this chair's PEF footprint: based on TAKT's third-party verified Cross Chair (same factory, oak, bolts and flat-pack), scaled to this chair's weight, plus the leather seat. Carbon stored in the wood (published by TAKT): \u22121.82 kg CO\u2082e.",
     carbonFootprintByStage: [
-      {
-        stage: "rawMaterialExtraction",
-        label: "Raw material extraction",
-        value: 10,
-        percentage: 42,
-        chartColor: "#ADF5D1"
-      },
-      { stage: "manufacturing", label: "Manufacturing", value: 9, percentage: 37, chartColor: "#B6D4FC" },
-      { stage: "transport", label: "Transport", value: 5, percentage: 21, chartColor: "#A9F1FA" }
+      { stage: "materials", label: "Materials & surface treatment", value: 11.8, percentage: 30, chartColor: "#C4B5FD" },
+      { stage: "upholstery", label: "Leather upholstery", value: 8, percentage: 20, chartColor: "#FDE68A" },
+      { stage: "manufacturing", label: "Production", value: 3.2, percentage: 8, chartColor: "#B6D4FC" },
+      { stage: "transport", label: "Packaging & transport", value: 9.7, percentage: 25, chartColor: "#A9F1FA" },
+      { stage: "endOfLife", label: "Use & disposal", value: 6.7, percentage: 17, chartColor: "#ADF5D1" }
     ],
     recycledContentPercent: 30,
     recyclableContentPercent: 88,
     recyclabilityAssessment:
-      "88% of the chair by weight is recyclable. Oak and plywood parts enter standard wood recycling streams and stainless fixings standard metal recycling; leather can be repurposed or composted under industrial conditions.",
-    substancesOfConcern:
-      "No substances of very high concern (SVHC) above 0.1% w/w per REACH Article 33. No SCIP notification required.",
+      "Designed for disassembly: the chair comes apart into its key materials (wood, leather and metal fixings), so each can be separated and recycled or upcycled.",
     vocData: "Natural white-pigmented oil finish",
     toxicitySummary: "Eco-certified with the EU Ecolabel",
     redListFreeStatement: ""
   },
 
   lifecycleAndMaintenance: {
-    expectedLifetime: "25+ years",
-    expectedLifetimeValue: { value: 25, unit: "years" },
+    expectedLifetime: "Built to last for generations",
     warranty: "5-year warranty",
     warrantyDuration: { value: 5, unit: "years" },
     lifespanDetails: [
@@ -280,36 +284,47 @@ export const slopeChair: ProductPassport = {
       "Spare parts are available on request through support."
     ],
     takeBackProgram:
-      "The Soft Lounge Chair is built for circular lifecycle management. When you no longer need it, return it through our Take Back Programme. Returned chairs are inspected, refurbished, and resold or donated, keeping materials in use and out of landfill.",
+      "Keep the chair in use: worn or damaged parts can be replaced on their own, also in a different finish where available. If you no longer need it, pass it on to friends or family, or resell it to a new owner.",
     endOfLife:
-      "The chair disassembles into individual parts. Oak and plywood components are recyclable or biodegradable; stainless fixings enter standard metal recycling; leather can be repurposed or industrially composted.",
+      "When the chair can no longer be reused or repaired, it can be taken apart into its key materials, following the assembly instructions in reverse, so each material can be recycled or upcycled.",
     productHistory: [
       { title: "Product Created", date: toIso(createdDate), icon: "star" },
       { title: "Product Shipped", date: toIso(shippedDate), icon: "archive" },
       { title: "Product Scanned", date: toIso(scannedDate), icon: "qr" },
-      { title: "Floor Pads Ordered", date: toIso(orderedDate), icon: "add-to-basket" }
+      { title: "Care Kit Ordered", date: toIso(orderedDate), icon: "add-to-basket" }
     ],
     productAgeStatement: "Your product is 3 years old"
   },
 
   certificationsAndCompliance: {
     certifications: [
+      // From the product's certificate pack (t04-soft-lounge-chair-certificates.pdf on taktcph.com).
       {
         name: "FSC™",
-        issuingBody: "Forest Stewardship Council",
-        description: "FSC™-certified wood from responsibly managed forests.",
+        issuingBody: "Forest Stewardship Council · chain of custody certified by Preferred by Nature",
+        certificationId: "FSC-C112576 (NC-COC-013022)",
+        expiryDate: "2027-09-06",
+        description: "Made from FSC™-certified wood from responsibly managed forests, with chain-of-custody certification covering the Latvian factories.",
         logo: `${base}certs/fsc.svg`
       },
       {
         name: "EU Ecolabel",
-        issuingBody: "European Commission",
-        description: "Eco-certified with the EU Ecolabel, the EU's official label for environmental excellence.",
+        issuingBody: "European Commission · awarded by Ecolabelling Denmark",
+        certificationId: "DK/049/002",
+        expiryDate: "2026-12-31",
+        description: "Eco-certified with the EU Ecolabel, the EU's official label for environmental excellence, under the furniture criteria.",
         logo: `${base}certs/ecolabel.svg`
+      },
+      {
+        name: "Durability tested, EN 16139 level L1",
+        issuingBody: "Danish Technological Institute · report 884516-3 (2019)",
+        description: "Passed the strength, durability and safety requirements for non-domestic seating at level L1 (offices, cafés, restaurants and public spaces), and the EN 1022 stability test."
       }
     ],
     certificationsText: [
       "FSC™-certified wood from responsibly managed forests.",
-      "Eco-certified with the EU Ecolabel."
+      "Eco-certified with the EU Ecolabel.",
+      "Durability tested to EN 16139 level L1 for non-domestic use."
     ]
   },
 
@@ -319,16 +334,18 @@ export const slopeChair: ProductPassport = {
     locationOnProduct: "Underside of the seat frame, near the front-left leg"
   },
 
+  // From taktcph.com (contact, about and B Corp pages).
   company: {
     description:
-      "Your Company designs furniture that lasts — combining Scandinavian craft traditions with modern circular-economy principles. Every piece is made to be repaired, refinished, and eventually returned, so materials stay in use for as long as possible.",
+      "TAKT is a Copenhagen furniture company rethinking how furniture is made and sold: well-designed pieces in natural, certified materials, shipped flat-packed in components and built to be repaired, so they can be handed on to the next generation. A certified B Corp since 2020.",
     contact: {
-      companyName: "Your Company",
-      addressLines: ["Industrivej 42", "8700 Horsens", "Central Jutland", "Denmark"],
-      phone: "+45 70 20 30 40",
-      email: "hello@yourcompany.com",
-      website: "yourcompany.com",
-      websiteUrl: "#"
+      companyName: "TAKT A/S",
+      addressLines: ["Nygårdsvej 19", "2100 Copenhagen Ø", "Denmark"],
+      phone: "", // TAKT publishes no phone number (chatbot and email instead)
+      email: "info@taktcph.com",
+      website: "taktcph.com",
+      websiteUrl: "https://taktcph.com/products/soft-lounge-chair/"
     }
   }
+
 };

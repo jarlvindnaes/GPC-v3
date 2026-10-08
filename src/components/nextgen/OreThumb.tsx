@@ -3,6 +3,7 @@ import * as Three from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACO_DECODER_PATH } from "../../utilities/draco";
 
 // Small turning 3D model for a label in the chair story: the ore in "Material information" (same model
 // as the raw-material step on our original How it works page) and the open cardboard box in
@@ -40,8 +41,6 @@ function corrugationNormalMap() {
   return texture;
 }
 
-const DRACO_DECODER_PATH =
-  "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
 
 export function OreThumb({
   base,

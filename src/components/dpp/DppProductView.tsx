@@ -14,6 +14,8 @@ import { brandConfig } from "./dppBrandConfig";
 import { CHAIR_MODEL, partForPiece } from "./dppChairModel";
 import { slopeChair } from "./dppProductData";
 import type { PurchasablePart } from "./dppTypes";
+import { DRACO_DECODER_PATH } from "../../utilities/draco";
+import { SOFT_LIGHT } from "../wireframe/softChairLight";
 
 const data = slopeChair;
 
@@ -84,14 +86,14 @@ function useChairCanvas(
     rendererRef.current = renderer;
 
     // ── Lights ──
-    const ambient = new Three.AmbientLight(0xffffff, 0.35);
+    const ambient = new Three.AmbientLight(SOFT_LIGHT.ambient, 0.5);
     scene.add(ambient);
 
-    const spot = new Three.SpotLight(0xfff8f0, 1.8, 0, 0.2, 1);
+    const spot = new Three.SpotLight(SOFT_LIGHT.key, 2.1, 0, 0.2, 1);
     spot.position.set(6, 10, 6);
     scene.add(spot);
 
-    const dir = new Three.DirectionalLight(0xc7d2fe, 0.5);
+    const dir = new Three.DirectionalLight(SOFT_LIGHT.rim, 0.5);
     dir.position.set(-3, 5, -3);
     scene.add(dir);
 
@@ -103,7 +105,7 @@ function useChairCanvas(
 
     // ── Load GLB model ──
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.5/");
+    dracoLoader.setDecoderPath(DRACO_DECODER_PATH);
     const gltfLoader = new GLTFLoader();
     gltfLoader.setDRACOLoader(dracoLoader);
 
@@ -144,7 +146,7 @@ function useChairCanvas(
       rgbeLoader.load(STUDIO_HDR, (texture) => {
         texture.mapping = Three.EquirectangularReflectionMapping;
         scene.environment = texture;
-        scene.environmentIntensity = 0.75;
+        scene.environmentIntensity = 0.55; // less neutral studio light, more of the warm lights
       });
     });
 
@@ -346,11 +348,13 @@ function useChairCanvas(
         const original: Three.Color = (mat.userData.baseColor ??= mat.color.clone());
         const on = partId === selectedPartId;
         mat.color.copy(original);
+        // (The brand colour is TAKT's near-black, so the tint is gentler than it would be for a bright
+        // colour: the part darkens towards it rather than turning black; the outline does the rest.)
         if (on) {
-          mat.color.lerp(brand, 0.7);
+          mat.color.lerp(brand, 0.45);
         }
-        mat.emissive.set(on ? brand : 0x000000);
-        mat.emissiveIntensity = on ? 0.35 : 0;
+        mat.emissive.set(0x000000);
+        mat.emissiveIntensity = 0;
       }
     }
     if (outlineRef.current) {
@@ -463,7 +467,7 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
   const part = selectedPartId ? parts[selectedPartId] : null;
 
   return (
-    <div className="relative w-full" style={{ height: `${812 - 145 - 94}px` }}>
+    <div className="relative w-full" style={{ height: `${812 - 116 - 94}px` }}>
       {/* Three.js canvas container */}
       <div ref={canvasContainerRef} className="absolute inset-0" />
 
@@ -570,7 +574,7 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
                 >
                   {/* Drag Handle */}
                   <div className="flex justify-center pt-[8px] pb-[4px]">
-                    <div className="h-[4px] w-[36px] rounded-[2px] bg-[rgba(0,8,47,0.20)]" />
+                    <div className="h-[4px] w-[36px] rounded-[2px] bg-[rgba(50,47,49,0.20)]" />
                   </div>
 
                   {/* Content */}
@@ -586,19 +590,19 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
                         )}
                         <div
                           aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 rounded-[10px] border border-[rgba(1,6,47,0.12)]"
+                          className="pointer-events-none absolute inset-0 rounded-[10px] border border-[rgba(50,47,49,0.12)]"
                         />
                       </div>
 
                       {/* Part Details */}
                       <div className="min-w-0 flex-1 pt-[2px]">
-                        <h3 className="mb-[2px] overflow-hidden text-ellipsis text-nowrap font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[18px] text-[rgba(0,7,19,0.72)] leading-[24px]">
+                        <h3 className="mb-[2px] overflow-hidden text-ellipsis text-nowrap font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[18px] text-[rgba(50,47,49,0.72)] leading-[24px]">
                           {part.name}
                         </h3>
-                        <p className="mb-[4px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[14px] text-[rgba(0,4,29,0.58)] leading-[20px]">
+                        <p className="mb-[4px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[14px] text-[rgba(50,47,49,0.58)] leading-[20px]">
                           {part.weight} · {part.material}
                         </p>
-                        <p className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[18px] text-[rgba(0,7,19,0.72)] leading-[24px]">
+                        <p className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[18px] text-[rgba(50,47,49,0.72)] leading-[24px]">
                           {part.price}
                         </p>
                       </div>
@@ -611,18 +615,18 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
                         <button
                           type="button"
                           onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                          className="flex size-[44px] cursor-pointer select-none items-center justify-center rounded-l-[8px] font-medium text-[20px] text-[rgba(0,7,19,0.58)] transition-colors hover:bg-[rgba(0,0,0,0.04)]"
+                          className="flex size-[44px] cursor-pointer select-none items-center justify-center rounded-l-[8px] font-medium text-[20px] text-[rgba(50,47,49,0.58)] transition-colors hover:bg-[rgba(0,0,0,0.04)]"
                           aria-label="Decrease quantity"
                         >
                           -
                         </button>
-                        <span className="w-[32px] text-center font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[16px] text-[rgba(0,7,19,0.72)] leading-[24px]">
+                        <span className="w-[32px] text-center font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[16px] text-[rgba(50,47,49,0.72)] leading-[24px]">
                           {quantity}
                         </span>
                         <button
                           type="button"
                           onClick={() => setQuantity(quantity + 1)}
-                          className="flex size-[44px] cursor-pointer select-none items-center justify-center rounded-r-[8px] font-medium text-[20px] text-[rgba(0,7,19,0.58)] transition-colors hover:bg-[rgba(0,0,0,0.04)]"
+                          className="flex size-[44px] cursor-pointer select-none items-center justify-center rounded-r-[8px] font-medium text-[20px] text-[rgba(50,47,49,0.58)] transition-colors hover:bg-[rgba(0,0,0,0.04)]"
                           aria-label="Increase quantity"
                         >
                           +

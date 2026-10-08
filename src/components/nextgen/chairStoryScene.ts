@@ -10,6 +10,8 @@ import { ChairDofShader } from "../wireframe/chair-dof";
 import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
 import { placeStaged, SOFT_RETURN_STAGES, softMovesFor } from "../wireframe/softChairStages";
 import { getStoryFrame } from "./productStoryMath";
+import { DRACO_DECODER_PATH } from "../../utilities/draco";
+import { SOFT_LIGHT } from "../wireframe/softChairLight";
 
 // "The intelligence inside" story, driven by scroll / the slider (same contract as productStoryScene).
 // It starts as a copy of the hero's exploding chair (wireframe/ExplodingChair.tsx): same model,
@@ -23,8 +25,6 @@ import { getStoryFrame } from "./productStoryMath";
 // collision-free staged disassembly as the hero), with the connector bolt nearest the camera taking
 // the screw's role in the close-up. The Cross Chair stays available as "cross".
 
-const DRACO_DECODER_PATH =
-  "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
 const EXPLODE_FACTOR = 2.2;
 const EXPLODE_AMOUNT = 0.15; // as in the hero
 const LEAD = 0.14; // screws leave first and return last (as in the hero)
@@ -93,11 +93,11 @@ export async function createChairStoryScene(
     scene.environment = envMap;
     hdr.dispose();
   });
-  scene.add(new Three.AmbientLight(0xffffff, 0.78));
-  const key = new Three.DirectionalLight(0xfff8f0, 0.18);
+  scene.add(new Three.AmbientLight(variant === "soft" ? SOFT_LIGHT.ambient : 0xffffff, 0.78));
+  const key = new Three.DirectionalLight(variant === "soft" ? SOFT_LIGHT.key : 0xfff8f0, 0.18);
   key.position.set(5, 3.5, 4);
   scene.add(key);
-  const fill = new Three.DirectionalLight(0xffe9d5, 0.35);
+  const fill = new Three.DirectionalLight(variant === "soft" ? SOFT_LIGHT.fill : 0xffe9d5, 0.35);
   fill.position.set(-4, 6, -4);
   scene.add(fill);
 

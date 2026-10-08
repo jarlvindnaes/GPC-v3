@@ -294,3 +294,8 @@ svg.pc-mark.brandmark-svg{height:34px;--pc-mark-dot:#d6ef8c}
 .screw-facts.is-on .screw-fact:is(.is-open,:hover) .fact-body li:nth-child(3){transition-delay:.2s}
 .screw-facts.is-on .screw-fact:is(.is-open,:hover) .fact-body li:nth-child(4){transition-delay:.26s}
 @media(prefers-reduced-motion:reduce){.screw-fact .fact-body li{transition:none!important;transform:none}}
+/* Open labels: as wide as their longest bullet, up to the room the viewer has (--fact-room, set by
+   the story layout). Bullets stay on one line (no re-flow while opening); only a label marked
+   .fact-wraps, whose longest bullet doesn't fit, lets them wrap. */
+.screw-facts.is-on .screw-fact:is(.is-open,:hover) .fact-body ul{max-width:min(var(--open-w,280px),var(--fact-room,9999px))}
+.screw-fact.fact-wraps .fact-body li{white-space:pre-wrap}

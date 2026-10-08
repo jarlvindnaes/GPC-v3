@@ -1,0 +1,62 @@
+/* Passport typography in the spirit of TAKT's brand (taktcph.com sets GT America in three widths:
+   Extended Light headlines, Standard body, Condensed labels). GT America is a licensed typeface, so
+   the passport uses Archivo (open font licence), whose width axis gives the same three widths from
+   one file. The views' class names still say "SF_Pro" (from the original design export); they are
+   mapped here. */
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+.dpp-phone {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-stretch: 100%;
+  letter-spacing: 0.1px;
+}
+
+/* Titles and headings: extended, light-ish (TAKT's headlines are Extended Light; a touch heavier
+   here so small UI titles stay readable). */
+.dpp-phone [class*="SF_Pro:Bold"] {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-stretch: 125%;
+  font-weight: 420;
+  letter-spacing: -0.1px;
+}
+
+/* Body text. */
+.dpp-phone [class*="SF_Pro:Regular"] {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-stretch: 100%;
+  font-weight: 400;
+}
+.dpp-phone [class*="SF_Pro:Medium"] {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-stretch: 100%;
+  font-weight: 500;
+}
+
+/* Small captions and labels: condensed, slightly spaced (like TAKT's condensed labels). */
+.dpp-phone [class*="SF_Pro:Light"] {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-stretch: 75%;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* The tappable section titles (Your products history, Toxicity, Certifications…) are headlines too. */
+.dpp-phone .dpp-section-title {
+  font-stretch: 125%;
+  font-weight: 420;
+  letter-spacing: -0.1px;
+}
+
+/* Headlines in TAKT's solid warm near-black, as on taktcph.com (the views draw them semi-transparent;
+   some set the colour inline, hence !important). Body text keeps its softer tones. */
+.dpp-phone [class*="SF_Pro:Bold"],
+.dpp-phone .dpp-section-title {
+  color: #322f31 !important;
+}

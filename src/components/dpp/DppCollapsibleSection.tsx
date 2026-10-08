@@ -15,7 +15,7 @@ function ArrowsCaretDown({ className }: { className?: string }) {
       <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="M 6 9 L 12 15 L 18 9"
-          stroke="rgba(0,4,29,0.58)"
+          stroke="rgba(50,47,49,0.58)"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
@@ -52,7 +52,7 @@ export function DppCollapsibleSection({
         <div className="relative flex h-[51px] w-full content-stretch items-center justify-between overflow-clip rounded-[inherit]">
           <h2
             id={headingId}
-            className="relative m-0 flex min-h-px min-w-px shrink-0 grow basis-0 items-center overflow-hidden overflow-ellipsis text-nowrap text-left font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[16px] text-[rgba(0,4,29,0.58)] leading-[24px] [white-space-collapse:collapse]"
+            className="dpp-section-title relative m-0 flex min-h-px min-w-px shrink-0 grow basis-0 items-center overflow-hidden overflow-ellipsis text-nowrap text-left font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[16px] text-[rgba(50,47,49,0.58)] leading-[24px] [white-space-collapse:collapse]"
           >
             {title}
           </h2>

@@ -47,14 +47,14 @@ function StepIndicator({ step }: { step: number }) {
             <div
               className="h-[2px] w-[28px] rounded-full"
               style={{
-                backgroundColor: step > i ? brandConfig.colors.primary : "rgba(0,8,47,0.12)"
+                backgroundColor: step > i ? brandConfig.colors.primary : "rgba(50,47,49,0.12)"
               }}
             />
           )}
           <div
             className="size-[8px] rounded-full transition-colors duration-200"
             style={{
-              backgroundColor: step >= s ? brandConfig.colors.primary : "rgba(0,8,47,0.12)"
+              backgroundColor: step >= s ? brandConfig.colors.primary : "rgba(50,47,49,0.12)"
             }}
           />
         </div>
@@ -121,17 +121,17 @@ function StepBasket({
 
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center gap-[12px] pt-[60px]">
-            <AddToBasketIcon size={48} color="rgba(0,8,47,0.2)" />
+            <AddToBasketIcon size={48} color="rgba(50,47,49,0.2)" />
             <div className="text-center">
               <p
                 className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[15px] leading-[20px]"
-                style={{ color: "rgba(0,4,29,0.38)" }}
+                style={{ color: "rgba(50,47,49,0.38)" }}
               >
                 Your cart is empty
               </p>
               <p
                 className="mx-auto mt-[4px] max-w-[200px] text-[13px] leading-[18px]"
-                style={{ color: "rgba(0,4,29,0.38)" }}
+                style={{ color: "rgba(50,47,49,0.38)" }}
               >
                 Select parts in the product model on the 'parts' page to order
               </p>
@@ -148,7 +148,7 @@ function StepBasket({
                 const lineTotal = (part.priceValue?.value ?? 0) * item.quantity;
                 return (
                   <div key={item.partId} className="flex items-center gap-[12px]">
-                    <div className="size-[60px] shrink-0 rounded-[8px] border border-[rgba(1,6,47,0.12)] p-[3px]">
+                    <div className="size-[60px] shrink-0 rounded-[8px] border border-[rgba(50,47,49,0.12)] p-[3px]">
                       {part.image ? (
                         <img src={part.image} alt={part.name} className="size-full rounded-[6px] object-contain" />
                       ) : (
@@ -158,23 +158,23 @@ function StepBasket({
                     <div className="min-w-0 flex-1">
                       <p
                         className="truncate font-['SF_Pro:Bold',sans-serif] font-bold text-[15px] leading-[20px]"
-                        style={{ color: "rgba(0,7,19,0.72)" }}
+                        style={{ color: "rgba(50,47,49,0.72)" }}
                       >
                         {part.name}
                       </p>
-                      <p className="text-[13px] leading-[18px]" style={{ color: "rgba(0,4,29,0.58)" }}>
+                      <p className="text-[13px] leading-[18px]" style={{ color: "rgba(50,47,49,0.58)" }}>
                         {part.material}
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
                       <p
                         className="font-['SF_Pro:Bold',sans-serif] font-bold text-[15px] leading-[20px]"
-                        style={{ color: "rgba(0,7,19,0.72)" }}
+                        style={{ color: "rgba(50,47,49,0.72)" }}
                       >
                         {formatEur(lineTotal)}
                       </p>
                       {item.quantity > 1 && (
-                        <p className="text-[12px] leading-[16px]" style={{ color: "rgba(0,4,29,0.58)" }}>
+                        <p className="text-[12px] leading-[16px]" style={{ color: "rgba(50,47,49,0.58)" }}>
                           {item.quantity} × {part.price}
                         </p>
                       )}
@@ -188,7 +188,7 @@ function StepBasket({
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                         <path
                           d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5"
-                          stroke="rgba(0,7,19,0.4)"
+                          stroke="rgba(50,47,49,0.4)"
                           strokeWidth="1.5"
                           strokeLinecap="round"
                         />
@@ -199,7 +199,7 @@ function StepBasket({
               })}
             </div>
 
-            <div className="mt-[16px] border-[rgba(0,8,47,0.1)] border-t pt-[12px]">
+            <div className="mt-[16px] border-[rgba(50,47,49,0.1)] border-t pt-[12px]">
               <div className="flex items-center justify-between">
                 <span
                   className="font-['SF_Pro:Bold',sans-serif] font-bold text-[17px] leading-[22px]"
@@ -285,24 +285,24 @@ function StepAddress({
               onClick={() => onShippingChange(opt.id)}
               className="flex cursor-pointer items-center justify-between rounded-[10px] border p-[12px] text-left transition-colors"
               style={{
-                borderColor: shipping === opt.id ? brandConfig.colors.primary : "rgba(0,8,47,0.12)",
+                borderColor: shipping === opt.id ? brandConfig.colors.primary : "rgba(50,47,49,0.12)",
                 backgroundColor: shipping === opt.id ? `rgba(${brandConfig.colors.primaryRgb},0.06)` : "transparent"
               }}
             >
               <div>
                 <p
                   className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[15px] leading-[20px]"
-                  style={{ color: "rgba(0,7,19,0.72)" }}
+                  style={{ color: "rgba(50,47,49,0.72)" }}
                 >
                   {opt.label}
                 </p>
-                <p className="text-[13px] leading-[18px]" style={{ color: "rgba(0,4,29,0.58)" }}>
+                <p className="text-[13px] leading-[18px]" style={{ color: "rgba(50,47,49,0.58)" }}>
                   {opt.time}
                 </p>
               </div>
               <span
                 className="font-['SF_Pro:Bold',sans-serif] font-bold text-[15px]"
-                style={{ color: "rgba(0,7,19,0.72)" }}
+                style={{ color: "rgba(50,47,49,0.72)" }}
               >
                 {opt.price === 0 ? "Free" : formatEur(opt.price)}
               </span>
@@ -332,17 +332,17 @@ function FormField({ label, value, className = "" }: { label: string; value: str
     <div className={className}>
       <span
         className="mb-[4px] block font-['SF_Pro:Medium',sans-serif] font-[510] text-[12px] leading-[16px]"
-        style={{ color: "rgba(0,4,29,0.58)" }}
+        style={{ color: "rgba(50,47,49,0.58)" }}
       >
         {label}
       </span>
       <div
-        className="flex h-[40px] items-center rounded-[8px] border border-[rgba(0,8,47,0.12)] px-[12px]"
+        className="flex h-[40px] items-center rounded-[8px] border border-[rgba(50,47,49,0.12)] px-[12px]"
         style={{ backgroundColor: "rgba(0,0,0,0.02)" }}
       >
         <span
           className="font-['SF_Pro:Regular',sans-serif] text-[15px] leading-[20px]"
-          style={{ color: "rgba(0,7,19,0.72)" }}
+          style={{ color: "rgba(50,47,49,0.72)" }}
         >
           {value}
         </span>
@@ -407,14 +407,14 @@ function StepPayment({
               onClick={() => onPaymentChange(opt.id)}
               className="flex cursor-pointer items-center gap-[10px] rounded-[10px] border p-[12px] text-left transition-colors"
               style={{
-                borderColor: payment === opt.id ? brandConfig.colors.primary : "rgba(0,8,47,0.12)",
+                borderColor: payment === opt.id ? brandConfig.colors.primary : "rgba(50,47,49,0.12)",
                 backgroundColor: payment === opt.id ? `rgba(${brandConfig.colors.primaryRgb},0.06)` : "transparent"
               }}
             >
               {opt.id === "apple-pay" ? <ApplePayIcon /> : <span className="text-[18px]">{opt.icon}</span>}
               <span
                 className="font-['SF_Pro:Medium',sans-serif] font-[510] text-[15px] leading-[20px]"
-                style={{ color: "rgba(0,7,19,0.72)" }}
+                style={{ color: "rgba(50,47,49,0.72)" }}
               >
                 {opt.label}
               </span>
@@ -440,7 +440,7 @@ function StepPayment({
               <div
                 key={item.partId}
                 className="flex justify-between text-[14px] leading-[20px]"
-                style={{ color: "rgba(0,7,19,0.72)" }}
+                style={{ color: "rgba(50,47,49,0.72)" }}
               >
                 <span>
                   {item.quantity}× {part.name}
@@ -450,12 +450,12 @@ function StepPayment({
             );
           })}
 
-          <div className="flex justify-between text-[14px] leading-[20px]" style={{ color: "rgba(0,4,29,0.58)" }}>
+          <div className="flex justify-between text-[14px] leading-[20px]" style={{ color: "rgba(50,47,49,0.58)" }}>
             <span>Shipping</span>
             <span>{shippingCost === 0 ? "Free" : formatEur(shippingCost)}</span>
           </div>
 
-          <div className="mt-[6px] flex justify-between border-[rgba(0,8,47,0.1)] border-t pt-[8px]">
+          <div className="mt-[6px] flex justify-between border-[rgba(50,47,49,0.1)] border-t pt-[8px]">
             <span
               className="font-['SF_Pro:Bold',sans-serif] font-bold text-[17px] leading-[22px]"
               style={{ color: brandConfig.colors.textPrimary }}
@@ -532,7 +532,7 @@ function SuccessScreen({ onDone }: { onDone: () => void }) {
         >
           Order Confirmed
         </p>
-        <p className="mt-[4px] text-[14px] leading-[20px]" style={{ color: "rgba(0,4,29,0.58)" }}>
+        <p className="mt-[4px] text-[14px] leading-[20px]" style={{ color: "rgba(50,47,49,0.58)" }}>
           Order #PC-28491
         </p>
       </div>
@@ -623,7 +623,7 @@ export function DppCheckoutOverlay({
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path
                   d="M11 4L6 9L11 14"
-                  stroke="rgba(0,7,19,0.6)"
+                  stroke="rgba(50,47,49,0.6)"
                   strokeWidth="1.8"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -639,7 +639,7 @@ export function DppCheckoutOverlay({
             aria-label="Close checkout"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M4 4L12 12M12 4L4 12" stroke="rgba(0,7,19,0.6)" strokeWidth="1.8" strokeLinecap="round" />
+              <path d="M4 4L12 12M12 4L4 12" stroke="rgba(50,47,49,0.6)" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </button>
         </div>

@@ -23,12 +23,17 @@ const links = [
     <PcMark class="site-mark" />
     <span>product<br />connect</span>
   </a>
-  <nav aria-label="Main navigation">
+  <nav id="site-menu" aria-label="Main navigation">
     {links.map((link) => (
       <a href={link.href} class:list={{ active: link.key && link.key === current }} aria-current={link.key && link.key === current ? 'page' : undefined}>{link.label}</a>
     ))}
+    <a class="menu-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗</span></a>
   </nav>
   <a class="site-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗</span></a>
+  <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Open menu" data-menu-toggle>
+    <svg class="icon-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+  </button>
 </header>
 
 <style>
@@ -57,6 +62,7 @@ const links = [
     --sh-bg: #fffffffa; /* near-solid, no backdrop blur: a blur layer over the 3D canvases flickers while scrolling */
     --sh-ink: #242528;
     --sh-soft: #4a4f57;
+    --sh-solid: #ffffff; /* fully opaque, for the mobile menu panel */
     --sh-hover: #5c70bf;
     --sh-rule: #e9eaec;
     --sh-accent: #7887d8;
@@ -67,6 +73,7 @@ const links = [
     --sh-bg: #101a2afa;
     --sh-ink: #fff;
     --sh-soft: #a8aeaa;
+    --sh-solid: #101a2a;
     --sh-hover: #fff;
     --sh-rule: #ffffff14;
     --sh-accent: #d6ef8c;
@@ -142,14 +149,17 @@ const links = [
       font-size: 13px;
     }
   }
-  /* Narrow screens: compact bar; the links move to a second row. */
+  /* The burger and the in-menu "Talk to sales" exist only on narrow screens. */
+  .menu-toggle,
+  .menu-cta {
+    display: none;
+  }
+  /* Narrow screens: logo + burger in the bar; the links (and Talk to sales) open in a panel below it,
+     as on our main site. */
   @media (max-width: 940px) {
     .site-header {
-      height: auto;
-      min-height: 68px;
-      flex-wrap: wrap;
-      padding: 14px 5%;
-      gap: 10px 16px;
+      height: 68px;
+      padding: 0 5%;
     }
     .site-brand {
       font-size: 14px;
@@ -157,32 +167,85 @@ const links = [
     .site-header :global(.site-mark) {
       height: 29px;
     }
-    nav {
-      order: 3;
-      width: 100%;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12px;
-      overflow-x: auto;
-      scrollbar-width: none; /* still swipeable if a very narrow phone needs it, but no grey track */
-    }
-    nav::-webkit-scrollbar {
+    .site-cta {
       display: none;
     }
-    nav a {
-      padding: 6px 0 10px;
+    .menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-right: -6px;
+      border: 1px solid var(--sh-cta-border);
+      border-radius: 10px;
+      background: var(--sh-cta-bg);
+      color: var(--sh-ink);
+      cursor: pointer;
     }
-    .site-cta {
-      font-size: 12px;
-      padding: 9px 13px;
-      gap: 14px;
+    .menu-toggle svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
     }
-  }
-  /* Small phones: a touch smaller so all four links fit on one row. */
-  @media (max-width: 400px) {
+    .menu-toggle .icon-close,
+    .is-menu-open .menu-toggle .icon-open {
+      display: none;
+    }
+    .is-menu-open .menu-toggle .icon-close {
+      display: block;
+    }
+    .menu-toggle:focus-visible {
+      outline: 3px solid #627de7;
+      outline-offset: 3px;
+    }
     nav {
-      font-size: 11.5px;
-      gap: 4px; /* minimum gap; space-between still spreads the links across the row */
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: 6px 5% 22px;
+      background: var(--sh-solid);
+      border-bottom: 1px solid var(--sh-rule);
+      box-shadow: 0 18px 40px #0b14241f;
+      font-size: 18px;
+      color: var(--sh-ink);
+    }
+    .is-menu-open nav {
+      display: flex;
+    }
+    nav a {
+      padding: 15px 0 15px 16px;
+      border-bottom: 1px solid var(--sh-rule);
+    }
+    /* Current page / section: the accent dot sits before the label. */
+    nav a.active::after {
+      left: 0;
+      top: 50%;
+      bottom: auto;
+      width: 6px;
+      height: 6px;
+      transform: translateY(-50%);
+    }
+    nav .menu-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 15px;
+      border: 1px solid var(--sh-cta-border);
+      border-radius: 10px;
+      background: var(--sh-ink);
+      color: var(--sh-solid);
+      font-size: 16px;
+      font-weight: 550;
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -209,7 +272,7 @@ const links = [
       }
       if (y <= 64) {
         header.classList.remove('is-hidden');
-      } else if (next === 'down' && y - anchor > 10) {
+      } else if (next === 'down' && y - anchor > 10 && !header.classList.contains('is-menu-open')) {
         header.classList.add('is-hidden');
       } else if (next === 'up' && anchor - y > 40) {
         header.classList.remove('is-hidden');
@@ -230,11 +293,32 @@ const links = [
     // Keyboard users tabbing into the menu always get it back.
     header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
 
+    // Burger menu (narrow screens): opens the links in a panel under the bar.
+    const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const setMenu = (open: boolean) => {
+      header.classList.toggle('is-menu-open', open);
+      toggle?.setAttribute('aria-expanded', String(open));
+      toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    toggle?.addEventListener('click', () => setMenu(!header.classList.contains('is-menu-open')));
+    header.querySelectorAll('nav a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && header.classList.contains('is-menu-open')) {
+        setMenu(false);
+        toggle?.focus();
+      }
+    });
+    window.matchMedia('(min-width: 941px)').addEventListener('change', (event) => {
+      if (event.matches) {
+        setMenu(false);
+      }
+    });
+
     // Active dot on this page: links to sections of the current page (e.g. #benefits on the homepage)
     // get the dot while that section is being read. A link to the page itself (How it works) keeps
     // its fixed `active` from the server.
     const here = window.location.pathname;
-    const links = [...header.querySelectorAll<HTMLAnchorElement>('nav a')];
+    const links = [...header.querySelectorAll<HTMLAnchorElement>('nav a:not(.menu-cta)')];
     // A link to this page's top (What we solve → homepage): scroll up smoothly instead of reloading,
     // and it holds the dot from the top until another section's link takes over.
     const topLink = links.find((link) => {

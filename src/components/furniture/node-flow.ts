@@ -208,6 +208,8 @@ export function initNodeFlow() {
     function animatePackets(now: number) {
       packetFrame = requestAnimationFrame(animatePackets);
       if (now - lastPaint < 24) return; // cap at ~40 fps
+      // Hold still under the full-screen passport (its blurred backdrop flickers over moving content).
+      if (document.documentElement.dataset.overlayOpen) return;
       lastPaint = now;
       if (now >= nextWave) {
         spawnWave(now);

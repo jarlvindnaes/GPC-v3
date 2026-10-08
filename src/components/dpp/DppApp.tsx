@@ -9,11 +9,12 @@ import { DppNavigation } from "./DppNavigation";
 import { BasketIcon, DppProductView, parts } from "./DppProductView";
 import { brandConfig } from "./dppBrandConfig";
 import type { CartItem } from "./dppTypes";
+import "./dpp-takt.css";
 
 type TabId = "about" | "maintenance" | "impact" | "parts";
 
-/** Header: 52px top pad + 1px border + 12px pad + 52px logo + 12px pad = 129px; plus 16px gap */
-const HEADER_HEIGHT = 145;
+/** Header: 52px top pad + 58px logo card = 110px; plus a 6px gap before the content */
+const HEADER_HEIGHT = 116; // keep in step with the Parts viewer height in DppProductView
 /** Navigation bar height + Safari bottom chrome clearance */
 const NAV_HEIGHT = 94;
 
@@ -87,8 +88,8 @@ export function DppApp() {
         position: "relative",
         overflow: "hidden",
         borderRadius: 62,
-        background: "#fff",
-        color: "#000"
+        background: "#F8F7F5", // TAKT's warm off-white (taktcph.com --color-3)
+        color: "#322F31"
       }}
     >
       {/* Fixed header */}

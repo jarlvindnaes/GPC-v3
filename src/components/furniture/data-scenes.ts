@@ -203,6 +203,11 @@ export function initDataScenes() {
     function tick(now: number) {
       frame = 0;
       if (!visible || document.hidden || reduced.matches) return;
+      // Hold still under the full-screen passport, but keep ticking so it resumes when it closes.
+      if (document.documentElement.dataset.overlayOpen) {
+        frame = requestAnimationFrame(tick);
+        return;
+      }
       if (now - last >= 32) {
         time += Math.min((now - last) / 1000, 0.05);
         last = now;

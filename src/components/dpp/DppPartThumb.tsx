@@ -5,6 +5,8 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { CHAIR_MODEL, pieceName } from "./dppChairModel";
 import { slopeChair } from "./dppProductData";
+import { DRACO_DECODER_PATH } from "../../utilities/draco";
+import { SOFT_LIGHT } from "../wireframe/softChairLight";
 
 // Small turning 3D model of one purchasable part (one representative piece, e.g. one of the two
 // armrests), cut from the same product model as the parts viewer. Every thumbnail on the page shares
@@ -44,7 +46,7 @@ function getShared() {
   renderer.toneMapping = Three.ACESFilmicToneMapping;
   const scene = new Three.Scene();
   scene.environment = new Three.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
-  const key = new Three.DirectionalLight(0xfff8f0, 1.4);
+  const key = new Three.DirectionalLight(SOFT_LIGHT.key, 1.4);
   key.position.set(2, 3, 4);
   scene.add(key);
   const camera = new Three.PerspectiveCamera(30, 1, 0.01, 50);
@@ -52,7 +54,7 @@ function getShared() {
   pivot.rotation.x = 0.35;
   scene.add(pivot);
 
-  const draco = new DRACOLoader().setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.5/");
+  const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
   const model = new Promise<Three.Object3D>((resolve, reject) => {
     new GLTFLoader().setDRACOLoader(draco).load(CHAIR_MODEL, (gltf) => resolve(gltf.scene), undefined, reject);
   });

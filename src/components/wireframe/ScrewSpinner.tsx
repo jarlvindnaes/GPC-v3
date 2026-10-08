@@ -7,13 +7,13 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
+import { DRACO_DECODER_PATH } from "../../utilities/draco";
 
 // A single metal screw lifted straight out of the Cross Chair GLB, isolated and slowly turning in the
 // top-right of the #components section. It reuses the chair model (already loaded + browser-cached on this
 // page) and the same studio HDR as the other 3D islands, so it adds no new asset. On load it finds the
 // first "Metal_Screw" mesh, bakes its world transform, recentres the geometry, and spins it on its own.
 
-const DRACO_DECODER_PATH = "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
 // The original site's bolt ships a "BoltSteel" PBR material (baseColor + metallicRoughness + normal +
 // occlusion maps) that gives it its natural, worn-metal look. We lift that material onto the chair screw.
 const BOLT_MODEL = `${import.meta.env.BASE_URL}models/bolt_m10x25_hexagon_head (1).glb`;

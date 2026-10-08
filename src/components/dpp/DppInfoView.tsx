@@ -59,10 +59,10 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       {/* Title Section */}
       <div
-        className="w-full whitespace-pre text-nowrap px-[16px] py-[24px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,4,24,0.58)] leading-[24px]"
+        className="w-full whitespace-pre text-nowrap px-[16px] py-[24px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.58)] leading-[24px]"
         data-name="Title"
       >
-        <h1 className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <h1 className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           {data.categorization.displayName}
         </h1>
         <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -77,7 +77,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         onToggle={() => setHistoryOpen(!historyOpen)}
       >
         <div className="relative h-[404px] w-full shrink-0 overflow-clip">
-          <p className="absolute top-[15px] left-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+          <p className="absolute top-[15px] left-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
             {data.lifecycleAndMaintenance.productAgeStatement}
           </p>
 
@@ -88,12 +88,12 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
                 key={event.title}
                 className="relative h-[52px] w-full shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Medium',sans-serif] font-[510]"
               >
-                <p className="absolute top-[6px] left-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+                <p className="absolute top-[6px] left-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
                   {event.title}
                 </p>
                 <time
                   dateTime={event.date}
-                  className="absolute top-[28px] left-0 block font-width-normal text-[14px] text-[rgba(0,4,24,0.58)] leading-[20px]"
+                  className="absolute top-[28px] left-0 block font-width-normal text-[14px] text-[rgba(50,47,49,0.58)] leading-[20px]"
                 >
                   {new Date(event.date).toLocaleDateString("en-GB", {
                     day: "numeric",
@@ -189,7 +189,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={specificationsOpen}
         onToggle={() => setSpecificationsOpen(!specificationsOpen)}
       >
-        <dl className="relative m-0 w-full shrink-0 pb-[20px] font-['SF_Pro:Regular','Noto_Sans:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <dl className="relative m-0 w-full shrink-0 pb-[20px] font-['SF_Pro:Regular','Noto_Sans:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           {specifications.map((spec, index) => (
             <React.Fragment key={spec.label}>
               <dt className="mb-0 font-['SF_Pro:Bold','Noto_Sans:Regular',sans-serif] font-bold font-width-normal">
@@ -220,7 +220,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         onToggle={() => setDescriptionOpen(!descriptionOpen)}
       >
         <div className="flex w-full flex-col gap-[24px] pb-[20px]">
-          <p className="relative w-full shrink-0 whitespace-pre-wrap font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,5,9,0.89)] leading-[24px]">
+          <p className="relative w-full shrink-0 whitespace-pre-wrap font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
             {data.commerce.description}
           </p>
           {data.commerce.photographs.dimensionsDiagram && (
@@ -243,7 +243,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
         isOpen={companyOpen}
         onToggle={() => setCompanyOpen(!companyOpen)}
       >
-        <p className="relative w-full shrink-0 whitespace-pre-wrap pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <p className="relative w-full shrink-0 whitespace-pre-wrap pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           {data.company.description}
         </p>
       </DppCollapsibleSection>
@@ -265,8 +265,8 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
 
       {/* Contact Us Section */}
       <DppCollapsibleSection title="Contact Us" isOpen={contactOpen} onToggle={() => setContactOpen(!contactOpen)}>
-        <address className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] not-italic leading-[24px]">
-          <p className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">{"Workshop & Offices: "}</p>
+        <address className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] not-italic leading-[24px]">
+          <p className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">{"Showroom & office: "}</p>
           <p className="mb-0">{`${data.company.contact.companyName} `}</p>
           {data.company.contact.addressLines.map((line) => (
             <p key={line} className="mb-0">{`${line} `}</p>
@@ -274,12 +274,14 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
           <p className="mb-0">
             <br />
           </p>
-          <p className="mb-0">
-            <a
-              className="focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
-              href={`tel:${data.company.contact.phone.replace(/\s/g, "")}`}
-            >{`${data.company.contact.phone} `}</a>
-          </p>
+          {data.company.contact.phone && (
+            <p className="mb-0">
+              <a
+                className="focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
+                href={`tel:${data.company.contact.phone.replace(/\s/g, "")}`}
+              >{`${data.company.contact.phone} `}</a>
+            </p>
+          )}
           <p className="mb-0">
             <a
               className="focus-visible:outline-2 focus-visible:outline-[#6C7254] focus-visible:outline-offset-2"
@@ -292,6 +294,9 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
           >
             {data.company.contact.website}
           </a>
+          {data.identity.economicOperatorId && (
+            <p className="mt-[8px] mb-0 text-[13px] leading-[20px]">{data.identity.economicOperatorId}</p>
+          )}
         </address>
       </DppCollapsibleSection>
 
@@ -303,14 +308,14 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
             fillRule="evenodd"
             clipRule="evenodd"
             d="M208.5 0L0 95.6667V343.983L15.5888 351.448V111.259L202.543 196.196V429.576L15.5888 333.741V351.448L208.5 451L417 341.667V95.6667L208.5 0ZM208.5 16.8786L27.5896 99.8863L208.5 182.894L389.411 99.8863L208.5 16.8786ZM400.819 230.12C399.446 222.906 378.855 202.128 347.959 202.575C302.652 203.231 245.673 253.729 218.9 315.378C217.192 319.313 218.9 323.99 223.02 325.215C226.372 326.212 230.069 324.523 231.258 321.28C240.868 295.047 283.43 226.185 343.841 222.25C371.947 220.419 382.059 236.283 384.944 240.809C385.179 241.179 385.367 241.472 385.512 241.674C385.593 241.787 385.66 241.872 385.716 241.925C389.148 246.516 393.542 246.384 397.386 243.236C401.23 240.089 402.192 237.334 400.819 230.12ZM378.165 264.879C376.106 260.944 359.63 244.698 341.095 245.859C299.219 248.483 265.582 283.898 245.674 326.527C244.226 329.626 243.614 336.364 247.733 338.332C251.852 340.299 256.39 336.077 257.344 333.741C268.328 306.852 300.592 263.567 335.603 264.223C351.341 264.518 356.509 270.109 361.2 275.187C363.059 277.199 364.844 279.13 367.181 280.619C370.614 281.93 373.497 280.225 376.792 276.028C380.087 271.831 379.487 267.405 378.165 264.879ZM331.484 289.8C347.463 290.974 352.766 300.293 353.452 302.261C354.138 304.229 354.138 309.475 352.078 312.755C349.075 317.537 344.527 318.657 341.095 317.345C340.374 317.001 339.748 316.25 338.98 315.33C336.824 312.743 333.553 308.819 323.933 308.819C306.767 308.819 286.863 333.741 282.057 347.513C280.844 350.992 275.879 352.104 273.819 351.448C271.76 350.792 269.014 347.513 272.446 339.644C286.869 306.574 313.636 288.488 331.484 289.8Z"
-            fill="rgba(0,7,19,0.40)"
+            fill="rgba(50,47,49,0.40)"
           />
         </svg>
         {/* Divider */}
-        <div className="mb-[8px] h-[1px] w-[24px] bg-[rgba(0,7,19,0.18)]" />
+        <div className="mb-[8px] h-[1px] w-[24px] bg-[rgba(50,47,49,0.18)]" />
         {/* Info lines */}
-        <div className="font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[10px] text-[rgba(0,7,19,0.58)] leading-[16px] tracking-[0.02em]">
-          <p className="mb-0 font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[rgba(0,7,19,0.58)] uppercase tracking-[0.06em]">
+        <div className="font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[10px] text-[rgba(50,47,49,0.58)] leading-[16px] tracking-[0.02em]">
+          <p className="mb-0 font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[rgba(50,47,49,0.58)] uppercase tracking-[0.06em]">
             Digital Product Passport
           </p>
           <p className="mb-0">

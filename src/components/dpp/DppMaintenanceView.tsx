@@ -70,8 +70,8 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
             <div className="relative min-h-px min-w-px shrink-0 grow basis-0" data-name="Title">
               <div className="flex size-full flex-row items-center overflow-clip rounded-[inherit]">
                 <div className="relative box-border flex w-full content-stretch items-center px-[16px] py-[10px]">
-                  <div className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,4,24,0.58)] leading-[24px]">
-                    <h1 className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[rgba(0,7,19,0.62)]">
+                  <div className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.58)] leading-[24px]">
+                    <h1 className="mb-0 font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[rgba(50,47,49,0.62)]">
                       {data.categorization.displayName}
                     </h1>
                     <p>{`Designed by ${data.categorization.designer}`}</p>
@@ -92,17 +92,25 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         onToggle={() => setLifespanWarrantyOpen(!lifespanWarrantyOpen)}
       >
         <div className="flex flex-col gap-[20px] pb-[20px]">
-          {data.lifecycleAndMaintenance.expectedLifetimeValue && (
+          {(data.lifecycleAndMaintenance.expectedLifetimeValue || data.lifecycleAndMaintenance.expectedLifetime) && (
             <div>
               <div className="mb-[6px] flex items-baseline gap-[8px]">
-                <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[28px] text-[rgba(0,7,19,0.72)] leading-[32px]">
-                  {`${data.lifecycleAndMaintenance.expectedLifetimeValue.value}+`}
-                </span>
-                <span className="font-['SF_Pro:Regular',sans-serif] font-width-normal text-[16px] text-[rgba(0,7,19,0.50)] leading-[20px]">
-                  {`${data.lifecycleAndMaintenance.expectedLifetimeValue.unit} expected lifetime`}
-                </span>
+                {data.lifecycleAndMaintenance.expectedLifetimeValue ? (
+                  <>
+                    <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[28px] text-[rgba(50,47,49,0.72)] leading-[32px]">
+                      {`${data.lifecycleAndMaintenance.expectedLifetimeValue.value}+`}
+                    </span>
+                    <span className="font-['SF_Pro:Regular',sans-serif] font-width-normal text-[16px] text-[rgba(50,47,49,0.50)] leading-[20px]">
+                      {`${data.lifecycleAndMaintenance.expectedLifetimeValue.unit} expected lifetime`}
+                    </span>
+                  </>
+                ) : (
+                  <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[20px] text-[rgba(50,47,49,0.72)] leading-[28px]">
+                    {data.lifecycleAndMaintenance.expectedLifetime}
+                  </span>
+                )}
               </div>
-              <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+              <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
                 With regular care. The oiled oak develops a patina over time, and surface marks can be repaired with
                 light sanding and a new coat of oil.
               </p>
@@ -111,14 +119,14 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
           {data.lifecycleAndMaintenance.warrantyDuration && (
             <div>
               <div className="mb-[6px] flex items-baseline gap-[8px]">
-                <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[28px] text-[rgba(0,7,19,0.72)] leading-[32px]">
+                <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal text-[28px] text-[rgba(50,47,49,0.72)] leading-[32px]">
                   {data.lifecycleAndMaintenance.warrantyDuration.value}
                 </span>
-                <span className="font-['SF_Pro:Regular',sans-serif] font-width-normal text-[16px] text-[rgba(0,7,19,0.50)] leading-[20px]">
+                <span className="font-['SF_Pro:Regular',sans-serif] font-width-normal text-[16px] text-[rgba(50,47,49,0.50)] leading-[20px]">
                   {`${data.lifecycleAndMaintenance.warrantyDuration.unit} warranty`}
                 </span>
               </div>
-              <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+              <p className="mb-0 font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
                 Spare parts are available through support, and the leather seat can be bought on its own.
               </p>
             </div>
@@ -134,7 +142,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={maintenanceCareOpen}
         onToggle={() => setMaintenanceCareOpen(!maintenanceCareOpen)}
       >
-        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           {data.lifecycleAndMaintenance.maintenanceInstructions.map((instruction, index) => (
             <p
               key={instruction}
@@ -154,7 +162,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={refurbishRepairOpen}
         onToggle={() => setRefurbishRepairOpen(!refurbishRepairOpen)}
       >
-        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           {data.lifecycleAndMaintenance.refurbishAndRepair.map((text, index) => (
             <p
               key={text}
@@ -188,13 +196,13 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
                 >
                   <div className="relative flex shrink-0 content-stretch items-center gap-[8px]" data-name="Wood">
                     <div className="size-[16px] shrink-0 rounded-[3px] bg-[#b5f7d5]" />
-                    <p className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(0,7,19,0.62)] leading-[16px] tracking-[0.04px]">
+                    <p className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(50,47,49,0.62)] leading-[16px] tracking-[0.04px]">
                       Replaceable
                     </p>
                   </div>
                   <div className="relative flex shrink-0 content-stretch items-center gap-[8px]" data-name="Assemblies">
                     <div className="size-[16px] shrink-0 rounded-[3px] bg-[#fcbfbf]" />
-                    <p className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(0,7,19,0.62)] leading-[16px] tracking-[0.04px]">
+                    <p className="relative shrink-0 whitespace-pre text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(50,47,49,0.62)] leading-[16px] tracking-[0.04px]">
                       Non-Replaceable
                     </p>
                   </div>
@@ -209,7 +217,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
           <div className="h-full max-h-[287px] overflow-y-auto">
             <table className="w-full border-collapse bg-white" data-name="Table">
               <thead className="sticky top-0 z-10 bg-[#f0f0f0]">
-                <tr className="border-[rgba(1,1,46,0.13)] border-b">
+                <tr className="border-[rgba(50,47,49,0.13)] border-b">
                   <th
                     scope="col"
                     className="min-h-[44px] text-nowrap p-[12px] text-left font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[#1c2024] text-[14px] leading-[20px]"
@@ -229,7 +237,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
                   <tr
                     key={component.name}
                     className={
-                      index > 0 && index < componentData.length - 1 ? "border-[rgba(1,1,46,0.13)] border-t" : ""
+                      index > 0 && index < componentData.length - 1 ? "border-[rgba(50,47,49,0.13)] border-t" : ""
                     }
                   >
                     <td className="min-h-[44px] px-[16px] py-[10px]">
@@ -237,7 +245,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
                         {component.name}
                       </p>
                       {(component.material || component.weight) && (
-                        <p className="mt-[2px] max-w-full overflow-hidden overflow-ellipsis text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(0,7,19,0.58)] leading-[16px]">
+                        <p className="mt-[2px] max-w-full overflow-hidden overflow-ellipsis text-nowrap font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[12px] text-[rgba(50,47,49,0.58)] leading-[16px]">
                           {[
                             component.material,
                             component.weight ? `${component.weight.value} ${component.weight.unit}` : null
@@ -265,7 +273,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
           </div>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-[6px] border border-[rgba(1,1,46,0.13)] border-solid"
+            className="pointer-events-none absolute inset-0 rounded-[6px] border border-[rgba(50,47,49,0.13)] border-solid"
           />
         </div>
 
@@ -273,7 +281,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
           className="relative box-border flex w-full shrink-0 content-stretch items-center justify-center gap-[8px] overflow-clip px-0 pt-[8px] pb-0"
           data-name="Sub Info"
         >
-          <p className="relative min-h-px min-w-px shrink-0 grow basis-0 text-right font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[14px]">
+          <p className="relative min-h-px min-w-px shrink-0 grow basis-0 text-right font-['SF_Pro:Light',sans-serif] font-[274.315] font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[14px]">
             <span className="font-['SF_Pro:Bold',sans-serif] font-bold font-width-normal">
               {data.materialsAndComponents.components.length}
             </span>
@@ -286,7 +294,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
 
       {/* Reuse Section */}
       <DppCollapsibleSection title="Reuse" isOpen={reuseOpen} onToggle={() => setReuseOpen(!reuseOpen)}>
-        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           <p className="mb-0">{data.lifecycleAndMaintenance.takeBackProgram}</p>
         </div>
       </DppCollapsibleSection>
@@ -299,7 +307,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
         isOpen={endOfLifeOpen}
         onToggle={() => setEndOfLifeOpen(!endOfLifeOpen)}
       >
-        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(0,7,19,0.62)] leading-[24px]">
+        <div className="relative w-full shrink-0 pb-[20px] font-['SF_Pro:Regular',sans-serif] font-normal font-width-normal text-[16px] text-[rgba(50,47,49,0.62)] leading-[24px]">
           <p className="mb-0">{data.lifecycleAndMaintenance.endOfLife}</p>
         </div>
       </DppCollapsibleSection>

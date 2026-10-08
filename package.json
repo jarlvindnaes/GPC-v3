@@ -13,7 +13,8 @@
     "check": "biome check --error-on-warnings",
     "lint": "biome check --fix",
     "typecheck": "astro check && tsc --noEmit",
-    "dev:4399": "astro dev --port=4399 --host"
+    "dev:4399": "astro dev --port=4399 --host",
+    "draco:copy": "cp node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.js node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.wasm node_modules/three/examples/jsm/libs/draco/gltf/draco_wasm_wrapper.js public/draco/"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",

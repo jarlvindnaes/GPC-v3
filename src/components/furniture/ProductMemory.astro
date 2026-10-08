@@ -173,6 +173,7 @@ document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
   function tick(ts: number) {
     frame = requestAnimationFrame(tick);
     if (ts - last < 30) return;
+    if (document.documentElement.dataset.overlayOpen) return; // hold still under the full-screen passport
     const dt = last ? ts - last : 0;
     last = ts;
     if (t >= 1) {

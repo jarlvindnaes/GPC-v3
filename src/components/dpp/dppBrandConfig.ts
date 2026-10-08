@@ -5,17 +5,17 @@
 
 export const brandConfig = {
   colors: {
-    primary: "#105c7a",
-    primaryRgb: "16,92,122",
-    textPrimary: "rgba(0,7,19,0.89)",
-    textSecondary: "rgba(0,7,19,0.62)"
+    primary: "#322F31", // TAKT's warm near-black (taktcph.com --color-1)
+    primaryRgb: "50,47,49",
+    textPrimary: "rgba(50,47,49,0.92)",
+    textSecondary: "rgba(50,47,49,0.64)"
   },
 
-  name: "Your Company",
-  website: "#",
+  name: "TAKT",
+  website: "https://taktcph.com",
 
   header: {
-    borderColor: "#105c7a",
-    backgroundColor: "rgba(255, 255, 255, 0.8)"
+    borderColor: "#322F31",
+    backgroundColor: "rgba(248, 247, 245, 0.8)"
   }
 };

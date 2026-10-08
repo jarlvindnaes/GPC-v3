@@ -180,7 +180,7 @@ export default function ProductStory({ base }: { base: string }) {
       if (!desktop) {
         // Phones keep their own stylesheet positions.
         for (const el of all) {
-          for (const prop of ["top", "left", "right", "bottom", "scale", "transform-origin"]) {
+          for (const prop of ["top", "left", "right", "bottom", "scale", "transform-origin", "width", "margin-inline", "--fact-room"]) {
             el.style.removeProperty(prop);
           }
         }
@@ -197,15 +197,40 @@ export default function ProductStory({ base }: { base: string }) {
       const certs = center[0];
       const certsH = certs ? certs.offsetHeight * k : 0;
       const columnsBottom = H * (1 - COLUMN_BOTTOM) - (certs ? certsH + H * COLUMN_GAP : 0);
+      // Each label is anchored on the side facing the bolt (at the viewer's centre), so when it opens it
+      // grows towards the bolt: labels above the middle hang from their top and grow down, labels
+      // below it stand on their bottom and grow up; the left column grows right, the right column left.
       const place = (el: HTMLElement, y: number, x: "left" | "right" | "center") => {
-        el.style.top = `${Math.round(y)}px`;
-        el.style.bottom = "auto";
-        el.style.left =
-          x === "left" ? `${Math.round(side)}px` : x === "center" ? `${Math.round((W - el.offsetWidth) / 2)}px` : "auto";
-        el.style.right = x === "right" ? `${Math.round(side)}px` : "auto";
+        const h = el.offsetHeight * k;
+        const below = y + h / 2 > H / 2;
+        el.style.top = below ? "auto" : `${Math.round(y)}px`;
+        el.style.bottom = below ? `${Math.round(H - y - h)}px` : "auto";
+        el.style.left = x === "left" ? `${Math.round(side)}px` : x === "center" ? `${Math.round(side)}px` : "auto";
+        el.style.right = x === "right" || x === "center" ? `${Math.round(side)}px` : "auto";
+        if (x === "center") {
+          // Centred between the margins with the full width available, however wide it opens.
+          el.style.width = "fit-content";
+          el.style.marginInline = "auto";
+        } else {
+          el.style.removeProperty("width");
+          el.style.removeProperty("margin-inline");
+        }
+        // Room for the open bullet list: the viewer width minus margins, the label's icon and padding.
+        // Only a label whose longest bullet doesn't fit there wraps (others stay on one line, so the
+        // text doesn't re-flow while the label opens).
+        const room = Math.round((W - side * 2) / k - 64);
+        el.style.setProperty("--fact-room", `${room}px`);
+        const list = el.querySelector<HTMLElement>(".fact-body ul");
+        const wraps = Number(list?.dataset.needW ?? 0) > room;
+        el.classList.toggle("fact-wraps", wraps);
+        if (list && wraps) {
+          list.style.setProperty("--open-h", `${list.scrollHeight * 2}px`);
+        }
+        const ox = x === "left" ? "0" : x === "right" ? "100%" : "50%";
+        const oy = below ? "100%" : "0";
         if (k < 1) {
           el.style.scale = String(k);
-          el.style.transformOrigin = x === "left" ? "0 0" : x === "right" ? "100% 0" : "50% 0";
+          el.style.transformOrigin = `${ox} ${oy}`;
         } else {
           el.style.removeProperty("scale");
           el.style.removeProperty("transform-origin");
@@ -601,8 +626,21 @@ function measureFact(label: HTMLElement) {
   if (!list) {
     return;
   }
-  list.style.setProperty("--open-w", `${list.scrollWidth}px`);
-  list.style.setProperty("--open-h", `${list.scrollHeight}px`);
+  // The longest bullet's own text width (the bullets sit nudged left while closed, so the list's
+  // scrollWidth would come out short and clip the end of the line).
+  let width = 0;
+  const range = document.createRange();
+  for (const item of list.querySelectorAll<HTMLElement>("li")) {
+    // Measured on one line (the closed list is zero-wide, which would wrap every word).
+    item.style.whiteSpace = "pre";
+    range.selectNodeContents(item);
+    width = Math.max(width, range.getBoundingClientRect().width + Number.parseFloat(getComputedStyle(item).paddingLeft));
+    item.style.removeProperty("white-space");
+  }
+  list.style.setProperty("--open-w", `${Math.ceil(width) + 4}px`);
+  list.dataset.needW = String(Math.ceil(width) + 4);
+  // Exact open height (one line per bullet); a label that has to wrap gets room for it below.
+  list.style.setProperty("--open-h", `${list.scrollHeight * (label.classList.contains("fact-wraps") ? 2 : 1)}px`);
 }
 
 function FactIcon({ kind }: { kind: string }) {
