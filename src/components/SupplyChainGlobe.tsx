@@ -613,7 +613,8 @@ export function SupplyChainGlobe() {
     function animate() {
       animationFrameId = requestAnimationFrame(animate);
 
-      if (!isNearViewport.current) {
+      // Paused while off-screen, or while a full-screen overlay (the passport) covers the page.
+      if (!isNearViewport.current || document.documentElement.dataset.overlayOpen) {
         return;
       }
 

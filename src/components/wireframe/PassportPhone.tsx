@@ -59,13 +59,18 @@ export function PassportPhone() {
   }, []);
 
   useEffect(() => {
+    // Also flag the open overlay on <html>, so live canvases behind it (the supply-chain globe) can
+    // pause: redrawing under the blurred backdrop makes it flicker.
     if (expanded) {
       document.body.style.overflow = "hidden";
+      document.documentElement.dataset.overlayOpen = "true";
     } else {
       document.body.style.overflow = "";
+      delete document.documentElement.dataset.overlayOpen;
     }
     return () => {
       document.body.style.overflow = "";
+      delete document.documentElement.dataset.overlayOpen;
     };
   }, [expanded]);
 
