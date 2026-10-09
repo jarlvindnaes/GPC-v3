@@ -1,7 +1,8 @@
 {
-  "takt": "https://taktcph.com/wp-content/uploads/2026/09/mimi-spoke-desktop.jpg.webp",
-  "mater": "https://materdesign.com/cdn/shop/files/Mater_09335_09345_Ocean_Collection_Lifestyle_3_1800x.jpg?v=1775048663",
-  "muuto": "https://cdn.occtoo-media.com/4d81f22f-2795-41f2-b8bf-15e9abf03890/6069dcfb-ab5a-501c-88dd-d018e131cfd9/verso-rug-pale-green-warm-brown-outline-soft-3-seater-clay-12-polished-alu-high-res.webp?format=medium",
-  "new-works": "https://www.datocms-assets.com/49896/1788798262-new-works_website_images_atlas-stool_front-page_01.png?auto=compress&fm=webp&q=60&w=800",
-  "benchmark": "https://benchmarkfurniture.com/wp-content/uploads/2021/06/Benchmark_Arran_Sofa_3Seat_11457CS-2100x1400-1-2048x1365.jpg"
+  "note": "Photos supplied by the Product Connect team on 2026-10-08 (Benchmark.webp, mater.webp, muuto.webp, newworks.webp, takt.webp in the repo root), resized to 900px on the short side.",
+  "takt": "takt.webp",
+  "mater": "mater.webp",
+  "muuto": "muuto.webp",
+  "new-works": "newworks.webp",
+  "benchmark": "Benchmark.webp"
 }

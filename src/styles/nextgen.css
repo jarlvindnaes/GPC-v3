@@ -299,3 +299,20 @@ svg.pc-mark.brandmark-svg{height:34px;--pc-mark-dot:#d6ef8c}
    .fact-wraps, whose longest bullet doesn't fit, lets them wrap. */
 .screw-facts.is-on .screw-fact:is(.is-open,:hover) .fact-body ul{max-width:min(var(--open-w,280px),var(--fact-room,9999px))}
 .screw-fact.fact-wraps .fact-body li{white-space:pre-wrap}
+/* Hero chair loading stand-in: a small capture of the assembled chair (public/nextgen/hero-chair-placeholder.webp,
+   taken from this same scene at 1440 wide) starts heavily blurred and slowly sharpens until the 3D chair has
+   its model and lighting (data-ready on .chair-explode), then the two crossfade.
+   Placement mirrors ExplodingChair's framing (offsetX .26, offsetY .2): the chair's centre sits at 76% / 70% of
+   the stage and its size follows the stage's shorter side, hence cqw / cqh / cqmin. Re-capture if the hero's
+   framePad, offsets or view change. */
+.hero-chair-stage{container-type:size}
+.chair-placeholder{position:absolute;left:calc(76cqw - 62.237cqmin);top:calc(70cqh - 63.944cqmin);width:109.718cqmin;pointer-events:none;transition:opacity .7s ease}
+.chair-placeholder img{display:block;width:100%;height:auto;max-width:none;opacity:0;filter:blur(36px);animation:chair-focus 7s cubic-bezier(.25,.6,.3,1) forwards}
+@keyframes chair-focus{0%{opacity:0;filter:blur(40px)}15%{opacity:.9}100%{opacity:.95;filter:blur(5px)}}
+.hero-chair-stage .chair-explode canvas{opacity:0;transition:opacity .7s ease}
+.hero-chair-stage .chair-explode[data-ready] canvas{opacity:1}
+.hero-chair-stage:has(.chair-explode[data-ready]) .chair-placeholder{opacity:0}
+@media(prefers-reduced-motion:reduce){.chair-placeholder img{animation:none;opacity:.9;filter:blur(8px)}.chair-placeholder,.hero-chair-stage .chair-explode canvas{transition:none}}
+/* The new circular logo (PcLogo) in the footer, same height as the old mark. */
+svg.pc-logo.brandmark-svg{height:34px}
+@media(max-width:700px){svg.pc-logo.brandmark-svg{height:29px}}

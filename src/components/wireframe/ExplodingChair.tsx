@@ -114,6 +114,9 @@ export function ExplodingChair({
     const pmrem = new Three.PMREMGenerator(renderer);
     pmrem.compileEquirectangularShader();
     let envMap: Three.Texture | null = null;
+    // The scene counts as shown (host data-ready) only once the model AND its lighting are in, so a
+    // loading stand-in (e.g. the hero's blurred chair image) can hand over without a lighting pop.
+    let envReady = false;
     const rgbeLoader = new RGBELoader();
     // Shared with the passport phone (hdri/studio_small_03_1k.hdr) so the SME page loads one HDR, not two.
     rgbeLoader.load(
@@ -123,6 +126,11 @@ export function ExplodingChair({
         envMap = pmrem.fromEquirectangular(hdr).texture;
         scene.environment = envMap;
         hdr.dispose();
+        envReady = true;
+      },
+      undefined,
+      () => {
+        envReady = true; // show the chair anyway, just without the studio reflections
       },
     );
 
@@ -397,7 +405,8 @@ export function ExplodingChair({
     // out to ~EXPLODE_START exploded and back, on a loop. The cosine easing dwells gently at each
     // extreme. Time only advances while the chair is on-screen, so it never jumps after being away.
     const clock = new Three.Clock();
-    let elapsed = 0;
+    // Starts a little below zero: the chair rests assembled a moment longer while a stand-in fades out.
+    let elapsed = variant === "soft" ? -0.4 : 0;
     const explodeSeconds = variant === "soft" ? SOFT_EXPLODE_SECONDS : EXPLODE_SECONDS;
     // The Soft chair rests only briefly assembled, so it visibly starts coming apart right away.
     const holdSeconds = variant === "soft" ? 0.3 : HOLD_ASSEMBLED;
@@ -410,7 +419,7 @@ export function ExplodingChair({
       if (!isNear.current) {
         return;
       }
-      if (ready) {
+      if (ready && envReady) {
         if (!reduceMotion) {
           elapsed += dt;
         }
@@ -460,6 +469,9 @@ export function ExplodingChair({
         composer.render();
       } else {
         renderer.render(scene, camera);
+      }
+      if (ready && envReady && !host.dataset.ready) {
+        host.dataset.ready = "true"; // first complete frame is on screen
       }
     };
     raf = requestAnimationFrame(animate);
@@ -527,6 +539,7 @@ export function ExplodingChair({
       if (renderer.domElement.parentNode === host) {
         host.removeChild(renderer.domElement);
       }
+      delete host.dataset.ready;
     };
   }, [
     isNear,

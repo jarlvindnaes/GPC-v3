@@ -3,7 +3,7 @@
 // place. Full-width bar, sticky, and it slides away on scroll-down / returns on a deliberate scroll-up
 // (ported from our wireframes' NavAutoHide). `theme` matches the page: light (homepage) or dark
 // (How it works). `current` marks the active link.
-import PcMark from './PcMark.astro';
+import PcLogoAnimated from './PcLogoAnimated.astro';
 
 interface Props {
   theme?: 'light' | 'dark';
@@ -20,7 +20,7 @@ const links = [
 ---
 <header class:list={['site-header', `is-${theme}`]} data-site-header>
   <a class="site-brand" href={base} aria-label="Product Connect home">
-    <PcMark class="site-mark" />
+    <PcLogoAnimated class="site-mark" trigger="hover" />
     <span>product<br />connect</span>
   </a>
   <nav id="site-menu" aria-label="Main navigation">
@@ -93,7 +93,7 @@ const links = [
     letter-spacing: -0.7px;
     font-weight: 550;
   }
-  /* vector "pc·" mark (PcMark); dot in this theme's accent */
+  /* Product Connect logo (PcLogo): ring in the text colour, so black on light and white on dark */
   .site-header :global(.site-mark) {
     height: 34px;
     --pc-mark-dot: var(--sh-accent);

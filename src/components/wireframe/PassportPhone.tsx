@@ -1,6 +1,7 @@
 import { useProgress } from "@react-three/drei";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import "./passport-overlay.css";
 
 import { DppPhoneScreen } from "../dpp/DppPhoneScreen";
 import { HtmlPhoneCanvas } from "../Native3DModels";
@@ -59,8 +60,8 @@ export function PassportPhone() {
   }, []);
 
   useEffect(() => {
-    // Also flag the open overlay on <html>, so live canvases behind it (the supply-chain globe) can
-    // pause: redrawing under the blurred backdrop makes it flicker.
+    // Also flag the open overlay on <html>: the page behind it is blurred (passport-overlay.css) and its
+    // live canvases and animations pause, so the blurred page stays still instead of flickering.
     if (expanded) {
       document.body.style.overflow = "hidden";
       document.documentElement.dataset.overlayOpen = "true";
@@ -102,7 +103,7 @@ export function PassportPhone() {
         onClick={() => {
           setExpanded(true);
         }}
-        className="absolute top-2 left-2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-400/40 bg-white/70 text-slate-700 backdrop-blur-md transition-all duration-300 hover:bg-white/90"
+        className="absolute top-2 left-2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-400/40 bg-white/90 text-slate-700 transition-all duration-300 hover:bg-white"
       >
         <svg
           className="h-5 w-5"
@@ -123,18 +124,15 @@ export function PassportPhone() {
 
       {expanded &&
         createPortal(
-          <div className="passport-scope fixed inset-0 z-[99999] flex flex-col items-center" style={{ paddingTop: 8 }}>
+          <div className="passport-scope passport-overlay fixed inset-0 z-[99999] flex flex-col items-center" style={{ paddingTop: 8 }}>
             <button
               type="button"
               aria-label="Close fullscreen passport"
               onClick={() => {
                 setExpanded(false);
               }}
-              className="absolute cursor-default border-0 bg-black/40 backdrop-blur-xl"
-              // Reaches 96px past every screen edge (more than the 24px blur's reach): Chrome guesses the pixels beyond a backdrop
-              // blur's edges, and those guesses flicker as the page changes; this keeps them
-              // off-screen. Its own GPU layer avoids re-rasterising it.
-              style={{ inset: -96, transform: "translateZ(0)" }}
+              // Plain dark tint: the blur comes from the page itself (passport-overlay.css), not a backdrop-filter.
+              className="absolute inset-0 cursor-default border-0 bg-black/40"
             />
             <div
               className="relative z-10 cursor-grab active:cursor-grabbing"
@@ -149,7 +147,7 @@ export function PassportPhone() {
                 onClick={() => {
                   setExpanded(false);
                 }}
-                className="absolute top-2 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/30"
+                className="absolute top-2 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white transition-all duration-300 hover:bg-white/30"
               >
                 <svg
                   className="h-5 w-5"

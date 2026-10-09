@@ -51,16 +51,14 @@ export function DppHeader({ isScrolled = false }: { isScrolled?: boolean }) {
             borderRadius: "1rem"
           }}
         >
-          {/* Backdrop-blur background — separate layer so GPU compositing
-              doesn't degrade SVG anti-aliasing in the logo above */}
+          {/* Card background (near-solid, no backdrop blur: inside the 3D phone a blur layer blinks
+              while things redraw) — separate layer so the logo above stays crisp */}
           <div
             aria-hidden="true"
             style={{
               position: "absolute",
               inset: 0,
               borderRadius: "inherit",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
               // At the top of the page the card is invisible (no background, border or shadow); once the
               // content scrolls under it, all three fade in together.
               backgroundColor: isScrolled ? brandConfig.header.backgroundColor : "rgba(248, 247, 245, 0)",

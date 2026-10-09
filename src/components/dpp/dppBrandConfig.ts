@@ -16,6 +16,6 @@ export const brandConfig = {
 
   header: {
     borderColor: "#322F31",
-    backgroundColor: "rgba(248, 247, 245, 0.8)"
+    backgroundColor: "rgba(248, 247, 245, 0.94)"
   }
 };

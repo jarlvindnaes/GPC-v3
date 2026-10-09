@@ -474,7 +474,8 @@ function buildParticleSystem(
   };
 }
 
-export function SupplyChainGlobe() {
+// `size` scales the globe relative to its canvas (1 = default, slightly larger than the canvas's short side).
+export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
   const containerReference = useRef<HTMLDivElement>(null);
   const isNearViewport = useIsNearViewport(containerReference);
   const tooltipReferences = useRef<(HTMLDivElement | null)[]>([]);
@@ -501,6 +502,20 @@ export function SupplyChainGlobe() {
 
     const camera = new Three.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 0.1, 2000);
     camera.position.z = 900;
+    // Optional off-centre placement from CSS: --globe-offset-x / --globe-offset-y move the globe's centre by
+    // that fraction of the canvas width / height (positive = right / down). Shifting the camera frustum keeps
+    // the canvas covering the whole panel, so arcs above the globe are never clipped at a canvas edge.
+    const applyFrustum = (frustumWidth: number, frustumHeight: number) => {
+      const style = getComputedStyle(container);
+      const offsetX = (Number.parseFloat(style.getPropertyValue("--globe-offset-x")) || 0) * frustumWidth;
+      const offsetY = (Number.parseFloat(style.getPropertyValue("--globe-offset-y")) || 0) * frustumHeight;
+      camera.left = -(frustumWidth / 2 + offsetX);
+      camera.right = frustumWidth / 2 - offsetX;
+      camera.top = frustumHeight / 2 + offsetY;
+      camera.bottom = -(frustumHeight / 2 - offsetY);
+      camera.updateProjectionMatrix();
+    };
+    applyFrustum(width, height);
 
     const renderer = new Three.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
@@ -508,7 +523,7 @@ export function SupplyChainGlobe() {
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
-    const globeScale = Math.min(width, height) / (GLOBE_RADIUS * 1.6);
+    const globeScale = (Math.min(width, height) / (GLOBE_RADIUS * 1.6)) * size;
 
     const globeGroup = new Three.Group();
     globeGroup.scale.setScalar(globeScale);
@@ -737,7 +752,6 @@ export function SupplyChainGlobe() {
       }
 
       const containerWidth = renderer.domElement.clientWidth;
-      const containerHeight = renderer.domElement.clientHeight;
       const compactScale = Math.min(1, containerWidth / 700);
 
       const pointsMaterial = particleData.points.material as Three.ShaderMaterial;
@@ -777,8 +791,9 @@ export function SupplyChainGlobe() {
         );
         tooltipPosition.applyMatrix4(globeGroup.matrixWorld);
 
-        const screenX = tooltipPosition.x + containerWidth / 2;
-        const screenY = containerHeight / 2 - tooltipPosition.y;
+        // World units are pixels; measure from the frustum's edges so labels follow any --globe-offset shift.
+        const screenX = tooltipPosition.x - camera.left;
+        const screenY = camera.top - tooltipPosition.y;
 
         if (tooltip.anchor === "bottom-left") {
           tooltipElement.style.transform = `translate(${screenX}px, ${screenY + tooltipOffsetPixels}px) translate(-100%, 0%) scale(${compactScale})`;
@@ -799,11 +814,7 @@ export function SupplyChainGlobe() {
           return;
         }
         renderer.setSize(newWidth, newHeight);
-        camera.left = -newWidth / 2;
-        camera.right = newWidth / 2;
-        camera.top = newHeight / 2;
-        camera.bottom = -newHeight / 2;
-        camera.updateProjectionMatrix();
+        applyFrustum(newWidth, newHeight);
 
         if (particleData) {
           for (const line of particleData.flightPaths) {

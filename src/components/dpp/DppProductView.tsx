@@ -484,7 +484,7 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
             transition={{ duration: 0.2 }}
           >
             <div
-              className="inline-flex items-center gap-[6px] rounded-full px-[10px] py-[4px] font-medium text-[11px] text-white backdrop-blur-md"
+              className="inline-flex items-center gap-[6px] rounded-full px-[10px] py-[4px] font-medium text-[11px] text-white"
               style={{ backgroundColor: `${brandConfig.colors.primary}cc` }}
             >
               <div className="size-[6px] animate-pulse rounded-full bg-white" />
@@ -507,7 +507,7 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                <div className="relative overflow-hidden rounded-[10px] bg-black/30 backdrop-blur-lg">
+                <div className="relative overflow-hidden rounded-[10px] bg-black/60">
                   <p className="px-[16px] py-[12px] pr-[70px] font-['SF_Pro:Regular',sans-serif] text-[13px] text-white leading-[18px] tracking-[-0.02px]">
                     Use touch gestures to navigate the model and select the individual parts
                   </p>

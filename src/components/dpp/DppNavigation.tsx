@@ -88,9 +88,8 @@ export function DppNavigation({ activeTab, onTabChange }: DppNavigationProps) {
             borderTop: "1px solid white",
             borderLeft: "1px solid white",
             boxShadow: "0 -2px 12px rgba(0, 0, 0, 0.15), 0 -4px 24px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(4px)",
-            WebkitBackdropFilter: "blur(4px)",
-            backgroundColor: "rgba(255, 255, 255, 0.8)"
+            // Near-solid instead of a backdrop blur: inside the 3D phone a blur layer blinks.
+            backgroundColor: "rgba(255, 255, 255, 0.95)"
           }}
           role="tablist"
           aria-label="Product sections"

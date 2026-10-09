@@ -1,0 +1,15 @@
+/* Full-screen passport: instead of a backdrop-filter on the overlay (Chrome re-samples what's behind it and
+   the page blinks), the page itself is blurred while the overlay is open. The page is frozen then
+   (animations and canvases pause on html[data-overlay-open]), so the blur is rendered once and stays put.
+   The overlay is portalled straight into <body> with the .passport-overlay class, so it stays sharp. */
+body > *:not(.passport-overlay) {
+  transition: filter 0.3s ease;
+}
+html[data-overlay-open] body > *:not(.passport-overlay) {
+  filter: blur(18px);
+}
+@media (prefers-reduced-motion: reduce) {
+  body > *:not(.passport-overlay) {
+    transition: none;
+  }
+}

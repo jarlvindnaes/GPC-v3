@@ -1,5 +1,5 @@
 ---
-import PcMark from '../PcMark.astro';
+import PcLogoAnimated from '../PcLogoAnimated.astro';
 const base = import.meta.env.BASE_URL;
 const groups = [
  {title:'Platform', links:[['What we solve',base],['How it works',`${base}how-it-works/`],['Digital Product Passports',`${base}#product-passports`]]},
@@ -8,7 +8,7 @@ const groups = [
 ];
 ---
 <footer class="site-footer frame">
- <div class="footer-main"><div class="footer-identity"><a class="brand" href={base} aria-label="Product Connect home"><PcMark class="footer-mark" /><span>product<br/>connect</span></a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:hello@getproductconnect.com">hello@getproductconnect.com ↗</a></div>
+ <div class="footer-main"><div class="footer-identity"><a class="brand" href={base} aria-label="Product Connect home"><PcLogoAnimated class="footer-mark" trigger="hover" /><span>product<br/>connect</span></a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:hello@getproductconnect.com">hello@getproductconnect.com ↗</a></div>
  {groups.map(group=><nav aria-label={group.title}><h2>{group.title}</h2>{group.links.map(([label,url])=><a href={url}>{label}</a>)}</nav>)}</div>
  <div class="footer-bottom"><span>© {new Date().getFullYear()} Product Connect</span><span>Product data. Connected.</span><a href="#main">Back to top ↑</a></div>
 </footer>
