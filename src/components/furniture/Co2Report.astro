@@ -1,0 +1,463 @@
+---
+// "CO₂ numbers you can trust": a dark miniature of Product Connect's professional LCA report
+// (ProductConnect/application/product-connect/WebApp/routes/reports/-components/professional): summary metric
+// cards, then top component contributors above the component analysis table, in the product's dark chart
+// palette. It cycles through the two views while on screen; the view tabs are buttons. Illustrative numbers for a lounge chair, not a real result.
+const metrics = [
+  { icon: 'leaf', tone: 'emerald', value: '24.8', unit: 'kg CO₂ eq', label: 'Carbon impact' },
+  { icon: 'zap', tone: 'amber', value: '312.5', unit: 'MJ', label: 'Energy use' },
+  { icon: 'drop', tone: 'sky', value: '86.4', unit: 'L', label: 'Water use' },
+  { icon: 'bin', tone: 'slate', value: '1.9', unit: 'kg', label: 'Waste generated' },
+];
+const highlights = [
+  { value: '13%', label: 'Recycled content' },
+  { value: '58%', label: 'Bio-based content' },
+  { value: 'A1-A5, C1-C4, D', label: 'Modules' },
+];
+
+// --- Top component contributors (kg CO₂ eq), largest first; they add up to the 24.8 kg total ---
+// Parts of the TAKT Soft Lounge Chair model, so each gets the passport's turning 3D thumbnail (part ids
+// from dppProductData.ts).
+const contributors = [
+  { name: 'Leather seat', part: 'seat-cushion', value: 9.8 },
+  { name: 'Back shell', part: 'back-shell', value: 4.6 },
+  { name: 'Seat shell', part: 'seat-shell', value: 3.9 },
+  { name: 'Armrests', part: 'armrest', value: 2.4 },
+  { name: 'Legs', part: 'front-leg', value: 2.1 },
+  { name: 'Rails', part: 'seat-rail', value: 1.1 },
+  { name: 'Bolts', part: 'bolt', value: 0.9 },
+];
+const barMax = 15; // headroom above the tallest bar for its thumbnail and value
+
+// --- Component analysis table --- (the columns rank the parts differently, so every sort visibly reorders)
+const rows = [
+  { name: 'Leather seat', part: 'seat-cushion', supplier: 'Tannery, Italy', kg: 1.4, co2: 9.8, mj: 74.2, l: 41.3, waste: 0.6, km: 1450 },
+  { name: 'Back shell', part: 'back-shell', supplier: 'Kvist Industries, Latvia', kg: 2.1, co2: 4.6, mj: 88.6, l: 12.2, waste: 0.9, km: 980 },
+  { name: 'Seat shell', part: 'seat-shell', supplier: 'Kvist Industries, Latvia', kg: 1.8, co2: 3.9, mj: 61.3, l: 15.8, waste: 0.4, km: 980 },
+  { name: 'Armrests', part: 'armrest', supplier: 'Kvist Industries, Latvia', kg: 1.0, co2: 2.4, mj: 23.8, l: 6.1, waste: 0.1, km: 980 },
+  { name: 'Bolts', part: 'bolt', supplier: 'Fastener supplier, China', kg: 0.3, co2: 0.9, mj: 9.2, l: 2.4, waste: 0.0, km: 8200 },
+];
+const columns = [
+  { key: 'name', label: 'Component' },
+  { key: 'kg', label: 'Weight (kg)', opt: true },
+  { key: 'co2', label: 'CO₂ (kg)' },
+  { key: 'mj', label: 'Energy (MJ)', opt: true },
+  { key: 'l', label: 'Water (L)', opt: true },
+  { key: 'waste', label: 'Waste (kg)', opt: true },
+  { key: 'km', label: 'Distance' },
+];
+const tier = (km: number) => (km >= 2000 ? 'far' : km >= 1000 ? 'regional' : 'near');
+
+const views = ['Overview', 'Contributors'];
+const START = 0; // opens on the overview
+import { DppPartThumb } from '../dpp/DppPartThumb';
+const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+---
+<div class="rep" data-co2-report>
+
+  <div class="rep-tabs" role="tablist" aria-label="Report views">
+    {views.map((v, i) => (
+      <button type="button" role="tab" class:list={{ 'is-active': i === START }} aria-selected={i === START ? 'true' : 'false'} data-tab={i}>
+        {v}<i aria-hidden="true"></i>
+      </button>
+    ))}
+  </div>
+
+  <div class="rep-views">
+    <section class="rep-view is-active" data-view="0" aria-label="Overview">
+      <div class="rep-metrics">
+        {metrics.map((m) => (
+          <div class="rep-card">
+            <span class:list={['rep-icon', `t-${m.tone}`]} aria-hidden="true">
+              {m.icon === 'leaf' && <svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>}
+              {m.icon === 'zap' && <svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>}
+              {m.icon === 'drop' && <svg viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>}
+              {m.icon === 'bin' && <svg viewBox="0 0 24 24"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/></svg>}
+            </span>
+            <span class="rep-metric"><b>{m.value}</b> <small>{m.unit}</small></span>
+            <span class="rep-label">{m.label}</span>
+          </div>
+        ))}
+      </div>
+      <div class="rep-highlights">
+        {highlights.map((h) => (
+          <div class="rep-card rep-hl"><b>{h.value}</b><span>{h.label}</span></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="rep-view rep-contrib" data-view="1" aria-label="Top component contributors and component analysis">
+      <h4>Top component contributors <small>kg CO₂ eq</small></h4>
+      <div class="rep-bars" aria-hidden="true">
+        <div class="sk-tip bar-tip"><b></b><span></span></div>
+        {[0, 5, 10, 15].map((g) => <span class="rep-grid" style={`bottom:calc(var(--lab) + (100% - var(--lab)) * ${g / barMax})`}><em>{g}</em></span>)}
+        {contributors.map((c, i) => (
+          <div class="rep-barcol" style={`--i:${i}`} data-title={c.name} data-kg={nf(c.value)}>
+            <span class="rep-bar" style={`height:${(c.value / barMax) * 100}%`}></span>
+            <span class="rep-thumb rep-barthumb" style={`bottom:calc(${(c.value / barMax) * 100}% + 5px)`}><DppPartThumb client:visible partId={c.part} label={`3D model: ${c.name}`} /></span>
+            <span class="rep-barval" style={`bottom:calc(${(c.value / barMax) * 100}% + 52px)`}>{nf(c.value)}</span>
+            <span class="rep-barname">{c.name}</span>
+          </div>
+        ))}
+      </div>
+      <h4 class="rep-sub">Component analysis</h4>
+      <table class="rep-table">
+        <thead><tr>{columns.map((col) => (
+          <th class:list={[col.opt && 'opt']} aria-sort={col.key === 'co2' ? 'descending' : 'none'}>
+            <button type="button" data-sort={col.key}>{col.label}<span class="rep-arrow" aria-hidden="true">{col.key === 'co2' ? '↓' : ''}</span></button>
+          </th>
+        ))}</tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr style={`--r:${rows.indexOf(r)}`} data-name={r.name} data-kg={r.kg} data-co2={r.co2} data-mj={r.mj} data-l={r.l} data-waste={r.waste} data-km={r.km}>
+              <td><div class="rep-comp"><span class="rep-thumb"><DppPartThumb client:visible partId={r.part} label={`3D model: ${r.name}`} /></span><div><b>{r.name}</b><span>{r.supplier}</span></div></div></td>
+              <td class="opt">{nf(r.kg)}</td>
+              <td>{nf(r.co2)}</td>
+              <td class="opt">{nf(r.mj)}</td>
+              <td class="opt">{nf(r.l)}</td>
+              <td class="opt">{nf(r.waste)}</td>
+              <td><span class:list={['rep-km', `k-${tier(r.km)}`]}>{r.km.toLocaleString('en-US')} km</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <span class="rep-note">Illustrative data</span>
+</div>
+
+<script>
+  // The line under the active tab is the timer: it fills over STEP while the panel is on screen, and when it
+  // is full the next view is selected. Hovering the panel freezes the line where it is; clicking a tab starts
+  // that tab's line from empty and cycling carries on from there. Sorting the table stops the cycling, and
+  // with reduced motion views only change on click.
+  const root = document.querySelector<HTMLElement>("[data-co2-report]");
+  if (root) {
+    const views = Array.from(root.querySelectorAll<HTMLElement>(".rep-view"));
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const STEP = 5000;
+    root.style.setProperty("--step", `${STEP}ms`);
+    let current = Math.max(0, views.findIndex((v) => v.classList.contains("is-active")));
+    let visible = false;
+    let hovering = false;
+    let stopped = reduce;
+    // Running: the line animates. Paused: it holds its progress (hover, or scrolled away).
+    const sync = () => {
+      root.classList.toggle("is-running", !stopped);
+      root.classList.toggle("is-paused", hovering || !visible);
+    };
+    const show = (index: number) => {
+      current = index;
+      views.forEach((v, i) => v.classList.toggle("is-active", i === index));
+      tabs.forEach((t, i) => {
+        t.classList.toggle("is-active", i === index);
+        t.setAttribute("aria-selected", i === index ? "true" : "false");
+      });
+      // Start the new tab's line from empty.
+      root.classList.remove("is-running");
+      void root.offsetWidth;
+      sync();
+    };
+    // Sortable component table: numbers sort largest first on the first click, names A-Z; a second click flips.
+    const table = root.querySelector<HTMLTableElement>(".rep-table");
+    if (table) {
+      const body = table.tBodies[0];
+      let sortKey = "co2";
+      let descending = true;
+      for (const button of table.querySelectorAll<HTMLButtonElement>("[data-sort]")) {
+        button.addEventListener("click", () => {
+          const key = button.dataset.sort ?? "co2";
+          descending = key === sortKey ? !descending : key !== "name";
+          sortKey = key;
+          const rowsSorted = Array.from(body.rows).sort((a, b) => {
+            const order = key === "name"
+              ? (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "")
+              : Number(a.dataset[key]) - Number(b.dataset[key]);
+            return descending ? -order : order;
+          });
+          body.append(...rowsSorted);
+          for (const th of table.querySelectorAll("th")) {
+            const own = th.querySelector<HTMLButtonElement>("[data-sort]")?.dataset.sort === key;
+            th.setAttribute("aria-sort", own ? (descending ? "descending" : "ascending") : "none");
+            const arrow = th.querySelector(".rep-arrow");
+            if (arrow) {
+              arrow.textContent = own ? (descending ? "↓" : "↑") : "";
+            }
+          }
+          stopped = true; // the visitor is reading the table: stop cycling
+          sync();
+        });
+      }
+    }
+    // Contributors hover (mirrors the product's BarChart): highlight the hovered bar, dim the rest, tooltip.
+    const barArea = root.querySelector<HTMLElement>(".rep-bars");
+    const barTip = barArea?.querySelector<HTMLElement>(".bar-tip");
+    if (barArea && barTip) {
+      const cols = Array.from(barArea.querySelectorAll<HTMLElement>(".rep-barcol"));
+      for (const col of cols) {
+        col.addEventListener("pointermove", (event) => {
+          barArea.classList.add("is-hl");
+          cols.forEach((c) => c.classList.toggle("on", c === col));
+          barTip.querySelector("b")!.textContent = col.dataset.title ?? "";
+          barTip.querySelector("span")!.textContent = `${col.dataset.kg} kg CO₂ eq`;
+          const box = barArea.getBoundingClientRect();
+          const x = Math.min(event.clientX - box.left + 14, box.width - barTip.offsetWidth - 4);
+          barTip.style.left = `${Math.max(4, x)}px`;
+          barTip.style.top = `${Math.min(event.clientY - box.top + 14, box.height - barTip.offsetHeight)}px`;
+          barTip.classList.add("on");
+        });
+      }
+      barArea.addEventListener("pointerleave", () => {
+        barArea.classList.remove("is-hl");
+        cols.forEach((c) => c.classList.remove("on"));
+        barTip.classList.remove("on");
+      });
+    }
+    // Scroll story (Home.astro): while this chapter is pinned, scrolling moves through the views in tab
+    // order from the start view, and the active tab's line shows how far through that view the scroll is.
+    // A click wins until the scroll reaches the next view.
+    const ORDER = [0, 1];
+    let scrubbed = false;
+    let seg = -1;
+    let lockSeg = -1;
+    window.addEventListener("co2report:scroll", (event) => {
+      const { arrived, held } = (event as CustomEvent<{ arrived: number; held: number }>).detail;
+      const was = scrubbed;
+      scrubbed = !reduce && arrived >= 0.999 && held < 0.999;
+      root.classList.toggle("is-scrubbed", scrubbed);
+      if (scrubbed) {
+        const pos = Math.min(ORDER.length - 0.001, Math.max(0, held) * ORDER.length);
+        const next = Math.floor(pos);
+        root.style.setProperty("--seg", (pos - next).toFixed(3));
+        if (next !== seg) {
+          seg = next;
+          if (seg !== lockSeg) {
+            lockSeg = -1;
+            if (ORDER[seg] !== current) {
+              show(ORDER[seg]);
+            }
+          }
+        }
+      } else if (was) {
+        seg = -1;
+        lockSeg = -1;
+        show(current); // back to the timed cycle from this view
+      }
+    });
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => {
+        if (scrubbed) {
+          lockSeg = seg;
+        }
+        show(i);
+      });
+      // The active tab's line has filled: move on.
+      tab.addEventListener("animationend", () => {
+        if (i === current && !stopped && !scrubbed) {
+          show((current + 1) % views.length);
+        }
+      });
+    });
+    root.addEventListener("pointerenter", () => { hovering = true; sync(); });
+    root.addEventListener("pointerleave", () => { hovering = false; sync(); });
+    new IntersectionObserver((entries) => {
+      visible = entries.some((e) => e.isIntersecting);
+      sync();
+    }, { threshold: 0.4 }).observe(root);
+    sync();
+  }
+</script>
+
+<style>
+  .rep {
+    --bg: #090e18;
+    --card: #0d1320;
+    --border: #1f2635;
+    --fg: #eef1f6;
+    --muted: #8b93a7;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 14px 22px 12px;
+    color: var(--fg);
+    background: var(--bg);
+    overflow: hidden;
+    font-feature-settings: "tnum";
+  }
+  /* Small print in the card's bottom-right corner. */
+  .rep-note { position: absolute; right: 16px; bottom: 9px; z-index: 1; font-size: 11px; color: #5f677c; pointer-events: none; }
+
+  .rep-views { position: relative; flex: 1; min-height: 0; margin-top: 14px; }
+  .rep-view {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s linear 0.45s;
+  }
+  .rep-view.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s;
+  }
+  .rep-view h4 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+  .rep-view h4.rep-sub { margin-top: 22px; margin-bottom: 6px; }
+  /* Contributors: the bar chart sits above the component table, so it gets a fixed height */
+  .rep-contrib .rep-bars { flex: none; height: clamp(140px, 21vh, 190px); }
+  .rep-view h4 small { margin-left: 6px; font-size: 11px; font-weight: 400; color: var(--muted); }
+
+  .rep-card { border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+  .rep-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .rep-metrics .rep-card { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px 10px; padding: 14px; }
+  .rep-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; }
+  .rep-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .t-emerald { background: #022c22; color: #10b981; }
+  .t-amber { background: #451a03; color: #f59e0b; }
+  .t-sky { background: #082f49; color: #0ea5e9; }
+  .t-slate { background: #1e293b; color: #94a3b8; }
+  .rep-metric b { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .rep-metric small { font-size: 12px; color: var(--muted); }
+  .rep-label { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
+  .rep-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; flex: 1; }
+  .rep-hl { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px; text-align: center; }
+  .rep-hl b { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .rep-hl span { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  .sk-tip {
+    position: absolute;
+    z-index: 2;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #111827f2;
+    box-shadow: 0 10px 30px #0008;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+  .sk-tip.on { opacity: 1; }
+  .sk-tip b { display: block; font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .sk-tip span { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
+
+  .rep-bars { --lab: 24px; position: relative; flex: 1; display: flex; gap: 12px; margin: 14px 0 0 26px; padding-bottom: var(--lab); }
+  .rep-grid { position: absolute; left: 0; right: 0; height: 0; border-top: 1px dashed #2a3345; }
+  .rep-grid em { position: absolute; left: -24px; top: -7px; font-size: 10.5px; font-style: normal; color: var(--muted); }
+  .rep-barcol { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; }
+  .rep-bar {
+    position: relative;
+    display: block;
+    border: 1.5px solid hsl(226 70% 65%);
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+    background: hsl(226 70% 65% / 0.3);
+    transform-origin: bottom;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .rep-barval { position: absolute; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 500; color: var(--muted); white-space: nowrap; transition: color 150ms ease-out, font-size 150ms ease-out; }
+  /* Hover, as in the product's BarChart: the hovered bar gets a thicker outline and a glow and its value turns
+     bold; the other bars (and their parts) dim to 0.4. */
+  .rep-barcol { cursor: pointer; }
+  .rep-bar { transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 150ms ease-out, box-shadow 150ms ease-out; }
+  .rep-bars.is-hl .rep-barcol:not(.on) .rep-bar { opacity: 0.4; }
+  .rep-barthumb { transition: opacity 0.4s ease calc(var(--i, 0) * 60ms + 650ms), filter 150ms ease-out; }
+  .rep-bars.is-hl .rep-barcol:not(.on) .rep-barthumb { filter: opacity(0.4); } /* filter, so it is not held back by the fade-in delay */
+  .rep-barcol.on .rep-bar { box-shadow: 0 0 0 2.5px hsl(226 70% 65%), 0 0 10px 1px hsl(226 70% 65% / 0.7); }
+  .rep-barcol.on .rep-barval { color: var(--fg); font-size: 12.5px; font-weight: 700; }
+  .rep-bars .bar-tip { left: 0; top: 0; }
+  .rep-barname { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .rep-view:not(.is-active) .rep-bar { transform: scaleY(0); }
+  .rep-view.is-active .rep-bar { transition-delay: calc(var(--i, 0) * 60ms + 150ms), 0s, 0s; } /* stagger the growth only, not hover */
+
+  /* Rounded tile behind each 3D part, as in Product Connect's product lists. */
+  .rep-thumb { display: block; width: 38px; height: 38px; flex: none; padding: 3px; border-radius: 9px; background: #1c2333; }
+  /* Each part's 3D thumbnail sits on top of its bar, its value above it; both arrive after the bar has grown. */
+  .rep-barthumb { position: absolute; left: 50%; width: 42px; height: 42px; transform: translateX(-50%); }
+  .rep-barthumb, .rep-barval { transition: opacity 0.4s ease calc(var(--i, 0) * 60ms + 650ms); }
+  .rep-view:not(.is-active) .rep-barthumb, .rep-view:not(.is-active) .rep-barval { opacity: 0; transition: none; }
+  .rep-comp { display: flex; align-items: center; gap: 10px; }
+  .rep-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .rep-table th { padding: 6px 10px; text-align: right; font-weight: 500; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .rep-table th:first-child, .rep-table td:first-child { text-align: left; }
+  .rep-table th button { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; white-space: nowrap; }
+  .rep-table th button:hover, .rep-table th[aria-sort="ascending"], .rep-table th[aria-sort="descending"] { color: var(--fg); }
+  .rep-table th button:focus-visible { outline: 2px solid hsl(226 70% 65%); outline-offset: 2px; border-radius: 4px; }
+  .rep-arrow { display: inline-block; min-width: 0.9em; margin-left: 3px; color: hsl(226 70% 70%); }
+  .rep-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid #161d2b; white-space: nowrap; }
+  .rep-table td b { display: block; font-weight: 600; }
+  .rep-table td span { display: block; font-size: 11px; color: var(--muted); }
+  .rep-km { display: inline-block !important; padding: 3px 9px; border-radius: 999px; font-size: 11.5px !important; font-weight: 500; }
+  .k-near { background: rgb(16 185 129 / 0.15); color: #34d399 !important; }
+  .k-regional { background: rgb(14 165 233 / 0.15); color: #38bdf8 !important; }
+  .k-far { background: rgb(245 158 11 / 0.15); color: #fbbf24 !important; }
+
+  .rep-tabs { display: flex; gap: 6px; }
+  .rep-tabs button {
+    position: relative;
+    flex: 1;
+    padding: 6px 4px 8px;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .rep-tabs button.is-active { color: var(--fg); }
+  .rep-tabs button i { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: #1f2635; }
+  .rep-tabs button.is-active i { background: #3a4560; }
+  .rep-tabs button.is-active i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: hsl(226 70% 65%); transform-origin: left; }
+  .is-running .rep-tabs button.is-active i::after { animation: rep-progress var(--step, 5s) linear forwards; }
+  .is-paused .rep-tabs button.is-active i::after { animation-play-state: paused; }
+  /* Scroll-driven (story): the line follows the scroll through the view instead of the timer. */
+  .is-scrubbed .rep-tabs button.is-active i::after { animation: none !important; transform: scaleX(var(--seg, 0)) !important; transition: transform 80ms linear; }
+
+  /* Each view stages its contents when it becomes active. */
+  .rep-metrics .rep-card, .rep-hl, .rep-table tbody tr { transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  /* Flow chart: the entrance uses opacity (links) and filter (nodes), so hover's own fades stay instant. */
+  .rep-view:not(.is-active) :is(.rep-metrics .rep-card, .rep-hl) { opacity: 0; transform: translateY(14px) scale(0.97); transition: none; }
+  .rep-view.is-active .rep-metrics .rep-card:nth-child(1) { transition-delay: 0.08s; }
+  .rep-view.is-active .rep-metrics .rep-card:nth-child(2) { transition-delay: 0.16s; }
+  .rep-view.is-active .rep-metrics .rep-card:nth-child(3) { transition-delay: 0.24s; }
+  .rep-view.is-active .rep-metrics .rep-card:nth-child(4) { transition-delay: 0.32s; }
+  .rep-view.is-active .rep-hl:nth-child(1) { transition-delay: 0.42s; }
+  .rep-view.is-active .rep-hl:nth-child(2) { transition-delay: 0.5s; }
+  .rep-view.is-active .rep-hl:nth-child(3) { transition-delay: 0.58s; }
+  .rep-view:not(.is-active) .rep-table tbody tr { opacity: 0; transform: translateY(10px); transition: none; }
+  .rep-view.is-active .rep-table tbody tr { transition-delay: calc(var(--r, 0) * 70ms + 0.1s); }
+  .rep-tabs button.is-active i::after { transform: scaleX(0); }
+  .rep:not(.is-running) .rep-tabs button.is-active i::after { transform: scaleX(1); } /* stopped: a full line marks the tab */
+  .rep-tabs button:focus-visible { outline: 2px solid hsl(226 70% 65%); outline-offset: -2px; border-radius: 6px; }
+  @keyframes rep-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  @media (max-width: 720px) {
+    .rep { padding: 12px 12px 10px; }
+    .rep-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .rep-metrics .rep-card { padding: 10px; }
+    .rep-metric b { font-size: 18px; }
+    .rep-highlights { gap: 8px; }
+    .rep-hl b { font-size: 15px; }
+    .rep-hl span { font-size: 9px; }
+    .rep-table .opt { display: none; }
+    .rep-bars { gap: 6px; }
+    .rep-bars { --lab: 30px; margin-left: 22px; }
+    .rep-barthumb { width: 32px; height: 32px; }
+    .rep-barval { margin-bottom: -8px; }
+    .rep-thumb:not(.rep-barthumb) { width: 32px; height: 32px; border-radius: 8px; }
+    .rep-barname { width: 100%; bottom: auto; top: calc(100% + 4px); font-size: 9px; line-height: 1.15; text-align: center; white-space: normal; }
+    .rep-table th, .rep-table td { padding-left: 6px; padding-right: 6px; }
+    .rep-tabs button { font-size: 10.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rep-view, .rep-bar { transition: none; }
+  }
+</style>

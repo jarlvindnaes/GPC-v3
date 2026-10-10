@@ -314,5 +314,5 @@ svg.pc-mark.brandmark-svg{height:34px;--pc-mark-dot:#d6ef8c}
 .hero-chair-stage:has(.chair-explode[data-ready]) .chair-placeholder{opacity:0}
 @media(prefers-reduced-motion:reduce){.chair-placeholder img{animation:none;opacity:.9;filter:blur(8px)}.chair-placeholder,.hero-chair-stage .chair-explode canvas{transition:none}}
 /* The new circular logo (PcLogo) in the footer, same height as the old mark. */
-svg.pc-logo.brandmark-svg{height:34px}
+svg.pc-logo.brandmark-svg{height:34px;--pc-logo-dot:#d6ef8c}
 @media(max-width:700px){svg.pc-logo.brandmark-svg{height:29px}}

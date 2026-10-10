@@ -9,6 +9,7 @@ import Scale from './Scale.astro';
 import McpGraphic from './McpGraphic.astro';
 import BenefitProof from './BenefitProof.astro';
 import BrandStrip from './BrandStrip.astro';
+import Co2Report from './Co2Report.astro';
 import ProductMemory from './ProductMemory.astro';
 import { SupplyChainGlobe } from '../SupplyChainGlobe';
 const base = import.meta.env.BASE_URL;
@@ -17,7 +18,7 @@ const getStarted = 'mailto:contact@productconnect.com?subject=Getting%20started%
 // The testimonial (portrait, person, company, quote) is a fictional placeholder; hidden until an approved one exists.
 const SHOW_DRAFT_TESTIMONIAL = false;
 const benefits = [
- {id:'harvest-data',label:'Supplier data & control',title:'Stop chasing suppliers.',lead:'Save up to 90% of the time spent collecting data.',text:'No spreadsheets, no emails back and forth. Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform. They’re even rewarded for helping you out with LCA data on their own products.'},
+ {id:'harvest-data',label:'Supplier data & management',title:'Stop chasing suppliers.',lead:'Save up to 90% of the time spent collecting data.',text:'No spreadsheets, no emails back and forth. Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform. Suppliers are rewarded for helping you out with LCA data on their own products.'},
  {id:'trusted-co2',label:'Trusted CO₂ numbers',title:'CO₂ numbers you can trust.',lead:'EPD calculations in days, not months.',text:'Auditor-grade calculations built on EN 15804+A2 and the ISO standards behind every EPD, verified and validated end to end. It’s a world first, and it cuts the whole EPD process from months to weeks.'},
  {id:'analyse-improve',label:'Analyse & improve',title:'Know exactly what to fix.',lead:'Better scores, better products, more deals won.',text:'See where your impact really comes from, and what will move it most: a material, a component, a supplier. Improve your products and your supply chain with confidence, and bring better numbers to every tender.'},
  {id:'product-passports',label:'Next-gen passports',title:'Show your impact to the world.',lead:'Living Digital Product Passports for B2B and B2C.',text:'Every product gets a passport that stays up to date: materials, impact, care and repair, one scan away. Give your sales team a story competitors can’t match, and set the standard in your category.'},
@@ -26,6 +27,19 @@ const benefits = [
 ];
 // Rotating end of the benefits heading: "A product expert that …".
 const expertPhrases = ['never sleeps.','gathers the data.','spots the gains.','proves the progress.','opens new sales.'];
+// Chapter 1's paragraph as titled bullet steps in the globe card (shown one step at a time). Sub-headers
+// (step titles and eyebrows) have no full stop; headlines do.
+const supplierSteps = [
+ { title: 'Stop chasing suppliers', points: ['No spreadsheets.', 'No emails back and forth.'] },
+ { title: 'Onboarding suppliers actually like', points: ['Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform.'] },
+ { title: 'A win for your suppliers too', points: ['Suppliers are rewarded for helping you out with LCA data on their own products.'] },
+ { title: 'Real risk assessments', points: ['Manage all tiers in your supply chain and do real risk assessments.'] }
+];
+// Chapter 2's paragraph as titled bullet steps in its card.
+const co2Steps = [
+ { title: 'Audit-ready by design', points: ['Auditor-grade calculations built on EN 15804+A2 and the ISO standards behind every EPD.'] },
+ { title: 'Months become weeks', points: ['Verified and validated end to end.', 'It’s a world first, and it cuts the whole EPD process from months to weeks.'] }
+];
 const capabilities = [
  ['Every change, traceable.','A complete ledger of inputs, with timestamped field history. Know what changed, when, and where the data came from.'],
  ['Data in every dimension.','3D models, materials, components, and specifications—connected in one scalable data foundation.'],
@@ -40,15 +54,15 @@ const capabilities = [
 <main id="main"><section class="hero frame"><div class="hero-copy hero-chair"><picture class="hero-picture"><source media="(max-width: 720px)" srcset={`${base}v4/hero-chair-mobile-828.webp 828w, ${base}v4/hero-chair-mobile-1242.webp 1242w`} sizes="100vw" width="828" height="1028"/><img class="hero-backdrop" src={`${base}v4/hero-chair-closeup.webp`} alt="" width="976" height="1098" fetchpriority="high"/></picture><div class="hero-editorial"><span class="eyebrow"><i></i> PRODUCT CONNECT</span><h1><span>Make better products,</span><span>show the world.</span></h1><p>One platform for all your product data. Calculate CO₂ and environmental impact, track every improvement, and show the proof in next-generation <strong>Digital Product Passports.</strong></p><div class="actions"><a class="button" href={contact}>Talk to sales</a><a class="button primary" href={getStarted}>Start for free <span>↗</span></a></div></div><button class="chair-passport-trigger" type="button" data-open-passport><span class="qr-badge" aria-hidden="true"><svg class="qr" viewBox="0 0 25 25" aria-hidden="true" shape-rendering="crispEdges"><path stroke="currentColor" d="M0 0.5h7m1 0h2m3 0h1m2 0h1m1 0h7M0 1.5h1m5 0h1m6 0h1m2 0h1m1 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h4m1 0h4m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m2 0h1m2 0h1m1 0h1m3 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 7.5h1m1 0h1m2 0h2M0 8.5h4m2 0h1m1 0h1m5 0h1m1 0h2m2 0h3m1 0h1M0 9.5h2m3 0h1m1 0h1m1 0h1m6 0h2m1 0h1m3 0h1M1 10.5h7m9 0h1m2 0h1M1 11.5h1m1 0h1m1 0h1m1 0h1m3 0h4m3 0h2m1 0h2M0 12.5h3m2 0h5m1 0h10m1 0h3M1 13.5h1m1 0h2m5 0h2m2 0h7m3 0h1M1 14.5h2m1 0h1m1 0h2m1 0h1m2 0h1m4 0h2m1 0h1m1 0h2M0 15.5h1m1 0h4m1 0h1m1 0h2m3 0h1m2 0h1m1 0h2m3 0h1M3 16.5h1m2 0h1m3 0h1m2 0h1m2 0h9M8 17.5h1m2 0h4m1 0h1m3 0h1m1 0h1m1 0h1M0 18.5h7m3 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h3M0 19.5h1m5 0h1m2 0h2m1 0h1m1 0h3m3 0h1m2 0h2M0 20.5h1m1 0h3m1 0h1m3 0h2m4 0h6m2 0h1M0 21.5h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m3 0h2m1 0h5M0 22.5h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m1 0h2m1 0h1m1 0h2M0 23.5h1m5 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1M0 24.5h7m1 0h2m2 0h3m3 0h7"/></svg></span><span>Explore its passport ↗</span></button></div></section>
 <p class="eyebrow brand-eyebrow">Trusted with product data from circular market leaders</p>
 <BrandStrip />
-<section id="benefits" class="benefits frame"><div class="section-intro"><span class="eyebrow">PRODUCT CONNECT</span><h2><span class="sr-only">A product expert that never sleeps. Gathers the data. Spots the gains. Proves the progress. Opens new sales.</span><i class="expert-line" aria-hidden="true">A product expert that <span class="expert-rotator" data-expert-rotator>{expertPhrases.map((phrase,i)=><span class:list={['expert-phrase',{'is-active':i===0}]}>{phrase}</span>)}</span></i></h2></div><div class="benefit-layout"><aside class="benefit-nav"><nav aria-label="Product benefits">{benefits.map((b,i)=><a href={`#${b.id}`} data-benefit-link={b.id} aria-current={i===0?'location':undefined}><span class="nav-number">0{i+1}</span>{b.label}<span class="nav-arrow">↗</span></a>)}</nav><p>From product data<br/>to what comes next.</p></aside><div class="chapters">{benefits.map((b,i)=><section id={b.id} class="chapter" data-chapter><div class="chapter-heading"><span class="chapter-number">0{i+1} / 0{benefits.length}</span>{b.id==='connect-clients'&&<span class="coming">Coming this fall</span>}<h3>{b.title} <span>{b.lead}</span></h3><p>{b.text}</p>{i===1&&<small class="epd-process-note">EPD publication follows the applicable programme rules and independent verification.</small>}</div>
+<section id="benefits" class="benefits frame"><div class="section-intro"><span class="eyebrow">PRODUCT CONNECT</span><h2><span class="sr-only">A product expert that never sleeps. Gathers the data. Spots the gains. Proves the progress. Opens new sales.</span><i class="expert-line" aria-hidden="true">A product expert that <span class="expert-rotator" data-expert-rotator>{expertPhrases.map((phrase,i)=><span class:list={['expert-phrase',{'is-active':i===0}]}>{phrase}</span>)}</span></i></h2></div><div class="benefit-layout"><aside class="benefit-nav"><nav aria-label="Product benefits">{benefits.map((b,i)=><a href={`#${b.id}`} data-benefit-link={b.id} aria-current={i===0?'location':undefined}>{b.label}<span class="nav-arrow">↗</span></a>)}</nav><p>From product data<br/>to what comes next.</p></aside><div class="chapters"><div class="story-stage" data-story-stage><div class="story-tint" aria-hidden="true"></div>{benefits.map((b,i)=><section id={b.id} class="chapter" data-chapter><div class="chapter-pin">{i>1&&<div class="chapter-heading">{b.id==='connect-clients'&&<span class="coming">Coming this fall</span>}<h3>{b.title} <span>{b.lead}</span></h3><p>{b.text}</p>{i===1&&<small class="epd-process-note">EPD publication follows the applicable programme rules and independent verification.</small>}</div>}
 <div class:list={['ui-stage',`stage-${i}`]}>
-{i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><SupplyChainGlobe client:only="react" size={0.72} /><div class="stage-copy" aria-hidden="true"><span>Supply chain management</span><strong>Manage all tiers in your supply chain and do real risk assessments.</strong></div></div></div></div>}
-{i===1&&<div class="screen-card dashboard"><div class="ui-bar"><span>◈ Portfolio overview</span><span class="pill">Illustrative data</span></div><div class="dashboard-body"><div class="metric"><small>Product carbon footprint</small><strong>24.8 <em>kg CO₂e</em></strong><span>Cross Chair / Oak</span></div><div class="chart-title">Where the impact comes from</div>{[['Materials',72,'17.9'],['Manufacturing',17,'4.2'],['Transport',8,'2.0'],['Packaging',3,'0.7']].map(([label,value,total])=><div class="bar-row"><span>{label}</span><div class="bar-track"><i style={`width:${value}%`}></i></div><b>{total}</b></div>)}<div class="insight"><span>↗</span><div><strong>Start with materials</strong><p>Explore the components behind your product’s footprint.</p></div></div></div></div>}
+{i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-intro"><span class="intro-eyebrow">Supply chain management</span><h3>{b.lead}</h3></div><div class="globe-points">{supplierSteps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map((point)=><p class="sentence">{point}</p>)}</div>)}</div><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><SupplyChainGlobe client:only="react" size={0.655} /></div></div></div>}
+{i===1&&<div class="co2-card"><div class="globe-intro co2-intro"><span class="intro-eyebrow">{b.title.replace(/\.$/, '')}</span><h3>{b.lead}</h3></div><div class="globe-points co2-points">{co2Steps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map((point)=><p class="sentence">{point}</p>)}</div>)}</div><small class="co2-note">EPD publication follows the applicable programme rules and independent verification.</small><div class="co2-report-wrap"><Co2Report /></div></div>}
 {i===2&&<div class="screen-card compare"><div class="ui-bar"><span>◈ Compare components</span><span class="pill">Illustrative scenario</span></div><div class="compare-body"><div class="product-thumb"><img src={`${base}v4/chair.webp`} width="640" height="427" alt="Oak chair used in the product comparison" loading="lazy"/><span>Cross Chair<small>Material comparison</small></span></div><div class="compare-grid"><div><small>Current material</small><h4>Oak / baseline</h4><strong>17.9 <em>kg CO₂e</em></strong><div class="compare-line"></div></div><div class="selected"><small>Alternative material</small><h4>Oak / scenario</h4><strong>14.2 <em>kg CO₂e</em></strong><div class="compare-line shorter"></div></div></div><div class="ui-footer">Materials <span>→</span> Components <span>→</span> Better decisions</div></div></div>}
 {i===4&&<div class="screen-card report"><div class="ui-bar"><span>◈ Compliance readiness</span><span class="pill">Illustrative data</span></div><div class="report-body"><span class="report-label">CROSS CHAIR / DIGITAL PRODUCT PASSPORT</span><h4>Ready before<br/>it’s required.</h4><div class="record"><span class="check">✓</span><span>Materials and components declared</span></div><div class="record"><span class="check">✓</span><span>Impact data traceable to source</span></div><div class="record"><span class="check">✓</span><span>Care, repair and end-of-life information</span></div><div class="record"><span class="check">✓</span><span>Passport published and kept up to date</span></div></div></div>}
 {i===3&&<div class="passport-composition"><div class="passport-copy"><span class="tag">Digital Product Passport</span><h4>The next chapter<br/>starts here.</h4><button type="button" data-open-passport>Explore the passport <span>↗</span></button></div><div class="phone-live"><PassportPhone client:only="react" /><p class="phone-caption">The passport displayed on this 3D model is interactive. You can enlarge it to really engage with its content.</p></div></div>}
 {i===5&&<div class="screen-card report"><div class="ui-bar"><span>◈ Customer channel</span><span class="pill">Coming this fall</span></div><div class="report-body"><span class="report-label">CROSS CHAIR / AFTER THE SALE</span><h4>Every passport,<br/>a storefront.</h4><div class="record"><span class="check">✓</span><span>Spare parts, matched to the exact product</span></div><div class="record"><span class="check">✓</span><span>Accessories and upgrades</span></div><div class="record"><span class="check">✓</span><span>Care and repair services</span></div><div class="record"><span class="check">✓</span><span>A direct line to every product owner</span></div></div></div>}
-</div><BenefitProof index={i} /></section>)}</div></div></section>
+</div><BenefitProof index={i} /></div></section>)}</div><div class="story-markers" aria-hidden="true">{benefits.map((b)=><div class="story-marker" data-story-marker={b.id}></div>)}</div></div></div></section>
 <section id="how-it-works" class="getting-started frame"><NodeFlow /><div class="time-value-copy"><span class="tag">Self-building</span><h2>Live from day one. <span>Bring your data. Map your supply chain, uncover insights, and publish your first Digital Product Passports — all on day one.</span></h2></div></section>
 <section class="model" id="product-model"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text],i)=><article><span class="cap-icon">{['▤','◎','◈','⌁','⌘'][i]}</span><h3>{title}</h3><p>{text}</p></article>)}</div><div class="signals"><div><span class="tag">Signals</span><h2>Scattered data.<br/>Connected knowledge.<br/><span>Better decisions.</span></h2><p class="signals-lead">Product Connect gathers data from hundreds of sources, from CAD files and ERP systems to suppliers and certificates, and stores it in one dynamic product model.</p></div><div class="signal-map data-vortex" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div></div><ProductMemory /><div id="integrations" class="api api-reference"><div class="api-copy"><h2>API. MCP.<br/><span>Connect to Product Connect.</span></h2><a class="button dark-button" href={`${contact}?subject=Product%20Connect%20API%20and%20MCP`}>Explore integrations <span>↗</span></a></div><McpGraphic /></div></div></section>
 {SHOW_DRAFT_TESTIMONIAL && <section class="customer-story frame" aria-label="Customer testimonial preview"><span class="tag">Testimonial · copy to be confirmed</span><blockquote>“A clearer picture of every product.<br/><span>A better foundation for what comes next.”</span></blockquote><img class="quote-portrait" src={`${base}v4/testimonial-portrait.webp`} alt="Fictional bearded man, placeholder portrait" width="80" height="80" loading="lazy"/><p class="quote-attribution">Mikkel Sørensen<small>Head of Design · Fjordform Studio, Denmark</small></p><p class="quote-note">Fictional testimonial, person and company for design preview.</p></section>}
@@ -59,6 +73,26 @@ const capabilities = [
 import { initDataScenes } from "./data-scenes";
 const disposeScenes = initDataScenes();
 document.addEventListener("astro:before-swap", disposeScenes, { once: true });
+// Chapter tab row: one dot that slides under whichever item is current (the items' own ::after dot is the
+// no-JS fallback). Follows aria-current, which the scroll code below sets.
+{
+ const nav = document.querySelector<HTMLElement>('.benefit-nav nav');
+ if (nav) {
+  const dot = document.createElement('span');
+  dot.className = 'nav-dot';
+  dot.setAttribute('aria-hidden', 'true');
+  nav.append(dot);
+  const place = () => {
+   const current = nav.querySelector<HTMLElement>('a[aria-current]');
+   if (current) dot.style.transform = `translateX(${current.offsetLeft + current.offsetWidth / 2 - 2}px)`;
+  };
+  place();
+  void dot.offsetWidth; // first placement without the slide
+  nav.classList.add('has-dot');
+  new MutationObserver(place).observe(nav, { subtree: true, attributeFilter: ['aria-current'] });
+  new ResizeObserver(place).observe(nav);
+ }
+}
 // Benefits heading: cycle the phrase after "A product expert that". The rotator's width follows the
 // visible phrase, so the centred line re-centres smoothly (static first phrase with reduced motion).
 const rotator = document.querySelector<HTMLElement>('[data-expert-rotator]');
@@ -83,11 +117,119 @@ if (rotator) {
   document.addEventListener("astro:before-swap", () => window.clearInterval(timer), { once: true });
  }
 }
+// Benefits scroll story: ONE stage. On desktop the six chapters are layers of a single sticky stage
+// (html.story-stage); the page scrolls past invisible markers (one per chapter, sized in home.css) and each
+// chapter's --k runs 0 -> 2 over its own marker: 0 -> 1 arriving (elements fly in), 1 -> 2 its steps play;
+// at 2 it fades out as the next one arrives. The stage background fades from dark to light as chapter 3
+// arrives (--dark). Phones / short screens keep the stacked chapters with the same reveals (k from each
+// chapter's own position). CSS turns --k into the reveals (home.css "Scroll story" / "One stage").
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+ const storyChapters = Array.from(document.querySelectorAll<HTMLElement>('[data-chapter]'));
+ const markers = Array.from(document.querySelectorAll<HTMLElement>('[data-story-marker]'));
+ const stage = document.querySelector<HTMLElement>('[data-story-stage]');
+ const tabRow = document.querySelector<HTMLElement>('.benefit-nav');
+ const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
+ const storyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-benefit-link]'));
+ const stageQuery = matchMedia('(min-width: 721px) and (min-height: 700px)');
+ const ARRIVE = 0.4; // share of the screen height each later chapter spends arriving
+ const OVERLAP = 0.22; // ...starting this much (share of the screen height) before the previous one has left, so they crossfade
+ document.documentElement.classList.add('story-on');
+ const clamp = (v: number) => Math.min(1, Math.max(0, v));
+ const pinLineNow = () => Math.max(0, siteHeader?.getBoundingClientRect().bottom ?? 0) + (tabRow?.offsetHeight ?? 53);
+ const storyUpdate = () => {
+  const staged = stageQuery.matches;
+  document.documentElement.classList.toggle('story-stage', staged);
+  const vh = window.innerHeight;
+  // Where the tab row sits once it sticks (under the header while that is shown), not where it is now.
+  const pinLine = pinLineNow();
+  let active = 0;
+  storyChapters.forEach((chapter, i) => {
+   let k: number;
+   if (staged) {
+    const marker = markers[i];
+    const top = marker.getBoundingClientRect().top;
+    const length = Math.max(1, marker.offsetHeight);
+    if (i === 0) {
+     // the first chapter arrives as the stage itself comes up the screen, then plays over its marker
+     k = clamp((vh - top) / Math.max(1, vh - pinLine - 40)) + clamp((pinLine - top) / length);
+    } else {
+     const arrive = vh * ARRIVE;
+     const d = pinLine - top + vh * OVERLAP;
+     k = clamp(d / arrive) + clamp((d - arrive) / Math.max(1, length - arrive));
+    }
+    chapter.classList.toggle('is-live', k > 0.001 && (k < 1.999 || i === storyChapters.length - 1));
+    if (k >= (i === 0 ? 0 : 0.35)) active = i;
+   } else {
+    const top = chapter.getBoundingClientRect().top;
+    const e = clamp((vh - top) / Math.max(1, vh - pinLine - 40));
+    k = e + clamp((pinLine - top) / (vh * 0.45));
+    chapter.classList.add('is-live');
+   }
+   chapter.style.setProperty('--k', k.toFixed(3));
+   chapter.style.setProperty('--e', Math.min(1, k).toFixed(3));
+   if (chapter.id === 'harvest-data') {
+    // the globe assembles from scattered stars as the chapter arrives, holds while the bullets play, and
+    // disperses back into stars at the end (read by SupplyChainGlobe as --globe-scatter)
+    // slow on purpose: fully assembled only as the third step ("A win for your suppliers too") arrives
+    // Stacked layout (phones, short screens): k runs out while the globe is still on screen, so there it
+    // assembles as the card scrolls in, its nodes follow, and it never disperses.
+    const scatter = staged
+     ? Math.max(1 - clamp((k - 0.05) / 1.37), clamp((k - 1.88) / 0.12))
+     : 1 - clamp((k - 0.1) / 0.8);
+    chapter.style.setProperty('--globe-scatter', scatter.toFixed(3));
+    // once the globe has (mostly) assembled, the supply-chain nodes and their labels are placed one by one,
+    // through the "Onboarding suppliers" step and done as "A win for your suppliers too" settles
+    chapter.style.setProperty('--globe-place', clamp(staged ? (k - 1.16) / 0.4 : (k - 0.7) / 0.4).toFixed(3));
+    // risk regions light up red with the last step ("Real risk assessments", k 1.66–1.86 on the stage)
+    chapter.style.setProperty('--globe-risk', clamp(staged ? (k - 1.62) / 0.14 : (k - 1.46) / 0.14).toFixed(3));
+   }
+   if (chapter.id === 'trusted-co2') {
+    window.dispatchEvent(new CustomEvent('co2report:scroll', { detail: { arrived: Math.min(1, k), held: clamp(k - 1) } }));
+   }
+   if (i === 1 && stage) {
+    stage.style.setProperty('--co2', clamp(k / 0.5).toFixed(3)); // the How it works palette as chapter 2 arrives
+   }
+   if (i === 2 && stage) {
+    stage.style.setProperty('--dark', (1 - clamp(k / 0.6)).toFixed(3)); // dark -> light as chapter 3 arrives
+    stage.style.setProperty('--blue', clamp(k * 8).toFixed(3)); // ...and the light is chapter 3's pale blue
+   }
+   if (i === 3 && stage && k > 0) {
+    stage.style.setProperty('--blue', (1 - clamp(k / 0.6)).toFixed(3)); // pale blue -> white as chapter 4 arrives
+   }
+  });
+  if (staged) {
+   // the chapters are stacked in the stage: only the current one takes the pointer (so faded-out chapters
+   // above it don't swallow drags on the globe or clicks in the report)
+   storyChapters.forEach((chapter, i) => chapter.classList.toggle('is-front', i === active));
+   storyLinks.forEach((link, i) => {
+    if (i === active) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+   });
+  }
+ };
+ // Tabs: on the one-stage layout, scroll to the point where that chapter has fully arrived.
+ storyLinks.forEach((link, i) => {
+  link.addEventListener('click', (event) => {
+   if (!stageQuery.matches || !markers[i]) {
+    return;
+   }
+   event.preventDefault();
+   const top = markers[i].getBoundingClientRect().top + window.scrollY;
+   const offset = i === 0 ? 2 : window.innerHeight * (ARRIVE - OVERLAP) + 2;
+   window.scrollTo({ top: top - pinLineNow() + offset, behavior: 'smooth' });
+  });
+ });
+ // Measured straight in the scroll handler (a dozen rects), so it never lags a frame behind the scroll.
+ window.addEventListener('scroll', storyUpdate, { passive: true });
+ window.addEventListener('resize', storyUpdate);
+ storyUpdate();
+}
 document.querySelectorAll('[data-open-passport]').forEach(el=>el.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('passport:open'))));
 const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-benefit-link]'));
 const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-chapter]'));
 let pending = false;
 function updateActive() {
+ if (document.documentElement.classList.contains('story-stage')) { pending = false; return; } // the story tracks it
  const line = Math.min(window.innerHeight * .38, 300);
  let active = chapters[0];
  for (const chapter of chapters) { if (chapter.getBoundingClientRect().top <= line) active = chapter; }

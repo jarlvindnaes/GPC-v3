@@ -1,4 +1,4 @@
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;color:#242528;background:#fff;font-family:Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,a{-webkit-tap-highlight-color:transparent}a:focus-visible{outline:3px solid #627de7;outline-offset:5px}img{max-width:100%;height:auto;display:block}h1,h2,h3,h4,p{margin:0}h1,h2,h3,h4{font-weight:500;letter-spacing:-.045em}p{line-height:1.65;color:#72777e}span{line-height:inherit}.frame{max-width:1240px;margin:auto;border-left:1px solid #e9eaec;border-right:1px solid #e9eaec}.header{height:80px;max-width:1240px;margin:auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;border:1px solid #e9eaec;border-top:0;background:#ffffffed;position:sticky;top:0;z-index:20;backdrop-filter:blur(16px)}.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;letter-spacing:-.04em}.mark{font-size:31px;font-weight:750;letter-spacing:-.22em;width:35px;transform:rotate(-12deg)}.mark span{color:#7887d8}.header nav{display:flex;gap:30px;font-size:14px}.header nav a:hover{color:#5c70bf}.button{display:inline-flex;align-items:center;justify-content:center;gap:24px;min-height:44px;border:1px solid #dedfe2;border-radius:7px;padding:11px 17px;background:white;font-size:14px;font-weight:500;box-shadow:0 2px 3px #00000005;transition:transform .2s,background .2s}.button:hover{background:#f5f6fa;transform:translateY(-2px)}.button.primary{background:#242528;color:#fff;border-color:#242528}.button.primary:hover{background:#45464d}.small{min-height:38px}.skip{position:fixed;top:-100px;background:#fff;padding:14px;z-index:100}.skip:focus{top:8px}.hero{overflow:hidden}.hero-copy{text-align:center;padding:86px 24px 50px}.eyebrow{font-size:12px;letter-spacing:.14em;color:#7d818a}.eyebrow i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#8295d1;margin-right:7px}.hero h1{font-size:clamp(40px,5.5vw,72px);line-height:1.02;margin:24px 0}.hero-copy p{max-width:665px;margin:auto;font-size:16px;line-height:1.65}.hero-copy strong{font-weight:600}.actions{display:flex;gap:10px;justify-content:center;margin-top:26px}.hero-visual{position:relative;padding:25px 80px 0;background:radial-gradient(ellipse at 50% 90%,#dfe4ff 0,transparent 65%);height:510px}.window{border:1px solid #e0e2e8;border-radius:13px 13px 0 0;background:#fff;box-shadow:0 12px 70px #3b46751c;overflow:hidden}.window-bar{height:42px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;font-size:12px;color:#858a95;background:#fafbfc;border-bottom:1px solid #e9eaec}.dots{letter-spacing:3px;color:#b6bfd1}.live{color:#5d806d}.window img{width:100%}.float-note{position:absolute;bottom:40px;right:38px;display:flex;align-items:center;gap:14px;background:#fff;padding:18px 22px;border:1px solid #e3e6ed;border-radius:10px;box-shadow:0 12px 32px #1d2a5010;font-size:14px}.float-note small{display:block;color:#969aa2;margin-top:6px;font-size:12px}.check{background:#e6f2e9;color:#52806a;width:26px;height:26px;display:inline-grid;place-items:center;border-radius:50%;flex:none}.logos{display:flex;justify-content:space-around;align-items:center;gap:30px;padding:40px;border-top:1px solid #e9eaec;border-bottom:1px solid #e9eaec}.logos img{width:110px;max-height:30px;object-fit:contain;filter:grayscale(1);opacity:.7}.section-intro{padding:90px 48px 64px;border-bottom:1px solid #e9eaec}.tag{display:inline-block;font-size:12px;background:#f0f3fb;color:#5f739c;border-radius:4px;padding:4px 7px;margin-bottom:22px}h2{font-size:clamp(28px,3.2vw,42px);line-height:1.2}h2>span,h3>span{color:#90959e}.section-intro h2{font-size:32px;line-height:1.28}.benefit-layout{display:grid;grid-template-columns:250px minmax(0,1fr)}.benefit-nav{border-right:1px solid #e9eaec;padding-top:0;position:relative}.benefit-nav nav{position:sticky;top:130px;padding:30px 16px}.benefit-nav nav a{display:flex;gap:10px;align-items:center;font-size:14px;color:#92969e;min-height:48px;padding:10px;border-left:2px solid transparent;transition:color .2s,background .2s}.benefit-nav a[aria-current]{color:#242528;border-left-color:#8198e6;background:linear-gradient(90deg,#f1f4ff,transparent)}.nav-number{font-size:11px;color:#9ca4b3}.nav-arrow{margin-left:auto;opacity:0}.benefit-nav a[aria-current] .nav-arrow{opacity:1}.benefit-nav>p{position:absolute;bottom:35px;left:28px;font-size:12px;color:#a0a4ad}.chapter{min-height:calc(100svh - 80px);scroll-margin-top:90px;border-bottom:1px solid #e9eaec;display:flex;flex-direction:column}.chapter-heading{padding:38px 48px 28px}.chapter-number{font-size:11px;letter-spacing:.12em;color:#a4a9b2;display:inline-block;margin-bottom:22px}.chapter h3{font-size:25px;line-height:1.35;letter-spacing:-.035em;max-width:690px}.chapter-heading p{font-size:16px;max-width:650px;margin-top:8px;line-height:1.5}.coming{display:inline-flex;background:#f5efd9;border:1px solid #e9dfbd;color:#84723c;border-radius:4px;padding:5px 8px;font-size:11px;letter-spacing:0;margin-left:14px}.ui-stage{padding:35px 44px;background:#f6f7fa;border-top:1px solid #eef0f4;border-bottom:1px solid #eef0f4;min-height:380px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:1}.screen-card{background:#fff;border:1px solid #e2e5eb;border-radius:9px;overflow:hidden;box-shadow:0 14px 36px #27365b0a;width:100%;max-width:700px}.ui-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #eceef2;font-size:13px}.pill{font-size:11px;color:#7b8495;background:#f3f5f8;border:1px solid #e8ebef;padding:4px 7px;border-radius:4px}.screen-card>img{width:100%;max-height:350px;object-fit:cover;object-position:top}.ui-footer{display:flex;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid #eef0f4;font-size:12px;color:#7b8490}.chapter-caption{padding:22px 48px;display:flex;flex-direction:column;gap:5px;font-size:13px;line-height:1.5;color:#8c929d}.chapter-caption strong{font-weight:500;color:#464c56}.dashboard-body,.report-body{padding:28px 32px}.metric small,.metric>span{display:block;color:#8a919e;font-size:12px}.metric strong{display:block;font-size:42px;letter-spacing:-.05em;font-weight:500;margin:8px 0}em{font-size:12px;letter-spacing:0;font-style:normal;color:#9299a5;font-weight:400}.chart-title{font-size:12px;margin:26px 0 16px;color:#737a85}.bar-row{display:grid;grid-template-columns:104px 1fr 35px;align-items:center;gap:12px;font-size:12px;margin:15px 0;color:#707887}.bar-row b{font-weight:400;text-align:right}.bar-track{height:13px;border-radius:3px;background:#f4f5f8}.bar-track i{display:block;height:100%;background:#91a4da;border-radius:3px}.bar-row:nth-of-type(4) i{background:#bac7e5}.insight{display:flex;align-items:center;gap:15px;background:#f5f7fc;border:1px solid #e7ecf8;border-radius:5px;padding:14px;margin-top:25px;font-size:12px}.insight>span{font-size:23px;color:#8c9dcc}.insight strong{font-weight:500}.insight p{font-size:12px}.compare-body{padding:24px}.product-thumb{display:flex;align-items:center;gap:18px;font-size:14px}.product-thumb img{width:120px;height:90px;object-fit:cover;border-radius:6px}.product-thumb small{display:block;font-size:12px;color:#9299a4;margin-top:6px}.compare-grid{display:grid;grid-template-columns:1fr 1fr;margin:25px 0;gap:12px}.compare-grid>div{border:1px solid #e7eaf0;border-radius:6px;padding:20px}.compare-grid .selected{border-color:#becddf;background:#f7f9fd}.compare-grid small{font-size:11px;color:#828b99}.compare-grid h4{font-size:15px;letter-spacing:-.02em;margin:12px 0 20px}.compare-grid strong{font-size:30px;font-weight:500;white-space:nowrap}.compare-line{height:7px;background:#b5bfcf;border-radius:2px;margin-top:22px}.compare-line.shorter{width:79%;background:#8aab97}.report-label{font-size:10px;color:#9aa2af;letter-spacing:.1em}.report h4{font-size:29px;margin:20px 0}.progress-metrics{display:flex;align-items:center;gap:28px;margin:25px 0 8px}.progress-metrics small{font-size:11px;color:#8a929e}.progress-metrics strong{display:block;font-size:38px;font-weight:500;margin-top:8px}.delta{padding:8px;background:#eaf3ed;color:#54725e;border-radius:5px;font-size:14px}.report-body>small{font-size:11px;color:#99a0aa;display:block;margin-bottom:23px}.record{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:12px;border-top:1px solid #f0f1f4}.record .check{width:20px;height:20px}.passport-composition{display:flex;align-items:center;justify-content:space-around;width:100%;gap:30px}.passport-copy h4{font-size:28px;line-height:1.2}.passport-copy a{font-size:12px;display:inline-block;margin-top:25px;border-bottom:1px solid #c4cbd8;padding-bottom:7px}.phone{width:230px;flex:none;background:white;border:5px solid #292c34;border-radius:30px;overflow:hidden;box-shadow:0 16px 30px #2c35491c}.phone-top{font-size:10px;display:flex;justify-content:space-between;padding:20px 15px 10px}.phone>img{height:155px;width:100%;object-fit:cover}.phone-body{padding:16px}.phone-body small{font-size:9px;color:#9ba3af;letter-spacing:.08em}.phone-body h4{font-size:23px;margin:7px 0}.phone-body p{font-size:11px;margin-bottom:14px}.phone-body>div{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #eceef2;font-size:11px}.phone .coming{margin:8px 0 0;font-size:9px}.getting-started{text-align:center;padding:80px 48px}.getting-started .button{margin-top:25px}.input-flow{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:45px;padding:30px;border:1px solid #edeef1;background:#fafbfc;font-size:13px}.input-flow span{border:1px solid #e3e6eb;padding:12px;border-radius:5px;background:white;color:#77808c}.input-flow strong{font-weight:500}.model{background:#111214;color:#f8f9fc}.model-inner{border-color:#292a2d}.model-title{text-align:center;padding:90px 20px 20px}.model-title p{font-size:14px;color:#9b9da3;margin-bottom:14px}.model-title h2{font-size:clamp(34px,4.5vw,60px)}.model-horizon{height:250px;position:relative;overflow:hidden;background:repeating-linear-gradient(90deg,transparent 0 5px,#ffffff02 5px 6px)}.model-horizon>div{position:absolute;width:110%;height:650px;left:-5%;top:65px;border-radius:50%;background:#111214;border:1px solid #71808b;box-shadow:0 -5px 20px #d2bb5933,0 -2px 8px #9aaccc66}.model-core{position:absolute;bottom:30px;left:calc(50% - 28px);font-size:45px;font-weight:600;letter-spacing:-.12em;color:#d3d8e3}.model-core span{color:#a0b7df}.capabilities{display:grid;grid-template-columns:repeat(5,1fr);border-block:1px solid #292a2d}.capabilities article{padding:30px 24px;border-right:1px solid #292a2d}.capabilities article:last-child{border:0}.cap-icon{color:#9298a1;font-size:22px;display:block;margin-bottom:28px}.capabilities h3{font-size:14px;letter-spacing:-.02em;margin-bottom:12px}.capabilities p{font-size:12px;line-height:1.65;color:#9498a1}.signals{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #292a2d;min-height:450px}.signals>div:first-child{padding:70px 50px;border-right:1px solid #292a2d}.model .tag{background:#252b3b;color:#b4c0d8}.dark-button{background:transparent;color:#c8cbd2;border-color:#383a40;box-shadow:none;margin-top:24px}.dark-button:hover{background:#24262b}.signal-map{position:relative;overflow:hidden;display:grid;place-items:center;min-height:400px;background:radial-gradient(ellipse,#34435b20,transparent 70%)}.signal-ring{position:absolute;border:1px solid #343842;border-radius:50%;width:220px;height:220px}.ring-two{width:350px;height:350px}.ring-three{width:480px;height:480px}.signal-map strong{font-size:14px;font-weight:400;background:#171a20;border:1px solid #485165;border-radius:6px;padding:18px;z-index:1;box-shadow:0 0 60px #6578991a}.node{position:absolute;background:#17191d;border:1px solid #353944;padding:8px 12px;border-radius:4px;font-size:12px;color:#a9b0bf}.n1{top:60px;left:45%}.n2{left:35px;top:45%}.n3{bottom:60px;left:35%}.n4{right:30px;top:55%}.api{padding:65px 50px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,transparent,#26303b1c)}.api h2{font-size:32px}.api .button{margin:0}.closing{text-align:center;padding:95px 24px}.closing h2{font-size:clamp(35px,4.5vw,58px);margin-top:24px}footer{padding:30px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e9eaec;font-size:12px;color:#8a909a}footer .brand{color:#363b43}@media(min-width:1500px){.chapter{min-height:850px}}@media(max-width:1000px){.benefit-layout{grid-template-columns:210px minmax(0,1fr)}.chapter-heading,.chapter-caption{padding-left:28px;padding-right:28px}.ui-stage{padding:25px}.benefit-nav nav{padding:20px 8px}.benefit-nav nav a{font-size:12px}.hero-visual{height:410px;padding-inline:45px}.capabilities{grid-template-columns:repeat(3,1fr)}.capabilities article{border-bottom:1px solid #292a2d}.passport-copy h4{font-size:23px}.phone{width:205px}.compare-grid>div{padding:12px}.compare-grid strong{font-size:25px}}@media(max-width:720px){html{scroll-padding-top:150px}.header{height:68px;padding:0 16px}.header nav{display:none}.brand{font-size:14px}.header .button{font-size:12px;padding:8px 12px}.hero-copy{padding:55px 20px 35px}.hero h1{font-size:42px}.hero-copy p{font-size:15px}.hero-visual{padding:15px 15px 0;height:265px}.window-bar{font-size:9px;padding:0 10px}.live{display:none}.float-note{right:22px;bottom:20px;font-size:10px;padding:10px;gap:8px}.float-note small{font-size:9px}.logos{padding:25px 20px;gap:20px;flex-wrap:wrap}.logos img{width:70px;max-height:22px}.section-intro{padding:55px 22px 35px}.section-intro h2{font-size:25px}.benefit-layout{display:block}.benefit-nav{position:sticky;top:68px;z-index:15;background:#ffffffed;backdrop-filter:blur(15px);border-bottom:1px solid #e5e8ee}.benefit-nav nav{position:static;display:flex;overflow-x:auto;padding:5px 10px;scrollbar-width:thin}.benefit-nav nav a{flex:none;white-space:nowrap;font-size:12px;border-left:0;border-bottom:2px solid transparent;gap:5px;padding:10px}.benefit-nav a[aria-current]{border-bottom-color:#8198e6;background:#f4f6fc}.nav-arrow,.benefit-nav>p{display:none}.nav-number{font-size:9px}.chapter{scroll-margin-top:140px;min-height:0}.chapter-heading{padding:30px 22px 24px}.chapter h3{font-size:23px}.chapter-heading p{font-size:15px}.ui-stage{padding:24px 15px;min-height:300px}.chapter-caption{padding:20px 22px}.dashboard-body,.report-body{padding:20px}.ui-bar{padding:12px;font-size:11px}.pill{font-size:9px}.metric strong{font-size:34px}.bar-row{grid-template-columns:85px 1fr 30px;font-size:11px}.compare-body{padding:15px}.compare-grid{gap:8px}.compare-grid strong{font-size:22px}.compare-grid em{font-size:9px}.product-thumb img{width:90px;height:70px}.progress-metrics{gap:17px}.progress-metrics strong{font-size:32px}.passport-composition{gap:10px}.passport-copy{max-width:140px}.passport-copy h4{font-size:21px}.passport-copy .tag{font-size:9px}.phone{width:175px;border-width:4px;border-radius:24px}.phone>img{height:120px}.phone-body{padding:12px}.phone-top{font-size:9px}.phone-body h4{font-size:21px}.phone-body>div{font-size:10px}.coming{font-size:10px}.getting-started{padding:55px 20px}.input-flow{padding:20px 10px;gap:8px;font-size:11px}.input-flow span{padding:8px}.model-title{padding-top:60px}.model-horizon{height:170px}.model-horizon>div{height:400px}.capabilities{grid-template-columns:1fr 1fr}.capabilities article{padding:25px 20px}.capabilities article:last-child{grid-column:1/-1}.signals{grid-template-columns:1fr}.signals>div:first-child{padding:45px 25px;border-right:0}.signal-map{min-height:330px}.api{padding:40px 25px;display:block}.api h2{font-size:28px}.api .button{margin-top:22px}.closing{padding:65px 20px}footer{gap:20px;flex-wrap:wrap;padding:25px 20px}footer .brand{width:100%}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;color:#242528;background:#fff;font-family:Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,a{-webkit-tap-highlight-color:transparent}a:focus-visible{outline:3px solid #627de7;outline-offset:5px}img{max-width:100%;height:auto;display:block}h1,h2,h3,h4,p{margin:0}h1,h2,h3,h4{font-weight:500;letter-spacing:-.045em}p{line-height:1.65;color:#72777e}span{line-height:inherit}.frame{max-width:1240px;margin:auto;border-left:1px solid #e9eaec;border-right:1px solid #e9eaec}.header{height:80px;max-width:1240px;margin:auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;border:1px solid #e9eaec;border-top:0;background:#ffffffed;position:sticky;top:0;z-index:20;backdrop-filter:blur(16px)}.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;letter-spacing:-.04em}.mark{font-size:31px;font-weight:750;letter-spacing:-.22em;width:35px;transform:rotate(-12deg)}.mark span{color:#7887d8}.header nav{display:flex;gap:30px;font-size:14px}.header nav a:hover{color:#5c70bf}.button{display:inline-flex;align-items:center;justify-content:center;gap:24px;min-height:44px;border:1px solid #dedfe2;border-radius:7px;padding:11px 17px;background:white;font-size:14px;font-weight:500;box-shadow:0 2px 3px #00000005;transition:transform .2s,background .2s}.button:hover{background:#f5f6fa;transform:translateY(-2px)}.button.primary{background:#242528;color:#fff;border-color:#242528}.button.primary:hover{background:#45464d}.small{min-height:38px}.skip{position:fixed;top:-100px;background:#fff;padding:14px;z-index:100}.skip:focus{top:8px}.hero{overflow:hidden}.hero-copy{text-align:center;padding:86px 24px 50px}.eyebrow{font-size:12px;letter-spacing:.14em;color:#7d818a}.eyebrow i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#8295d1;margin-right:7px}.hero h1{font-size:clamp(40px,5.5vw,72px);line-height:1.02;margin:24px 0}.hero-copy p{max-width:665px;margin:auto;font-size:16px;line-height:1.65}.hero-copy strong{font-weight:600}.actions{display:flex;gap:10px;justify-content:center;margin-top:26px}.hero-visual{position:relative;padding:25px 80px 0;background:radial-gradient(ellipse at 50% 90%,#dfe4ff 0,transparent 65%);height:510px}.window{border:1px solid #e0e2e8;border-radius:13px 13px 0 0;background:#fff;box-shadow:0 12px 70px #3b46751c;overflow:hidden}.window-bar{height:42px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;font-size:12px;color:#858a95;background:#fafbfc;border-bottom:1px solid #e9eaec}.dots{letter-spacing:3px;color:#b6bfd1}.live{color:#5d806d}.window img{width:100%}.float-note{position:absolute;bottom:40px;right:38px;display:flex;align-items:center;gap:14px;background:#fff;padding:18px 22px;border:1px solid #e3e6ed;border-radius:10px;box-shadow:0 12px 32px #1d2a5010;font-size:14px}.float-note small{display:block;color:#969aa2;margin-top:6px;font-size:12px}.check{background:#e6f2e9;color:#52806a;width:26px;height:26px;display:inline-grid;place-items:center;border-radius:50%;flex:none}.logos{display:flex;justify-content:space-around;align-items:center;gap:30px;padding:40px;border-top:1px solid #e9eaec;border-bottom:1px solid #e9eaec}.logos img{width:110px;max-height:30px;object-fit:contain;filter:grayscale(1);opacity:.7}.section-intro{padding:90px 48px 64px;border-bottom:1px solid #e9eaec}.tag{display:inline-block;font-size:12px;background:#f0f3fb;color:#5f739c;border-radius:4px;padding:4px 7px;margin-bottom:22px}h2{font-size:clamp(28px,3.2vw,42px);line-height:1.2}h2>span,h3>span{color:#90959e}.section-intro h2{font-size:32px;line-height:1.28}.benefit-layout{display:grid;grid-template-columns:250px minmax(0,1fr)}.benefit-nav{border-right:1px solid #e9eaec;padding-top:0;position:relative}.benefit-nav nav{position:sticky;top:130px;padding:30px 16px}.benefit-nav nav a{display:flex;gap:10px;align-items:center;font-size:14px;color:#92969e;min-height:48px;padding:10px;border-left:2px solid transparent;transition:color .2s,background .2s}.benefit-nav a[aria-current]{color:#242528;border-left-color:#8198e6;background:linear-gradient(90deg,#f1f4ff,transparent)}.nav-arrow{margin-left:auto;opacity:0}.benefit-nav a[aria-current] .nav-arrow{opacity:1}.benefit-nav>p{position:absolute;bottom:35px;left:28px;font-size:12px;color:#a0a4ad}.chapter{min-height:calc(100svh - 80px);scroll-margin-top:90px;border-bottom:1px solid #e9eaec;display:flex;flex-direction:column}.chapter-heading{padding:38px 48px 28px}.chapter-number{font-size:11px;letter-spacing:.12em;color:#a4a9b2;display:inline-block;margin-bottom:22px}.chapter h3{font-size:25px;line-height:1.35;letter-spacing:-.035em;max-width:690px}.chapter-heading p{font-size:16px;max-width:650px;margin-top:8px;line-height:1.5}.coming{display:inline-flex;background:#f5efd9;border:1px solid #e9dfbd;color:#84723c;border-radius:4px;padding:5px 8px;font-size:11px;letter-spacing:0;margin-left:14px}.ui-stage{padding:35px 44px;background:#f6f7fa;border-top:1px solid #eef0f4;border-bottom:1px solid #eef0f4;min-height:380px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:1}.screen-card{background:#fff;border:1px solid #e2e5eb;border-radius:9px;overflow:hidden;box-shadow:0 14px 36px #27365b0a;width:100%;max-width:700px}.ui-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #eceef2;font-size:13px}.pill{font-size:11px;color:#7b8495;background:#f3f5f8;border:1px solid #e8ebef;padding:4px 7px;border-radius:4px}.screen-card>img{width:100%;max-height:350px;object-fit:cover;object-position:top}.ui-footer{display:flex;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid #eef0f4;font-size:12px;color:#7b8490}.chapter-caption{padding:22px 48px;display:flex;flex-direction:column;gap:5px;font-size:13px;line-height:1.5;color:#8c929d}.chapter-caption strong{font-weight:500;color:#464c56}.dashboard-body,.report-body{padding:28px 32px}.metric small,.metric>span{display:block;color:#8a919e;font-size:12px}.metric strong{display:block;font-size:42px;letter-spacing:-.05em;font-weight:500;margin:8px 0}em{font-size:12px;letter-spacing:0;font-style:normal;color:#9299a5;font-weight:400}.chart-title{font-size:12px;margin:26px 0 16px;color:#737a85}.bar-row{display:grid;grid-template-columns:104px 1fr 35px;align-items:center;gap:12px;font-size:12px;margin:15px 0;color:#707887}.bar-row b{font-weight:400;text-align:right}.bar-track{height:13px;border-radius:3px;background:#f4f5f8}.bar-track i{display:block;height:100%;background:#91a4da;border-radius:3px}.bar-row:nth-of-type(4) i{background:#bac7e5}.insight{display:flex;align-items:center;gap:15px;background:#f5f7fc;border:1px solid #e7ecf8;border-radius:5px;padding:14px;margin-top:25px;font-size:12px}.insight>span{font-size:23px;color:#8c9dcc}.insight strong{font-weight:500}.insight p{font-size:12px}.compare-body{padding:24px}.product-thumb{display:flex;align-items:center;gap:18px;font-size:14px}.product-thumb img{width:120px;height:90px;object-fit:cover;border-radius:6px}.product-thumb small{display:block;font-size:12px;color:#9299a4;margin-top:6px}.compare-grid{display:grid;grid-template-columns:1fr 1fr;margin:25px 0;gap:12px}.compare-grid>div{border:1px solid #e7eaf0;border-radius:6px;padding:20px}.compare-grid .selected{border-color:#becddf;background:#f7f9fd}.compare-grid small{font-size:11px;color:#828b99}.compare-grid h4{font-size:15px;letter-spacing:-.02em;margin:12px 0 20px}.compare-grid strong{font-size:30px;font-weight:500;white-space:nowrap}.compare-line{height:7px;background:#b5bfcf;border-radius:2px;margin-top:22px}.compare-line.shorter{width:79%;background:#8aab97}.report-label{font-size:10px;color:#9aa2af;letter-spacing:.1em}.report h4{font-size:29px;margin:20px 0}.progress-metrics{display:flex;align-items:center;gap:28px;margin:25px 0 8px}.progress-metrics small{font-size:11px;color:#8a929e}.progress-metrics strong{display:block;font-size:38px;font-weight:500;margin-top:8px}.delta{padding:8px;background:#eaf3ed;color:#54725e;border-radius:5px;font-size:14px}.report-body>small{font-size:11px;color:#99a0aa;display:block;margin-bottom:23px}.record{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:12px;border-top:1px solid #f0f1f4}.record .check{width:20px;height:20px}.passport-composition{display:flex;align-items:center;justify-content:space-around;width:100%;gap:30px}.passport-copy h4{font-size:28px;line-height:1.2}.passport-copy a{font-size:12px;display:inline-block;margin-top:25px;border-bottom:1px solid #c4cbd8;padding-bottom:7px}.phone{width:230px;flex:none;background:white;border:5px solid #292c34;border-radius:30px;overflow:hidden;box-shadow:0 16px 30px #2c35491c}.phone-top{font-size:10px;display:flex;justify-content:space-between;padding:20px 15px 10px}.phone>img{height:155px;width:100%;object-fit:cover}.phone-body{padding:16px}.phone-body small{font-size:9px;color:#9ba3af;letter-spacing:.08em}.phone-body h4{font-size:23px;margin:7px 0}.phone-body p{font-size:11px;margin-bottom:14px}.phone-body>div{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #eceef2;font-size:11px}.phone .coming{margin:8px 0 0;font-size:9px}.getting-started{text-align:center;padding:80px 48px}.getting-started .button{margin-top:25px}.input-flow{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:45px;padding:30px;border:1px solid #edeef1;background:#fafbfc;font-size:13px}.input-flow span{border:1px solid #e3e6eb;padding:12px;border-radius:5px;background:white;color:#77808c}.input-flow strong{font-weight:500}.model{background:#111214;color:#f8f9fc}.model-inner{border-color:#292a2d}.model-title{text-align:center;padding:90px 20px 20px}.model-title p{font-size:14px;color:#9b9da3;margin-bottom:14px}.model-title h2{font-size:clamp(34px,4.5vw,60px)}.model-horizon{height:250px;position:relative;overflow:hidden;background:repeating-linear-gradient(90deg,transparent 0 5px,#ffffff02 5px 6px)}.model-horizon>div{position:absolute;width:110%;height:650px;left:-5%;top:65px;border-radius:50%;background:#111214;border:1px solid #71808b;box-shadow:0 -5px 20px #d2bb5933,0 -2px 8px #9aaccc66}.model-core{position:absolute;bottom:30px;left:calc(50% - 28px);font-size:45px;font-weight:600;letter-spacing:-.12em;color:#d3d8e3}.model-core span{color:#a0b7df}.capabilities{display:grid;grid-template-columns:repeat(5,1fr);border-block:1px solid #292a2d}.capabilities article{padding:30px 24px;border-right:1px solid #292a2d}.capabilities article:last-child{border:0}.cap-icon{color:#9298a1;font-size:22px;display:block;margin-bottom:28px}.capabilities h3{font-size:14px;letter-spacing:-.02em;margin-bottom:12px}.capabilities p{font-size:12px;line-height:1.65;color:#9498a1}.signals{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #292a2d;min-height:450px}.signals>div:first-child{padding:70px 50px;border-right:1px solid #292a2d}.model .tag{background:#252b3b;color:#b4c0d8}.dark-button{background:transparent;color:#c8cbd2;border-color:#383a40;box-shadow:none;margin-top:24px}.dark-button:hover{background:#24262b}.signal-map{position:relative;overflow:hidden;display:grid;place-items:center;min-height:400px;background:radial-gradient(ellipse,#34435b20,transparent 70%)}.signal-ring{position:absolute;border:1px solid #343842;border-radius:50%;width:220px;height:220px}.ring-two{width:350px;height:350px}.ring-three{width:480px;height:480px}.signal-map strong{font-size:14px;font-weight:400;background:#171a20;border:1px solid #485165;border-radius:6px;padding:18px;z-index:1;box-shadow:0 0 60px #6578991a}.node{position:absolute;background:#17191d;border:1px solid #353944;padding:8px 12px;border-radius:4px;font-size:12px;color:#a9b0bf}.n1{top:60px;left:45%}.n2{left:35px;top:45%}.n3{bottom:60px;left:35%}.n4{right:30px;top:55%}.api{padding:65px 50px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,transparent,#26303b1c)}.api h2{font-size:32px}.api .button{margin:0}.closing{text-align:center;padding:95px 24px}.closing h2{font-size:clamp(35px,4.5vw,58px);margin-top:24px}footer{padding:30px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e9eaec;font-size:12px;color:#8a909a}footer .brand{color:#363b43}@media(min-width:1500px){.chapter{min-height:850px}}@media(max-width:1000px){.benefit-layout{grid-template-columns:210px minmax(0,1fr)}.chapter-heading,.chapter-caption{padding-left:28px;padding-right:28px}.ui-stage{padding:25px}.benefit-nav nav{padding:20px 8px}.benefit-nav nav a{font-size:12px}.hero-visual{height:410px;padding-inline:45px}.capabilities{grid-template-columns:repeat(3,1fr)}.capabilities article{border-bottom:1px solid #292a2d}.passport-copy h4{font-size:23px}.phone{width:205px}.compare-grid>div{padding:12px}.compare-grid strong{font-size:25px}}@media(max-width:720px){html{scroll-padding-top:150px}.header{height:68px;padding:0 16px}.header nav{display:none}.brand{font-size:14px}.header .button{font-size:12px;padding:8px 12px}.hero-copy{padding:55px 20px 35px}.hero h1{font-size:42px}.hero-copy p{font-size:15px}.hero-visual{padding:15px 15px 0;height:265px}.window-bar{font-size:9px;padding:0 10px}.live{display:none}.float-note{right:22px;bottom:20px;font-size:10px;padding:10px;gap:8px}.float-note small{font-size:9px}.logos{padding:25px 20px;gap:20px;flex-wrap:wrap}.logos img{width:70px;max-height:22px}.section-intro{padding:55px 22px 35px}.section-intro h2{font-size:25px}.benefit-layout{display:block}.benefit-nav{position:sticky;top:68px;z-index:15;background:#ffffffed;backdrop-filter:blur(15px);border-bottom:1px solid #e5e8ee}.benefit-nav nav{position:static;display:flex;overflow-x:auto;padding:5px 10px;scrollbar-width:thin}.benefit-nav nav a{flex:none;white-space:nowrap;font-size:12px;border-left:0;border-bottom:2px solid transparent;gap:5px;padding:10px}.benefit-nav a[aria-current]{border-bottom-color:#8198e6;background:#f4f6fc}.nav-arrow,.benefit-nav>p{display:none}.chapter{scroll-margin-top:140px;min-height:0}.chapter-heading{padding:30px 22px 24px}.chapter h3{font-size:23px}.chapter-heading p{font-size:15px}.ui-stage{padding:24px 15px;min-height:300px}.chapter-caption{padding:20px 22px}.dashboard-body,.report-body{padding:20px}.ui-bar{padding:12px;font-size:11px}.pill{font-size:9px}.metric strong{font-size:34px}.bar-row{grid-template-columns:85px 1fr 30px;font-size:11px}.compare-body{padding:15px}.compare-grid{gap:8px}.compare-grid strong{font-size:22px}.compare-grid em{font-size:9px}.product-thumb img{width:90px;height:70px}.progress-metrics{gap:17px}.progress-metrics strong{font-size:32px}.passport-composition{gap:10px}.passport-copy{max-width:140px}.passport-copy h4{font-size:21px}.passport-copy .tag{font-size:9px}.phone{width:175px;border-width:4px;border-radius:24px}.phone>img{height:120px}.phone-body{padding:12px}.phone-top{font-size:9px}.phone-body h4{font-size:21px}.phone-body>div{font-size:10px}.coming{font-size:10px}.getting-started{padding:55px 20px}.input-flow{padding:20px 10px;gap:8px;font-size:11px}.input-flow span{padding:8px}.model-title{padding-top:60px}.model-horizon{height:170px}.model-horizon>div{height:400px}.capabilities{grid-template-columns:1fr 1fr}.capabilities article{padding:25px 20px}.capabilities article:last-child{grid-column:1/-1}.signals{grid-template-columns:1fr}.signals>div:first-child{padding:45px 25px;border-right:0}.signal-map{min-height:330px}.api{padding:40px 25px;display:block}.api h2{font-size:28px}.api .button{margin-top:22px}.closing{padding:65px 20px}footer{gap:20px;flex-wrap:wrap;padding:25px 20px}footer .brand{width:100%}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 
 /* Editorial hero and animated product-data diagrams. */
 .hero-chair{position:relative;isolation:isolate;text-align:left;min-height:670px;display:flex;align-items:center;padding:80px 6%;background:#11120f;overflow:hidden}.hero-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 57%;z-index:-2}.hero-chair::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#090b0aeb,#090b0a00)}.hero-chair::before{background:linear-gradient(90deg,#090b0aeb 0%,#090b0abd 32%,#090b0a20 65%,transparent 100%)}.hero-editorial{max-width:580px;width:54%}.hero-chair h1{font-size:clamp(40px,4.7vw,66px);color:#fafaf7;line-height:1.05;text-wrap:balance}.hero-chair h1 br{display:none}.hero-chair .eyebrow{color:#c1c3bd}.hero-chair p{color:#c8cbc6;font-size:16px;line-height:1.7;margin:0;max-width:490px}.hero-chair .actions{justify-content:flex-start;margin-top:30px}.hero-chair .button{background:#ffffff0b;border-color:#ffffff45;color:#fff;backdrop-filter:blur(8px)}.hero-chair .button.primary{background:#f7f7f2;border-color:#f7f7f2;color:#252824}.hero-chair .button:hover{background:#ffffff25}.hero-chair .button.primary:hover{background:#fff}.hero-visual{padding-top:50px}.getting-started h2{max-width:900px;margin:auto;font-size:clamp(27px,3vw,38px);line-height:1.3}.getting-started h2 span{color:#858b95}.model-horizon.data-sphere{height:560px;background:radial-gradient(ellipse at 50% 70%,#17212c33,transparent 65%)}.data-sphere canvas,.data-vortex canvas{display:block;width:100%;height:100%}.signal-map.data-vortex{display:block;background:#111214;min-height:450px}.data-vortex canvas{position:absolute;inset:0}.benefit-nav>p{display:none}@media(max-width:1000px){.hero-chair{min-height:590px;padding:65px 5%}.hero-editorial{width:56%}.hero-chair h1{font-size:48px}.model-horizon.data-sphere{height:480px}}@media(max-width:720px){.hero-chair{min-height:740px;align-items:flex-start;padding:44px 24px}.hero-editorial{width:100%;max-width:500px}.hero-chair h1{font-size:42px;max-width:370px}.hero-chair p{font-size:14px;max-width:370px}.hero-backdrop{object-position:65% bottom}.hero-chair::before{background:linear-gradient(180deg,#090b0af2 0%,#090b0ade 29%,#090b0a66 53%,#090b0a00 78%)}.hero-chair .actions{margin-top:23px}.hero-visual{padding-top:24px}.model-horizon.data-sphere{height:390px}.signal-map.data-vortex{min-height:370px}.getting-started h2{font-size:28px}} 
@@ -259,3 +259,483 @@ html[data-overlay-open] main *,html[data-overlay-open] main *::before,html[data-
 .eyebrow i{vertical-align:calc(.37em - 3px)}
 /* Eyebrow above the brand strip: same look as the "PRODUCT CONNECT" eyebrow above the benefits heading. */
 .brand-eyebrow{text-align:center;text-transform:uppercase;line-height:1.25;margin:0 auto 32px;padding:0 22px}
+/* "CO₂ numbers you can trust": the dark report miniature (Co2Report) fills its stage edge to edge, like the globe. */
+.ui-stage.stage-1{padding:0;display:block;min-height:0}
+@media(max-width:720px){.ui-stage.stage-1{height:auto}.stage-1 .co2,.stage-1 .rep{min-height:470px}}
+/* Chapter menu as a horizontal tab row across the top of the benefits section (all widths, as it already was
+   on phones). It sticks to the top of the screen once reached: right under the site header while that is
+   shown, and at the very top when the header has slid away on scroll-down. */
+:root{--sh-h:102px}
+@media(max-width:940px){:root{--sh-h:68px}}
+.benefit-layout{display:block}
+.benefit-nav{position:sticky;top:0;z-index:15;border-right:0;border-bottom:1px solid #e5e8ee;background:#fffffffa;transition:top .3s ease}
+html:has(.site-header:not(.is-hidden)) .benefit-nav{top:var(--sh-h)}
+.benefit-nav nav{position:static;display:flex;overflow-x:auto;padding:0 12px;scrollbar-width:none}
+.benefit-nav nav::-webkit-scrollbar{display:none}
+.benefit-nav nav a{flex:1 0 auto;justify-content:center;white-space:nowrap;min-height:0;padding:16px 12px 14px;font-size:13px;gap:7px;border-left:0;border-bottom:2px solid transparent}
+.benefit-nav a[aria-current]{border-bottom-color:#8198e6;background:linear-gradient(0deg,#f1f4ff,transparent)}
+.benefit-nav .nav-arrow{display:none}
+/* Styled like the main menu (SiteHeader, light): 14px medium in soft grey, blue on hover, ink when active with a
+   small accent dot below instead of an underline. */
+.benefit-nav nav a{position:relative;font-size:14px;font-weight:500;color:#4a4f57;border-bottom:0}
+.benefit-nav nav a:hover{color:#5c70bf}
+.benefit-nav nav a[aria-current]{color:#242528;background:none;border-bottom:0}
+.benefit-nav nav a[aria-current]::after{content:'';position:absolute;left:50%;bottom:6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#7887d8}
+@media(max-width:720px){.benefit-nav nav a{font-size:13px}.benefit-nav nav a[aria-current]::after{bottom:4px}}
+.chapter{scroll-margin-top:calc(var(--sh-h) + 60px)} /* clear the tab row, and the header if it is showing */
+@media(max-width:720px){.benefit-nav nav{padding:0 6px}.benefit-nav nav a{flex:none;font-size:12px;padding:12px 10px 10px}.chapter{scroll-margin-top:calc(var(--sh-h) + 52px)}}
+/* The two dark illustrations (globe, CO₂ report) get the site's 12px corners, like the hero and brand strip. */
+.stage-0 .live-window,.stage-1 .rep{border-radius:12px;overflow:hidden;isolation:isolate}
+.ui-stage.stage-0,.ui-stage.stage-1{padding:0 14px 14px;background:none;border:0}
+@media(max-width:720px){.ui-stage.stage-0,.ui-stage.stage-1{padding:10px}}
+/* Scroll story for the benefit chapters (like How it works). The script sets --e on each chapter: 0 when its
+   top reaches the bottom of the screen, 1 when it reaches the pin line under the tab row. As --e rises, the
+   number, title and text slide in one after another, then the illustration rises and settles; scrolling back
+   reverses it. On tall enough screens the chapter then pins (sticky) while its runway scrolls past, before
+   the next chapter slides up. Only with JS (html.story-on) and without reduced motion. */
+.chapter-pin{display:flex;flex-direction:column;background:#fff}
+.chapter-runway{display:none}
+html.story-on .chapter{--e:1}
+html.story-on .chapter-heading>*{
+ --t:clamp(0,calc((var(--e) - var(--s,0)) * 4),1);
+ opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 26px));will-change:opacity,transform}
+html.story-on .chapter-heading>.chapter-number{--s:.05}
+html.story-on .chapter-heading>.coming{--s:.1}
+html.story-on .chapter-heading>h3{--s:.12}
+html.story-on .chapter-heading>p{--s:.22}
+html.story-on .chapter-heading>small{--s:.3}
+html.story-on .chapter .ui-stage>*{
+ --v:clamp(0,calc((var(--e) - .3) * 1.8),1);
+ opacity:var(--v);transform:translateY(calc((1 - var(--v)) * 48px)) scale(calc(.955 + var(--v) * .045));transform-origin:50% 100%}
+@media(min-width:721px) and (min-height:700px){
+ html.story-on .chapter-pin{position:sticky;top:var(--tab-row);z-index:1;transition:top .3s ease}
+ html.story-on:has(.site-header:not(.is-hidden)) .chapter-pin{top:calc(var(--sh-h) + var(--tab-row))}
+ html.story-on .chapter-runway{display:block;height:45vh}
+}
+@media(min-width:721px) and (min-height:700px){html.story-on .chapter.no-pin .chapter-pin{position:relative;top:auto}html.story-on .chapter.no-pin .chapter-runway{display:none}}
+/* No divider lines between the benefit chapters (or around their stages). */
+.chapters .chapter{border-bottom:0}
+.chapters .ui-stage{border-top:0;border-bottom:0}
+/* The byline under each chapter title ("Save up to 90% ...") sits on its own line and slides in as a separate
+   step of the scroll story, after the title and before the paragraph. */
+.chapter h3>span{display:block;margin-top:2px}
+html.story-on .chapter h3>span{--t:clamp(0,calc((var(--e) - .19) * 4),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 18px))}
+html.story-on .chapter-heading>p{--s:.27}
+html.story-on .chapter-heading>small{--s:.34}
+
+/* Scroll story, part 2: what plays out inside each illustration. All text arrives like the chapter headings
+   (fades in while rising 26px, one element after another). --k (0-2) runs through arriving (0-1) and the
+   pinned stretch (1-2); each element has its own start (a) and length (d): --q = clamp((k - a) / d). */
+html.story-on .chapter{--k:2}
+html.story-on #harvest-data .chapter-runway{height:50vh}
+html.story-on #trusted-co2 .chapter-runway{height:140vh} /* four report views to scroll through */
+html.story-on #analyse-improve .chapter-runway{height:60vh}
+html.story-on #beat-regulation .chapter-runway,html.story-on #connect-clients .chapter-runway{height:75vh}
+html.story-on .chapter .stage-0 .globe-stage astro-island{--q:clamp(0,calc((var(--k) - .45) / .6),1);transform:scale(calc(.8 + .2 * var(--q) + .06 * clamp(0, var(--k) - 1, 1)));transform-origin:72% 55%}
+html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 0.85) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.0) / 0.3),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-1 .rep-note{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * -10px))}
+html.story-on .chapter .stage-1 .rep-tabs{--q:clamp(0,calc((var(--k) - 0.8) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * -8px))}
+html.story-on .chapter .stage-1 .rep-views{--q:clamp(0,calc((var(--k) - 0.9) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-2 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-2 .product-thumb{--q:clamp(0,calc((var(--k) - 0.9) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-2 .compare-grid>div:nth-child(1){--q:clamp(0,calc((var(--k) - 1.05) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-2 .compare-grid>div:nth-child(2){--q:clamp(0,calc((var(--k) - 1.25) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px)) scale(calc(.96 + .04 * var(--q)))}
+html.story-on .chapter .stage-2 .compare-line{--q:clamp(0,calc((var(--k) - 1.35) / .35),1);transform:scaleX(var(--q));transform-origin:left}
+html.story-on .chapter .stage-2 .ui-footer{--q:clamp(0,calc((var(--k) - 1.6) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-3 .passport-copy>.tag{--q:clamp(0,calc((var(--k) - 0.75) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-3 .passport-copy>h4{--q:clamp(0,calc((var(--k) - 0.85) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-3 .passport-copy>button{--q:clamp(0,calc((var(--k) - 1.0) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-3 .phone-live{--q:clamp(0,calc((var(--k) - 0.8) / 0.45),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 50px)) scale(calc(.92 + .08 * var(--q)))}
+html.story-on .chapter .stage-4 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .report-label{--q:clamp(0,calc((var(--k) - 0.85) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .report-body>h4{--q:clamp(0,calc((var(--k) - 0.95) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(1){--q:clamp(0,calc((var(--k) - 1.1) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(1) .check{--c:clamp(0,calc((var(--k) - 1.1800000000000002) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .record:nth-of-type(2){--q:clamp(0,calc((var(--k) - 1.3) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(2) .check{--c:clamp(0,calc((var(--k) - 1.3800000000000001) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .record:nth-of-type(3){--q:clamp(0,calc((var(--k) - 1.5) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(3) .check{--c:clamp(0,calc((var(--k) - 1.58) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .record:nth-of-type(4){--q:clamp(0,calc((var(--k) - 1.7) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(4) .check{--c:clamp(0,calc((var(--k) - 1.78) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-5 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .report-label{--q:clamp(0,calc((var(--k) - 0.85) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .report-body>h4{--q:clamp(0,calc((var(--k) - 0.95) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .record:nth-of-type(1){--q:clamp(0,calc((var(--k) - 1.1) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .record:nth-of-type(1) .check{--c:clamp(0,calc((var(--k) - 1.1800000000000002) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-5 .record:nth-of-type(2){--q:clamp(0,calc((var(--k) - 1.3) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .record:nth-of-type(2) .check{--c:clamp(0,calc((var(--k) - 1.3800000000000001) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-5 .record:nth-of-type(3){--q:clamp(0,calc((var(--k) - 1.5) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .record:nth-of-type(3) .check{--c:clamp(0,calc((var(--k) - 1.58) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-5 .record:nth-of-type(4){--q:clamp(0,calc((var(--k) - 1.7) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-5 .record:nth-of-type(4) .check{--c:clamp(0,calc((var(--k) - 1.78) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+/* Active chapter tab: blue underline only, no gradient fill. */
+.benefit-nav a[aria-current]{background:none}
+/* Chapter 1: its title, byline and paragraph sit inside the globe card (top left), above the caption at the
+   bottom left. The card takes the chapter's full height instead of the usual stage height. */
+.stage-0 .live-window{position:relative}
+.globe-intro{position:absolute;left:36px;top:34px;z-index:3;max-width:430px;pointer-events:none;color:#eef1fb}
+.globe-intro h3{font-size:30px;line-height:1.2;letter-spacing:-.035em;color:#fff}
+.globe-intro h3>span{display:block;margin-top:4px;color:#97a1c6}
+.globe-intro p{margin-top:18px;font-size:15px;line-height:1.55;color:#b9c1da}
+.globe-intro .sentence{display:block;margin-bottom:6px}
+@media(min-width:721px){.ui-stage.stage-0{height:clamp(460px,calc(100svh - var(--tab-row) - 24px),700px)}}
+@media(max-width:720px){
+ .globe-intro{position:relative;left:auto;top:auto;max-width:none;padding:24px 20px 6px;background:#070a17}
+ .globe-intro h3{font-size:24px}
+ .globe-intro p{font-size:14px}
+}
+/* Its scroll sequence: card, title, byline, then (pinned) one sentence at a time, then the caption. */
+html.story-on #harvest-data .chapter-runway{height:95vh}
+html.story-on .chapter .globe-intro h3{--q:clamp(0,calc((var(--k) - .62) / .25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .globe-intro h3>span{--q:clamp(0,calc((var(--k) - .8) / .25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 18px))}
+html.story-on .chapter .globe-intro .sentence:nth-child(1){--q:clamp(0,calc((var(--k) - 1.0) / .2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .globe-intro .sentence:nth-child(2){--q:clamp(0,calc((var(--k) - 1.22) / .2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .globe-intro .sentence:nth-child(3){--q:clamp(0,calc((var(--k) - 1.44) / .2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 1.66) / .2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.78) / .2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+/* Chapter 1: the card stays solid (no fade or rise); instead the globe starts small and grows as you scroll,
+   from a third of its size as the card arrives to full size well into the pinned stretch. The scale is taken
+   around the globe's centre (it sits at 75% / 55% of the canvas, see --globe-offset). */
+html.story-on .chapter .ui-stage.stage-0>*{opacity:1;transform:none}
+html.story-on .chapter .stage-0 .globe-stage astro-island{--g:clamp(0,calc((var(--k) - .1) / 1.5),1);transform:scale(calc(.3 + .7 * var(--g)));transform-origin:75% 55.4%}
+/* Chapter 1 paragraph: the three sentences share one spot and replace each other while the card is pinned,
+   so only one is visible at a time (each rises in, holds, then lifts away as the next arrives). The last one
+   stays, and the caption follows it. */
+.globe-intro p{display:grid;font-size:17px;line-height:1.5}
+.globe-intro .sentence{grid-area:1/1;margin:0}
+html.story-on .chapter .globe-intro .sentence:nth-child(n){
+ --in:clamp(0,calc((var(--k) - var(--a)) / .12),1);
+ --out:clamp(0,calc((var(--k) - var(--b)) / .1),1);
+ opacity:calc(var(--in) * (1 - var(--out)));
+ transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 22px))}
+html.story-on .chapter .globe-intro .sentence:nth-child(1){--a:1.0;--b:1.26}
+html.story-on .chapter .globe-intro .sentence:nth-child(2){--a:1.34;--b:1.6}
+html.story-on .chapter .globe-intro .sentence:nth-child(3){--a:1.68;--b:9}
+html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 1.8) / .12),1)}
+html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.87) / .12),1)}
+/* Chapter 1 globe: starts small on the far right and travels inwards as you scroll, ending at 1.2x with its
+   centre at about 69% across (left edge near the middle, running off the right and bottom). Moved and scaled around its own centre (75% / 55% of the canvas);
+   translate percentages are of the canvas width. */
+html.story-on .chapter .stage-0 .globe-stage astro-island{
+ --g:clamp(0,calc((var(--k) - .1) / 1.85),1);
+ transform:translateX(calc((.12 - .18 * var(--g)) * 100%)) scale(calc(.35 + .85 * var(--g)));
+ transform-origin:75% 55.4%}
+/* Chapter 1 headline and byline arrive early: already in place when the top third of the card is on screen. */
+html.story-on .chapter .globe-intro h3{--q:clamp(0,calc((var(--k) - .08) / .18),1)}
+html.story-on .chapter .globe-intro h3>span{--q:clamp(0,calc((var(--k) - .18) / .18),1)}
+/* Phones: the globe is centred there, so it only grows (no inward travel). */
+@media(max-width:720px){html.story-on .chapter .stage-0 .globe-stage astro-island{transform:scale(calc(.45 + .55 * var(--g)));transform-origin:50% 50%}}
+/* Chapter 1: the top text (headline, byline, last sentence) lifts away and fades out before the caption at
+   the bottom appears, so the two never show together. */
+html.story-on .chapter .globe-intro{--out:clamp(0,calc((var(--k) - 1.72) / .1),1);opacity:calc(1 - var(--out));transform:translateY(calc(var(--out) * -22px))}
+html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 1.84) / .08),1)}
+html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.9) / .08),1)}
+/* Chapter 1 sentences: centred in the card, one at a time, each a dark pill (like the globe's labels) with
+   the story's checkmark bullet in front. They fade out with the headline before the caption arrives. */
+.globe-points{position:absolute;inset:0;z-index:3;display:grid;place-items:center;pointer-events:none;padding:0 40px}
+.globe-points .sentence{grid-area:1/1;display:flex;align-items:flex-start;gap:12px;max-width:560px;margin:0;padding:14px 22px 14px 16px;border:1px solid #ffffff1c;border-radius:16px;background:#0b1124e6;box-shadow:0 12px 40px #0006;color:#eef1fb;font-size:19px;line-height:1.45;text-align:left}
+.globe-points .sentence::before{content:"";flex:none;width:22px;height:22px;margin-top:.1em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%238fa0f2' fill-opacity='.22'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%23a9b7ff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+html.story-on .chapter .globe-points .sentence:nth-child(n){
+ --in:clamp(0,calc((var(--k) - var(--a)) / .12),1);
+ --out:clamp(0,calc((var(--k) - var(--b)) / .1),1);
+ opacity:calc(var(--in) * (1 - var(--out)));
+ transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 22px))}
+html.story-on .chapter .globe-points .sentence:nth-child(1){--a:.95;--b:1.18}
+html.story-on .chapter .globe-points .sentence:nth-child(2){--a:1.24;--b:1.46}
+html.story-on .chapter .globe-points .sentence:nth-child(3){--a:1.52;--b:1.72} /* leaves with the headline */
+@media(max-width:720px){
+ .globe-points{position:relative;inset:auto;padding:6px 16px 4px;background:#070a17}
+ .globe-points .sentence{font-size:15px;padding:11px 14px 11px 12px}
+}
+/* ...placed on the left (in line with the headline), vertically centred in the card. Off the globe, so plain
+   text with the checkmark, no pill. */
+@media(min-width:721px){
+ .globe-points{place-items:center start;padding:0 36px}
+ .globe-points .sentence{max-width:470px;padding:0;border:0;background:none;box-shadow:none}
+}
+/* First sentence is already in place when the card pins (k = 1); the next two follow while pinned. */
+html.story-on .chapter .globe-points .sentence:nth-child(1){--a:.8;--b:1.16}
+html.story-on .chapter .globe-points .sentence:nth-child(2){--a:1.22;--b:1.44}
+html.story-on .chapter .globe-points .sentence:nth-child(3){--a:1.5;--b:1.72}
+/* Chapter 2 gets chapter 1's treatment: one tall dark card holding the headline and byline (top left), the
+   paragraph as checkmark bullets one at a time (left, centred), the EPD note as small print, and the report
+   on the right, which starts small on the far right and moves inwards and grows as you scroll (and still
+   steps through its views while pinned). The text stays at the end: there is no caption to make way for. */
+.co2-card{position:relative;height:100%;border-radius:12px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 72% 45%,#1d2754 0%,#0e1430 48%,#070a17 100%)}
+.co2-intro,.co2-points .sentence{max-width:34%}
+.co2-report-wrap{position:absolute;top:24px;right:24px;bottom:24px;width:58%;z-index:2}
+.co2-report-wrap .rep{border:1px solid #ffffff14;box-shadow:0 30px 80px #0008}
+.co2-note{position:absolute;left:36px;bottom:26px;z-index:3;max-width:30%;font-size:11.5px;line-height:1.45;color:#7e88aa}
+.ui-stage.stage-1>*{height:100%}
+@media(min-width:721px){.ui-stage.stage-1{height:clamp(460px,calc(100svh - var(--tab-row) - 24px),700px)}}
+html.story-on .chapter .ui-stage.stage-1>*{opacity:1;transform:none}
+html.story-on .chapter .co2-intro{opacity:1;transform:none} /* no fade-out at the end */
+html.story-on .chapter .co2-points .sentence:nth-child(1){--a:.8;--b:1.3}
+html.story-on .chapter .co2-points .sentence:nth-child(2){--a:1.36;--b:9}
+html.story-on .chapter .co2-note{--q:clamp(0,calc((var(--k) - 1.45) / .15),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .co2-report-wrap{--g:clamp(0,calc((var(--k) - .1) / 1.0),1);transform:translateX(calc((1 - var(--g)) * 18%)) scale(calc(.6 + .4 * var(--g)));transform-origin:100% 50%}
+@media(max-width:720px){
+ .ui-stage.stage-1{height:auto}
+ .co2-card{height:auto;display:flex;flex-direction:column}
+ .co2-intro,.co2-points .sentence{max-width:none}
+ .co2-note{position:static;max-width:none;padding:0 20px 14px;background:#070a17}
+ .co2-report-wrap{position:relative;inset:auto;width:auto;margin:0 10px 10px}
+ html.story-on .chapter .co2-report-wrap{transform:scale(calc(.85 + .15 * var(--g)));transform-origin:50% 0}
+}
+/* The report now slides in itself, so its tabs and contents come along early rather than after it lands. */
+/* the report's tab menu drops in from the top as the panel settles into place */
+html.story-on .chapter .co2-card .rep-tabs{--q:clamp(0,calc((var(--k) - .62) / .28),1);transform:translateY(calc((1 - var(--q)) * -56px))}
+html.story-on .chapter .co2-card .rep-views{--q:clamp(0,calc((var(--k) - .35) / .25),1)}
+html.story-on .chapter .co2-card .rep-note{--q:clamp(0,calc((var(--k) - .5) / .2),1)}
+/* Bullet steps (chapters 1 and 2): each step holds one or more checkmark bullets; steps share one spot and
+   replace each other. The headline and byline fade away as the first step arrives, so the bullets speak for
+   themselves. (Replaces the per-sentence timing above.) */
+.globe-points .step{grid-area:1/1;display:flex;flex-direction:column;gap:14px}
+.globe-points .step .sentence{grid-area:auto}
+html.story-on .chapter .globe-points .sentence:nth-child(n){opacity:1;transform:none}
+html.story-on .chapter .globe-points .step:nth-child(n){
+ --in:clamp(0,calc((var(--k) - var(--a)) / .12),1);
+ --out:clamp(0,calc((var(--k) - var(--b)) / .1),1);
+ opacity:calc(var(--in) * (1 - var(--out)));
+ transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 22px))}
+html.story-on #harvest-data .globe-points .step:nth-child(1){--a:.8;--b:1.16}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:1.22;--b:1.44}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.5;--b:1.72}
+html.story-on #trusted-co2 .globe-points .step:nth-child(1){--a:.8;--b:1.3}
+html.story-on #trusted-co2 .globe-points .step:nth-child(2){--a:1.36;--b:9}
+/* headline + byline: in early, out as the first bullets arrive */
+html.story-on .chapter .globe-intro:is(*,.co2-intro){--out:clamp(0,calc((var(--k) - .78) / .12),1);opacity:calc(1 - var(--out));transform:translateY(calc(var(--out) * -22px))}
+/* Chapter 2 report: no black window of its own; its contents sit directly on the card's blue background.
+   Inner cards get a light translucent tint instead of near-black, and the highlight cards keep their height
+   instead of stretching to fill the tall panel. */
+.co2-card .co2-report-wrap .rep{--bg:transparent;--card:#ffffff0a;--border:#ffffff17;background:none;border:0;box-shadow:none;padding-left:4px;padding-right:4px}
+.co2-card .co2-report-wrap .rep-highlights{flex:0 0 auto;height:150px}
+.co2-card .co2-report-wrap .rep-table td{border-bottom-color:#ffffff12}
+.co2-card .co2-report-wrap .rep-thumb{background:#ffffff12}
+/* Chapters 1 + 2: the main headline stays top left. The byline sits in the bullets' spot (left, centred),
+   arrives with the card and gives way as the first bullets arrive. (Overrides the step timing above: the byline
+   is now step 1, the bullets follow.) */
+.globe-points .lead-text{margin:0;max-width:470px;font-size:30px;line-height:1.2;letter-spacing:-.035em;color:#97a1c6}
+.co2-points .lead-text{max-width:100%}
+.co2-points .step.lead{max-width:34%}
+html.story-on .chapter .globe-points .step.lead{--a:.12;--b:.78}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:.84;--b:1.16}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.22;--b:1.44}
+html.story-on #harvest-data .globe-points .step:nth-child(4){--a:1.5;--b:1.72}
+html.story-on #trusted-co2 .globe-points .step:nth-child(2){--a:.84;--b:1.3}
+html.story-on #trusted-co2 .globe-points .step:nth-child(3){--a:1.36;--b:9}
+/* headline: stays; in chapter 1 it still steps aside at the end for the caption */
+html.story-on .chapter .globe-intro:is(*,.co2-intro){opacity:1;transform:none}
+html.story-on #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.72) / .1),1);opacity:calc(1 - var(--out));transform:translateY(calc(var(--out) * -22px))}
+@media(max-width:720px){.globe-points .lead-text{font-size:22px}.co2-points .step.lead{max-width:none}}
+html.story-on :is(#harvest-data,#trusted-co2) .globe-points .step.lead{--a:.12;--b:.78}
+/* Strict hand-overs in the bullet spot: each step has fully left (its fade-out takes .1) before the next starts. */
+html.story-on :is(#harvest-data,#trusted-co2) .globe-points .step.lead{--a:.12;--b:.74}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:.86;--b:1.08}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.2;--b:1.38}
+html.story-on #harvest-data .globe-points .step:nth-child(4){--a:1.5;--b:1.72}
+html.story-on #trusted-co2 .globe-points .step:nth-child(2){--a:.86;--b:1.28}
+html.story-on #trusted-co2 .globe-points .step:nth-child(3){--a:1.4;--b:9}
+/* Chapter 1: "Save up to 90% ..." is the headline; "Stop chasing suppliers." heads the first bullet step. */
+.globe-points .step-title{margin:0 0 4px;font-size:26px;line-height:1.2;letter-spacing:-.03em;font-weight:500;color:#fff}
+html.story-on #harvest-data .globe-points .step:nth-child(1){--a:.78;--b:1.08}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:1.2;--b:1.38}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.5;--b:1.72}
+@media(max-width:720px){.globe-points .step-title{font-size:20px}}
+/* Chapter 2: every bullet step (title included) stays inside the left text column, clear of the report. */
+@media(min-width:721px){.co2-points .step{max-width:34%}.co2-points .step .sentence{max-width:none}}
+/* Chapter 1: "SUPPLY CHAIN MANAGEMENT" now sits above the headline (top left) instead of above the caption. */
+.globe-intro .intro-eyebrow{display:block;margin-bottom:12px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#D4EE9C}
+html.story-on .chapter .globe-intro .intro-eyebrow{--q:clamp(0,calc((var(--k) - .04) / .18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 18px))}
+/* Chapter 1: the old bottom caption is now the last bullet step ("Real risk assessments."), so there is no
+   caption, the headline stays to the end, and four steps share the pinned stretch. */
+html.story-on #harvest-data .globe-intro{opacity:1;transform:none}
+html.story-on #harvest-data .globe-points .step:nth-child(1){--a:.78;--b:.98}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:1.1;--b:1.3}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.42;--b:1.6}
+html.story-on #harvest-data .globe-points .step:nth-child(4){--a:1.72;--b:9}
+html.story-on #harvest-data .chapter-runway{height:110vh}
+/* Chapter 2, like chapter 1: eyebrow "CO₂ numbers you can trust." over the headline "EPD calculations in days,
+   not months."; no byline step, so the two bullet steps take the pinned stretch. */
+html.story-on #trusted-co2 .globe-points .step:nth-child(1){--a:.78;--b:1.28}
+html.story-on #trusted-co2 .globe-points .step:nth-child(2){--a:1.4;--b:9}
+/* Chapter 2 report: no scaling or sideways travel; it simply rises into place (and fades in) as the card arrives. */
+html.story-on .chapter .co2-report-wrap{--g:clamp(0,calc((var(--k) - .2) / .7),1);opacity:var(--g);transform:translateY(calc((1 - var(--g)) * 80px))}
+@media(max-width:720px){html.story-on .chapter .co2-report-wrap{transform:translateY(calc((1 - var(--g)) * 40px))}}
+/* Chapter 2 report column is narrower than the old panel: the component table drops Water and Waste there so
+   Component, Weight, CO₂, Energy and Distance fit without being cut off. */
+@media(min-width:721px){.co2-card .co2-report-wrap .rep-table :is(th,td):nth-child(5),.co2-card .co2-report-wrap .rep-table :is(th,td):nth-child(6){display:none}}
+@media(min-width:721px) and (max-width:1100px){.co2-card .co2-report-wrap .rep-table :is(th,td):nth-child(4){display:none}} /* narrower laptops: Energy goes too */
+/* Chapter 2 report: tabs stay at the top; each view's content is compact and centred vertically in the space
+   below them instead of stretching to fill it. */
+.co2-card .co2-report-wrap .rep-view{justify-content:center}
+.co2-card .co2-report-wrap .rep-bars{flex:none;height:min(300px,70%)}.co2-card .co2-report-wrap .rep-highlights{height:120px}
+/* Break the mold: chapters 1 and 2 paint their dark background the full width of the screen (no rounded
+   corners), while their content keeps to the page width. The background is a full-bleed layer behind each
+   card; nothing clips sideways inside the card, and the page clips at the screen edge (overflow-x: clip keeps
+   the sticky story working). The globe canvas also reaches the screen edges, so the grown globe runs off the
+   screen instead of being cut at the content edge. */
+html{overflow-x:clip}
+.ui-stage.stage-0,.ui-stage.stage-1{padding:0;overflow:visible}
+.stage-0 .live-visual,.stage-0 .live-window,.co2-card{border-radius:0;overflow:visible clip}
+.stage-0 .live-window{position:relative;isolation:isolate;background:none}
+.stage-0 .globe-stage{background:none;overflow:visible clip}
+.stage-0 .live-window::before,.co2-card::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 66% 45%,#1d2754 0%,#0e1430 46%,#070a17 100%)}
+.co2-card{background:none}
+@media(min-width:721px){.stage-0 .globe-stage astro-island{left:calc(50% - 50vw);right:calc(50% - 50vw)}}
+@media(min-width:721px){.stage-0 .globe-stage::after{display:none}} /* the old left shade would end at the content edge on the full-bleed background */
+/* Chapter tab row: its lines (top and bottom) and white background run the full screen width; the tabs keep to
+   the page width. The intro above no longer draws its own bottom line (that was the tab row's top line). */
+.benefits>.section-intro{border-bottom:0}
+.benefit-nav{border-bottom:0;background:transparent;isolation:isolate}
+.benefit-nav::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;z-index:-1;background:#fffffffa;border-top:1px solid #e9eaec;border-bottom:1px solid #e5e8ee;pointer-events:none}
+/* Chapters 1 and 2 as one dark scene: one continuous full-width background behind both chapters (their
+   cards, pins and runways), with each card adding only its soft glow on top, so there is no seam or white
+   gap between them. At the end of chapter 1 the globe slides out to the right and away, and its text lifts
+   off, before chapter 2's headline, bullets and report glide in on the same background. */
+#harvest-data,#trusted-co2{position:relative;isolation:isolate}
+#harvest-data::before,#trusted-co2::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;z-index:-1;background:#080c1f;pointer-events:none}
+#harvest-data .chapter-pin,#trusted-co2 .chapter-pin{background:transparent}
+.stage-0 .live-window::before,.co2-card::before{background:radial-gradient(ellipse at 66% 45%,#1d2754 0%,#0e1430 46%,#080c1f00 100%)}
+html.story-on #harvest-data .chapter-runway{height:120vh}
+/* globe: grows and travels inwards as before, then (from k 1.82) slides out to the right and fades */
+html.story-on .chapter .stage-0 .globe-stage astro-island{
+ --g:clamp(0,calc((var(--k) - .1) / 1.6),1);
+ --x:clamp(0,calc((var(--k) - 1.82) / .16),1);
+ opacity:calc(1 - var(--x));
+ transform:translateX(calc((.12 - .18 * var(--g)) * 100% + var(--x) * 55%)) scale(calc(.35 + .85 * var(--g)))}
+/* chapter 1 text lifts off with it */
+html.story-on #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.84) / .12),1);opacity:calc(1 - var(--out));transform:translateY(calc(var(--out) * -22px))}
+html.story-on #harvest-data .globe-points .step:nth-child(4){--a:1.62;--b:1.84}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.36;--b:1.52}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:1.08;--b:1.24}
+html.story-on #harvest-data .globe-points .step:nth-child(1){--a:.78;--b:.96}
+@media(max-width:720px){html.story-on .chapter .stage-0 .globe-stage astro-island{transform:translateX(calc(var(--x) * 55%)) scale(calc(.45 + .55 * var(--g)))}}
+/* Seamless dark scene: the card glows fade out completely before their top and bottom edges (so no seam where
+   one chapter meets the next), and the old pale hero glow behind the globe is gone. */
+.stage-0 .hero-visual.live-visual{background:none}
+.stage-0 .live-window::before,.co2-card::before{background:radial-gradient(58% 50% at 62% 50%,#1d2754 0%,#0e1430 52%,#080c1f00 100%)}
+/* The two chapter backgrounds overlap by a pixel, so no hairline of white shows where they meet. */
+#harvest-data::before,#trusted-co2::before{top:-1px;bottom:-1px}
+/* The blue fills the screen: once pinned, the dark cards take the full height below the tab row. */
+@media(min-width:721px){.ui-stage.stage-0,.ui-stage.stage-1{height:calc(100svh - var(--tab-row) - 1px)}}
+/* Chapter 1 globe: grows and moves in only while the card arrives, settling at its final size (0.91x, as in the
+   reference) by the time the card pins; it then holds still while the bullets play, and slides out at the end. */
+html.story-on .chapter .stage-0 .globe-stage astro-island{
+ --g:clamp(0,calc((var(--k) - .1) / .9),1);
+ transform:translateX(calc((.12 - .12 * var(--g)) * 100% + var(--x) * 55%)) scale(calc(.35 + .56 * var(--g)))}
+@media(max-width:720px){html.story-on .chapter .stage-0 .globe-stage astro-island{transform:translateX(calc(var(--x) * 55%)) scale(calc(.45 + .55 * var(--g)))}}
+
+/* ===== One stage (desktop): the six chapters share one sticky, full-screen stage under the tab row and
+   swap in place - nothing is pushed off the screen. Each chapter fades in as its --k starts, plays, and
+   fades out at --k 2 as the next arrives (the last one stays). The page scrolls past invisible markers, one
+   per chapter, whose heights set how long each chapter lasts. The stage background fades from the dark blue
+   to light as chapter 3 arrives (--dark, set by the script). Phones keep the stacked chapters. ===== */
+.story-markers{display:none}
+html.story-stage .story-stage{position:sticky;top:var(--tab-row);height:calc(100svh - var(--tab-row) - 1px);z-index:1;isolation:isolate;--dark:1;transition:top .3s ease}
+html.story-stage:has(.site-header:not(.is-hidden)) .story-stage{top:calc(var(--sh-h) + var(--tab-row))}
+html.story-stage .story-stage::before,html.story-stage .story-stage::after{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;pointer-events:none}
+html.story-stage .story-stage::before{z-index:-3;background:#fff}
+html.story-stage .story-stage::after{z-index:-2;background:#080c1f;opacity:var(--dark)}
+html.story-stage .story-markers{display:block;margin-top:calc(-1 * (100svh - var(--tab-row) - 1px));padding-bottom:calc(100svh - var(--tab-row) - 1px)}
+html.story-stage [data-story-marker="harvest-data"]{height:120vh}
+html.story-stage [data-story-marker="trusted-co2"]{height:180vh}
+html.story-stage [data-story-marker="analyse-improve"]{height:100vh}
+html.story-stage [data-story-marker="product-passports"]{height:95vh}
+html.story-stage [data-story-marker="beat-regulation"],html.story-stage [data-story-marker="connect-clients"]{height:115vh}
+/* the chapters become layers of the stage */
+html.story-stage .story-stage .chapter{position:absolute;inset:0;min-height:0;opacity:calc(clamp(0,var(--k) * 8,1) * (1 - clamp(0,(var(--k) - 1.92) * 12.5,1)))}
+html.story-stage .story-stage .chapter:last-of-type{opacity:clamp(0,var(--k) * 8,1)}
+html.story-stage .story-stage .chapter:not(.is-live){visibility:hidden}
+html.story-stage .story-stage .chapter-pin{position:static!important;top:auto!important;height:100%;background:transparent!important}
+html.story-stage #harvest-data::before,html.story-stage #trusted-co2::before{display:none}
+/* chapters 3-6: text on the left, the illustration on the right, both centred vertically on the stage */
+html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-pin{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.25fr);align-items:center;gap:56px;padding:0 36px}
+html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-heading{padding:0}
+html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-heading h3{font-size:30px;line-height:1.22}
+html.story-stage .story-stage .chapter:nth-of-type(n+3) .ui-stage{height:auto;min-height:0;padding:0;background:none;border:0;overflow:visible}
+html.story-stage .story-stage .chapter:nth-of-type(n+3) .ui-stage>*{transform-origin:50% 50%}
+/* The id rule giving chapters 1 and 2 position:relative must not beat the stage layering. */
+html.story-stage .story-stage :is(#harvest-data,#trusted-co2){position:absolute;inset:0}
+
+/* "Trusted CO₂ numbers" in the How it works hero's colours: warm charcoal (#0a1017) with a grey-green glow
+   and sage accents. On the stage a tint layer crossfades over the dark blue as chapter 2 arrives (--co2) and
+   fades with the rest as chapter 3 brings the light background (--dark). */
+.story-tint{display:none}
+html.story-stage .story-tint{display:block;position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 55% 60% at 72% 26%,#56605bbf 0%,#2b3431a6 38%,#10182033 62%,transparent 80%),#0a1017;opacity:calc(var(--co2,0) * var(--dark,1))}
+html.story-stage .co2-card::before{display:none}
+#trusted-co2::before{background:#0a1017}
+.co2-card::before{background:radial-gradient(ellipse 55% 60% at 72% 26%,#56605bbf 0%,#2b3431a6 38%,#10182033 62%,transparent 80%)}
+#trusted-co2 .intro-eyebrow{color:#c7d0bb}
+#trusted-co2 .globe-intro h3,#trusted-co2 .step-title{color:#f5f6f0}
+#trusted-co2 .globe-points .sentence{color:#dfe4dc}
+#trusted-co2 .globe-points .sentence::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%23c5d1c0' fill-opacity='.2'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%23d6e0d1' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+#trusted-co2 .co2-note{color:#8d968f}
+.co2-card .co2-report-wrap .rep-tabs button.is-active i::after{background:#c5d1c0}
+/* Chapter 1 globe: the stars assembling / dispersing (--globe-scatter, drawn inside the globe) replace the earlier
+   grow, travel and slide-out; the globe itself stays put at its final size. */
+html.story-on .chapter .stage-0 .globe-stage astro-island{opacity:1;transform:scale(.91);transform-origin:75% 55.4%}
+@media(max-width:720px){html.story-on .chapter .stage-0 .globe-stage astro-island{transform:none}}
+/* Chapter 1's text is gone (k 1.78) just before chapter 2's text arrives; only the dispersing stars overlap the
+   hand-over. The four bullet steps tighten up a little to make room. */
+html.story-on #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.66) / .12),1)}
+html.story-on #harvest-data .globe-points .step:nth-child(1){--a:.76;--b:.92}
+html.story-on #harvest-data .globe-points .step:nth-child(2){--a:1.02;--b:1.16}
+html.story-on #harvest-data .globe-points .step:nth-child(3){--a:1.26;--b:1.4}
+html.story-on #harvest-data .globe-points .step:nth-child(4){--a:1.5;--b:1.66}
+/* Chapter 1 lasts a little longer, so the slower star assembly and the bullet steps are not rushed. */
+html.story-stage [data-story-marker="harvest-data"]{height:150vh}
+/* Chapter 1 globe canvas covers the whole stage, top to bottom and edge to edge (so dispersing stars are never
+   cut at a canvas edge); the globe keeps its size because it is drawn smaller inside (size 0.655 = 0.72 x 0.91)
+   instead of the canvas being scaled down. */
+html.story-on .chapter .stage-0 .globe-stage astro-island{transform:none}
+@media(max-width:720px){html.story-on .chapter .stage-0 .globe-stage astro-island{transform:scale(1.1);transform-origin:50% 50%}}
+
+/* Chapter 2 report, Overview: as the report arrives on scroll the cards rise in one by one, the four metrics
+   first and then the three highlights. Uses translate + filter so it never fights the report's own
+   click-triggered entrance (opacity + transform). */
+html.story-on .chapter .co2-card :is(.rep-metrics .rep-card,.rep-hl){--c:clamp(0,calc((var(--k) - var(--s)) / .16),1);translate:0 calc((1 - var(--c)) * 34px);filter:opacity(var(--c))}
+html.story-on .chapter .co2-card .rep-metrics .rep-card:nth-child(1){--s:.42}
+html.story-on .chapter .co2-card .rep-metrics .rep-card:nth-child(2){--s:.5}
+html.story-on .chapter .co2-card .rep-metrics .rep-card:nth-child(3){--s:.58}
+html.story-on .chapter .co2-card .rep-metrics .rep-card:nth-child(4){--s:.66}
+html.story-on .chapter .co2-card .rep-hl:nth-child(1){--s:.76}
+html.story-on .chapter .co2-card .rep-hl:nth-child(2){--s:.84}
+html.story-on .chapter .co2-card .rep-hl:nth-child(3){--s:.92}
+@media(prefers-reduced-motion:reduce){html.story-on .chapter .co2-card :is(.rep-metrics .rep-card,.rep-hl){translate:none}}
+
+html.story-stage .story-stage .chapter:not(.is-front){pointer-events:none}
+
+/* Chapter tab row: taller, with room to breathe. --tab-row is its height, which the pinned stage sits under
+   (phones keep the compact row). */
+:root{--tab-row:67px}
+@media(max-width:720px){:root{--tab-row:53px}}
+@media(min-width:721px){.benefit-nav nav a{padding:24px 14px 22px}.benefit-nav nav a[aria-current]::after{bottom:11px}.chapter{scroll-margin-top:calc(var(--sh-h) + var(--tab-row) + 7px)}}
+/* the sliding active dot (Home.astro script) replaces the per-item dot */
+.benefit-nav nav{position:relative;top:auto} /* top:auto: an old sticky "top:130px" would otherwise shift it */
+.benefit-nav .nav-dot{position:absolute;left:0;bottom:6px;width:4px;height:4px;border-radius:50%;background:#7887d8;pointer-events:none;opacity:0}
+.benefit-nav nav.has-dot .nav-dot{opacity:1;transition:transform .5s cubic-bezier(.65,0,.35,1)}
+.benefit-nav nav.has-dot a[aria-current]::after{display:none}
+@media(min-width:721px){.benefit-nav .nav-dot{bottom:11px}}
+@media(max-width:720px){.benefit-nav .nav-dot{bottom:4px}}
+@media(prefers-reduced-motion:reduce){.benefit-nav nav.has-dot .nav-dot{transition:none}}
+/* "Know exactly what to fix" (chapter 3) sits on the pale blue (#f6f7fa) the panels used to have: the stage's light
+   base turns that blue under it (--blue, set by the story script) and back to white for the next chapter. */
+html.story-stage .story-stage{--blue:0}
+html.story-stage .story-stage::before{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),#fff)}
+html:not(.story-stage) #analyse-improve{background:#f6f7fa;box-shadow:0 0 0 100vmax #f6f7fa;clip-path:inset(0 -100vmax)}
+/* Globe labels for nodes off the visible face are parked outside the canvas; clip them to the globe's own box so
+   they never widen the page (on phones they stretched it to ~1460px). */
+.globe-stage astro-island>div{overflow:clip}
+
+/* Chapter 1, pinned stage: each step holds on screen for a good stretch of scrolling, like chapter 2's.
+   A longer chapter (280vh), quicker fades, and the steps spread evenly; the globe's timings follow
+   (Home.astro: assembled as step 3 arrives, nodes placed through step 2, risk with step 4, dispersal last). */
+html.story-stage [data-story-marker="harvest-data"]{height:280vh}
+html.story-stage #harvest-data .globe-points .step:nth-child(n){--in:clamp(0,calc((var(--k) - var(--a)) / .06),1);--out:clamp(0,calc((var(--k) - var(--b)) / .05),1)}
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--a:.76;--b:1.1}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--a:1.16;--b:1.36}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--a:1.42;--b:1.6}
+html.story-stage #harvest-data .globe-points .step:nth-child(4){--a:1.66;--b:1.86}
+html.story-stage #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.86) / .08),1)}

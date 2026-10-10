@@ -40,6 +40,24 @@ const RAW_MATERIAL_LOCATIONS: GeoLocation[] = [
 
 const PRODUCT_USER_LOCATIONS: GeoLocation[] = [{ latitude: 34.1, longitude: -118.2 }];
 
+// Illustrative risk regions (radius in degrees) shown on "Real risk assessments": tropical-timber and
+// raw-material sourcing areas, kept unlabelled.
+const RISK_LOCATIONS: (GeoLocation & { radius: number })[] = [
+  { latitude: -6, longitude: -60, radius: 15 },
+  { latitude: -1, longitude: 23, radius: 13 },
+  { latitude: 2, longitude: 110, radius: 12 },
+  { latitude: 20, longitude: 96, radius: 9 }
+];
+
+// Placement of the supply-chain nodes (driven by the page's --globe-place, 0 → 1; 1 when unset):
+// node `order` (factory first) runs from placeStart(order) for PLACE_DURATION.
+const PLACE_DURATION = 0.4;
+const placeStart = (order: number) => order * 0.09;
+const placeProgress = (place: number, order: number) =>
+  Math.min(1, Math.max(0, (place - placeStart(order)) / PLACE_DURATION));
+// ease-out with a small overshoot, so a label lands and settles
+const easeOutBack = (t: number) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
+
 function geoToPosition(location: GeoLocation): Three.Vector3 {
   const theta = ((location.longitude + 180) * Math.PI) / 180;
   const latitudeRadians = (location.latitude * Math.PI) / 180;
@@ -181,7 +199,8 @@ function createBackdropMesh(centerColor: Three.Color, edgeColor: Three.Color): T
   const material = new Three.ShaderMaterial({
     uniforms: {
       centerColor: { value: centerColor },
-      edgeColor: { value: edgeColor }
+      edgeColor: { value: edgeColor },
+      fade: { value: 1 }
     },
     vertexShader: `
       varying vec2 vUv;
@@ -193,11 +212,12 @@ function createBackdropMesh(centerColor: Three.Color, edgeColor: Three.Color): T
     fragmentShader: `
       uniform vec3 centerColor;
       uniform vec3 edgeColor;
+      uniform float fade;
       varying vec2 vUv;
       void main() {
         float dist = clamp(distance(vUv, vec2(0.5, 0.5)) * 2.0, 0.0, 1.0);
         vec3 color = mix(centerColor, edgeColor, dist);
-        gl_FragColor = vec4(color, 0.2);
+        gl_FragColor = vec4(color, 0.2 * fade);
       }
     `,
     transparent: true,
@@ -379,8 +399,56 @@ function buildParticleSystem(
   const originalColors = new Float32Array(colorArray);
   const originalSizes = new Float32Array(sizeArray);
 
+  // Scatter ("stars"): each dot gets its own flight direction (mostly outward, with some randomness, kept
+  // shallow in depth so it stays in front of the camera), distance and timing; see the `scatter` uniform.
+  const scatterDirs = new Float32Array(positionArray.length);
+  const scatterSeeds = new Float32Array(positionArray.length / 3);
+  for (let i = 0; i < scatterSeeds.length; i++) {
+    const px = positionArray[i * 3], py = positionArray[i * 3 + 1], pz = positionArray[i * 3 + 2];
+    const len = Math.hypot(px, py, pz) || 1;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 2 - 1);
+    const rx = Math.sin(phi) * Math.cos(theta), ry = Math.sin(phi) * Math.sin(theta), rz = Math.cos(phi);
+    const distance = GLOBE_RADIUS * (1.1 + Math.random() * 3.6);
+    let dx = (px / len) * 0.55 + rx, dy = (py / len) * 0.55 + ry, dz = ((pz / len) * 0.55 + rz) * 0.3;
+    const dlen = Math.hypot(dx, dy, dz) || 1;
+    dx /= dlen; dy /= dlen; dz /= dlen;
+    scatterDirs[i * 3] = dx * distance;
+    scatterDirs[i * 3 + 1] = dy * distance;
+    scatterDirs[i * 3 + 2] = dz * distance * 0.3;
+    scatterSeeds[i] = Math.random();
+  }
+
+  // Risk ("Real risk assessments"): dots in a few regions turn red, scattered patchily (denser at each
+  // region's centre) and each with its own delay so the regions flare up rather than switch on.
+  // -1 = never red; otherwise the delay (0–0.5) within the `risk` uniform's 0→1 ramp.
+  const riskDelays = new Float32Array(particleCount).fill(-1);
+  const riskCentres = RISK_LOCATIONS.map((region) => ({ centre: geoToPosition(region).normalize(), radius: region.radius }));
+  for (let i = 0; i < particleCount; i++) {
+    if (usedIndices.has(i)) continue;
+    const px = positionArray[i * 3], py = positionArray[i * 3 + 1], pz = positionArray[i * 3 + 2];
+    const len = Math.hypot(px, py, pz) || 1;
+    for (const { centre, radius } of riskCentres) {
+      const angle = (Math.acos(Math.min(1, (px * centre.x + py * centre.y + pz * centre.z) / len)) * 180) / Math.PI;
+      if (angle < radius && Math.random() < 0.8 * (1 - angle / radius) + 0.25) {
+        riskDelays[i] = Math.random() * 0.5;
+        break;
+      }
+    }
+  }
+
   const geometry = new Three.BufferGeometry();
   geometry.setAttribute("position", new Three.BufferAttribute(positionArray, 3));
+  geometry.setAttribute("riskDelay", new Three.BufferAttribute(riskDelays, 1));
+  // Placement: the supply-chain nodes are stamped onto the globe one after another (see `place`).
+  // -1 = an ordinary dot; otherwise the node's start within the `place` ramp.
+  const placeStarts = new Float32Array(particleCount).fill(-1);
+  specialIndices.forEach((index, order) => {
+    placeStarts[index] = placeStart(order);
+  });
+  geometry.setAttribute("placeStart", new Three.BufferAttribute(placeStarts, 1));
+  geometry.setAttribute("scatterDir", new Three.BufferAttribute(scatterDirs, 3));
+  geometry.setAttribute("scatterSeed", new Three.BufferAttribute(scatterSeeds, 1));
   geometry.setAttribute("color", new Three.BufferAttribute(colorArray, 3));
   geometry.setAttribute("size", new Three.BufferAttribute(sizeArray, 1));
 
@@ -388,21 +456,47 @@ function buildParticleSystem(
     uniforms: {
       pointTexture: { value: circleTexture },
       sizeScale: { value: 1.0 },
-      pixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
+      pixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+      scatter: { value: 0 },
+      risk: { value: 0 },
+      place: { value: 1 }
     },
     vertexShader: `
       attribute float size;
+      attribute vec3 scatterDir;
+      attribute float scatterSeed;
+      attribute float riskDelay;
+      attribute float placeStart;
       uniform float sizeScale;
       uniform float pixelRatio;
+      uniform float scatter;
+      uniform float risk;
+      uniform float place;
       varying vec3 vColor;
       varying float vFacing;
+      varying float vFade;
       void main() {
-        vColor = color;
+        // as the globe breaks into stars, the risk red drains away and every dot is back to its own colour
+        float red = riskDelay < 0.0 ? 0.0 : smoothstep(riskDelay, riskDelay + 0.5, risk) * (1.0 - smoothstep(0.0, 0.2, scatter));
+        vColor = mix(color, vec3(1.0, 0.27, 0.25), red);
         vec3 worldNormal = normalize((modelMatrix * vec4(normalize(position), 0.0)).xyz);
         vec3 viewDir = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
         vFacing = dot(worldNormal, viewDir);
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * sizeScale * pixelRatio;
+        // scatter 0 = globe, 1 = dispersed: each dot leaves at its own moment (seed), eases out to its
+        // star position and fades on the way, so the globe dissolves into (or assembles from) stars.
+        float s = clamp((scatter - scatterSeed * 0.4) / 0.6, 0.0, 1.0);
+        float eased = s * s * (3.0 - 2.0 * s);
+        vFade = 1.0 - smoothstep(0.25, 1.0, s);
+        vec3 displaced = position + scatterDir * eased;
+        vec4 mvPosition = modelViewMatrix * vec4(displaced, 1.0);
+        // supply-chain nodes: hidden until placed, then stamped down from 3x size
+        float stamp = 1.0;
+        if (placeStart >= 0.0) {
+          float p = clamp((place - placeStart) / ${PLACE_DURATION.toFixed(2)}, 0.0, 1.0);
+          vFade *= smoothstep(0.0, 0.35, p);
+          stamp = mix(3.0, 1.0, 1.0 - pow(1.0 - p, 3.0));
+        }
+        gl_PointSize = size * stamp * (1.0 + 0.6 * red) * sizeScale * pixelRatio;
         gl_Position = projectionMatrix * mvPosition;
       }
     `,
@@ -410,10 +504,11 @@ function buildParticleSystem(
       uniform sampler2D pointTexture;
       varying vec3 vColor;
       varying float vFacing;
+      varying float vFade;
       void main() {
         vec4 texColor = texture2D(pointTexture, gl_PointCoord);
-        if (texColor.a < 0.3) discard;
-        float alpha = mix(0.3, 1.0, smoothstep(-0.2, 0.5, vFacing));
+        if (texColor.a < 0.3 || vFade <= 0.01) discard;
+        float alpha = mix(0.3, 1.0, smoothstep(-0.2, 0.5, vFacing)) * vFade;
         gl_FragColor = vec4(vColor, alpha);
       }
     `,
@@ -756,6 +851,29 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
 
       const pointsMaterial = particleData.points.material as Three.ShaderMaterial;
       pointsMaterial.uniforms.sizeScale.value = compactScale;
+      // Scatter into stars (0 = globe, 1 = dispersed), set by the page through --globe-scatter. Arcs, rings,
+      // labels and the backdrop disc fade out early so the dispersed dots read as pure stars.
+      const scatter = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-scatter")) || 0));
+      pointsMaterial.uniforms.scatter.value = scatter;
+      // Risk regions in red, set by the page through --globe-risk (0 = none, 1 = all lit).
+      pointsMaterial.uniforms.risk.value = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-risk")) || 0));
+      const extrasFade = 1 - Math.min(1, scatter * 3);
+      (backdropMesh.material as Three.ShaderMaterial).uniforms.fade.value = extrasFade;
+      // Placement of the supply-chain nodes (--globe-place): each node's ring, arcs and label follow its dot.
+      const placeValue = Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-place"));
+      const place = Number.isNaN(placeValue) ? 1 : Math.min(1, Math.max(0, placeValue));
+      pointsMaterial.uniforms.place.value = place;
+      const nodeProgress = (particleIndex: number) =>
+        placeProgress(place, Math.max(0, particleData.specialIndices.indexOf(particleIndex)));
+      particleData.ringSprites.forEach((sprite, s) => {
+        (sprite.material as Three.SpriteMaterial).opacity = extrasFade * Math.min(1, placeProgress(place, s) * 2);
+      });
+      particleData.flightPaths.forEach((line, e) => {
+        const edge = particleData.supplyChainEdges[e];
+        // an arc draws in once both of its ends are placed
+        const reach = Math.min(nodeProgress(edge.sourceIndex), nodeProgress(edge.targetIndex));
+        (line.material as LineMaterial).opacity *= extrasFade * reach;
+      });
 
       const pulsePhase = (Math.sin(Date.now() / 500) + 1) / 2;
       const pulseRadius =
@@ -772,7 +890,7 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
         );
         spriteWorldPosition.applyMatrix4(globeGroup.matrixWorld);
         particleData.ringSprites[s].position.copy(spriteWorldPosition);
-        particleData.ringSprites[s].scale.setScalar(pulseRadius);
+        particleData.ringSprites[s].scale.setScalar(pulseRadius * placeProgress(place, s));
       }
 
       const tooltipOffsetPixels = TOOLTIP_OFFSET_Y * Math.sqrt(globeScale);
@@ -795,10 +913,17 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
         const screenX = tooltipPosition.x - camera.left;
         const screenY = camera.top - tooltipPosition.y;
 
+        // Placed with its dot: the label drops from above onto its spot, lands with a small overshoot and
+        // grows from a little smaller, so it reads as pinned to the globe rather than faded in.
+        const placed = nodeProgress(tooltip.nodeIndex);
+        const drop = (1 - easeOutBack(placed)) * -40;
+        const labelScale = compactScale * (0.85 + 0.15 * Math.min(1, placed * 1.6));
+        tooltipElement.style.opacity = String(extrasFade * Math.min(1, placed * 2.5));
+
         if (tooltip.anchor === "bottom-left") {
-          tooltipElement.style.transform = `translate(${screenX}px, ${screenY + tooltipOffsetPixels}px) translate(-100%, 0%) scale(${compactScale})`;
+          tooltipElement.style.transform = `translate(${screenX}px, ${screenY + tooltipOffsetPixels + drop}px) translate(-100%, 0%) scale(${labelScale})`;
         } else {
-          tooltipElement.style.transform = `translate(${screenX}px, ${screenY - tooltipOffsetPixels}px) translate(-50%, -100%) scale(${compactScale})`;
+          tooltipElement.style.transform = `translate(${screenX}px, ${screenY - tooltipOffsetPixels + drop}px) translate(-50%, -100%) scale(${labelScale})`;
         }
       }
 
