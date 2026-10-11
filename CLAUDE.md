@@ -37,7 +37,7 @@ Read `README.md` for routes and development commands.
 - The large testimonial portrait, person, company, and quote are fictional placeholders.
 - Replace draft proof only with approved quotes and measured outcomes.
 - EPD publication follows applicable programme rules and independent verification. Avoid promising certification in a specific time.
-- The commerce feature is labeled “Coming this fall.”
+- The commerce feature is labeled “Coming this spring.”
 - Avoid unsupported scale, security, certification, customer, and performance claims.
 
 ## Technical rules

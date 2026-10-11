@@ -26,6 +26,41 @@ for (const part of data.materialsAndComponents.purchasableParts) {
 
 const STUDIO_HDR = `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`;
 
+/* Load-once assets for the Parts view: the chair model (Draco GLB) and the studio HDR. The passport starts them
+   in the background (preloadPartsView, from DppApp) so opening Parts shows the chair without a wait; each view
+   mount works on its own clone of the model. A failed load is forgotten so the next attempt retries. */
+let chairSource: Promise<Three.Object3D> | null = null;
+let studioEnvironment: Promise<Three.Texture> | null = null;
+
+export function preloadPartsView() {
+  if (!chairSource) {
+    const draco = new DRACOLoader();
+    draco.setDecoderPath(DRACO_DECODER_PATH);
+    const loading = new GLTFLoader()
+      .setDRACOLoader(draco)
+      .loadAsync(CHAIR_MODEL)
+      .then((gltf) => gltf.scene);
+    loading.finally(() => draco.dispose()).catch(() => undefined);
+    loading.catch(() => {
+      chairSource = null;
+    });
+    chairSource = loading;
+  }
+  if (!studioEnvironment) {
+    const loading = import("three/examples/jsm/loaders/RGBELoader.js")
+      .then(({ RGBELoader }) => new RGBELoader().loadAsync(STUDIO_HDR))
+      .then((texture) => {
+        texture.mapping = Three.EquirectangularReflectionMapping;
+        return texture as Three.Texture;
+      });
+    loading.catch(() => {
+      studioEnvironment = null;
+    });
+    studioEnvironment = loading;
+  }
+  return { chairSource, studioEnvironment };
+}
+
 /* ------------------------------------------------------------------ */
 /*  Imperative Three.js chair viewer (avoids R3F StrictMode ctx loss)  */
 /* ------------------------------------------------------------------ */
@@ -103,14 +138,15 @@ function useChairCanvas(
     scene.add(chairGroup);
     chairGroupRef.current = chairGroup;
 
-    // ── Load GLB model ──
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath(DRACO_DECODER_PATH);
-    const gltfLoader = new GLTFLoader();
-    gltfLoader.setDRACOLoader(dracoLoader);
+    // ── Model and environment: from the shared, preloaded assets (instant once the background load is done) ──
+    let alive = true;
+    const assets = preloadPartsView();
 
-    gltfLoader.load(CHAIR_MODEL, (gltf) => {
-      const model = gltf.scene;
+    assets.chairSource.then((source) => {
+      if (!alive) {
+        return;
+      }
+      const model = source.clone(true);
       model.scale.setScalar(3.0);
       model.position.set(0, -0.5, 0);
       chairGroup.add(model);
@@ -138,17 +174,15 @@ function useChairCanvas(
         });
       }
       setModelReady(true);
-    });
+    }, () => undefined);
 
-    // ── Load HDR environment ──
-    import("three/examples/jsm/loaders/RGBELoader.js").then(({ RGBELoader }) => {
-      const rgbeLoader = new RGBELoader();
-      rgbeLoader.load(STUDIO_HDR, (texture) => {
-        texture.mapping = Three.EquirectangularReflectionMapping;
-        scene.environment = texture;
-        scene.environmentIntensity = 0.55; // less neutral studio light, more of the warm lights
-      });
-    });
+    assets.studioEnvironment.then((texture) => {
+      if (!alive) {
+        return;
+      }
+      scene.environment = texture;
+      scene.environmentIntensity = 0.55; // less neutral studio light, more of the warm lights
+    }, () => undefined);
 
     // ── Contact shadow (radial gradient for soft fade) ──
     const ShadowSize = 4;
@@ -321,6 +355,7 @@ function useChairCanvas(
 
     // ── Cleanup ──
     return () => {
+      alive = false;
       cancelAnimationFrame(animFrameRef.current);
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointermove", onPointerMove);
@@ -331,7 +366,6 @@ function useChairCanvas(
       output.dispose();
       outlineRef.current = null;
       renderer.dispose();
-      dracoLoader.dispose();
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -446,6 +480,21 @@ export function DppProductView({ overlayRef, onAddToCart }: DppProductViewProps)
     setSheetOpen(false);
     setSelectedPartId(null);
   }, []);
+
+  // A host page can select a part as if it were tapped (null closes it), e.g. the homepage story:
+  // window.dispatchEvent(new CustomEvent("dpp:part", { detail: "seat-cushion" })).
+  useEffect(() => {
+    const onPart = (event: Event) => {
+      const partId = (event as CustomEvent<string | null>).detail;
+      if (partId) {
+        handlePartClick(partId);
+      } else {
+        handleClose();
+      }
+    };
+    window.addEventListener("dpp:part", onPart);
+    return () => window.removeEventListener("dpp:part", onPart);
+  }, [handlePartClick, handleClose]);
 
   // Imperative Three.js scene
   useChairCanvas(canvasContainerRef, handlePartClick, selectedPartId);

@@ -1,3 +1,4 @@
+import { reducedMotion } from "../../utilities/motion";
 export function initNodeFlow() {
   const disposers: (() => void)[] = [];
   document.querySelectorAll<HTMLElement>("[data-node-diagram]").forEach((root) => {
@@ -12,7 +13,7 @@ export function initNodeFlow() {
     const positions = nodes.map((n) => ({ x: Number(n.dataset.x), y: Number(n.dataset.y) }));
     const origins = positions.map((p) => ({ ...p }));
     const velocities = positions.map(() => ({ x: 0, y: 0 }));
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const reduced = reducedMotion;
     let frame = 0,
       last = 0;
     function stopSpring(index: number) {

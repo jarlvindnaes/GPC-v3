@@ -8,7 +8,7 @@ const brands = [
   { id: 'benchmark', name: 'Benchmark', url: 'https://benchmarkfurniture.com/' },
 ];
 ---
-<div class="brand-strip frame" aria-label="Product Connect community">
+<div class="brand-strip frame" role="group" aria-label="Product Connect community">
   {brands.map(brand => (
     <a class="brand-panel" href={brand.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${brand.name} (opens in a new tab)`}>
       <img class="brand-photo" src={`${base}v4/brands/${brand.id}.webp`} alt="" width="1000" height="1000" loading="lazy" decoding="async" />

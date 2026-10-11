@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { reducedMotion } from "../../utilities/motion";
 
 export default function CinematicHero({ base }: { base: string }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -17,7 +18,7 @@ export default function CinematicHero({ base }: { base: string }) {
     let cancelled = false;
     let cleanup: (() => void) | undefined;
     let hold = 0;
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const preference = reducedMotion; // system setting or the footer's "Pause animations"
     const syncPreference = () => {
       reduced.current = preference.matches;
       paused.current = preference.matches;

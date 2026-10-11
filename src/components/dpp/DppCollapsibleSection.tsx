@@ -37,10 +37,12 @@ export function DppCollapsibleSection({
   const headingId = `${id}-heading`;
 
   return (
+    // Accordion pattern: the heading holds the button (a heading inside a button loses its meaning), and only the
+    // open panel is labelled as a region, so each section is announced once.
     <section
       className={`relative box-border flex w-full flex-col content-stretch items-start gap-[18px] overflow-clip px-[20px] py-[12px] ${className}`}
-      aria-labelledby={headingId}
     >
+      <h2 className="m-0 w-full">
       <button
         type="button"
         onClick={onToggle}
@@ -50,12 +52,12 @@ export function DppCollapsibleSection({
         aria-controls={panelId}
       >
         <div className="relative flex h-[51px] w-full content-stretch items-center justify-between overflow-clip rounded-[inherit]">
-          <h2
+          <span
             id={headingId}
             className="dpp-section-title relative m-0 flex min-h-px min-w-px shrink-0 grow basis-0 items-center overflow-hidden overflow-ellipsis text-nowrap text-left font-['SF_Pro:Medium',sans-serif] font-[510] font-width-normal text-[16px] text-[rgba(50,47,49,0.58)] leading-[24px] [white-space-collapse:collapse]"
           >
             {title}
-          </h2>
+          </span>
           <div
             className={`relative flex shrink-0 items-center justify-center transition-transform duration-300 ${isOpen ? "" : "-rotate-90"}`}
             aria-hidden="true"
@@ -64,6 +66,7 @@ export function DppCollapsibleSection({
           </div>
         </div>
       </button>
+      </h2>
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div

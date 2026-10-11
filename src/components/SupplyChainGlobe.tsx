@@ -4,6 +4,7 @@ import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
+import { reducedMotion } from "../utilities/motion";
 
 const GLOBE_RADIUS = 120;
 const AUTO_ROTATION_SPEED = 0.0015;
@@ -729,7 +730,8 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
       }
 
       if (!dragState.current.isDragging) {
-        globeGroup.rotation.y += AUTO_ROTATION_SPEED;
+        // reduced motion: no auto-spin (it can still be turned by dragging)
+        if (!reducedMotion.matches) globeGroup.rotation.y += AUTO_ROTATION_SPEED;
       }
 
       if (!particleData) {
@@ -875,7 +877,7 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
         (line.material as LineMaterial).opacity *= extrasFade * reach;
       });
 
-      const pulsePhase = (Math.sin(Date.now() / 500) + 1) / 2;
+      const pulsePhase = reducedMotion.matches ? 0.6 : (Math.sin(Date.now() / 500) + 1) / 2; // rings hold still with reduced motion
       const pulseRadius =
         (PULSATION_RING_MIN_SCALE + pulsePhase * (PULSATION_RING_MAX_SCALE - PULSATION_RING_MIN_SCALE)) *
         globeScale *

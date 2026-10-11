@@ -1,10 +1,11 @@
+import { reducedMotion } from "../../utilities/motion";
 // Lightweight procedural data diagrams. No WebGL or animation dependencies.
 export function initDataScenes() {
   const cleanups: (() => void)[] = [];
   for (const canvas of document.querySelectorAll<HTMLCanvasElement>("canvas[data-scene]")) {
     const ctx = canvas.getContext("2d");
     if (!ctx) continue;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const reduced = reducedMotion;
     let w = 0,
       h = 0,
       frame = 0,

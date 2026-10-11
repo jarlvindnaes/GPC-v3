@@ -1,5 +1,5 @@
 import { useProgress } from "@react-three/drei";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./passport-overlay.css";
 
@@ -50,6 +50,26 @@ function PhoneLoadingOverlay() {
 // control (a portalled overlay that escapes all stacking contexts and locks body scroll).
 export function PassportPhone() {
   const [expanded, setExpanded] = useState(false);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  // Dialog behaviour (WCAG 2.1.2, 2.4.3): while open, the page behind is inert (not focusable or readable), focus
+  // moves to the close button, and on close it returns to whatever opened the passport.
+  useEffect(() => {
+    if (!expanded) {
+      return;
+    }
+    const opener = document.activeElement as HTMLElement | null;
+    const behind = Array.from(document.body.children).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement && !el.classList.contains("passport-overlay")
+    );
+    for (const el of behind) el.inert = true;
+    const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 0);
+    return () => {
+      window.clearTimeout(focusTimer);
+      for (const el of behind) el.inert = false;
+      if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
+    };
+  }, [expanded]);
 
   // Allow other parts of the page (e.g. the hero "Explore its passport" link) to open the
   // fullscreen passport by dispatching a window event.
@@ -62,15 +82,17 @@ export function PassportPhone() {
   useEffect(() => {
     // Also flag the open overlay on <html>: the page behind it is blurred (passport-overlay.css) and its
     // live canvases and animations pause, so the blurred page stays still instead of flickering.
+    // Scroll is locked on <html>, not <body>: with html's own overflow set (the homepage clips x), overflow on body
+    // would make body a scroll container and pinned (sticky) sections would jump while the passport is open.
     if (expanded) {
-      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
       document.documentElement.dataset.overlayOpen = "true";
     } else {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       delete document.documentElement.dataset.overlayOpen;
     }
     return () => {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       delete document.documentElement.dataset.overlayOpen;
     };
   }, [expanded]);
@@ -124,9 +146,18 @@ export function PassportPhone() {
 
       {expanded &&
         createPortal(
-          <div className="passport-scope passport-overlay fixed inset-0 z-[99999] flex flex-col items-center" style={{ paddingTop: 8 }}>
+          <div
+            className="passport-scope passport-overlay fixed inset-0 z-[99999] flex flex-col items-center"
+            style={{ paddingTop: 8 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Product passport"
+          >
+            {/* click-outside backdrop; the visible close button below is the one keyboard and screen readers use */}
             <button
               type="button"
+              tabIndex={-1}
+              aria-hidden="true"
               aria-label="Close fullscreen passport"
               onClick={() => {
                 setExpanded(false);
@@ -142,6 +173,7 @@ export function PassportPhone() {
                 <DppPhoneScreen />
               </HtmlPhoneCanvas>
               <button
+                ref={closeRef}
                 type="button"
                 aria-label="Close fullscreen passport"
                 onClick={() => {

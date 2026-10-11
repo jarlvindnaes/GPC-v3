@@ -1,0 +1,95 @@
+/* Product Connect node diagram ("Your data → Connected knowledge → Put to work") and its section, used on the
+   How it works page. Moved from the furniture homepage stylesheet; later rules refine earlier ones. */
+.getting-started{text-align:center;padding:80px 48px}
+@media(max-width:720px){.getting-started{padding:55px 20px}}
+.node-diagram{margin-top:48px;border:1px solid #e8ebf0;border-radius:8px;background:#fafbfd;text-align:left;overflow:hidden}
+.diagram-toolbar{display:flex;justify-content:space-between;padding:24px 5%;font-size:10px;letter-spacing:.13em;color:#8b95a5;border-bottom:1px solid #eef0f4}
+.node-stage{position:relative;height:390px;background-image:radial-gradient(#d8dfe9 .7px,transparent .7px);background-size:18px 18px}
+.node-wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.node-wires path{stroke-width:1.4}
+.flow-node{position:absolute;transform:translate(-50%,-50%);width:185px;min-height:77px;border:1px solid #dce2ec;border-radius:8px;padding:14px 14px 14px 42px;background:#fff;box-shadow:0 4px 16px #24324b06;text-align:left;color:#455063;font-family:inherit;cursor:grab;touch-action:none;user-select:none;margin:0!important;transition:box-shadow .15s,border-color .15s}
+.flow-node strong{display:block;font-size:13px;font-weight:500;line-height:1.4}
+.flow-node small{display:block;font-size:10px;line-height:1.4;color:#929baa;margin-top:4px}
+.flow-node .node-symbol{position:absolute;left:14px;top:21px;color:#94a7c8;font-size:18px}
+.flow-hub{min-height:95px;background:#202731;border-color:#202731;color:#fff;padding:18px 12px;text-align:center;width:190px;box-shadow:0 8px 30px #2239591a}
+.flow-hub .node-symbol{position:static;display:block;margin-bottom:8px;font-size:25px;letter-spacing:-.1em;color:#c9d6f0;line-height:1}
+.flow-hub small{color:#a6b3c7;font-size:9px}
+.flow-node:hover,.flow-node:focus-visible,.flow-node.is-dragging{border-color:#92a8cf;box-shadow:0 8px 24px #5876aa20;z-index:2}
+.flow-node:focus-visible{outline:2px solid #7794c5;outline-offset:4px}
+.flow-node.is-dragging{cursor:grabbing}
+.diagram-footer{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:15px;border-top:1px solid #e8ebf0}
+.diagram-footer p{font-size:11px;color:#8d96a4}
+.diagram-reset{border:0;background:none;white-space:nowrap;color:#657994;font:inherit;font-size:12px;cursor:pointer;padding:8px}
+.diagram-reset:focus-visible{outline:2px solid #7794c5}
+@media(max-width:1000px){.flow-node{width:155px;padding-left:32px}}
+@media(max-width:1000px){.flow-node .node-symbol{left:10px;font-size:15px}}
+@media(max-width:1000px){.flow-node strong{font-size:12px}}
+@media(max-width:1000px){.flow-hub{width:165px;padding:15px 8px}}
+@media(max-width:1000px){.flow-hub .node-symbol{font-size:25px}}
+@media(max-width:720px){.getting-started{padding-inline:12px}}
+@media(max-width:720px){.node-diagram{margin-top:32px}}
+@media(max-width:720px){.diagram-toolbar{font-size:8px;padding:18px 12px;letter-spacing:.04em}}
+@media(max-width:720px){.node-stage{height:380px}}
+@media(max-width:720px){.flow-node{width:96px;min-height:85px;padding:10px 7px;text-align:center}}
+@media(max-width:720px){.flow-node .node-symbol{position:static;display:block;margin-bottom:7px;font-size:16px;line-height:1}}
+@media(max-width:720px){.flow-node strong{font-size:10px}}
+@media(max-width:720px){.flow-node small{font-size:8px}}
+@media(max-width:720px){.flow-hub{width:100px;min-height:105px}}
+@media(max-width:720px){.flow-hub .node-symbol{font-size:23px}}
+@media(max-width:720px){.flow-hub small{font-size:8px}}
+@media(max-width:720px){.diagram-footer{padding:10px 12px;align-items:flex-start}}
+@media(max-width:720px){.diagram-footer p{font-size:10px;max-width:210px}}
+@media(max-width:720px){.diagram-reset{font-size:10px;padding:3px}}
+.getting-started{padding-bottom:28px;background-image:radial-gradient(#cdd6e440 .7px,transparent .7px);background-size:22px 22px}
+.getting-started>.tag,.getting-started>h2{position:relative}
+.node-diagram{border:0;border-radius:0;background:transparent;margin:34px -35px 0;overflow:visible}
+.diagram-toolbar{border:0;padding:12px 4%;opacity:.75}
+.node-scroll{overflow-x:auto;overscroll-behavior-x:contain}
+.node-stage{height:420px;background:none;min-width:850px}
+.flow-node{width:155px;min-height:72px;padding:12px 10px 12px 33px;background:#ffffffeb}
+.flow-node .node-symbol{left:10px;top:20px;font-size:16px}
+.flow-node strong{font-size:12px}
+.flow-node small{font-size:10px}
+.flow-leaf{width:125px;min-height:54px;padding:10px 8px;text-align:center;background:#ffffff9c;box-shadow:none;border-color:#e1e6ee}
+.flow-leaf .node-symbol{display:none}
+.flow-leaf strong{font-size:11px}
+.flow-leaf small{font-size:9px}
+.flow-hub{width:170px;min-height:110px;padding:16px 10px;background:#202731}
+.flow-hub .node-symbol{position:static;font-size:27px}
+.flow-hub small{font-size:9px}
+.diagram-footer{border:0;padding:12px 4%}
+@media(max-width:1000px){.node-diagram{margin-inline:-20px}}
+@media(max-width:1000px){.flow-node{width:135px}}
+@media(max-width:1000px){.flow-leaf{width:115px}}
+@media(max-width:1000px){.flow-hub{width:155px}}
+@media(max-width:720px){.node-diagram{margin-inline:0}}
+@media(max-width:720px){.node-stage{min-width:850px;height:410px}}
+@media(max-width:720px){.flow-node{text-align:left;padding:12px 8px 12px 31px;min-height:72px}}
+@media(max-width:720px){.flow-node .node-symbol{position:absolute;left:9px;top:20px}}
+@media(max-width:720px){.flow-leaf{text-align:center;padding:10px 7px;min-height:54px}}
+@media(max-width:720px){.flow-hub{text-align:center;padding:16px 10px;min-height:110px}}
+@media(max-width:720px){.flow-hub .node-symbol{position:static}}
+@media(max-width:720px){.diagram-toolbar{font-size:9px}}
+.time-value-copy{padding:48px 0 40px}
+.getting-started>.node-diagram{margin-top:0}
+.getting-started{padding-top:36px}
+@media(max-width:720px){.time-value-copy{padding:35px 10px}}
+@media(max-width:720px){.getting-started{padding-top:22px}}
+.getting-started{padding-top:80px;padding-bottom:35px}
+.getting-started .node-stage{height:560px}
+.getting-started .diagram-toolbar{padding-bottom:28px}
+.getting-started .diagram-footer{padding-top:28px}
+.time-value-copy{padding:110px 24px 105px}
+@media(max-width:720px){.getting-started{padding-top:48px}}
+@media(max-width:720px){.getting-started .node-stage{height:500px}}
+@media(max-width:720px){.time-value-copy{padding:75px 10px}}
+.flow-node{transition:box-shadow .45s ease,border-color .45s ease}
+.flow-node.is-receiving{border-color:#aebbf2;box-shadow:0 0 0 4px #697cf51c,0 8px 24px #5876aa20}
+.flow-hub.is-receiving{border-color:#202731;box-shadow:0 0 0 6px #697cf533,0 12px 34px #22395933}
+@media(min-width:721px){.time-value-copy{padding:150px 24px 145px}}
+.time-value-copy .button{margin-top:44px}
+@media(max-width:720px){.time-value-copy{padding:95px 14px}}
+@media(max-width:720px){.time-value-copy .button{margin-top:32px}}
+/* On How it works: a white band between the light intro and process sections, its copy in that page's style */
+.getting-started.section{background-color:#fff;color:#111b30}
+.getting-started .time-value-copy>p:not(.eyebrow){max-width:620px;margin:20px auto 0;font-size:17px;line-height:1.55;color:#5b6577}

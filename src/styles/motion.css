@@ -1,0 +1,7 @@
+/* Footer "Pause animations" (MotionToggle.astro, utilities/motion.ts): every CSS keyframe animation holds still.
+   Script-driven animations check the same html.motion-paused class through utilities/motion.ts. */
+html.motion-paused *,
+html.motion-paused *::before,
+html.motion-paused *::after {
+  animation-play-state: paused !important;
+}

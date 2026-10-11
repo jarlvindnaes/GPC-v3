@@ -6,7 +6,7 @@ import DppImpactView from "./DppImpactView";
 import DppInfoView from "./DppInfoView";
 import { DppMaintenanceView } from "./DppMaintenanceView";
 import { DppNavigation } from "./DppNavigation";
-import { BasketIcon, DppProductView, parts } from "./DppProductView";
+import { BasketIcon, DppProductView, parts, preloadPartsView } from "./DppProductView";
 import { brandConfig } from "./dppBrandConfig";
 import type { CartItem } from "./dppTypes";
 import "./dpp-takt.css";
@@ -60,6 +60,30 @@ export function DppApp() {
     }
     setIsScrolled(false);
   }, []);
+
+  // Load the Parts tab's 3D chair in the background once the passport is idle, so opening Parts has no wait.
+  useEffect(() => {
+    const start = () => preloadPartsView();
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(start, { timeout: 4000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(start, 1500);
+    return () => clearTimeout(id);
+  }, []);
+
+  // A host page can switch the passport's section, e.g. the homepage story showing "Parts" on its commerce
+  // chapter: window.dispatchEvent(new CustomEvent("dpp:tab", { detail: "parts" })).
+  useEffect(() => {
+    const onTab = (event: Event) => {
+      const tab = (event as CustomEvent<TabId>).detail;
+      if (tab === "about" || tab === "maintenance" || tab === "impact" || tab === "parts") {
+        handleTabChange(tab);
+      }
+    };
+    window.addEventListener("dpp:tab", onTab);
+    return () => window.removeEventListener("dpp:tab", onTab);
+  }, [handleTabChange]);
 
   useEffect(() => {
     const el = scrollContainerRef.current;

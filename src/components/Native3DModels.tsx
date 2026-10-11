@@ -1271,8 +1271,9 @@ export function HtmlPhoneCanvas({
   return (
     <div
       ref={containerRef}
-      role="img"
-      aria-label="3D iPhone with interactive content"
+      // A group, not an image: the passport inside is real, interactive content that must stay reachable
+      role="group"
+      aria-label="Interactive product passport on a 3D phone"
       className="relative h-full w-full cursor-grab overflow-hidden active:cursor-grabbing"
     >
       <Canvas
@@ -1280,6 +1281,9 @@ export function HtmlPhoneCanvas({
         camera={{ position: cameraPosition, fov: 30 }}
         gl={{ alpha: true }}
         style={{ background: "transparent" }}
+        // Size the canvas from the layout box (offsetWidth/Height), not the on-screen box, so a CSS scale on
+        // a host (the homepage zooms the passport phone) doesn't make the canvas larger than its frame.
+        resize={{ offsetSize: true }}
       >
         {hasPlayingProp && <PassportPhoneCameraRig isPlaying={isPlaying} />}
         <ResizeRepaint />

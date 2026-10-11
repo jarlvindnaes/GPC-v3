@@ -1,7 +1,7 @@
 ---
 // "CO₂ numbers you can trust": a dark miniature of Product Connect's professional LCA report
 // (ProductConnect/application/product-connect/WebApp/routes/reports/-components/professional): summary metric
-// cards, then top component contributors above the component analysis table, in the product's dark chart
+// cards, then top component contributors, in the product's dark chart
 // palette. It cycles through the two views while on screen; the view tabs are buttons. Illustrative numbers for a lounge chair, not a real result.
 const metrics = [
   { icon: 'leaf', tone: 'emerald', value: '24.8', unit: 'kg CO₂ eq', label: 'Carbon impact' },
@@ -28,25 +28,6 @@ const contributors = [
   { name: 'Bolts', part: 'bolt', value: 0.9 },
 ];
 const barMax = 15; // headroom above the tallest bar for its thumbnail and value
-
-// --- Component analysis table --- (the columns rank the parts differently, so every sort visibly reorders)
-const rows = [
-  { name: 'Leather seat', part: 'seat-cushion', supplier: 'Tannery, Italy', kg: 1.4, co2: 9.8, mj: 74.2, l: 41.3, waste: 0.6, km: 1450 },
-  { name: 'Back shell', part: 'back-shell', supplier: 'Kvist Industries, Latvia', kg: 2.1, co2: 4.6, mj: 88.6, l: 12.2, waste: 0.9, km: 980 },
-  { name: 'Seat shell', part: 'seat-shell', supplier: 'Kvist Industries, Latvia', kg: 1.8, co2: 3.9, mj: 61.3, l: 15.8, waste: 0.4, km: 980 },
-  { name: 'Armrests', part: 'armrest', supplier: 'Kvist Industries, Latvia', kg: 1.0, co2: 2.4, mj: 23.8, l: 6.1, waste: 0.1, km: 980 },
-  { name: 'Bolts', part: 'bolt', supplier: 'Fastener supplier, China', kg: 0.3, co2: 0.9, mj: 9.2, l: 2.4, waste: 0.0, km: 8200 },
-];
-const columns = [
-  { key: 'name', label: 'Component' },
-  { key: 'kg', label: 'Weight (kg)', opt: true },
-  { key: 'co2', label: 'CO₂ (kg)' },
-  { key: 'mj', label: 'Energy (MJ)', opt: true },
-  { key: 'l', label: 'Water (L)', opt: true },
-  { key: 'waste', label: 'Waste (kg)', opt: true },
-  { key: 'km', label: 'Distance' },
-];
-const tier = (km: number) => (km >= 2000 ? 'far' : km >= 1000 ? 'regional' : 'near');
 
 const views = ['Overview', 'Contributors'];
 const START = 0; // opens on the overview
@@ -86,7 +67,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
       </div>
     </section>
 
-    <section class="rep-view rep-contrib" data-view="1" aria-label="Top component contributors and component analysis">
+    <section class="rep-view" data-view="1" aria-label="Top component contributors">
       <h4>Top component contributors <small>kg CO₂ eq</small></h4>
       <div class="rep-bars" aria-hidden="true">
         <div class="sk-tip bar-tip"><b></b><span></span></div>
@@ -100,27 +81,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
           </div>
         ))}
       </div>
-      <h4 class="rep-sub">Component analysis</h4>
-      <table class="rep-table">
-        <thead><tr>{columns.map((col) => (
-          <th class:list={[col.opt && 'opt']} aria-sort={col.key === 'co2' ? 'descending' : 'none'}>
-            <button type="button" data-sort={col.key}>{col.label}<span class="rep-arrow" aria-hidden="true">{col.key === 'co2' ? '↓' : ''}</span></button>
-          </th>
-        ))}</tr></thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr style={`--r:${rows.indexOf(r)}`} data-name={r.name} data-kg={r.kg} data-co2={r.co2} data-mj={r.mj} data-l={r.l} data-waste={r.waste} data-km={r.km}>
-              <td><div class="rep-comp"><span class="rep-thumb"><DppPartThumb client:visible partId={r.part} label={`3D model: ${r.name}`} /></span><div><b>{r.name}</b><span>{r.supplier}</span></div></div></td>
-              <td class="opt">{nf(r.kg)}</td>
-              <td>{nf(r.co2)}</td>
-              <td class="opt">{nf(r.mj)}</td>
-              <td class="opt">{nf(r.l)}</td>
-              <td class="opt">{nf(r.waste)}</td>
-              <td><span class:list={['rep-km', `k-${tier(r.km)}`]}>{r.km.toLocaleString('en-US')} km</span></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </section>
 
   </div>
@@ -129,6 +89,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
 </div>
 
 <script>
+  import { motionPaused } from "../../utilities/motion";
   // The line under the active tab is the timer: it fills over STEP while the panel is on screen, and when it
   // is full the next view is selected. Hovering the panel freezes the line where it is; clicking a tab starts
   // that tab's line from empty and cycling carries on from there. Sorting the table stops the cycling, and
@@ -137,17 +98,20 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   if (root) {
     const views = Array.from(root.querySelectorAll<HTMLElement>(".rep-view"));
     const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = motionPaused(); // system setting or the footer's "Pause animations" (its timer line is a CSS animation, which the toggle pauses too)
     const STEP = 5000;
     root.style.setProperty("--step", `${STEP}ms`);
     let current = Math.max(0, views.findIndex((v) => v.classList.contains("is-active")));
     let visible = false;
     let hovering = false;
+    // Story: until this chapter has fully arrived, the report waits on the start view with its timer paused
+    // (in the pinned stage it sits under the earlier chapter, so it counts as on screen while still hidden).
+    let waiting = false;
     let stopped = reduce;
     // Running: the line animates. Paused: it holds its progress (hover, or scrolled away).
     const sync = () => {
       root.classList.toggle("is-running", !stopped);
-      root.classList.toggle("is-paused", hovering || !visible);
+      root.classList.toggle("is-paused", hovering || !visible || waiting);
     };
     const show = (index: number) => {
       current = index;
@@ -161,37 +125,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
       void root.offsetWidth;
       sync();
     };
-    // Sortable component table: numbers sort largest first on the first click, names A-Z; a second click flips.
-    const table = root.querySelector<HTMLTableElement>(".rep-table");
-    if (table) {
-      const body = table.tBodies[0];
-      let sortKey = "co2";
-      let descending = true;
-      for (const button of table.querySelectorAll<HTMLButtonElement>("[data-sort]")) {
-        button.addEventListener("click", () => {
-          const key = button.dataset.sort ?? "co2";
-          descending = key === sortKey ? !descending : key !== "name";
-          sortKey = key;
-          const rowsSorted = Array.from(body.rows).sort((a, b) => {
-            const order = key === "name"
-              ? (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "")
-              : Number(a.dataset[key]) - Number(b.dataset[key]);
-            return descending ? -order : order;
-          });
-          body.append(...rowsSorted);
-          for (const th of table.querySelectorAll("th")) {
-            const own = th.querySelector<HTMLButtonElement>("[data-sort]")?.dataset.sort === key;
-            th.setAttribute("aria-sort", own ? (descending ? "descending" : "ascending") : "none");
-            const arrow = th.querySelector(".rep-arrow");
-            if (arrow) {
-              arrow.textContent = own ? (descending ? "↓" : "↑") : "";
-            }
-          }
-          stopped = true; // the visitor is reading the table: stop cycling
-          sync();
-        });
-      }
-    }
     // Contributors hover (mirrors the product's BarChart): highlight the hovered bar, dim the rest, tooltip.
     const barArea = root.querySelector<HTMLElement>(".rep-bars");
     const barTip = barArea?.querySelector<HTMLElement>(".bar-tip");
@@ -226,6 +159,17 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     window.addEventListener("co2report:scroll", (event) => {
       const { arrived, held } = (event as CustomEvent<{ arrived: number; held: number }>).detail;
       const was = scrubbed;
+      const wasWaiting = waiting;
+      waiting = arrived < 0.999;
+      if (waiting) {
+        if (current !== 0 || !wasWaiting) {
+          show(0); // the overview, its line from empty and held paused
+        }
+        seg = -1;
+        lockSeg = -1;
+      } else if (wasWaiting) {
+        sync();
+      }
       scrubbed = !reduce && arrived >= 0.999 && held < 0.999;
       root.classList.toggle("is-scrubbed", scrubbed);
       if (scrubbed) {
@@ -310,9 +254,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s;
   }
   .rep-view h4 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-  .rep-view h4.rep-sub { margin-top: 22px; margin-bottom: 6px; }
-  /* Contributors: the bar chart sits above the component table, so it gets a fixed height */
-  .rep-contrib .rep-bars { flex: none; height: clamp(140px, 21vh, 190px); }
   .rep-view h4 small { margin-left: 6px; font-size: 11px; font-weight: 400; color: var(--muted); }
 
   .rep-card { border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
@@ -383,21 +324,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   .rep-barthumb { position: absolute; left: 50%; width: 42px; height: 42px; transform: translateX(-50%); }
   .rep-barthumb, .rep-barval { transition: opacity 0.4s ease calc(var(--i, 0) * 60ms + 650ms); }
   .rep-view:not(.is-active) .rep-barthumb, .rep-view:not(.is-active) .rep-barval { opacity: 0; transition: none; }
-  .rep-comp { display: flex; align-items: center; gap: 10px; }
-  .rep-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  .rep-table th { padding: 6px 10px; text-align: right; font-weight: 500; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
-  .rep-table th:first-child, .rep-table td:first-child { text-align: left; }
-  .rep-table th button { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; white-space: nowrap; }
-  .rep-table th button:hover, .rep-table th[aria-sort="ascending"], .rep-table th[aria-sort="descending"] { color: var(--fg); }
-  .rep-table th button:focus-visible { outline: 2px solid hsl(226 70% 65%); outline-offset: 2px; border-radius: 4px; }
-  .rep-arrow { display: inline-block; min-width: 0.9em; margin-left: 3px; color: hsl(226 70% 70%); }
-  .rep-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid #161d2b; white-space: nowrap; }
-  .rep-table td b { display: block; font-weight: 600; }
-  .rep-table td span { display: block; font-size: 11px; color: var(--muted); }
-  .rep-km { display: inline-block !important; padding: 3px 9px; border-radius: 999px; font-size: 11.5px !important; font-weight: 500; }
-  .k-near { background: rgb(16 185 129 / 0.15); color: #34d399 !important; }
-  .k-regional { background: rgb(14 165 233 / 0.15); color: #38bdf8 !important; }
-  .k-far { background: rgb(245 158 11 / 0.15); color: #fbbf24 !important; }
 
   .rep-tabs { display: flex; gap: 6px; }
   .rep-tabs button {
@@ -422,7 +348,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   .is-scrubbed .rep-tabs button.is-active i::after { animation: none !important; transform: scaleX(var(--seg, 0)) !important; transition: transform 80ms linear; }
 
   /* Each view stages its contents when it becomes active. */
-  .rep-metrics .rep-card, .rep-hl, .rep-table tbody tr { transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .rep-metrics .rep-card, .rep-hl { transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
   /* Flow chart: the entrance uses opacity (links) and filter (nodes), so hover's own fades stay instant. */
   .rep-view:not(.is-active) :is(.rep-metrics .rep-card, .rep-hl) { opacity: 0; transform: translateY(14px) scale(0.97); transition: none; }
   .rep-view.is-active .rep-metrics .rep-card:nth-child(1) { transition-delay: 0.08s; }
@@ -432,8 +358,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   .rep-view.is-active .rep-hl:nth-child(1) { transition-delay: 0.42s; }
   .rep-view.is-active .rep-hl:nth-child(2) { transition-delay: 0.5s; }
   .rep-view.is-active .rep-hl:nth-child(3) { transition-delay: 0.58s; }
-  .rep-view:not(.is-active) .rep-table tbody tr { opacity: 0; transform: translateY(10px); transition: none; }
-  .rep-view.is-active .rep-table tbody tr { transition-delay: calc(var(--r, 0) * 70ms + 0.1s); }
   .rep-tabs button.is-active i::after { transform: scaleX(0); }
   .rep:not(.is-running) .rep-tabs button.is-active i::after { transform: scaleX(1); } /* stopped: a full line marks the tab */
   .rep-tabs button:focus-visible { outline: 2px solid hsl(226 70% 65%); outline-offset: -2px; border-radius: 6px; }
@@ -447,15 +371,13 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     .rep-highlights { gap: 8px; }
     .rep-hl b { font-size: 15px; }
     .rep-hl span { font-size: 9px; }
-    .rep-table .opt { display: none; }
-    .rep-bars { gap: 6px; }
+      .rep-bars { gap: 6px; }
     .rep-bars { --lab: 30px; margin-left: 22px; }
     .rep-barthumb { width: 32px; height: 32px; }
     .rep-barval { margin-bottom: -8px; }
     .rep-thumb:not(.rep-barthumb) { width: 32px; height: 32px; border-radius: 8px; }
     .rep-barname { width: 100%; bottom: auto; top: calc(100% + 4px); font-size: 9px; line-height: 1.15; text-align: center; white-space: normal; }
-    .rep-table th, .rep-table td { padding-left: 6px; padding-right: 6px; }
-    .rep-tabs button { font-size: 10.5px; }
+      .rep-tabs button { font-size: 10.5px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .rep-view, .rep-bar { transition: none; }

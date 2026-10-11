@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motionPaused } from "../../utilities/motion";
 import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
@@ -95,9 +96,7 @@ export function ExplodingChair({
       return;
     }
 
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduceMotion = motionPaused(); // system setting or the footer's "Pause animations"
 
     const renderer = new Three.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(host.clientWidth, host.clientHeight);

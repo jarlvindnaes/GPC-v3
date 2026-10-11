@@ -1,0 +1,62 @@
+---
+// Footer "Pause animations" toggle (WCAG 2.2.2): freezes everything that moves on its own (rotating headline,
+// globe spin, report cycling, diagrams and scenes), the same way the system's reduced-motion setting does. The
+// choice is remembered (utilities/motion.ts) and applied before first paint by the inline script in each page's
+// <head>. The label says what pressing it will do, like the timeline's play/pause.
+import '../styles/motion.css';
+---
+<button type="button" class="motion-toggle" data-motion-toggle>
+  <span class="motion-icon" aria-hidden="true"></span><span class="motion-label">Pause animations</span>
+</button>
+<script>
+  import { motionPaused, reducedMotion, setUserPausedMotion } from "../utilities/motion";
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-motion-toggle]")) {
+    const label = button.querySelector(".motion-label");
+    const sync = () => {
+      const paused = motionPaused();
+      button.classList.toggle("is-paused", paused);
+      if (label) {
+        label.textContent = paused ? "Play animations" : "Pause animations";
+      }
+    };
+    sync();
+    // Playing again also clears a pause that only came from this toggle; the system setting still wins.
+    button.addEventListener("click", () => setUserPausedMotion(!motionPaused()));
+    reducedMotion.addEventListener("change", sync);
+  }
+</script>
+<style>
+  .motion-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    padding: 4px 12px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+  .motion-toggle:hover {
+    background: color-mix(in srgb, currentColor 8%, transparent);
+  }
+  .motion-toggle:focus-visible {
+    outline: 3px solid #627de7;
+    outline-offset: 3px;
+  }
+  .motion-icon::before {
+    content: "❚❚";
+    font-size: 8px;
+    letter-spacing: -1px;
+  }
+  .motion-toggle.is-paused .motion-icon::before {
+    content: "▶";
+    font-size: 9px;
+    letter-spacing: 0;
+  }
+</style>

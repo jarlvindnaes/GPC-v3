@@ -66,7 +66,7 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
   </div>
 
   <div class="memory-foot">
-    <button type="button" class="memory-play" aria-pressed="true" aria-label="Pause"><span aria-hidden="true">❚❚</span></button>
+    <button type="button" class="memory-play" aria-label="Pause the timeline"><span aria-hidden="true">❚❚</span></button>
     <span class="memory-note">Illustrative data</span>
   </div>
 </section>
@@ -96,13 +96,13 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
 .memory-bubble span{font-size:12px;color:#a2a8b3}
 .memory-bubble b{font-size:18px;font-weight:500;color:#f8f9fc}
 .memory-bubble em{font-style:normal;color:#D4EE9C;margin-left:4px}
-.memory-bubble small{font-size:11px;color:#6d737d}
+.memory-bubble small{font-size:11px;color:#8a909a}
 .memory-track{position:relative;height:50px;margin-top:24px}
 .track-line{position:absolute;left:2%;right:9.67%;top:16px;height:1px;background:#2a2d33;overflow:hidden}
 .track-fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#9db0ff,#D4EE9C)}
-.track-event{position:absolute;top:12px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;background:none;border:0;padding:0;color:#6d737d;cursor:pointer;z-index:2;font:inherit}
+.track-event{position:absolute;top:12px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;background:none;border:0;padding:0;color:#8a909a;cursor:pointer;z-index:2;font:inherit}
 .track-dot{width:7px;height:7px;border-radius:50%;background:#3a3e46;transition:all .3s}
-.track-date{font-size:11px;white-space:nowrap;color:#5f6570;transition:color .3s}
+.track-date{font-size:11px;white-space:nowrap;color:#868c96;transition:color .3s}
 .track-event.is-past .track-dot{background:#8a9a6a}
 .track-event.is-active .track-dot{background:#D4EE9C;box-shadow:0 0 0 4px #d4ee9c1a}
 .track-event.is-active .track-date{color:#f8f9fc}
@@ -113,16 +113,17 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
 .memory-range::-webkit-slider-thumb{-webkit-appearance:none;width:2px;height:22px;border-radius:1px;background:#f8f9fc}
 .memory-range::-moz-range-thumb{width:2px;height:22px;border:0;border-radius:1px;background:#f8f9fc}
 .memory-range:focus-visible{outline:2px solid #9db0ff;outline-offset:4px;border-radius:6px}
-.track-end{position:absolute;top:30px;font-size:11px;color:#5f6570}.track-start{left:2%}.track-today{right:9.67%;transform:translateX(50%)}
-.memory-foot{display:flex;align-items:center;gap:12px;margin-top:8px;font-size:12px;color:#6d737d}
+.track-end{position:absolute;top:30px;font-size:11px;color:#868c96}.track-start{left:2%}.track-today{right:9.67%;transform:translateX(50%)}
+.memory-foot{display:flex;align-items:center;gap:12px;margin-top:8px;font-size:12px;color:#8a909a}
 .memory-play{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1d2026;border:1px solid #33363d;color:#e6e9ef;font-size:9px;cursor:pointer}
-.memory-play:hover{background:#252932}
+.memory-play:hover{background:#252932}.memory-play:focus-visible{outline:3px solid #627de7;outline-offset:3px}
 .memory-note{margin-left:auto}
 @media(max-width:720px){.memory{padding:64px 22px 48px}.memory-chart{margin-top:36px;margin-right:64px}.static-label,.live-label{font-size:26px}.memory-bubble{min-width:140px;padding:9px 11px}.memory-bubble strong{font-size:13px}.track-date{display:none}.track-event.is-active .track-date{display:block;position:absolute;top:22px}}
 @media(prefers-reduced-motion:reduce){.memory-bubble,.track-dot,.event-mark{transition:none}}
 </style>
 
 <script>
+  import { reducedMotion } from "../../utilities/motion";
 type MemoryEvent = { frac: number; x: number; y: number; label: string; change: string; who: string; value: number; delta: number };
 type MemoryConfig = { start: number; end: number; VW: number; VH: number; X0: number; XW: number; staticY: number; events: MemoryEvent[] };
 
@@ -141,7 +142,7 @@ document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
   const bubble = root.querySelector<HTMLElement>(".memory-bubble")!;
   const k = Object.fromEntries(Array.from(bubble.querySelectorAll<HTMLElement>("[data-k]")).map((el) => [el.dataset.k!, el]));
   const play = root.querySelector<HTMLButtonElement>(".memory-play")!;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const reduced = reducedMotion; // system setting or the footer's "Pause animations"
   const DURATION = 14000, HOLD = 3000;
   let t = 0, active = -1, playing = !reduced.matches, visible = false, frame = 0, last = 0, hold = 0;
 
@@ -191,8 +192,8 @@ document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
   function stop() { cancelAnimationFrame(frame); frame = 0; }
   function setPlaying(next: boolean) {
     playing = next;
-    play.setAttribute("aria-pressed", String(next));
-    play.setAttribute("aria-label", next ? "Pause" : "Play");
+    // the label alone carries the state (a pressed state as well would contradict it)
+    play.setAttribute("aria-label", next ? "Pause the timeline" : "Play the timeline");
     play.firstElementChild!.textContent = next ? "❚❚" : "▶";
     if (next) { if (t >= 1) render(0); start(); } else stop();
   }
@@ -205,6 +206,7 @@ document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
   const onVis = () => (document.hidden ? stop() : start());
   document.addEventListener("visibilitychange", onVis);
   if (reduced.matches) { setPlaying(false); render(1); } else render(0);
+  reduced.addEventListener("change", () => { if (reduced.matches) setPlaying(false); });
   memoryCleanups.push(() => { stop(); io.disconnect(); document.removeEventListener("visibilitychange", onVis); range.removeEventListener("input", onInput); });
 });
 document.addEventListener("astro:before-swap", () => memoryCleanups.forEach((c) => c()), { once: true });

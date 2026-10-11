@@ -316,3 +316,35 @@ svg.pc-mark.brandmark-svg{height:34px;--pc-mark-dot:#d6ef8c}
 /* The new circular logo (PcLogo) in the footer, same height as the old mark. */
 svg.pc-logo.brandmark-svg{height:34px;--pc-logo-dot:#d6ef8c}
 @media(max-width:700px){svg.pc-logo.brandmark-svg{height:29px}}
+/* Story bullets without dividers, spaced like the homepage's chapter bullets */
+.chapter-points li{border-top:0;border-bottom:0;padding:7px 0 7px 30px}
+.chapter-points li:before{top:10px}
+/* One headline style across the site, after the hero ("Every product. Taken apart. Connected."): weight 480 with
+   tight tracking, the continuation (em) in the same weight in a muted tone. */
+h2:not(.passport-scope *),h2:not(.passport-scope *) em{font-weight:480}
+h2:not(.passport-scope *){letter-spacing:-.05em}
+h3:not(.passport-scope *){font-weight:500}
+
+/* Accessibility (WCAG 2.2 AA): text colours on the light sections darkened just enough for 4.5:1, keeping each hue;
+   the story progress slider gets a 24px-tall hit area (2.5.8) without moving the layout. */
+:is(.intro,.process,.provenance,.story-visual,.getting-started) .eyebrow,.story-visual>.eyebrow{color:#4a5bc0}
+.chapter-hint{color:#66728a}
+.selected>span{color:#4a5bc0}
+fieldset>button[type="button"]{color:#5f6b80}
+fieldset>button[type="button"]>span{color:#5f6b80}
+.chapter-copy>p{color:#5b687e}
+.intro-grid>div>p:nth-child(2){color:#5a677c}
+.diagram-tag{color:#4f6c74}
+.foundation-foot{color:#5a6880}
+.section-number{color:#5c6652}
+.process article .step-top>span:first-child{color:#4a5bc0}
+.process article>p{color:#56637a}
+.source-row>span{color:#5c6852}
+.chapter-progress{height:24px;margin:-10px 0 -4px}
+.chapter-tabs button.selected>span{color:#4a5bc0}
+.chapter-tabs button>span{color:#5f6b80}
+.chapter-copy>p:last-child{color:#5b687e}
+.reuse-chart-note{color:#66728a}
+.hint-touch,.hint-mouse{color:#5f6b80}
+/* keep focused and scrolled-to items clear of the sticky header (WCAG 2.4.11) */
+html{scroll-padding-top:115px}
