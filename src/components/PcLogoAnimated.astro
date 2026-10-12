@@ -126,7 +126,7 @@ const dur = `${seconds}s`;
       mode = "settle";
       kick();
     };
-    const target = svg.closest("a") ?? svg;
+    const target = svg.closest("a, button") ?? svg; // its link or button (e.g. the diagram hub), else itself
     target.addEventListener("pointerenter", (event) => {
       if (event.pointerType === "mouse") {
         mode = "run";

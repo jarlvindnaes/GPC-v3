@@ -40,6 +40,12 @@ Read `README.md` for routes and development commands.
 - The commerce feature is labeled “Coming this spring.”
 - Avoid unsupported scale, security, certification, customer, and performance claims.
 
+## Headline punctuation
+
+- A headline made of several sentences keeps every full stop, including the last ("Every product. Taken apart. Connected.").
+- A single-sentence headline, card title, step title or eyebrow has no full stop ("Save time and effort collecting data").
+- Bullets and body copy are ordinary sentences and keep their full stops.
+
 ## Technical rules
 
 - Prefix internal asset URLs with `import.meta.env.BASE_URL` for subpath deployments.

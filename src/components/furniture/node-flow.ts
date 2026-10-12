@@ -5,7 +5,7 @@ export function initNodeFlow() {
     const stage = root.querySelector<HTMLElement>(".node-stage")!;
     const nodes = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-node]"));
     const paths = Array.from(root.querySelectorAll<SVGPathElement>(".node-wires path"));
-    const reset = root.querySelector<HTMLButtonElement>(".diagram-reset")!;
+    const reset = root.querySelector<HTMLButtonElement>(".diagram-reset"); // optional (not shown on the site)
     const links = paths.map((path) => [
       nodes.findIndex((n) => n.dataset.node === path.dataset.from),
       nodes.findIndex((n) => n.dataset.node === path.dataset.to)
@@ -163,7 +163,7 @@ export function initNodeFlow() {
       settle();
       draw();
     };
-    reset.addEventListener("click", onReset);
+    reset?.addEventListener("click", onReset);
     const observer = new ResizeObserver(draw);
     observer.observe(stage);
     draw();
@@ -176,7 +176,7 @@ export function initNodeFlow() {
     const HOP = 1150; // ms for a chunk to cross one wire
     const CYCLE = 5600; // ms between waves entering from the left
     const column = (i: number) => Math.floor(origins[i].x / 21); // x 8/29/50/71 -> 0/1/2/3
-    type Packet = { path: SVGPathElement; el: SVGRectElement; start: number; target: HTMLElement };
+    type Packet = { path: SVGPathElement; el: SVGCircleElement; start: number; target: HTMLElement };
     let packets: Packet[] = [];
     let packetFrame = 0,
       visible = false,
@@ -195,10 +195,8 @@ export function initNodeFlow() {
         const col = column(a);
         const count = col === 1 || col === 2 ? 2 : 1; // wires around the hub carry more data
         for (let k = 0; k < count; k++) {
-          const el = document.createElementNS(NS, "rect");
-          el.setAttribute("width", "9");
-          el.setAttribute("height", "5");
-          el.setAttribute("rx", "1.5");
+          const el = document.createElementNS(NS, "circle"); // round dots
+          el.setAttribute("r", "3.5");
           el.setAttribute("class", `packet packet-c${col}`);
           el.style.opacity = "0";
           packetLayer.appendChild(el);
@@ -227,9 +225,7 @@ export function initNodeFlow() {
         const eased = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
         const length = p.path.getTotalLength();
         const at = p.path.getPointAtLength(length * eased);
-        const ahead = p.path.getPointAtLength(Math.min(length, length * eased + 1));
-        const angle = (Math.atan2(ahead.y - at.y, ahead.x - at.x) * 180) / Math.PI;
-        p.el.setAttribute("transform", `translate(${at.x} ${at.y}) rotate(${angle}) translate(-4.5 -2.5)`);
+        p.el.setAttribute("transform", `translate(${at.x} ${at.y})`);
         p.el.style.opacity = String(Math.min(1, t * 8, (1 - t) * 8));
         return true;
       });
@@ -267,7 +263,7 @@ export function initNodeFlow() {
     disposers.push(() => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      reset.removeEventListener("click", onReset);
+      reset?.removeEventListener("click", onReset);
     });
   });
   return () => disposers.forEach((dispose) => dispose());

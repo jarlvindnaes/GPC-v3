@@ -121,8 +121,8 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
 .memory-note{margin-left:auto}
 /* phones: the chart's end labels would be ~6px, so a legend under it names the two lines instead */
 .memory-legend{display:none}
-@media(max-width:720px){.static-label,.live-label{display:none}.memory-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:#a3a9b3}.memory-legend span{display:inline-flex;align-items:center;gap:7px}.memory-legend span::before{content:"";width:16px;height:0;border-top:2px dashed #868c96}.memory-legend .lg-live::before{border-top:2px solid #D4EE9C}}
-@media(max-width:720px){.memory{padding:64px 22px 48px}.memory-chart{margin-top:36px;margin-right:64px}.static-label,.live-label{font-size:26px}.memory-bubble{min-width:140px;padding:9px 11px}.memory-bubble strong{font-size:13px}.track-date{display:none}.track-event.is-active .track-date{display:block;position:absolute;top:22px}}
+@media(max-width:599px){.static-label,.live-label{display:none}.memory-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:#a3a9b3}.memory-legend span{display:inline-flex;align-items:center;gap:7px}.memory-legend span::before{content:"";width:16px;height:0;border-top:2px dashed #868c96}.memory-legend .lg-live::before{border-top:2px solid #D4EE9C}}
+@media(max-width:599px){.memory{padding:64px 22px 48px}.memory-chart{margin-top:36px;margin-right:64px}.static-label,.live-label{font-size:26px}.memory-bubble{min-width:140px;padding:9px 11px}.memory-bubble strong{font-size:13px}.track-date{display:none}.track-event.is-active .track-date{display:block;position:absolute;top:22px}}
 @media(prefers-reduced-motion:reduce){.memory-bubble,.track-dot,.event-mark{transition:none}}
 </style>
 

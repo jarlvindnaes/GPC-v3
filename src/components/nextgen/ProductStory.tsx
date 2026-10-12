@@ -19,7 +19,7 @@ const chapters = [
   },
   {
     label: "The components",
-    title: "Collect component data once.",
+    title: "Collect component data once",
     text: "We gather data and calculate LCA per component, not product by product.",
     points: [
       "LCA calculated per component",
@@ -29,7 +29,7 @@ const chapters = [
   },
   {
     label: "The connection",
-    title: "Reuse it everywhere.",
+    title: "Reuse it everywhere",
     text: "Every product that shares a component inherits its data automatically, with nothing re-typed.",
     points: [
       "Add data once; every product using it updates",

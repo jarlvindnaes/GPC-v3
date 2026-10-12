@@ -460,6 +460,7 @@ function buildParticleSystem(
       pixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
       scatter: { value: 0 },
       risk: { value: 0 },
+      exitTint: { value: 0 },
       place: { value: 1 }
     },
     vertexShader: `
@@ -472,6 +473,7 @@ function buildParticleSystem(
       uniform float pixelRatio;
       uniform float scatter;
       uniform float risk;
+      uniform float exitTint;
       uniform float place;
       varying vec3 vColor;
       varying float vFacing;
@@ -480,6 +482,8 @@ function buildParticleSystem(
         // as the globe breaks into stars, the risk red drains away and every dot is back to its own colour
         float red = riskDelay < 0.0 ? 0.0 : smoothstep(riskDelay, riskDelay + 0.5, risk) * (1.0 - smoothstep(0.0, 0.2, scatter));
         vColor = mix(color, vec3(1.0, 0.27, 0.25), red);
+        // leaving towards the CO₂ chapter, the stars take on its sage as they spread (--globe-tint)
+        vColor = mix(vColor, vec3(0.773, 0.82, 0.753), exitTint);
         vec3 worldNormal = normalize((modelMatrix * vec4(normalize(position), 0.0)).xyz);
         vec3 viewDir = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
         vFacing = dot(worldNormal, viewDir);
@@ -619,7 +623,11 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
-    const globeScale = (Math.min(width, height) / (GLOBE_RADIUS * 1.6)) * size;
+    // The globe's size: the `size` prop times an optional CSS --globe-scale (the page enlarges it on narrow
+    // screens), relative to the canvas's short side; recomputed whenever the canvas resizes.
+    const scaleFor = (w: number, h: number) =>
+      (Math.min(w, h) / (GLOBE_RADIUS * 1.6)) * size * (Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-scale")) || 1);
+    let globeScale = scaleFor(width, height);
 
     const globeGroup = new Three.Group();
     globeGroup.scale.setScalar(globeScale);
@@ -859,6 +867,7 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
       pointsMaterial.uniforms.scatter.value = scatter;
       // Risk regions in red, set by the page through --globe-risk (0 = none, 1 = all lit).
       pointsMaterial.uniforms.risk.value = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-risk")) || 0));
+      pointsMaterial.uniforms.exitTint.value = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-tint")) || 0));
       const extrasFade = 1 - Math.min(1, scatter * 3);
       (backdropMesh.material as Three.ShaderMaterial).uniforms.fade.value = extrasFade;
       // Placement of the supply-chain nodes (--globe-place): each node's ring, arcs and label follow its dot.
@@ -942,6 +951,9 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
         }
         renderer.setSize(newWidth, newHeight);
         applyFrustum(newWidth, newHeight);
+        globeScale = scaleFor(newWidth, newHeight);
+        globeGroup.scale.setScalar(globeScale);
+        backdropMesh.scale.setScalar(globeScale);
 
         if (particleData) {
           for (const line of particleData.flightPaths) {
