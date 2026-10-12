@@ -1028,3 +1028,14 @@ html:not(.story-stage) .story-stage .chapter .chapter-pin{background:transparent
 /* bigger globe on narrower screens and phones; cropping at the bottom is fine (--globe-scale, SupplyChainGlobe) */
 @media(min-width:600px) and (max-width:900px){html.story-stage #harvest-data .stage-0 .globe-stage{--globe-scale:1.15}}
 html:not(.story-stage) .stage-0 .globe-stage{--globe-scale:1.45;--globe-offset-y:.14}
+
+/* Chapter menu on narrower screens: short labels (all six fit from tablet width), and on phones the row scrolls
+   with the current chapter kept centred (Home.astro) and soft edges hinting at more */
+.benefit-nav .nav-short{display:none}
+@media(max-width:900px){
+ .benefit-nav .nav-full{display:none}
+ .benefit-nav .nav-short{display:inline}
+}
+@media(max-width:599px){
+ .benefit-nav nav{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 28px),transparent);scroll-padding-inline:24px}
+}
