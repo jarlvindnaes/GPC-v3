@@ -7,3 +7,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Adobe auto-saves, previews and caches
+Auto-Save/
+Adobe Premiere Pro Auto-Save/
+Adobe Premiere Pro Audio Previews/
+Adobe Premiere Pro Video Previews/
