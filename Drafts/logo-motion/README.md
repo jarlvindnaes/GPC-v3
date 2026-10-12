@@ -30,7 +30,7 @@ Colours follow the logo files: `#000` + `#6F7DCE` on light, `#fff` + `#D6EF8C` o
 
 1920 x 1080, 30 fps, each with Essential Graphics fields and a **Dark theme** switch (colours from the site: ink `#101A2A` / paper `#F7F8FB`, data blue `#697CF5`, lime `#D6EF8C`, Inter).
 
-- **Tutorial Intro** (6 s): label, title and optional subtitle beside the animated mark, on a fine grid. Leave the subtitle empty and the block re-centres. At the end the background lifts away, so it can sit on top of the first shot.
+- **Tutorial Intro** (6 s): label, title and optional subtitle beside the animated mark, on a plain background. Leave the subtitle empty and the block re-centres. At the end the background lifts away, so it can sit on top of the first shot.
 - **Section Breaker** (2.6 s, transparent): a circle opens from the centre to fill the frame behind an accent ring, shows the section label and title, then closes again. Place it over the cut between two sections.
 - **End Credits** (8 s): the closing screen. Starts fully transparent, the background rises over the last shot, then the lockup (top left), "Thank you for watching", a fine rule and the copyright and "learn more" lines spring in. It holds to the end (no exit).
 - **Lower Third** (5 s, transparent): a card in the bottom left with the mark, a name and an optional role. The card sizes itself to the longest line.
