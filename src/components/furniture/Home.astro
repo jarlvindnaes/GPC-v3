@@ -184,6 +184,13 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     chapter.classList.add('is-live');
    }
    chapter.style.setProperty('--k', k.toFixed(3));
+   // Stacked layout: a chapter's illustration card sits well below its text, so its contents are timed by the
+   // card's own position (built up as it scrolls into the middle of the screen), not by the chapter's top.
+   const card = chapter.querySelector<HTMLElement>('.screen-card')?.closest<HTMLElement>('.ui-stage');
+   if (card) {
+    if (staged) card.style.removeProperty('--k');
+    else card.style.setProperty('--k', (0.6 + 1.4 * clamp((vh * 0.9 - card.getBoundingClientRect().top) / (vh * 0.5))).toFixed(3));
+   }
    chapter.style.setProperty('--e', Math.min(1, k).toFixed(3));
    if (chapter.id === 'harvest-data') {
     // the globe assembles from scattered stars as the chapter arrives, holds while the bullets play, and

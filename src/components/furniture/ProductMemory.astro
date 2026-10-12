@@ -58,6 +58,7 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
       <span><b data-k="value">{first.value}</b> kg CO₂e <em data-k="delta"></em></span>
     </div>
   </div>
+  <div class="memory-legend" aria-hidden="true"><span class="lg-static">Static EPD</span><span class="lg-live">Living model</span></div>
 
   <div class="memory-track">
     <div class="track-line"><i class="track-fill"></i></div>
@@ -118,6 +119,9 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
 .memory-play{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1d2026;border:1px solid #33363d;color:#e6e9ef;font-size:9px;cursor:pointer}
 .memory-play:hover{background:#252932}.memory-play:focus-visible{outline:3px solid #627de7;outline-offset:3px}
 .memory-note{margin-left:auto}
+/* phones: the chart's end labels would be ~6px, so a legend under it names the two lines instead */
+.memory-legend{display:none}
+@media(max-width:720px){.static-label,.live-label{display:none}.memory-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:#a3a9b3}.memory-legend span{display:inline-flex;align-items:center;gap:7px}.memory-legend span::before{content:"";width:16px;height:0;border-top:2px dashed #868c96}.memory-legend .lg-live::before{border-top:2px solid #D4EE9C}}
 @media(max-width:720px){.memory{padding:64px 22px 48px}.memory-chart{margin-top:36px;margin-right:64px}.static-label,.live-label{font-size:26px}.memory-bubble{min-width:140px;padding:9px 11px}.memory-bubble strong{font-size:13px}.track-date{display:none}.track-event.is-active .track-date{display:block;position:absolute;top:22px}}
 @media(prefers-reduced-motion:reduce){.memory-bubble,.track-dot,.event-mark{transition:none}}
 </style>

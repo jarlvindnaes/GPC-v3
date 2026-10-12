@@ -867,3 +867,17 @@ main .ui-footer{color:#646c78}
 #beat-regulation .chapter-heading .chapter-eyebrow{color:#5f6878}
 /* keep focused and scrolled-to items clear of the sticky header (WCAG 2.4.11) */
 html{scroll-padding-top:120px}
+
+/* ---------- Mobile rundown ---------- */
+/* Stacked layout (phones and short screens, no pinned stage): the step texts of the supplier and CO₂ chapters are a
+   plain list, all visible, instead of swapping in one spot (there is no pinned scroll to play them out). */
+html:not(.story-stage) .globe-points{display:flex;flex-direction:column;align-items:stretch;gap:26px}
+html:not(.story-stage) .globe-points .step{grid-area:auto}
+html.story-on:not(.story-stage) .chapter .globe-points .step:nth-child(n){opacity:1;transform:none}
+html.story-on:not(.story-stage) .chapter .globe-intro{opacity:1;transform:none}
+html:not(.story-stage) .globe-points{padding-top:30px}
+@media(max-width:720px){
+ .globe-points .step-title{font-size:18px;font-weight:480;letter-spacing:-.02em}
+ #harvest-data .globe-points .step-title{color:#dfe5f7}
+ #trusted-co2 .globe-points .step-title{color:#e4eadf}
+}

@@ -93,3 +93,10 @@
 /* On How it works: a white band between the light intro and process sections, its copy in that page's style */
 .getting-started.section{background-color:#fff;color:#111b30}
 .getting-started .time-value-copy>p:not(.eyebrow){max-width:620px;margin:20px auto 0;font-size:17px;line-height:1.55;color:#5b6577}
+/* Phones: the diagram scrolls sideways, so say so and fade its right edge to show there is more */
+.node-swipe{display:none}
+@media(max-width:720px){
+ .node-swipe{display:block;margin:0;padding:10px 12px 0;font-size:12px;color:#5f6b80;text-align:right}
+ .node-scroll{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+ .getting-started .time-value-copy{padding:48px 10px 56px}
+}

@@ -348,3 +348,11 @@ fieldset>button[type="button"]>span{color:#5f6b80}
 .hint-touch,.hint-mouse{color:#5f6b80}
 /* keep focused and scrolled-to items clear of the sticky header (WCAG 2.4.11) */
 html{scroll-padding-top:115px}
+
+/* ---------- Mobile rundown ---------- */
+@media(max-width:700px){
+ /* the product story fits one screen while pinned: a slightly shorter 3D view leaves room for step 3's chart */
+ .story-viewer{height:23svh;min-height:176px}
+ /* one "Tap the cards" hint (on the image), not a second one under the bullets */
+ .story-narrative .facts-hint{display:none}
+}
