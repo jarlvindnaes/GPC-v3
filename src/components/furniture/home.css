@@ -807,6 +807,9 @@ html.story-stage .story-stage .chapter{bottom:var(--hdr)}
 html.story-stage #product-passports .ui-stage{align-self:stretch;height:auto}
 html.story-stage #product-passports .phone-live{height:100%;width:auto;padding:20px 0;position:relative}
 html.story-stage #product-passports .phone-live>astro-island{flex:1;min-height:0;height:auto;width:auto;aspect-ratio:280/460}
+/* The passport keeps a 460px minimum for its standalone use; inside the pinned stage the island is sized by the
+   stage height (aspect 280/460), so let it shrink with it instead of overflowing and cropping the phone sideways */
+html.story-stage #product-passports .phone-live .passport-scope{min-height:0}
 /* The passport's "interactive 3D model" note sits with the chapter's text: under the bullets, and on the pinned
    stage in the bottom-left corner like the CO₂ chapter's EPD note. */
 #product-passports .chapter-heading .phone-caption{display:block;max-width:360px;margin-top:22px;text-align:left;font-size:12px;line-height:1.5;color:#9a8f7d}
@@ -906,17 +909,16 @@ html:not(.story-stage) #analyse-improve{background:#eef1f7;box-shadow:0 0 0 100v
    its charcoal, laid over this as it arrives.) */
 html.story-stage .story-stage::after{background:#152239}
 #harvest-data::before{background:#152239}
-.stage-0 .live-window::before{background:radial-gradient(58% 50% at 62% 50%,#22345c 0%,#1a2a48 48%,#15223900 100%)}
+.stage-0 .live-window::before{background:none}
 @media(max-width:599px){#harvest-data .globe-points{background:#152239}}
 #harvest-data .globe-intro .intro-eyebrow{color:#a0aff7}
 #harvest-data .globe-intro h3{color:#acb9ff}
 #harvest-data .globe-points .step-title{color:#f5f6f0}
 #harvest-data .globe-points .sentence{background:#1b2c46;border-color:#354865;color:#d1dcf2;box-shadow:0 12px 40px #0b14254d}
 #harvest-data .globe-points .sentence::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%23a0aff7' fill-opacity='.2'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%23a0aff7' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-/* CO₂ chapter: the same soft glow as the supplier chapter (an ellipse centred behind the visual, a gentle lift from
-   the base), in its own charcoal and grey-green */
-html.story-stage .story-tint{background:radial-gradient(58% 50% at 62% 50%,#2a3431 0%,#18211f 52%,#0a101700 100%),#0a1017}
-.co2-card::before{background:radial-gradient(58% 50% at 62% 50%,#2a3431 0%,#18211f 52%,#0a101700 100%)}
+/* CO₂ chapter: a flat charcoal ground (no centre glow), like the supplier chapter's flat navy */
+html.story-stage .story-tint{background:#0e1615}
+.co2-card::before{background:#0e1615}
 /* bullets as plain check + text (no card), like the passport chapters' bullets */
 :is(#harvest-data,#trusted-co2) .globe-points .sentence{background:none;border:0;box-shadow:none;padding:4px 0}
 #harvest-data .globe-intro .intro-eyebrow{color:#f5f6f0}
@@ -944,11 +946,12 @@ html.story-stage .story-tint{background:radial-gradient(58% 50% at 62% 50%,#2a34
 .co2-card .co2-report-wrap .rep-note::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6ef8c}
 /* report tab menu in the green theme: sage label and progress line on a faint track (id-level, to beat the
    component's scoped blue) */
-#trusted-co2 .rep-tabs button{color:#8f9c8a}
-#trusted-co2 .rep-tabs button.is-active{color:#c5d1c0}
-#trusted-co2 .rep-tabs button i{background:#ffffff12}
-#trusted-co2 .rep-tabs button.is-active i{background:#ffffff1f}
-#trusted-co2 .rep-tabs button.is-active i::after{background:#c5d1c0}
+/* report menu kept quiet: dimmer labels (still ≥4.5:1), a hairline track and a softer progress line */
+#trusted-co2 .rep-tabs button{color:#7a8775;font-size:11px}
+#trusted-co2 .rep-tabs button.is-active{color:#a3ae9e}
+#trusted-co2 .rep-tabs button i{height:1px;background:#ffffff0a}
+#trusted-co2 .rep-tabs button.is-active i{background:#ffffff10}
+#trusted-co2 .rep-tabs button.is-active i::after{background:#a3ae9e99}
 /* chapters that are not on screen take no pointer at all, including content that turns pointer events back on
    inline (the 3D passport phone's screen), so nothing invisible blocks dragging the globe or clicking the report.
    The passport while it is held for Connect with clients is the exception. Keyboard focus still reaches them. */
@@ -1040,3 +1043,39 @@ html:not(.story-stage) .stage-0 .globe-stage{--globe-scale:1.45;--globe-offset-y
 @media(max-width:599px){
  .benefit-nav nav{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 28px),transparent);scroll-padding-inline:24px}
 }
+
+/* "Know exactly what to fix" (chapter 3) segmented like the passport chapters: a small eyebrow, the headline, and its
+   paragraph as two check bullets placed one after another, in the chapter's slate blue */
+#analyse-improve .chapter-heading .chapter-eyebrow{color:#56657e}
+#analyse-improve .chapter-points li{color:#4f5d72}
+#analyse-improve .chapter-points li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%2356657e' fill-opacity='.16'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%2356657e' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+html.story-stage [data-story-marker="analyse-improve"]{height:130vh}
+html.story-stage #analyse-improve .chapter-points li{--in:clamp(0,calc((var(--k) - var(--a)) / .12),1);opacity:var(--in);transform:translateY(calc((1 - var(--in)) * 26px))}
+html.story-stage #analyse-improve .chapter-points li:nth-child(1){--a:.87}
+html.story-stage #analyse-improve .chapter-points li:nth-child(2){--a:1.25}
+@media(prefers-reduced-motion:reduce){html.story-stage #analyse-improve .chapter-points li{transform:none}}
+/* Chapters 1–2: the small header sits right above the step text, as chapters 3–6 put theirs above the headline.
+   Desktop: steps hang from the same line as chapters 3–6's headline (centre − 69px), the header 29px above.
+   600–900px: the header sits 29px above the steps at the top of the stage. */
+@media(min-width:901px){
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-intro{top:calc(50% - 98px)}
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points{top:calc(50% - 69px);bottom:auto;place-items:start start}
+}
+@media(min-width:600px) and (max-width:900px){
+ html.story-stage #harvest-data .globe-intro{top:121px}
+ html.story-stage #trusted-co2 .globe-intro{top:101px}
+}
+/* Supplier chapter text colours follow How it works' "One product. Many teams." band: periwinkle eyebrow, off-white
+   titles, and its soft grey body copy for the bullets */
+#harvest-data .globe-intro .intro-eyebrow{color:#a0aff7}
+#harvest-data .globe-points .step-title{color:#f5f6f0}
+#harvest-data .globe-points .sentence{color:#b6c0b2}
+
+/* "Know exactly what to fix" (chapter 3) in the How it works hero's palette: its near-black #0a1017 ground (flat, no
+   glow), a sage-grey eyebrow, off-white headline, the hero's slate body grey for the bullets and sage checks */
+html.story-stage .story-stage::before{background:color-mix(in srgb,#0a1017 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
+html:not(.story-stage) #analyse-improve{background:#0a1017;box-shadow:0 0 0 100vmax #0a1017}
+#analyse-improve .chapter-heading .chapter-eyebrow{color:#c7d0bb}
+#analyse-improve .chapter-heading h3{color:#f5f6f0}
+#analyse-improve .chapter-points li{color:#98a4b0}
+#analyse-improve .chapter-points li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%23c5d1c0' fill-opacity='.16'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%23c5d1c0' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}

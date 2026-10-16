@@ -19,7 +19,7 @@ const SHOW_DRAFT_TESTIMONIAL = false;
 const benefits = [
  {id:'harvest-data',short:'Suppliers',label:'Supplier data & management',title:'Stop chasing suppliers.',lead:'Save time and effort collecting data',text:'No spreadsheets, no emails back and forth. Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform. Suppliers are rewarded for helping you out with LCA data on their own products.'},
  {id:'trusted-co2',short:'CO₂ numbers',label:'Trusted CO₂ numbers',title:'CO₂ numbers you can trust.',lead:'EPD calculations in days, not months',text:'Auditor-grade calculations built on EN 15804+A2 and the ISO standards behind every EPD, verified and validated end to end. It’s a world first, and it cuts the whole EPD process from months to weeks.'},
- {id:'analyse-improve',short:'Analyse',label:'Analyse & improve',title:'Know exactly what to fix.',lead:'Better scores, better products, more deals won.',text:'See where your impact really comes from, and what will move it most: a material, a component, a supplier. Improve your products and your supply chain with confidence, and bring better numbers to every tender.'},
+ {id:'analyse-improve',short:'Analyse',label:'Analyse & improve',title:'Know exactly what to fix',lead:'Better scores, better products, more deals won.',text:'See where your impact really comes from, and what will move it most: a material, a component, a supplier. Improve your products and your supply chain with confidence, and bring better numbers to every tender.'},
  {id:'product-passports',short:'Passports',label:'Next-gen passports',title:'Show your impact to the world',lead:'Living Product Passports for B2B and B2C.',text:'Every product gets a passport that stays up to date: materials, impact, care and repair, one scan away. Give your sales team a story competitors can’t match, and set the standard in your category.'},
  {id:'connect-clients',short:'Sales',label:'Connect with clients',title:'Open new sales channels',lead:'Build tomorrow’s customer experience today.',text:'Our passport infrastructure connects you directly with the people who own your products. Sell spare parts, accessories and services, and create customer experiences your competitors can’t offer yet.'},
  {id:'beat-regulation',short:'EU rules',label:'Beat EU regulation',title:'Ahead of the rules. Ahead of the rest.',lead:'Compliant years before you have to be.',text:'New EU rules for product data and Digital Product Passports are on their way. Don’t scramble to keep up. Get there early, and outperform the competitors who are still catching up.'}
@@ -31,19 +31,23 @@ const expertPhrases = ['never sleeps','gathers the data','spots the gains','prov
 // a single-sentence headline, step title or eyebrow has none; bullets and body text are sentences and keep theirs.
 const supplierSteps = [
  { title: 'Stop chasing suppliers', points: ['No spreadsheets.', 'No emails back and forth.'] },
- { title: 'Onboarding suppliers actually like', points: ['Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform.'] },
+ { title: 'Save time and effort', points: ['Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform.'] },
  { title: 'Suppliers get LCA numbers in return', points: ['Suppliers are rewarded for helping you out with LCA data on their own products.'] },
  { title: 'Real risk assessments', points: ['Manage all tiers in your supply chain and do real risk assessments.'] }
 ];
 // Chapter 2's paragraph as titled bullet steps in its card.
 const co2Steps = [
  { title: 'Audit-ready by design', points: ['Auditor-grade calculations built on EN 15804+A2 and the ISO standards behind every EPD.'] },
- { title: 'Verified and validated end to end', points: ['It’s a world first, and it cuts the whole EPD process from months to weeks.'] }
+ { title: 'Verified and validated end to end', points: ['It’s a world first, and it cuts the whole EPD process from months to weeks.', 'EPD calculations in days, not months.'] }
 ];
 // Chapters with a small eyebrow (from the lead) above the headline (the title), like chapters 1 and 2.
-const eyebrowChapters = ['product-passports', 'connect-clients', 'beat-regulation'];
+const eyebrowChapters = ['analyse-improve', 'product-passports', 'connect-clients', 'beat-regulation'];
 // Chapters whose paragraph is shown as check bullets.
 const chapterPoints: Record<string, string[]> = {
+ 'analyse-improve': [
+  'See where your impact really comes from, and what will move it most: a material, a component, a supplier.',
+  'Improve your products and your supply chain with confidence, and bring better numbers to every tender.'
+ ],
  'product-passports': [
   'Every product gets a passport that stays up to date: materials, impact, care and repair, one scan away.',
   'Give your sales team a story competitors can’t match, and set the standard in your category.'
@@ -69,8 +73,8 @@ const capabilities = [
 <BrandStrip />
 <section id="benefits" class="benefits frame"><div class="section-intro"><span class="eyebrow">PRODUCT CONNECT</span><h2><span class="sr-only">A product expert that never sleeps. Gathers the data. Spots the gains. Proves the progress. Opens new sales.</span><i class="expert-line" aria-hidden="true">A product expert that <span class="expert-rotator" data-expert-rotator>{expertPhrases.map((phrase,i)=><span class:list={['expert-phrase',{'is-active':i===0}]}>{phrase}</span>)}</span></i></h2></div><div class="benefit-layout"><aside class="benefit-nav"><nav aria-label="Product benefits">{benefits.map((b,i)=><a href={`#${b.id}`} data-benefit-link={b.id} aria-current={i===0?'location':undefined}><span class="nav-full">{b.label}</span><span class="nav-short">{b.short}</span><span class="nav-arrow">↗</span></a>)}</nav><p>From product data<br/>to what comes next.</p></aside><div class="chapters"><div class="story-stage" data-story-stage><div class="story-tint" aria-hidden="true"></div>{benefits.map((b,i)=><section id={b.id} class="chapter" data-chapter><div class="chapter-pin">{i>1&&<div class="chapter-heading">{eyebrowChapters.includes(b.id) ? <>{b.id==='connect-clients'&&<span class="coming">Coming this spring</span>}<span class="chapter-eyebrow">{b.lead.replace(/\.$/,'')}</span><h3>{b.title}</h3>{chapterPoints[b.id] ? <ul class="chapter-points">{chapterPoints[b.id].map((p)=><li>{p}</li>)}</ul> : <p>{b.text}</p>}{b.id==='product-passports'&&<small class="phone-caption">The passport displayed on this 3D model is interactive. You can enlarge it to really engage with its content.</small>}</> : <>{b.id==='connect-clients'&&<span class="coming">Coming this spring</span>}<h3>{b.title} <span>{b.lead}</span></h3><p>{b.text}</p>{i===1&&<small class="epd-process-note">EPD publication follows the applicable programme rules and independent verification.</small>}</>}</div>}
 <div class:list={['ui-stage',`stage-${i}`]}>
-{i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-intro"><span class="intro-eyebrow">Supply chain management</span><h3>{b.lead}</h3></div><div class="globe-points">{supplierSteps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map((point)=><p class="sentence">{point}</p>)}</div>)}</div><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><SupplyChainGlobe client:only="react" size={0.655} /></div></div></div>}
-{i===1&&<div class="co2-card"><div class="globe-intro co2-intro"><span class="intro-eyebrow">{b.title.replace(/\.$/, '')}</span><h3>{b.lead}</h3></div><div class="globe-points co2-points">{co2Steps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map((point)=><p class="sentence">{point}</p>)}</div>)}</div><small class="co2-note">EPD publication follows the applicable programme rules and independent verification.</small><div class="co2-report-wrap"><Co2Report /></div></div>}
+{i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-intro"><h3 class="sr-only">Supply chain management</h3><span class="intro-eyebrow" aria-hidden="true">Supply chain management</span></div><div class="globe-points">{supplierSteps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map((point)=><p class="sentence">{point}</p>)}</div>)}</div><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><SupplyChainGlobe client:only="react" size={0.655} /></div></div></div>}
+{i===1&&<div class="co2-card"><div class="globe-intro co2-intro"><h3 class="sr-only">{b.title.replace(/\.$/, '')}</h3><span class="intro-eyebrow" aria-hidden="true">{b.title.replace(/\.$/, '')}</span></div><div class="globe-points co2-points">{co2Steps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map((point)=><p class="sentence">{point}</p>)}</div>)}</div><small class="co2-note">EPD publication follows the applicable programme rules and independent verification.</small><div class="co2-report-wrap"><Co2Report /></div></div>}
 {i===2&&<div class="screen-card compare"><div class="ui-bar"><span>◈ Compare components</span><span class="pill">Illustrative scenario</span></div><div class="compare-body"><div class="product-thumb"><img src={`${base}v4/chair.webp`} width="640" height="427" alt="Oak chair used in the product comparison" loading="lazy"/><span>Cross Chair<small>Material comparison</small></span></div><div class="compare-grid"><div><small>Current material</small><h4>Oak / baseline</h4><strong>17.9 <em>kg CO₂e</em></strong><div class="compare-line"></div></div><div class="selected"><small>Alternative material</small><h4>Oak / scenario</h4><strong>14.2 <em>kg CO₂e</em></strong><div class="compare-line shorter"></div></div></div><div class="ui-footer">Materials <span>→</span> Components <span>→</span> Better decisions</div></div></div>}
 {b.id==='beat-regulation'&&<div class="screen-card report"><div class="ui-bar"><span>◈ Compliance readiness</span><span class="pill">Illustrative data</span></div><div class="report-body"><span class="report-label">CROSS CHAIR / DIGITAL PRODUCT PASSPORT</span><h4>Ready before<br/>it’s required</h4><div class="record"><span class="check">✓</span><span>Materials and components declared</span></div><div class="record"><span class="check">✓</span><span>Impact data traceable to source</span></div><div class="record"><span class="check">✓</span><span>Care, repair and end-of-life information</span></div><div class="record"><span class="check">✓</span><span>Passport published and kept up to date</span></div></div></div>}
 {i===3&&<div class="passport-composition"><div class="phone-live"><PassportPhone client:only="react" /></div></div>}
@@ -207,7 +211,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
    if (chapter.id === 'harvest-data') {
     // the globe assembles from scattered stars as the chapter arrives, holds while the bullets play, and
     // disperses back into stars at the end (read by SupplyChainGlobe as --globe-scatter)
-    // slow on purpose: fully assembled just as the second step ("Onboarding suppliers actually like") reaches full opacity (k 1.154)
+    // slow on purpose: fully assembled just as the second step ("Save time and effort") reaches full opacity (k 1.154)
     // Stacked layout (phones, short screens): k runs out while the globe is still on screen, so there it
     // assembles as the card scrolls in, its nodes follow, and it never disperses.
     const scatter = staged
@@ -218,7 +222,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     harvestExit = staged ? clamp((k - 1.602) / 0.36) : 0;
     chapter.style.setProperty('--globe-tint', harvestExit.toFixed(3));
     // once the globe has assembled, the supply-chain nodes and their labels are placed one by one,
-    // through the "Onboarding suppliers" step and done as "Suppliers get LCA numbers in return" settles
+    // through the "Save time and effort" step and done as "Suppliers get LCA numbers in return" settles
     chapter.style.setProperty('--globe-place', clamp(staged ? (k - 1.154) / 0.252 : (k - 0.7) / 0.4).toFixed(3));
     // risk regions light up red with the last step ("Real risk assessments", k 1.46–1.6 on the stage)
     chapter.style.setProperty('--globe-risk', clamp(staged ? (k - 1.434) / 0.098 : (k - 1.46) / 0.14).toFixed(3));

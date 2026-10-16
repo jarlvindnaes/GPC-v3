@@ -103,10 +103,6 @@
 /* the hub carries the Product Connect logo (lime dot on dark, as in the dark header) */
 .flow-hub .node-symbol .hub-logo{display:block;height:30px;width:auto;margin:0 auto;--pc-logo-dot:#d6ef8c}
 @media(max-width:720px){.flow-hub .node-symbol .hub-logo{height:24px}}
-/* "Live from day one" stands on its own now (the diagram moved up into the foundation section) */
-#connected-knowledge{padding-top:0;padding-bottom:0}
-#connected-knowledge .time-value-copy{padding:96px 24px}
-@media(max-width:720px){#connected-knowledge .time-value-copy{padding:64px 10px}}
 /* travelling data dots (node-flow.ts): round, blue into the hub, green out of it */
 .node-packets .packet{fill:#697CF5;filter:drop-shadow(0 0 3px #697cf580)}
 .node-packets .packet-c2,.node-packets .packet-c3{fill:#7ea653;filter:drop-shadow(0 0 3px #a8d06f99)}
