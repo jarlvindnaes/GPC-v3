@@ -992,24 +992,24 @@ html:not(.story-stage) .story-stage .chapter .chapter-pin{background:transparent
 
 /* ---------- Pinned story on narrower screens (600–900px wide) ---------- */
 /* supplier chapter: steps sit near the top under the headline, the globe in the lower part of the screen */
-@media(min-width:600px) and (max-width:900px){
+@media(max-width:900px){
  html.story-stage #harvest-data .globe-points{place-items:start start;padding:150px 28px 0}
  html.story-stage #harvest-data .stage-0 .globe-stage{--globe-offset-x:0;--globe-offset-y:.32}
 }
 /* CO₂ chapter: steps at the top under the headline, the report across the lower part (metric tiles two by two) */
-@media(min-width:600px) and (max-width:900px){
+@media(max-width:900px){
  html.story-stage #trusted-co2 .co2-report-wrap{top:auto;left:24px;right:24px;bottom:24px;width:auto;height:54%;transform-origin:50% 100%}
  html.story-stage #trusted-co2 .globe-points{place-items:start start;padding:130px 28px 0}
  html.story-stage #trusted-co2 .rep-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
  html.story-stage #trusted-co2 .co2-note{left:28px;bottom:auto;top:calc(46% - 74px);max-width:70%}
 }
-@media(min-width:600px) and (max-width:900px){
+@media(max-width:900px){
  html.story-stage :is(#harvest-data,#trusted-co2) .globe-intro{max-width:none;right:28px;left:28px}
  html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step{max-width:none}
  html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .sentence{max-width:560px}
 }
 /* chapters 3–6: text on top, the illustration below filling the rest of the pinned area */
-@media(min-width:600px) and (max-width:900px){
+@media(max-width:900px){
  html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-pin{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);align-items:start;gap:26px;padding:36px 28px 24px}
  html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-heading h3{font-size:26px}
  html.story-stage .story-stage .chapter:nth-of-type(n+3) .ui-stage{align-self:stretch;justify-self:stretch;display:flex;align-items:center;justify-content:center;min-height:0}
@@ -1019,13 +1019,13 @@ html:not(.story-stage) .story-stage .chapter .chapter-pin{background:transparent
 }
 /* the shared passport phone sits below both chapters' text: equal text heights, no zoom (no room), and the
    passport's note leaves with its text */
-@media(min-width:600px) and (max-width:900px){
+@media(max-width:900px){
  html.story-stage :is(#product-passports,#connect-clients) .chapter-heading{min-height:300px}
  html.story-stage #product-passports .phone-live{scale:none;translate:none}
  html.story-stage #product-passports .chapter-heading>.phone-caption{opacity:calc(var(--t) * (1 - clamp(0,(var(--k) - 1.92) * 12.5,1)))}
 }
 /* bigger globe on narrower screens and phones; cropping at the bottom is fine (--globe-scale, SupplyChainGlobe) */
-@media(min-width:600px) and (max-width:900px){html.story-stage #harvest-data .stage-0 .globe-stage{--globe-scale:1.15}}
+@media(max-width:900px){html.story-stage #harvest-data .stage-0 .globe-stage{--globe-scale:1.15}}
 html:not(.story-stage) .stage-0 .globe-stage{--globe-scale:1.45;--globe-offset-y:.14}
 
 /* Chapter menu on narrower screens: short labels (all six fit from tablet width), and on phones the row scrolls
@@ -1056,7 +1056,7 @@ html.story-stage #analyse-improve .chapter-points li:nth-child(2){--a:1.25}
  html.story-stage :is(#harvest-data,#trusted-co2) .globe-intro{top:calc(50% - 98px)}
  html.story-stage :is(#harvest-data,#trusted-co2) .globe-points{top:calc(50% - 69px);bottom:auto;place-items:start start}
 }
-@media(min-width:600px) and (max-width:900px){
+@media(max-width:900px){
  html.story-stage #harvest-data .globe-intro{top:121px}
  html.story-stage #trusted-co2 .globe-intro{top:101px}
 }
@@ -1218,3 +1218,61 @@ html.model-stage .model-pin{width:100vw;margin-left:calc(50% - 50vw)}
 /* while the site header is shown over the pinned model (scrolling up), its title steps down below it (--hdr eases
    with the header, as in the benefits story) */
 html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}
+/* Phones in portrait now get the pinned story too (Home.astro stageQuery: min-height 600px). The stage's tablet rules
+   (min-width:600px) are repeated here for the stage, and the stacked phone layout's panels, borders and fixed heights
+   are undone; the narrow pinned layouts (max-width:900px) then place each chapter's text on top of its visual. */
+@media(max-width:599px){
+ html.story-stage .ui-stage.stage-0,html.story-stage .ui-stage.stage-1{height:calc(100svh - var(--tab-row) - 1px - var(--hdr))}
+ html.story-stage .stage-0 .globe-stage{height:100%;--globe-offset-x:0}
+ html.story-stage .stage-0 .globe-stage astro-island{inset:0;left:calc(50% - 50vw);right:calc(50% - 50vw)}
+ html.story-stage .stage-0 .globe-stage::after{display:none}
+ html.story-stage .globe-intro{position:absolute;z-index:3;padding:0;background:none}
+ html.story-stage .globe-points{z-index:3}
+ html.story-stage .globe-points{position:absolute;inset:0;display:grid;padding:0 20px;background:none}
+ html.story-stage .globe-points .sentence{padding:0;border:0;background:none;box-shadow:none}
+}
+@media(max-width:599px){
+ html.story-stage #trusted-co2 .co2-report-wrap{position:absolute;top:auto;left:14px;right:14px;bottom:14px;width:auto;height:50%;margin:0}
+ html.story-stage #trusted-co2 .co2-note{position:absolute;left:20px;right:20px;top:calc(50% - 62px);bottom:auto;max-width:none;margin:0;padding:0;background:none;font-size:11px}
+ html.story-stage #trusted-co2 .globe-points{padding-top:120px}
+ html.story-stage #trusted-co2 .globe-intro{top:91px}
+ html.story-stage #harvest-data .globe-points{padding-top:120px}
+ html.story-stage #harvest-data .globe-intro{top:91px}
+}
+@media(max-width:599px){html.story-stage #trusted-co2 .co2-report-wrap .rep-view{justify-content:flex-start}html.story-stage #trusted-co2 .rep-views{margin-top:0}html.story-stage #trusted-co2 .rep-hl{padding-block:12px}}
+@media(max-width:599px){html.story-stage #trusted-co2 .co2-report-wrap .rep{height:100%;min-height:0}}
+/* phones: the passport phone fills the space under the text (its height sets its width), instead of its standalone
+   280×460 size spilling over the text and off the bottom */
+@media(max-width:599px){
+ html.story-stage #product-passports .passport-composition{height:100%;min-height:0;width:100%;justify-content:center}
+ html.story-stage #product-passports .phone-live{height:100%;width:auto;padding:6px 0}
+ html.story-stage :is(#product-passports,#connect-clients) .chapter-heading{min-height:0}
+ html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-pin{gap:18px;padding:28px 20px 16px}
+}
+/* phones in portrait: the sphere's canvas is twice the screen width, so the planet is big and rises well up the
+   screen with its sides running off the edges, leaving room inside it for the capability text */
+@media(max-width:599px){html.model-stage .model-pin .model-atmosphere .model-horizon.data-sphere{left:-50%;width:200%}}
+@media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%)) * .16);width:calc(100% - 40px)}}
+/* short phones (iPhone SE size): tighter type and spacing so each chapter's text and visual still fit one screen */
+@media(max-width:599px) and (max-height:740px){
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-intro{top:70px}
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points{padding-top:96px}
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step-title{font-size:18px}
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .sentence{font-size:14px;line-height:1.45}
+ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step{gap:10px}
+ html.story-stage #trusted-co2 .co2-report-wrap{height:49%}
+ html.story-stage #trusted-co2 .co2-note{top:calc(51% - 40px);font-size:10.5px}
+ html.story-stage #trusted-co2 .rep-metrics .rep-card,html.story-stage #trusted-co2 .rep-hl{padding:8px}
+ html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-pin{gap:12px;padding-top:20px}
+ html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-heading h3{font-size:22px}
+ html.story-stage .chapter-points{gap:10px;margin-top:14px}
+ html.story-stage .chapter-points li{font-size:14px}
+ html.story-stage #analyse-improve .compare .ui-footer{display:none}
+ html.story-stage #analyse-improve .compare-grid>div{padding:12px}
+ html.story-stage #analyse-improve .compare-grid h4{margin:6px 0 10px}
+}
+@media(max-width:599px) and (max-height:740px){html.story-stage #trusted-co2 .rep-highlights{display:none}}
+/* the stacked phone layout's navy panel behind the supplier steps (an id rule) must not survive in the pinned story,
+   where the steps layer spans the whole stage: it hid the globe and, as chapter 1 never fully fades, every later
+   chapter's background */
+@media(max-width:599px){html.story-stage #harvest-data .globe-points{background:none}}

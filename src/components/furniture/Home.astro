@@ -177,7 +177,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
  const tabRow = document.querySelector<HTMLElement>('.benefit-nav');
  const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
  const storyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-benefit-link]'));
- const stageQuery = matchMedia('(min-width: 600px) and (min-height: 640px)'); // pinned story from tablet width up; phones stack
+ const stageQuery = matchMedia('(min-height: 600px)'); // pinned story on any screen tall enough (phones in portrait too); short screens stack
  const ARRIVE = 0.4; // share of the screen height each later chapter spends arriving
  const OVERLAP = 0.22; // ...starting this much (share of the screen height) before the previous one has left, so they crossfade
  // Each later chapter starts arriving a little before the previous one has finished fading out (a true crossfade,
@@ -384,7 +384,7 @@ updateActive();
  // each one). Phones and short screens keep the capabilities as a grid under the sphere.
  const modelStory = document.querySelector<HTMLElement>('[data-model-story]');
  if (modelStory) {
-  const query = matchMedia('(min-width: 600px) and (min-height: 640px)');
+  const query = matchMedia('(min-height: 600px)');
   const dots = Array.from(modelStory.querySelectorAll<HTMLElement>('.model-dots li'));
   const count = modelStory.querySelectorAll('.capabilities article').length;
   let queued = false;
@@ -395,11 +395,12 @@ updateActive();
    if (!pinned) return;
    // the sphere's top edge, as data-scenes.ts draws it (centre 105.5% down, radius min(53% of width, 69% of height)),
    // so the capability text sits inside the dome at any screen shape
-   const atmosphere = modelStory.querySelector<HTMLElement>('.model-atmosphere');
-   if (atmosphere) {
-    const w = atmosphere.clientWidth;
-    const h = atmosphere.clientHeight;
-    modelStory.style.setProperty('--dome', `${Math.round(h * 1.055 - Math.min(w * 0.53, h * 0.69))}px`);
+   // (measured on the sphere's own canvas box, which is wider than the screen on phones)
+   const horizon = modelStory.querySelector<HTMLElement>('.model-horizon');
+   if (horizon) {
+    const w = horizon.clientWidth;
+    const h = horizon.clientHeight;
+    modelStory.style.setProperty('--dome', `${Math.round(horizon.offsetTop + h * 1.055 - Math.min(w * 0.53, h * 0.69))}px`);
    }
    const box = modelStory.getBoundingClientRect();
    const run = Math.max(1, modelStory.offsetHeight - window.innerHeight);
