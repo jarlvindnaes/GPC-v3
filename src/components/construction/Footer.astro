@@ -3,11 +3,11 @@ const base = import.meta.env.BASE_URL;
 const groups = [
  {title:'Platform', links:[['Overview',base],['How it works',`${base}how-it-works/`],['Digital Product Passports',`${base}dpp/`]]},
  {title:'Product Connect', links:[['Enterprise',`${base}enterprise/`],['Pricing',`${base}pricing/`],['About us',`${base}about/`]]},
- {title:'Let’s connect', links:[['Talk to sales','mailto:hello@getproductconnect.com'],['Explore integrations','mailto:hello@getproductconnect.com?subject=Product%20Connect%20integrations']]}
+ {title:'Let’s connect', links:[['Talk to sales','mailto:contact@productconnect.com'],['Explore integrations','mailto:contact@productconnect.com?subject=Product%20Connect%20integrations']]}
 ];
 ---
 <footer class="site-footer frame">
- <div class="footer-main"><div class="footer-identity"><a class="brand" href={base}><span class="mark">p<span>c</span></span>Product Connect</a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:hello@getproductconnect.com">hello@getproductconnect.com ↗</a></div>
+ <div class="footer-main"><div class="footer-identity"><a class="brand" href={base}><span class="mark">p<span>c</span></span>Product Connect</a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:contact@productconnect.com">contact@productconnect.com ↗</a></div>
  {groups.map(group=><nav aria-label={group.title}><h2>{group.title}</h2>{group.links.map(([label,url])=><a href={url}>{label}</a>)}</nav>)}</div>
  <div class="footer-bottom"><span>© {new Date().getFullYear()} Product Connect</span><span>Product data. Connected.</span><a href="#main">Back to top ↑</a></div>
 </footer>
