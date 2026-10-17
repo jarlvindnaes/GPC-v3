@@ -1276,3 +1276,7 @@ html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}
    where the steps layer spans the whole stage: it hid the globe and, as chapter 1 never fully fades, every later
    chapter's background */
 @media(max-width:599px){html.story-stage #harvest-data .globe-points{background:none}}
+/* the comparison cards in the analyse chapter's own cool near-black (#0a1017): a slightly lifted blue-black surface
+   and a cool slate outline instead of the CO₂ report's green-grey */
+#analyse-improve :is(.product-thumb,.compare-grid>div){background:#111923;border-color:#222d3b;box-shadow:0 12px 30px #00000066}
+#analyse-improve .compare-grid .selected{background:#16202d;border-color:#8796ad80}
