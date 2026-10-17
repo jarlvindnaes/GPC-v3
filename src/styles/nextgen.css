@@ -384,3 +384,16 @@ html{scroll-padding-top:115px}
 .provenance .source-row>strong{display:block;font-size:19px;font-weight:500}
 .provenance .source-row>p{margin:6px 0 0;font-size:14px;line-height:1.5}
 @media(max-width:480px){.provenance-grid>div{grid-template-columns:1fr;gap:24px}}
+/* Trust & compliance in the same build as "Know where it came from": lead paragraph on the left, the four points as
+   a numbered 2×2 grid with a blue left rule on the right, and the standards row underneath like the EPD note */
+.trust-body{display:grid;grid-template-columns:1fr 1fr;gap:11%;margin-top:45px}
+.trust-body .trust-lead{margin:0;font-size:19px;line-height:1.7;color:#596650;max-width:410px}
+.trust .trust-grid{grid-template-columns:1fr 1fr;gap:30px 32px;margin-top:0;align-content:start}
+.trust .trust-grid article{border-top:0;border-left:2px solid #8295d1;padding:0 0 0 18px}
+.trust .trust-grid span{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#5f6d8a}
+.trust .trust-grid h3{margin:0;font-size:19px;font-weight:500;letter-spacing:normal;color:var(--pc-ink,#111b30)}
+.trust .trust-grid p{margin:6px 0 0;font-size:14px;line-height:1.5;color:#617058}
+.trust .trust-standards{margin-top:45px;padding-top:25px;border-top:1px solid #c5cebb}
+@media(max-width:1000px){.trust .trust-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.trust-body{grid-template-columns:1fr;gap:28px;margin-top:25px}.trust-body .trust-lead{font-size:17px}}
+@media(max-width:480px){.trust .trust-grid{grid-template-columns:1fr;gap:24px}}

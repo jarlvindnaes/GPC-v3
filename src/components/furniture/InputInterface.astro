@@ -22,7 +22,10 @@
   .input-interface h2 span{color:#8b919c}
   .input-copy p{max-width:430px;margin:22px 0 0;font-size:17px;line-height:1.65;color:#a2a8b3}
   .input-interface{position:relative;isolation:isolate}
+  /* a soft dark halo in the section's own black, so the data streams running behind the copy don't cross the letters */
   .input-copy{position:relative;z-index:1}
+  .input-copy :is(h2,p){text-shadow:0 0 4px #111214,0 0 10px #111214,0 0 20px #111214,0 0 34px #111214}
+  .input-tag{box-shadow:0 0 0 6px #11121499,0 0 24px 10px #111214}
   .input-scene{position:relative;min-height:420px}
   /* the canvas spans the whole section, behind the copy, so the data streams start at the page's left edge; the
      lens scene itself still sits in the right column (--scene-left: where that column begins) */
