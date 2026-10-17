@@ -376,3 +376,11 @@ html{scroll-padding-top:115px}
 .enterprise .contact .button.dark:hover{background:#ffffff10}
 .enterprise .contact .contact-email{color:#b2bfaa}
 .enterprise .contact a:focus-visible{outline-color:#d6ef8c}
+/* "Know where it came from": its four sources use the homepage's "Built for your team" points design: a numbered
+   2×2 grid with a blue left rule, number, title and a short line */
+.provenance-grid>div{display:grid;grid-template-columns:1fr 1fr;gap:30px 32px;align-content:start}
+.provenance .source-row{display:block;border-top:0;border-left:2px solid #8295d1;padding:0 0 0 18px}
+.provenance .source-row>span{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#5f6d8a}
+.provenance .source-row>strong{display:block;font-size:19px;font-weight:500}
+.provenance .source-row>p{margin:6px 0 0;font-size:14px;line-height:1.5}
+@media(max-width:480px){.provenance-grid>div{grid-template-columns:1fr;gap:24px}}
