@@ -338,8 +338,9 @@ export async function createChairStoryScene(
 
       model = loaded;
       if (hero && variant === "soft") {
-        // The bolt fully backed out: its centre, size (it is a short head, so its diameter sets the
-        // close-up distance) and a three-quarter view onto its hex socket from the hero's side.
+        // The bolt fully backed out: its centre (the middle of the socket head cap screw, so its slow
+        // turn stays in place), size (its head diameter sets the close-up distance) and a three-quarter
+        // view onto its hex socket from the hero's side.
         const h: Part = hero;
         placeParts(1, 1);
         pivot.updateMatrixWorld(true);
@@ -347,10 +348,12 @@ export async function createChairStoryScene(
         const worldCenter = boltBox.getCenter(new Three.Vector3());
         close.center.copy(pivot.worldToLocal(worldCenter.clone()));
         const extent = boltBox.getSize(new Three.Vector3());
-        // The close-up distance is CLOSE_DISTANCE "screw lengths"; the bolt head is short and wide,
-        // so count it as ~4.4 diameters long: the whole head with room around it, and far enough that
-        // the faceted edge of the round hole in the leg doesn't show.
-        close.length = Math.max(extent.x, extent.y, extent.z) * 4.4;
+        // The close-up distance is CLOSE_DISTANCE "screw lengths"; count the screw as ~4.4 head
+        // diameters long (the head diameter is the box's middle side; its longest is the 25 mm screw):
+        // the whole screw with room around it, and far enough that the faceted edge of the round hole
+        // in the leg doesn't show.
+        const sides = [extent.x, extent.y, extent.z].sort((a, b) => a - b);
+        close.length = sides[1] * 4.4;
         heroCenter.copy(h.mesh.worldToLocal(worldCenter.clone()));
         heroAnchors.push(heroCenter.clone());
         close.dir.copy(VIEW);
