@@ -332,7 +332,7 @@ html.story-on .chapter .stage-0 .globe-stage astro-island{--q:clamp(0,calc((var(
 html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 0.85) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.0) / 0.3),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-1 .rep-note{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * -10px))}
-html.story-on .chapter .stage-1 .rep-tabs{--q:clamp(0,calc((var(--k) - 0.8) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * -8px))}
+
 html.story-on .chapter .stage-1 .rep-views{--q:clamp(0,calc((var(--k) - 0.9) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-2 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-2 .product-thumb{--q:clamp(0,calc((var(--k) - 0.9) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
@@ -480,7 +480,7 @@ html.story-on .chapter .co2-report-wrap{--g:clamp(0,calc((var(--k) - .1) / 1.0),
 }
 /* The report now slides in itself, so its tabs and contents come along early rather than after it lands. */
 /* the report's tab menu drops in from the top as the panel settles into place */
-html.story-on .chapter .co2-card .rep-tabs{--q:clamp(0,calc((var(--k) - .62) / .28),1);transform:translateY(calc((1 - var(--q)) * -56px))}
+
 html.story-on .chapter .co2-card .rep-views{--q:clamp(0,calc((var(--k) - .35) / .25),1)}
 html.story-on .chapter .co2-card .rep-note{--q:clamp(0,calc((var(--k) - .5) / .2),1)}
 /* Bullet steps (chapters 1 and 2): each step holds one or more checkmark bullets; steps share one spot and
@@ -664,7 +664,7 @@ html.story-stage .co2-card::before{display:none}
 #trusted-co2 .globe-points .sentence{color:#dfe4dc}
 #trusted-co2 .globe-points .sentence::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%23c5d1c0' fill-opacity='.2'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%23d6e0d1' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 #trusted-co2 .co2-note{color:#8d968f}
-.co2-card .co2-report-wrap .rep-tabs button.is-active i::after{background:#c5d1c0}
+
 /* Chapter 1 globe: the stars assembling / dispersing (--globe-scatter, drawn inside the globe) replace the earlier
    grow, travel and slide-out; the globe itself stays put at its final size. */
 html.story-on .chapter .stage-0 .globe-stage astro-island{opacity:1;transform:scale(.91);transform-origin:75% 55.4%}
@@ -932,8 +932,8 @@ html.story-stage .story-tint{background:#0e1615}
 .co2-card .co2-report-wrap .rep-metric small,.co2-card .co2-report-wrap .rep-label{color:var(--muted)}
 .co2-card .co2-report-wrap .rep-hl b{font-weight:480;color:var(--fg)}
 .co2-card .co2-report-wrap .rep-hl span{color:var(--muted)}
-.co2-card .co2-report-wrap .rep-tabs button{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8f9c8a}
-.co2-card .co2-report-wrap .rep-tabs button.is-active{color:#c5d1c0}
+
+
 .co2-card .co2-report-wrap .rep-view h4{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#c5d1c0}
 .co2-card .co2-report-wrap .rep-view h4 small{letter-spacing:.04em;text-transform:none;color:var(--muted)}
 .co2-card .co2-report-wrap .rep-grid{border-top-color:#ffffff14}
@@ -947,11 +947,6 @@ html.story-stage .story-tint{background:#0e1615}
 /* report tab menu in the green theme: sage label and progress line on a faint track (id-level, to beat the
    component's scoped blue) */
 /* report menu kept quiet: dimmer labels (still ≥4.5:1), a hairline track and a softer progress line */
-#trusted-co2 .rep-tabs button{color:#7a8775;font-size:11px}
-#trusted-co2 .rep-tabs button.is-active{color:#a3ae9e}
-#trusted-co2 .rep-tabs button i{height:1px;background:#ffffff0a}
-#trusted-co2 .rep-tabs button.is-active i{background:#ffffff10}
-#trusted-co2 .rep-tabs button.is-active i::after{background:#a3ae9e99}
 /* chapters that are not on screen take no pointer at all, including content that turns pointer events back on
    inline (the 3D passport phone's screen), so nothing invisible blocks dragging the globe or clicking the report.
    The passport while it is held for Connect with clients is the exception. Keyboard focus still reaches them. */
@@ -1079,3 +1074,116 @@ html:not(.story-stage) #analyse-improve{background:#0a1017;box-shadow:0 0 0 100v
 #analyse-improve .chapter-heading h3{color:#f5f6f0}
 #analyse-improve .chapter-points li{color:#98a4b0}
 #analyse-improve .chapter-points li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%23c5d1c0' fill-opacity='.16'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%23c5d1c0' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+/* Report and comparison card titles were picking up the global display face (Space Grotesk, index.css h1–h6) and,
+   in the CO₂ report, the scoped 14px/600 size: set them in the site's Inter, the CO₂ one as the small uppercase label
+   it was meant to be */
+#trusted-co2 .co2-report-wrap .rep-view h4{font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#c5d1c0}
+#trusted-co2 .co2-report-wrap .rep-view h4 small{font-family:inherit;font-size:11px;letter-spacing:.04em;text-transform:none}
+#analyse-improve h4{font-family:Inter,Arial,sans-serif}
+/* "Ahead of the rules. Ahead of the rest." (chapter 6): its paragraph as two check bullets, placed one after another
+   like the other chapters', in the chapter's slate grey */
+#beat-regulation .chapter-points li{color:#5c6270}
+#beat-regulation .chapter-points li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%235f6878' fill-opacity='.16'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%235f6878' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+html.story-stage #beat-regulation .chapter-points li{--in:clamp(0,calc((var(--k) - var(--a)) / .12),1);opacity:var(--in);transform:translateY(calc((1 - var(--in)) * 26px))}
+html.story-stage #beat-regulation .chapter-points li:nth-child(1){--a:.87}
+html.story-stage #beat-regulation .chapter-points li:nth-child(2){--a:1.25}
+@media(prefers-reduced-motion:reduce){html.story-stage #beat-regulation .chapter-points li{transform:none}}
+/* Story bullets: each carries an icon that leans into its text (lucide, Home.astro) in the chapter's accent, on the
+   same soft round badge the check marks used; the check mark stays only as a fallback for a bullet without one */
+.globe-points .sentence:has(.pt-icon)::before,.chapter-points li:has(.pt-icon)::before{content:none}
+.pt-icon{flex:none;display:grid;place-items:center;width:22px;height:22px;margin-top:.05em;border-radius:50%;background:color-mix(in srgb,currentColor 16%,transparent)}
+.pt-icon svg{display:block}
+.globe-points .sentence>.pt-icon{margin-top:.1em}
+.chapter-points .pt-icon{color:#8c7a5e}
+#harvest-data .pt-icon{color:#a0aff7}
+#trusted-co2 .pt-icon{color:#c5d1c0}
+#analyse-improve .pt-icon{color:#c5d1c0}
+#connect-clients .pt-icon{color:#5e7663}
+#beat-regulation .pt-icon{color:#5f6878}
+/* larger icon badges so the icons read at a glance: 28px badge, 16px icon, centred on the first line of text */
+.pt-icon{width:28px;height:28px;margin-top:calc((1lh - 28px) / 2)}
+.globe-points .sentence>.pt-icon{margin-top:calc((1lh - 28px) / 2)}
+.pt-icon svg{width:16px;height:16px}
+.globe-points .sentence:has(.pt-icon),.chapter-points li:has(.pt-icon){gap:14px}
+/* Chapter 1 has three steps: "Save time and effort" now carries the reward bullet too, placed on its own once the
+   step has settled (where the old "Suppliers get LCA numbers in return" step began), and stays until the step leaves */
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--a:1.112;--b:1.42}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--a:1.462;--b:1.602}
+/* Every step with two bullets places the second on its own once the first has settled (as in "Save time and
+   effort"): "Stop chasing suppliers" in chapter 1 and "Verified and validated end to end" in chapter 2 */
+/* Chapters 1–2, like the passport-style chapters: each step title stands alone for a beat, then its bullets are
+   placed one at a time (--b1, --b2 on the step), all leaving with the step */
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2){--s:clamp(0,calc((var(--k) - var(--b1,0)) / .045),1);opacity:var(--s);transform:translateY(calc((1 - var(--s)) * 22px))}
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(3){--s:clamp(0,calc((var(--k) - var(--b2,0)) / .045),1);opacity:var(--s);transform:translateY(calc((1 - var(--s)) * 22px))}
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--b1:.86;--b2:.96}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--b1:1.2;--b2:1.3}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.53}
+html.story-stage #trusted-co2 .globe-points .step:nth-child(1){--b1:.9}
+html.story-stage #trusted-co2 .globe-points .step:nth-child(2){--b1:1.57;--b2:1.67}
+@media(prefers-reduced-motion:reduce){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence{transform:none}}
+/* "Know exactly what to fix" illustration in the CO₂ report's card language: no white window, separate dark cards
+   (#141d1c, soft green-grey outline, 12px corners, deep shadow), sage uppercase labels, off-white figures, sage bars
+   and the lime-dot "Illustrative data" note */
+#analyse-improve .screen-card.compare{background:none;border:0;box-shadow:none;overflow:visible;border-radius:0;color:#f5f6f0}
+#analyse-improve .compare .ui-bar{padding:0 2px 14px;border:0;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#c5d1c0}
+#analyse-improve .compare .ui-bar .pill{display:inline-flex;align-items:center;gap:7px;padding:0;border:0;background:none;font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;color:#a8b5a2}
+#analyse-improve .compare .ui-bar .pill::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6ef8c}
+#analyse-improve .compare-body{padding:0}
+#analyse-improve :is(.product-thumb,.compare-grid>div){background:#141d1c;border:1px solid #2c3a35;border-radius:12px;box-shadow:0 12px 30px #00000055}
+#analyse-improve .product-thumb{padding:12px;color:#f5f6f0}
+#analyse-improve .product-thumb img{border-radius:8px}
+#analyse-improve .product-thumb>span>small{color:#a8b5a2}
+#analyse-improve .compare-grid{margin:12px 0 0}
+#analyse-improve .compare-grid>div{padding:18px}
+#analyse-improve .compare-grid .selected{background:#1a2523;border-color:#c5d1c099}
+#analyse-improve .compare-grid small{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#a8b5a2}
+#analyse-improve .compare-grid h4{color:#f5f6f0;font-weight:500}
+#analyse-improve .compare-grid strong{font-weight:700;letter-spacing:-.02em;color:#f5f6f0}
+#analyse-improve .compare-grid strong>em{font-style:normal;font-weight:400;font-size:12px;letter-spacing:0;color:#a8b5a2}
+#analyse-improve .compare-line{height:6px;border-radius:3px;background:#c5d1c03d}
+#analyse-improve .compare-line.shorter{background:#c5d1c0}
+#analyse-improve .compare .ui-footer{padding:16px 2px 0;border:0;color:#a8b5a2}
+#analyse-improve .compare .ui-footer span{color:#c5d1c0}
+@media(max-width:599px){#analyse-improve .compare-grid>div{padding:14px}#analyse-improve .compare-grid small{font-size:10px;letter-spacing:.06em;white-space:nowrap}}
+/* "Ahead of the rules" (chapter 6) in a deep blue in tone with the navy and near-black chapters (the stage's base
+   colour, reached as the sage fades), light text, and the EU flag's stars as a background effect: they fly in from
+   the right and settle into their circle low on the right, cut off by the bottom and right edges, with a soft glow */
+html.story-stage .story-stage::before{background:color-mix(in srgb,#0a1017 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#13285a)))}
+html:not(.story-stage) #beat-regulation{background:#13285a;box-shadow:0 0 0 100vmax #13285a;clip-path:inset(0 -100vmax)}
+#beat-regulation .chapter-heading .chapter-eyebrow{color:#b4c0ff}
+#beat-regulation .chapter-heading h3{color:#f5f6f0}
+#beat-regulation .chapter-points li{color:#c3cde6}
+#beat-regulation .pt-icon{color:#b4c0ff}
+#beat-regulation .chapter-pin{position:relative}
+#beat-regulation .chapter-heading{position:relative;z-index:1}
+#beat-regulation .ui-stage{position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;max-width:none;margin:0;overflow:hidden;pointer-events:none;z-index:0}
+.eu-flag{position:absolute;right:-10vmin;bottom:-26vmin;width:min(72vmin,640px);aspect-ratio:1;background:radial-gradient(circle at 50% 50%,#4a6fe066 0%,#2c4fb033 34%,transparent 66%)}
+.eu-star{position:absolute;left:var(--x);top:var(--y);width:9%;aspect-ratio:1;overflow:visible;transform:translate(-50%,-50%);filter:drop-shadow(0 0 6px #ffcc0099) drop-shadow(0 0 22px #ffcc0055)}
+.eu-star polygon{fill:#ffcc00}
+html.story-on #beat-regulation .eu-flag{--q:clamp(0,calc((var(--k) - .45) / .3),1);opacity:var(--q)}
+html.story-on #beat-regulation .eu-star{--s:clamp(0,calc((var(--k) - var(--a)) / .3),1);--e:calc(1 - (1 - var(--s)) * (1 - var(--s)));opacity:clamp(0,calc(var(--s) * 2.5),1);transform:translate(-50%,-50%) translate(calc((1 - var(--e)) * var(--fx)),calc((1 - var(--e)) * var(--fy))) rotate(calc((1 - var(--e)) * var(--r))) scale(calc(.6 + .4 * var(--e)))}
+@media(prefers-reduced-motion:reduce){html.story-on #beat-regulation .eu-star{transform:translate(-50%,-50%)}}
+html.motion-paused.story-on #beat-regulation .eu-star{transform:translate(-50%,-50%)}
+/* stacked chapters (phones, short screens): the stars get their own band under the text, cut off at its bottom
+   and right like on the stage */
+html:not(.story-stage) #beat-regulation .ui-stage{position:relative;top:auto;bottom:auto;left:auto;width:auto;height:min(78vw,340px);margin:8px calc(50% - 50vw) 0 0}
+html:not(.story-stage) #beat-regulation .eu-flag{width:min(96vw,420px);right:-22vw;bottom:-30vw}
+/* The chapters stop --hdr short of the stage bottom while the site header is shown (and --hdr eases as it comes and
+   goes); the star field reaches down to the stage's own bottom edge instead, so the stars stay cut off by the screen
+   edge rather than lifting off it as the header appears and disappears */
+html.story-stage #beat-regulation .ui-stage{bottom:calc(-1 * var(--hdr,0px))}
+/* bigger, nearly white stars with only a hint of the flag's gold, and a softer white glow */
+.eu-star{width:12.5%;filter:drop-shadow(0 0 7px #fff4cc99) drop-shadow(0 0 26px #ffe8a04d)}
+.eu-star polygon{fill:#fff8e1}
+/* a bigger circle centred on the stage's bottom-right corner, so only its top-left quarter shows; the stars keep
+   roughly their size */
+.eu-flag{right:0;bottom:0;width:min(150vmin,1400px);translate:50% 50%}
+html.story-on #beat-regulation .ui-stage>.eu-flag{transform:none}
+.eu-star{width:7.5%}
+html:not(.story-stage) #beat-regulation .eu-flag{right:0;bottom:0;width:min(150vw,640px)}
+html:not(.story-stage) #beat-regulation .eu-flag{background:radial-gradient(circle at 50% 50%,#4a6fe059 0%,#2c4fb02e 22%,transparent 38%)}
+/* the stars as a quieter background: about half opacity, with a gentler glow */
+.eu-star{opacity:.5;filter:drop-shadow(0 0 6px #fff4cc66) drop-shadow(0 0 20px #ffe8a033)}
+html.story-on #beat-regulation .eu-star{opacity:calc(clamp(0,var(--s) * 2.5,1) * .5)}
+/* no haze at the circle's centre: just the stars on the flat blue */
+.eu-flag,html:not(.story-stage) #beat-regulation .eu-flag{background:none}

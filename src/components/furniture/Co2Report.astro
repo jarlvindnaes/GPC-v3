@@ -2,7 +2,7 @@
 // "CO₂ numbers you can trust": a dark miniature of Product Connect's professional LCA report
 // (ProductConnect/application/product-connect/WebApp/routes/reports/-components/professional): summary metric
 // cards, then top component contributors, in the product's dark chart
-// palette. It cycles through the two views while on screen; the view tabs are buttons. Illustrative numbers for a lounge chair, not a real result.
+// palette. It moves from the overview to the contributors as you scroll (or takes turns on its own outside the pinned story). Illustrative numbers for a lounge chair, not a real result.
 const metrics = [
   { icon: 'leaf', tone: 'emerald', value: '24.8', unit: 'kg CO₂ eq', label: 'Carbon impact' },
   { icon: 'zap', tone: 'amber', value: '312.5', unit: 'MJ', label: 'Energy use' },
@@ -35,14 +35,6 @@ import { DppPartThumb } from '../dpp/DppPartThumb';
 const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 ---
 <div class="rep" data-co2-report>
-
-  <div class="rep-tabs" role="tablist" aria-label="Report views">
-    {views.map((v, i) => (
-      <button type="button" role="tab" class:list={{ 'is-active': i === START }} aria-selected={i === START ? 'true' : 'false'} data-tab={i}>
-        {v}<i aria-hidden="true"></i>
-      </button>
-    ))}
-  </div>
 
   <div class="rep-views">
     <section class="rep-view is-active" data-view="0" aria-label="Overview">
@@ -90,17 +82,14 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
 
 <script>
   import { motionPaused } from "../../utilities/motion";
-  // The line under the active tab is the timer: it fills over STEP while the panel is on screen, and when it
-  // is full the next view is selected. Hovering the panel freezes the line where it is; clicking a tab starts
-  // that tab's line from empty and cycling carries on from there. Sorting the table stops the cycling, and
-  // with reduced motion views only change on click.
+  // No view menu: in the pinned story, scrolling moves from the overview to the contributors; elsewhere (stacked
+  // chapters on phones) the views take turns every STEP while the report is on screen, holding while hovered.
+  // With reduced motion or "Pause animations" the timed turns stop; the scroll still moves between views.
   const root = document.querySelector<HTMLElement>("[data-co2-report]");
   if (root) {
     const views = Array.from(root.querySelectorAll<HTMLElement>(".rep-view"));
-    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
-    const reduce = motionPaused(); // system setting or the footer's "Pause animations" (its timer line is a CSS animation, which the toggle pauses too)
+    const reduce = motionPaused(); // system setting or the footer's "Pause animations"
     const STEP = 5000;
-    root.style.setProperty("--step", `${STEP}ms`);
     let current = Math.max(0, views.findIndex((v) => v.classList.contains("is-active")));
     let visible = false;
     let hovering = false;
@@ -108,22 +97,12 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     // (in the pinned stage it sits under the earlier chapter, so it counts as on screen while still hidden).
     let waiting = false;
     let stopped = reduce;
-    // Running: the line animates. Paused: it holds its progress (hover, or scrolled away).
-    const sync = () => {
-      root.classList.toggle("is-running", !stopped);
-      root.classList.toggle("is-paused", hovering || !visible || waiting);
-    };
+    // Timed turns (outside the pinned story): time only counts while on screen, not hovered and not scroll-driven.
+    let elapsed = 0;
     const show = (index: number) => {
       current = index;
       views.forEach((v, i) => v.classList.toggle("is-active", i === index));
-      tabs.forEach((t, i) => {
-        t.classList.toggle("is-active", i === index);
-        t.setAttribute("aria-selected", i === index ? "true" : "false");
-      });
-      // Start the new tab's line from empty.
-      root.classList.remove("is-running");
-      void root.offsetWidth;
-      sync();
+      elapsed = 0;
     };
     // Contributors hover (mirrors the product's BarChart): highlight the hovered bar, dim the rest, tooltip.
     const barArea = root.querySelector<HTMLElement>(".rep-bars");
@@ -149,13 +128,11 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
         barTip.classList.remove("on");
       });
     }
-    // Scroll story (Home.astro): while this chapter is pinned, scrolling moves through the views in tab
-    // order from the start view, and the active tab's line shows how far through that view the scroll is.
-    // A click wins until the scroll reaches the next view.
+    // Scroll story (Home.astro): while this chapter is pinned, scrolling moves through the views in order from
+    // the start view.
     const ORDER = [0, 1];
     let scrubbed = false;
     let seg = -1;
-    let lockSeg = -1;
     window.addEventListener("co2report:scroll", (event) => {
       const { arrived, held } = (event as CustomEvent<{ arrived: number; held: number }>).detail;
       const was = scrubbed;
@@ -163,55 +140,38 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
       waiting = arrived < 0.999;
       if (waiting) {
         if (current !== 0 || !wasWaiting) {
-          show(0); // the overview, its line from empty and held paused
+          show(0); // the overview, held until the chapter has arrived
         }
         seg = -1;
-        lockSeg = -1;
-      } else if (wasWaiting) {
-        sync();
       }
-      scrubbed = !reduce && arrived >= 0.999 && held < 0.999;
-      root.classList.toggle("is-scrubbed", scrubbed);
+      scrubbed = arrived >= 0.999 && held < 0.999;
       if (scrubbed) {
-        const pos = Math.min(ORDER.length - 0.001, Math.max(0, held) * ORDER.length);
-        const next = Math.floor(pos);
-        root.style.setProperty("--seg", (pos - next).toFixed(3));
+        const next = Math.floor(Math.min(ORDER.length - 0.001, Math.max(0, held) * ORDER.length));
         if (next !== seg) {
           seg = next;
-          if (seg !== lockSeg) {
-            lockSeg = -1;
-            if (ORDER[seg] !== current) {
-              show(ORDER[seg]);
-            }
+          if (ORDER[seg] !== current) {
+            show(ORDER[seg]);
           }
         }
       } else if (was) {
         seg = -1;
-        lockSeg = -1;
-        show(current); // back to the timed cycle from this view
       }
     });
-    tabs.forEach((tab, i) => {
-      tab.addEventListener("click", () => {
-        if (scrubbed) {
-          lockSeg = seg;
-        }
-        show(i);
-      });
-      // The active tab's line has filled: move on.
-      tab.addEventListener("animationend", () => {
-        if (i === current && !stopped && !scrubbed) {
-          show((current + 1) % views.length);
-        }
-      });
-    });
-    root.addEventListener("pointerenter", () => { hovering = true; sync(); });
-    root.addEventListener("pointerleave", () => { hovering = false; sync(); });
+    const TICK = 250;
+    window.setInterval(() => {
+      if (stopped || scrubbed || waiting || hovering || !visible || document.documentElement.classList.contains("story-stage")) {
+        return;
+      }
+      elapsed += TICK;
+      if (elapsed >= STEP) {
+        show((current + 1) % views.length);
+      }
+    }, TICK);
+    root.addEventListener("pointerenter", () => { hovering = true; });
+    root.addEventListener("pointerleave", () => { hovering = false; });
     new IntersectionObserver((entries) => {
       visible = entries.some((e) => e.isIntersecting);
-      sync();
     }, { threshold: 0.4 }).observe(root);
-    sync();
   }
 </script>
 
@@ -325,28 +285,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   .rep-barthumb, .rep-barval { transition: opacity 0.4s ease calc(var(--i, 0) * 60ms + 650ms); }
   .rep-view:not(.is-active) .rep-barthumb, .rep-view:not(.is-active) .rep-barval { opacity: 0; transition: none; }
 
-  .rep-tabs { display: flex; gap: 6px; }
-  .rep-tabs button {
-    position: relative;
-    flex: 1;
-    padding: 6px 4px 8px;
-    border: 0;
-    background: none;
-    color: var(--muted);
-    font: inherit;
-    font-size: 12px;
-    cursor: pointer;
-    overflow: hidden;
-  }
-  .rep-tabs button.is-active { color: var(--fg); }
-  .rep-tabs button i { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: #1f2635; }
-  .rep-tabs button.is-active i { background: #3a4560; }
-  .rep-tabs button.is-active i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: hsl(226 70% 65%); transform-origin: left; }
-  .is-running .rep-tabs button.is-active i::after { animation: rep-progress var(--step, 5s) linear forwards; }
-  .is-paused .rep-tabs button.is-active i::after { animation-play-state: paused; }
-  /* Scroll-driven (story): the line follows the scroll through the view instead of the timer. */
-  .is-scrubbed .rep-tabs button.is-active i::after { animation: none !important; transform: scaleX(var(--seg, 0)) !important; transition: transform 80ms linear; }
-
   /* Each view stages its contents when it becomes active. */
   .rep-metrics .rep-card, .rep-hl { transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
   /* Flow chart: the entrance uses opacity (links) and filter (nodes), so hover's own fades stay instant. */
@@ -358,10 +296,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   .rep-view.is-active .rep-hl:nth-child(1) { transition-delay: 0.42s; }
   .rep-view.is-active .rep-hl:nth-child(2) { transition-delay: 0.5s; }
   .rep-view.is-active .rep-hl:nth-child(3) { transition-delay: 0.58s; }
-  .rep-tabs button.is-active i::after { transform: scaleX(0); }
-  .rep:not(.is-running) .rep-tabs button.is-active i::after { transform: scaleX(1); } /* stopped: a full line marks the tab */
-  .rep-tabs button:focus-visible { outline: 2px solid hsl(226 70% 65%); outline-offset: -2px; border-radius: 6px; }
-  @keyframes rep-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
   @media (max-width:599px) {
     .rep { padding: 12px 12px 10px; }
@@ -377,7 +311,6 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     .rep-barval { margin-bottom: -8px; }
     .rep-thumb:not(.rep-barthumb) { width: 32px; height: 32px; border-radius: 8px; }
     .rep-barname { width: 100%; bottom: auto; top: calc(100% + 4px); font-size: 9px; line-height: 1.15; text-align: center; white-space: normal; }
-      .rep-tabs button { font-size: 10.5px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .rep-view, .rep-bar { transition: none; }
