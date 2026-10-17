@@ -93,11 +93,12 @@
 /* On How it works: a white band between the light intro and process sections, its copy in that page's style */
 .getting-started.section{background-color:#fff;color:#111b30}
 .getting-started .time-value-copy>p:not(.eyebrow){max-width:620px;margin:20px auto 0;font-size:17px;line-height:1.55;color:#5b6577}
-/* Phones: the diagram scrolls sideways, so say so and fade its right edge to show there is more */
+/* Phones: the diagram scrolls sideways, so say so and fade each edge that still has more beyond it (--fade-l/-r from
+   NodeFlow.astro: they shrink to nothing as that end is reached) */
 .node-swipe{display:none}
 @media(max-width:720px){
  .node-swipe{display:block;margin:0;padding:10px 12px 0;font-size:12px;color:#5f6b80;text-align:right}
- .node-scroll{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+ .node-scroll{--fade-l:0px;--fade-r:56px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 var(--fade-l),#000 calc(100% - var(--fade-r)),transparent);mask-image:linear-gradient(90deg,transparent,#000 var(--fade-l),#000 calc(100% - var(--fade-r)),transparent)}
  .getting-started .time-value-copy{padding:48px 10px 56px}
 }
 /* the hub carries the Product Connect logo (lime dot on dark, as in the dark header) */

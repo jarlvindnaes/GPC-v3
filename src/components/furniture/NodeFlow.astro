@@ -15,4 +15,17 @@ const edges=[['cad','files'],['bom','files'],['source','suppliers'],['docs','sup
 import { initNodeFlow } from './node-flow';
 const cleanup=initNodeFlow();
 document.addEventListener('astro:before-swap',cleanup,{once:true});
+// Phones: fade whichever edge still has more diagram beyond it; each fade shrinks away as that end is reached.
+for (const scroller of document.querySelectorAll<HTMLElement>('.node-scroll')) {
+ const FADE = 56;
+ const edges = () => {
+  const left = scroller.scrollLeft;
+  const right = scroller.scrollWidth - scroller.clientWidth - left;
+  scroller.style.setProperty('--fade-l', `${Math.round(Math.min(FADE, Math.max(0, left)))}px`);
+  scroller.style.setProperty('--fade-r', `${Math.round(Math.min(FADE, Math.max(0, right)))}px`);
+ };
+ scroller.addEventListener('scroll', edges, { passive: true });
+ new ResizeObserver(edges).observe(scroller);
+ edges();
+}
 </script>

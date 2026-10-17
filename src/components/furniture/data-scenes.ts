@@ -11,7 +11,10 @@ export function initDataScenes() {
       frame = 0,
       visible = false,
       last = 0,
-      time = 0;
+      time = 0,
+      // lens scene: where its own area begins inside a wider canvas (CSS --scene-left, a fraction of the width);
+      // the streams always run in from the canvas's left edge, everything else keeps its place
+      lead = 0;
     const sphere = canvas.dataset.scene === "sphere";
     const dot = (x: number, y: number, r: number, color: string | CanvasGradient) => {
       ctx.beginPath();
@@ -128,12 +131,15 @@ export function initDataScenes() {
           }
         }
       } else {
-        const lx = w * 0.43,
+        const ox = w * lead,
+          sw = w - ox,
+          lx = ox + sw * 0.43,
           cy = h * 0.47,
-          ry = Math.min(h * 0.42, w * 0.4),
-          rx = w * 0.075,
-          focus = w * 0.85,
-          start = w * 0.015;
+          ry = Math.min(h * 0.42, sw * 0.4),
+          rx = sw * 0.075,
+          focus = ox + sw * 0.85,
+          label = ox + sw * 0.015,
+          start = 0;
         // A convex lens gathers parallel information streams into a single focus.
         for (let i = 0; i < 9; i++) {
           const y = cy + (i - 4) * ry * 0.2;
@@ -170,7 +176,7 @@ export function initDataScenes() {
         ctx.strokeStyle = "#b7d5f02b";
         ctx.lineWidth = 0.65;
         ctx.stroke();
-        const orbR = Math.max(13, w * 0.035);
+        const orbR = Math.max(13, sw * 0.035);
         const glow = ctx.createRadialGradient(focus, cy, orbR * 0.8, focus, cy, orbR * 2.1);
         glow.addColorStop(0, "#aec9db44");
         glow.addColorStop(1, "#9ec5ec00");
@@ -193,7 +199,7 @@ export function initDataScenes() {
         ctx.font = "11px Inter, sans-serif";
         ctx.fillStyle = "#949daa";
         ctx.textAlign = "center";
-        ctx.fillText("Product data", start + 40, cy + ry + 20);
+        ctx.fillText("Product data", label + 40, cy + ry + 20);
         ctx.fillText("Input interface", lx, cy + ry + 20);
         ctx.fillStyle = "#d9e2ef";
         ctx.font = "12px Inter, sans-serif";
@@ -229,6 +235,7 @@ export function initDataScenes() {
       const box = canvas.getBoundingClientRect();
       w = box.width;
       h = box.height;
+      lead = Math.min(0.9, Math.max(0, Number.parseFloat(getComputedStyle(canvas).getPropertyValue("--scene-left")) || 0));
       const dpr = Math.min(devicePixelRatio, 2);
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);

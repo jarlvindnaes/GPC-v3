@@ -5,11 +5,9 @@ import { PassportPhone } from '../wireframe/PassportPhone';
 import Footer from './Footer.astro';
 import SiteHeader from '../SiteHeader.astro';
 import Scale from './Scale.astro';
-import McpGraphic from './McpGraphic.astro';
 import BenefitProof from './BenefitProof.astro';
 import BrandStrip from './BrandStrip.astro';
 import Co2Report from './Co2Report.astro';
-import ProductMemory from './ProductMemory.astro';
 import { SupplyChainGlobe } from '../SupplyChainGlobe';
 import { Award, ClipboardCheck, FileSpreadsheet, Flag, Gift, Landmark, MailX, Presentation, QrCode, ScanSearch, ShieldAlert, ShoppingBag, Timer, TrendingUp, UserRoundPlus, UsersRound } from 'lucide-react';
 const base = import.meta.env.BASE_URL;
@@ -81,12 +79,13 @@ const euStars = Array.from({ length: 12 }, (_, i) => {
   a: (0.62 + ((i * 5) % 12) * 0.05).toFixed(3)
  };
 });
+// Each capability's explainer section on How it works (its "Learn more" link).
 const capabilities = [
- ['Every change, traceable','A complete ledger of inputs, with timestamped field history. Know what changed, when, and where the data came from.'],
- ['Data in every dimension','3D models, materials, components, and specifications—connected in one scalable data foundation.'],
- ['Your supply chain, mapped','Suppliers, components, and their relationships. Trace how every part connects to the finished product.'],
- ['Impact built into the model','Impact calculations connected directly to your product data, alongside emissions and scores.'],
- ['Built to connect','MCP access makes your product model available to AI tools and agents, with the context they need to work.']
+ ['Every change, traceable','A complete ledger of inputs, with timestamped field history. Know what changed, when, and where the data came from.','product-memory'],
+ ['Data in every dimension','3D models, materials, components, and specifications—connected in one scalable data foundation.','input-interface'],
+ ['Your supply chain, mapped','Suppliers, components, and their relationships. Trace how every part connects to the finished product.','foundation'],
+ ['Impact built into the model','Impact calculations connected directly to your product data, alongside emissions and scores.','provenance'],
+ ['Built to connect','MCP access makes your product model available to AI tools and agents, with the context they need to work.','integrations']
 ];
 ---
 <!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Make better furniture, show the world. — Product Connect for furniture</title><meta name="description" content="Product Connect crunches all your product data—see what drives impact, measure improvements, and show the evidence in Digital Product Passports."/><link rel="icon" href={`${base}nextgen/favicon.svg`} type="image/svg+xml"/><link rel="icon" href={`${base}favicon-dark.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)"/><link rel="icon" href={`${base}favicon-light.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: light)"/><link rel="icon" href={`${base}favicon.ico`} sizes="48x48"/><link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`}/><link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin="anonymous"/><meta name="theme-color" content="#ffffff"/><style is:inline set:html={`@font-face{font-family:Inter;src:url("${base}fonts/inter-latin.woff2") format("woff2");font-display:swap;font-weight:100 900}`} /><script is:inline>try{if(localStorage.getItem("pc-motion-paused")==="1")document.documentElement.classList.add("motion-paused")}catch(e){}</script></head>
@@ -105,7 +104,7 @@ const capabilities = [
 {b.id==='connect-clients'&&<div class="screen-card report"><div class="ui-bar"><span>◈ Customer channel</span><span class="pill">Coming this spring</span></div><div class="report-body"><span class="report-label">CROSS CHAIR / AFTER THE SALE</span><h4>Every passport,<br/>a storefront</h4><div class="record"><span class="check">✓</span><span>Spare parts, matched to the exact product</span></div><div class="record"><span class="check">✓</span><span>Accessories and upgrades</span></div><div class="record"><span class="check">✓</span><span>Care and repair services</span></div><div class="record"><span class="check">✓</span><span>A direct line to every product owner</span></div></div></div>}
 </div><BenefitProof index={i} /></div></section>)}</div><div class="story-markers" aria-hidden="true">{benefits.map((b)=><div class="story-marker" data-story-marker={b.id}></div>)}</div></div></div></section>
 
-<section class="model" id="product-model"><div class="model-inner frame"><div class="model-story" data-model-story><div class="model-pin"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text],i)=><article style={`--i:${i}`}><span class="cap-icon">{['▤','◎','◈','⌁','⌘'][i]}</span><h3>{title}</h3><p>{text}</p></article>)}</div><ol class="model-dots" aria-hidden="true">{capabilities.map(()=><li></li>)}</ol></div></div><div class="signals"><div><span class="tag">Signals</span><h2>Scattered data.<br/>Connected knowledge.<br/><span>Better decisions.</span></h2><p class="signals-lead">Product Connect gathers data from hundreds of sources, from CAD files and ERP systems to suppliers and certificates, and stores it in one dynamic product model.</p></div><div class="signal-map data-vortex" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div></div><ProductMemory /><div id="integrations" class="api api-reference"><div class="api-copy"><h2>API. MCP.<br/><span>Connect to Product Connect.</span></h2><a class="button dark-button" href={`${contact}?subject=Product%20Connect%20API%20and%20MCP`}>Explore integrations <span>↗</span></a></div><McpGraphic /></div></div></section>
+<section class="model" id="product-model"><div class="model-inner frame"><div class="model-story" data-model-story><div class="model-pin"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text,anchor],i)=><article style={`--i:${i}`}><span class="cap-icon">{['▤','◎','◈','⌁','⌘'][i]}</span><h3>{title}</h3><p>{text}</p><a class="button dark-button cap-link" href={`${base}how-it-works/#${anchor}`}>Learn more<span class="sr-only"> about {title.toLowerCase()}</span> <span aria-hidden="true">↗</span></a></article>)}</div><ol class="model-dots" aria-hidden="true">{capabilities.map(()=><li></li>)}</ol></div></div></div></section>
 {SHOW_DRAFT_TESTIMONIAL && <section class="customer-story frame" aria-label="Customer testimonial preview"><span class="tag">Testimonial · copy to be confirmed</span><blockquote>“A clearer picture of every product.<br/><span>A better foundation for what comes next.”</span></blockquote><img class="quote-portrait" src={`${base}v4/testimonial-portrait.webp`} alt="Fictional bearded man, placeholder portrait" width="80" height="80" loading="lazy"/><p class="quote-attribution">Mikkel Sørensen<small>Head of Design · Fjordform Studio, Denmark</small></p><p class="quote-note">Fictional testimonial, person and company for design preview.</p></section>}
 <Scale />
 <section class="enterprise-invite frame"><p class="eyebrow">MADE TO GROW WITH YOU</p><div><h2>Complex portfolio?<br/><span>Meet the bigger picture.</span></h2><a class="button" href={`${base}how-it-works/`}>See how it works <span>↗</span></a></div><p>For larger manufacturers in furniture and building products: connect suppliers,<br/> shared components and your existing systems.</p></section>
@@ -177,6 +176,13 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
  const tabRow = document.querySelector<HTMLElement>('.benefit-nav');
  const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
  const storyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-benefit-link]'));
+ // The stage sits right under the chapter menu: --tab-row follows the menu's real height (it changes with the
+ // labels and screen size), so no strip of page shows between them.
+ if (tabRow) {
+  const syncTabRow = () => document.documentElement.style.setProperty('--tab-row', `${tabRow.offsetHeight}px`);
+  new ResizeObserver(syncTabRow).observe(tabRow);
+  syncTabRow();
+ }
  const stageQuery = matchMedia('(min-height: 600px)'); // pinned story on any screen tall enough (phones in portrait too); short screens stack
  const ARRIVE = 0.4; // share of the screen height each later chapter spends arriving
  const OVERLAP = 0.22; // ...starting this much (share of the screen height) before the previous one has left, so they crossfade
@@ -386,6 +392,7 @@ updateActive();
  if (modelStory) {
   const query = matchMedia('(min-height: 600px)');
   const dots = Array.from(modelStory.querySelectorAll<HTMLElement>('.model-dots li'));
+  const articles = Array.from(modelStory.querySelectorAll<HTMLElement>('.capabilities article'));
   const count = modelStory.querySelectorAll('.capabilities article').length;
   let queued = false;
   const update = () => {
@@ -410,6 +417,7 @@ updateActive();
    modelStory.style.setProperty('--mk', mk.toFixed(3));
    const active = Math.min(count - 1, Math.max(0, Math.floor(mk + 0.1)));
    dots.forEach((dot, i) => dot.classList.toggle('is-on', i === active));
+   articles.forEach((article, i) => article.classList.toggle('is-on', i === active));
   };
   const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
   window.addEventListener('scroll', queue, { passive: true });

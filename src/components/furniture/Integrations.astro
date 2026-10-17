@@ -1,0 +1,22 @@
+---
+// "API. MCP." explainer (How it works, #integrations): the product database talking to AI tools through MCP.
+import McpGraphic from './McpGraphic.astro';
+---
+<section class="integrations" id="integrations" aria-labelledby="integrations-title">
+  <div class="integrations-copy">
+    <span class="integrations-tag">Built to connect</span>
+    <h2 id="integrations-title">API. MCP.<br/><span>Connect to Product Connect.</span></h2>
+    <p>Structured access for your systems, and MCP access that makes your product model available to AI tools and agents, with the context they need to work.</p>
+  </div>
+  <McpGraphic />
+</section>
+<style>
+  .integrations{position:relative;isolation:isolate;display:flex;align-items:center;gap:20px;min-height:460px;padding:80px 7%;background:#111214;color:#f8f9fc;overflow:hidden;border-top:1px solid #292a2d}
+  .integrations::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:48px 48px}
+  .integrations-copy{flex:1;min-width:0;max-width:580px}
+  .integrations-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
+  .integrations h2{margin:26px 0 0;font-size:clamp(28px,3.3vw,41px);line-height:1.1;letter-spacing:-.035em;font-weight:500;color:#f8f9fc}
+  .integrations h2 span{color:#8b919c}
+  .integrations-copy p{max-width:460px;margin:20px 0 0;font-size:16px;line-height:1.65;color:#a2a8b3}
+  @media(max-width:700px){.integrations{display:block;padding:65px 6% 35px}}
+</style>

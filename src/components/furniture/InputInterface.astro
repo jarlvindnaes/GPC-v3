@@ -1,0 +1,32 @@
+---
+// "Input interface" explainer (How it works, #input-interface): scattered product data passes through the lens
+// and converges at the Dynamic Product Model (data-scenes.ts "lens" scene, visible-only and frame-rate limited).
+---
+<section class="input-interface" id="input-interface" aria-labelledby="input-title">
+  <div class="input-copy">
+    <span class="input-tag">Input interface</span>
+    <h2 id="input-title">Scattered data.<br/>Connected knowledge.<br/><span>Better decisions.</span></h2>
+    <p>Product Connect gathers data from hundreds of sources, from CAD files and ERP systems to suppliers and certificates, and stores it in one dynamic product model.</p>
+  </div>
+  <div class="input-scene" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div>
+</section>
+<script>
+  import { initDataScenes } from "./data-scenes";
+  initDataScenes();
+</script>
+<style>
+  .input-interface{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);min-height:480px;background:#111214;color:#f8f9fc}
+  .input-copy{padding:90px 7% 80px;align-self:center}
+  .input-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
+  .input-interface h2{margin:26px 0 0;font-size:clamp(32px,3.8vw,52px);line-height:1.1;letter-spacing:-.035em;font-weight:500;color:#f8f9fc}
+  .input-interface h2 span{color:#8b919c}
+  .input-copy p{max-width:430px;margin:22px 0 0;font-size:17px;line-height:1.65;color:#a2a8b3}
+  .input-interface{position:relative;isolation:isolate}
+  .input-copy{position:relative;z-index:1}
+  .input-scene{position:relative;min-height:420px}
+  /* the canvas spans the whole section, behind the copy, so the data streams start at the page's left edge; the
+     lens scene itself still sits in the right column (--scene-left: where that column begins) */
+  .input-scene canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+  @media(min-width:701px){.input-scene{position:static}.input-scene canvas{z-index:-1;--scene-left:.45}}
+  @media(max-width:700px){.input-interface{grid-template-columns:1fr;padding-bottom:48px}.input-copy{padding:65px 6% 10px}.input-scene{min-height:340px}} /* the scene's labels sit ~17px above its bottom edge; +48px matches the 65px above the copy */
+</style>
