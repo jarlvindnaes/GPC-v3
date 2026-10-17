@@ -1187,3 +1187,34 @@ html:not(.story-stage) #beat-regulation .eu-flag{background:radial-gradient(circ
 html.story-on #beat-regulation .eu-star{opacity:calc(clamp(0,var(--s) * 2.5,1) * .5)}
 /* no haze at the circle's centre: just the stars on the flat blue */
 .eu-flag,html:not(.story-stage) #beat-regulation .eu-flag{background:none}
+/* Dynamic Product Model story (tablet width up, html.model-stage): the section pins for a few screens, the sphere
+   stays as the canvas, and the five capabilities take turns centred in its dome (--mk from Home.astro: capability i
+   arrives as --mk passes i, its title first, then its text, and leaves as the next one comes), with progress dots */
+.model-dots{display:none}
+html.model-stage .model-story{height:calc(100svh + 5 * 72svh)}
+html.model-stage .model-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+html.model-stage .model-pin .model-atmosphere{height:100%}
+html.model-stage .model-pin .capabilities{position:absolute;left:50%;top:56%;width:min(460px,82%);translate:-50% 0;display:grid;border:0;z-index:2;pointer-events:none}
+html.model-stage .model-pin .capabilities article{grid-area:1/1;padding:0;border:0;text-align:center;--in:clamp(0,calc((var(--mk,0) - var(--i)) / .22),1);--out:clamp(0,calc((var(--mk,0) - var(--i) - .82) / .16),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 28px - var(--out) * 18px))}
+html.model-stage .model-pin .capabilities article:last-child{--out:0}
+html.model-stage .model-pin .cap-icon{margin:0 auto 18px;font-size:26px;color:#b4c0d8}
+html.model-stage .model-pin .capabilities h3{font-size:clamp(22px,2.2vw,28px);font-weight:500;letter-spacing:-.025em;margin-bottom:14px;color:#f8f9fc}
+html.model-stage .model-pin .capabilities p{--t:clamp(0,calc((var(--mk,0) - var(--i) - .16) / .2),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px));font-size:16px;line-height:1.6;color:#b1b6bf}
+html.model-stage .model-dots{display:flex;gap:10px;position:absolute;left:50%;bottom:38px;translate:-50% 0;margin:0;padding:0;list-style:none;z-index:2}
+html.model-stage .model-dots li{width:6px;height:6px;border-radius:50%;background:#ffffff33;transition:background .3s,transform .3s}
+html.model-stage .model-dots li.is-on{background:#d4ee9c;transform:scale(1.3)}
+@media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities :is(article,p){transform:none}}
+html.motion-paused.model-stage .model-pin .capabilities :is(article,p){transform:none}
+/* one column for the stacked capabilities, and each one starts arriving just before the previous has gone (no blank
+   beat between them) */
+html.model-stage .model-pin .capabilities{grid-template-columns:1fr}
+html.model-stage .model-pin .capabilities article{--in:clamp(0,calc((var(--mk,0) - var(--i) + .12) / .22),1)}
+html.model-stage .model-pin .capabilities p{--t:clamp(0,calc((var(--mk,0) - var(--i) - .06) / .2),1)}
+/* the capabilities sit a little way inside the sphere's rim (--dome, its top edge, from Home.astro) */
+html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%)) * .3)}
+/* the pinned model runs the full window width, so on wide screens the sphere and the falling data aren't clipped by
+   the content frame (the sphere's radius is capped by the height there, so it sits whole in the middle) */
+html.model-stage .model-pin{width:100vw;margin-left:calc(50% - 50vw)}
+/* while the site header is shown over the pinned model (scrolling up), its title steps down below it (--hdr eases
+   with the header, as in the benefits story) */
+html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}

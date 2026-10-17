@@ -105,7 +105,7 @@ const capabilities = [
 {b.id==='connect-clients'&&<div class="screen-card report"><div class="ui-bar"><span>◈ Customer channel</span><span class="pill">Coming this spring</span></div><div class="report-body"><span class="report-label">CROSS CHAIR / AFTER THE SALE</span><h4>Every passport,<br/>a storefront</h4><div class="record"><span class="check">✓</span><span>Spare parts, matched to the exact product</span></div><div class="record"><span class="check">✓</span><span>Accessories and upgrades</span></div><div class="record"><span class="check">✓</span><span>Care and repair services</span></div><div class="record"><span class="check">✓</span><span>A direct line to every product owner</span></div></div></div>}
 </div><BenefitProof index={i} /></div></section>)}</div><div class="story-markers" aria-hidden="true">{benefits.map((b)=><div class="story-marker" data-story-marker={b.id}></div>)}</div></div></div></section>
 
-<section class="model" id="product-model"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text],i)=><article><span class="cap-icon">{['▤','◎','◈','⌁','⌘'][i]}</span><h3>{title}</h3><p>{text}</p></article>)}</div><div class="signals"><div><span class="tag">Signals</span><h2>Scattered data.<br/>Connected knowledge.<br/><span>Better decisions.</span></h2><p class="signals-lead">Product Connect gathers data from hundreds of sources, from CAD files and ERP systems to suppliers and certificates, and stores it in one dynamic product model.</p></div><div class="signal-map data-vortex" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div></div><ProductMemory /><div id="integrations" class="api api-reference"><div class="api-copy"><h2>API. MCP.<br/><span>Connect to Product Connect.</span></h2><a class="button dark-button" href={`${contact}?subject=Product%20Connect%20API%20and%20MCP`}>Explore integrations <span>↗</span></a></div><McpGraphic /></div></div></section>
+<section class="model" id="product-model"><div class="model-inner frame"><div class="model-story" data-model-story><div class="model-pin"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text],i)=><article style={`--i:${i}`}><span class="cap-icon">{['▤','◎','◈','⌁','⌘'][i]}</span><h3>{title}</h3><p>{text}</p></article>)}</div><ol class="model-dots" aria-hidden="true">{capabilities.map(()=><li></li>)}</ol></div></div><div class="signals"><div><span class="tag">Signals</span><h2>Scattered data.<br/>Connected knowledge.<br/><span>Better decisions.</span></h2><p class="signals-lead">Product Connect gathers data from hundreds of sources, from CAD files and ERP systems to suppliers and certificates, and stores it in one dynamic product model.</p></div><div class="signal-map data-vortex" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div></div><ProductMemory /><div id="integrations" class="api api-reference"><div class="api-copy"><h2>API. MCP.<br/><span>Connect to Product Connect.</span></h2><a class="button dark-button" href={`${contact}?subject=Product%20Connect%20API%20and%20MCP`}>Explore integrations <span>↗</span></a></div><McpGraphic /></div></div></section>
 {SHOW_DRAFT_TESTIMONIAL && <section class="customer-story frame" aria-label="Customer testimonial preview"><span class="tag">Testimonial · copy to be confirmed</span><blockquote>“A clearer picture of every product.<br/><span>A better foundation for what comes next.”</span></blockquote><img class="quote-portrait" src={`${base}v4/testimonial-portrait.webp`} alt="Fictional bearded man, placeholder portrait" width="80" height="80" loading="lazy"/><p class="quote-attribution">Mikkel Sørensen<small>Head of Design · Fjordform Studio, Denmark</small></p><p class="quote-note">Fictional testimonial, person and company for design preview.</p></section>}
 <Scale />
 <section class="enterprise-invite frame"><p class="eyebrow">MADE TO GROW WITH YOU</p><div><h2>Complex portfolio?<br/><span>Meet the bigger picture.</span></h2><a class="button" href={`${base}how-it-works/`}>See how it works <span>↗</span></a></div><p>For larger manufacturers in furniture and building products: connect suppliers,<br/> shared components and your existing systems.</p></section>
@@ -377,4 +377,43 @@ function updateActive() {
 window.addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(updateActive); } }, {passive:true});
 window.addEventListener('resize', updateActive);
 updateActive();
+</script>
+<script>
+ // Dynamic Product Model as a second scroll story: on tablet width and up the section pins, the sphere stays as the
+ // canvas, and the five capabilities take turns inside its dome (--mk counts through them; home.css places and fades
+ // each one). Phones and short screens keep the capabilities as a grid under the sphere.
+ const modelStory = document.querySelector<HTMLElement>('[data-model-story]');
+ if (modelStory) {
+  const query = matchMedia('(min-width: 600px) and (min-height: 640px)');
+  const dots = Array.from(modelStory.querySelectorAll<HTMLElement>('.model-dots li'));
+  const count = modelStory.querySelectorAll('.capabilities article').length;
+  let queued = false;
+  const update = () => {
+   queued = false;
+   const pinned = query.matches;
+   document.documentElement.classList.toggle('model-stage', pinned);
+   if (!pinned) return;
+   // the sphere's top edge, as data-scenes.ts draws it (centre 105.5% down, radius min(53% of width, 69% of height)),
+   // so the capability text sits inside the dome at any screen shape
+   const atmosphere = modelStory.querySelector<HTMLElement>('.model-atmosphere');
+   if (atmosphere) {
+    const w = atmosphere.clientWidth;
+    const h = atmosphere.clientHeight;
+    modelStory.style.setProperty('--dome', `${Math.round(h * 1.055 - Math.min(w * 0.53, h * 0.69))}px`);
+   }
+   const box = modelStory.getBoundingClientRect();
+   const run = Math.max(1, modelStory.offsetHeight - window.innerHeight);
+   const progress = Math.min(1, Math.max(0, -box.top / run));
+   // a short lead-in for the sphere before the first capability, and a beat on the last one before release
+   const mk = progress * (count + 0.5) - 0.25;
+   modelStory.style.setProperty('--mk', mk.toFixed(3));
+   const active = Math.min(count - 1, Math.max(0, Math.floor(mk + 0.1)));
+   dots.forEach((dot, i) => dot.classList.toggle('is-on', i === active));
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+  window.addEventListener('scroll', queue, { passive: true });
+  window.addEventListener('resize', queue);
+  query.addEventListener('change', update);
+  update();
+ }
 </script></body></html>
