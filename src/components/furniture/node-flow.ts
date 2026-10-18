@@ -97,7 +97,8 @@ export function initNodeFlow() {
     }
     nodes.forEach((node, index) => {
       const down = (e: PointerEvent) => {
-        if (e.button !== 0 || drag) return;
+        // touch: no dragging, a swipe scrolls the flow (or the page) instead
+        if (e.button !== 0 || drag || e.pointerType === "touch") return;
         stopSpring(index);
         const r = node.getBoundingClientRect();
         drag = {

@@ -156,7 +156,7 @@ export default function ProductStory({ base }: { base: string }) {
   const [mode, setMode] = useState<"scroll" | "manual" | "play">("scroll");
   const [status, setStatus] = useState("Loading the product model…");
   const [ready, setReady] = useState(false);
-  const { chapter, separation } = getStoryFrame(progress);
+  const { chapter, separation, assembled } = getStoryFrame(progress);
   // Labels around the screw while it is centre stage (step 2, fully apart); gone again in step 3.
   const showFacts = chapter === 1 && separation > 0.85;
   const factsRef = useRef<HTMLDivElement>(null);
@@ -483,6 +483,8 @@ export default function ProductStory({ base }: { base: string }) {
                 aria-label="Interactive Soft Lounge Chair model separating into its leather seat, shells, legs, rails, armrests and bolts, then assembling again"
               />
               {!ready && <output className="story-loading">{status}</output>}
+              {/* once the chair is back together: what reusing its components saves on the next products */}
+              {chapter === 2 && assembled && <ReuseChart />}
               <div
                 className={`screw-facts${showFacts ? " is-on" : ""}`}
                 aria-hidden={!showFacts}
@@ -600,7 +602,6 @@ export default function ProductStory({ base }: { base: string }) {
                 <li key={point}>{point}</li>
               ))}
             </ul>
-            {chapter === 2 && <ReuseChart />}
             <p
               className={`facts-hint${showFacts ? " is-on" : ""}`}
               aria-hidden={!showFacts}

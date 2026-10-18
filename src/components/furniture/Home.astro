@@ -417,7 +417,8 @@ updateActive();
     modelStory.style.setProperty('--dome', `${Math.round(horizon.offsetTop + h * 1.055 - Math.min(w * 0.53, h * 0.69))}px`);
    }
    const box = modelStory.getBoundingClientRect();
-   const run = Math.max(1, modelStory.offsetHeight - window.innerHeight);
+   const pin = modelStory.querySelector<HTMLElement>('.model-pin');
+   const run = Math.max(1, modelStory.offsetHeight - (pin?.offsetHeight || window.innerHeight)); // the pinned panel's own run
    const progress = Math.min(1, Math.max(0, -box.top / run));
    // a short lead-in for the sphere before the first capability, and a beat on the last one before release
    const mk = progress * (count + 0.5) - 0.25;

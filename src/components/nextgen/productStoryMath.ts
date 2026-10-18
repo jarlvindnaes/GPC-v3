@@ -6,7 +6,9 @@ export function getStoryFrame(progress: number) {
   // scroll (ease-out), so the chair visibly responds right away; closing eases as before.
   const easeOut = (value: number) => value * (2 - value);
   const CLOSE_START = 0.62;
-  const CLOSE_END = 0.94;
+  const CLOSE_END = 0.84;
+  // fully assembled and framed from here: the end of the story holds on the finished chair, with the reuse chart
+  const ASSEMBLED = 0.88;
   let separation = 0;
   if (p > 0.03 && p < 0.42) {
     separation = easeOut((p - 0.03) / 0.39);
@@ -28,13 +30,14 @@ export function getStoryFrame(progress: number) {
   } else if (p < releaseAt) {
     focus = 1;
   } else {
-    focus = 1 - smooth((p - releaseAt) / (1 - releaseAt));
+    focus = 1 - smooth(Math.min(1, (p - releaseAt) / (ASSEMBLED - releaseAt)));
   }
   return {
     separation,
     focus,
     returning: p > CLOSE_START, // on the way back together (the Soft chair uses its return order)
     chapter: p < 0.3 ? 0 : p < 0.72 ? 1 : 2,
+    assembled: p >= ASSEMBLED,
   };
 }
 

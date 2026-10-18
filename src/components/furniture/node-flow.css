@@ -110,3 +110,5 @@
 /* the drag/arrow-key help stays for screen readers (the nodes point to it), not on screen */
 .node-diagram .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
+/* touch screens: the cards don't drag, so swipes pan the flow and scroll the page */
+@media(hover:none) and (pointer:coarse){.flow-node{cursor:default;touch-action:auto;user-select:auto}}

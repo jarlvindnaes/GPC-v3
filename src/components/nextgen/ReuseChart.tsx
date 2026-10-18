@@ -58,7 +58,7 @@ const barPath = (x: number, top: number, h: number) => {
 };
 const last = bars.at(-1)!;
 
-export function ReuseChart() {
+export function ReuseChart({ id = "rc" }: { id?: string }) {
   return (
     <figure className="reuse-chart">
       <figcaption>
@@ -71,11 +71,11 @@ export function ReuseChart() {
         aria-label="The first product takes about a week to add. Each later product reuses its components and takes less time: two days, one day, then a few hours."
       >
         <defs>
-          <linearGradient id="rc-curve" x1="0" x2="1">
+          <linearGradient id={`${id}-curve`} x1="0" x2="1">
             <stop stopColor="#7283c9" />
             <stop offset="1" stopColor="#6c8270" />
           </linearGradient>
-          <mask id="rc-reveal">
+          <mask id={`${id}-reveal`}>
             <path className="rc-reveal" d={CURVE} pathLength={1} />
           </mask>
         </defs>
@@ -94,7 +94,7 @@ export function ReuseChart() {
             </text>
           </g>
         ))}
-        <path className="rc-curve" d={CURVE} mask="url(#rc-reveal)" />
+        <path className="rc-curve" d={CURVE} mask={`url(#${id}-reveal)`} style={{ stroke: `url(#${id}-curve)` }} />
         <circle className="rc-start" cx={FIRST.cx} cy={FIRST.top} r="5" />
         <circle className="rc-head" cx={last.cx} cy={last.top} r="5" />
       </svg>
