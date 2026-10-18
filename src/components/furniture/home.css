@@ -1314,7 +1314,8 @@ html.story-on .chapter .globe-points .step{will-change:opacity,transform}
    bottom edge like an app bar, and then stops the page flowing under its toolbar. So every pinned story box ends --edge
    above the bottom of the screen, and the page behind it shows below: for the benefits story that is .chapters,
    painted in the stage's current colour (.story-under, set by Home.astro). */
-:root{--edge:10px}
+:root{--edge:0px}
+@media(hover:none) and (pointer:coarse){:root{--edge:10px}} /* touch screens only: desktop has no such toolbar */
 html.story-stage .story-stage{height:calc(100svh - var(--tab-row) - 1px - var(--edge))}
 html.story-stage .story-markers{margin-top:calc(-1 * (100svh - var(--tab-row) - 1px - var(--edge)));padding-bottom:calc(100svh - var(--tab-row) - 1px - var(--edge))}
 @media(min-width:600px){html.story-stage .ui-stage.stage-0,html.story-stage .ui-stage.stage-1{height:calc(100svh - var(--tab-row) - 1px - var(--hdr) - var(--edge))}}
@@ -1322,10 +1323,11 @@ html.story-stage .story-markers{margin-top:calc(-1 * (100svh - var(--tab-row) - 
 html.story-stage .chapters{position:relative;isolation:isolate}
 .story-under{display:none}
 html.story-stage .story-under{display:block;position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;z-index:-1;pointer-events:none}
-/* the globe fades out over its last 80px into the navy below, instead of being cut off where the stage ends */
-html.story-stage #harvest-data .globe-stage{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent)}
+/* touch screens (where the stage ends --edge above the screen bottom, for iOS Safari): the globe fades out over its
+   last 80px into the navy below, instead of being cut off where the stage ends; on desktop it runs to the edge */
+@media(hover:none) and (pointer:coarse){html.story-stage #harvest-data .globe-stage{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent)}}
 /* ...and so do the EU flag's stars in the regulation chapter */
-html.story-stage #beat-regulation .ui-stage{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent)}
+@media(hover:none) and (pointer:coarse){html.story-stage #beat-regulation .ui-stage{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 80px),transparent)}}
 /* a little more room between each chapter's heading and its bullets (and a globe step's title and its bullet) */
 .chapter-points{margin-top:32px}
 .globe-points .step{gap:24px}
@@ -1333,3 +1335,6 @@ html.story-stage #beat-regulation .ui-stage{-webkit-mask-image:linear-gradient(t
  html.story-stage .chapter-points{margin-top:24px}
  html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step{gap:20px}
 }
+/* phones: the globe's canvas runs a little past both screen edges; clip it sideways too (its box spans the screen
+   exactly), as iOS Safari otherwise lets the page pan sideways into that overflow despite html{overflow-x:clip} */
+@media(max-width:599px){#harvest-data .hero-visual{overflow:clip}}

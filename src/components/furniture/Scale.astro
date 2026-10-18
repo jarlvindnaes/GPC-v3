@@ -1,6 +1,13 @@
 ---
 const curve = (x:number) => 590 - 570 * (x/1200)**2.35;
 const points = Array.from({length:121},(_,i)=>`${i===0?'M':'L'}${i*10},${curve(i*10)}`).join(' ');
+// On wide screens the section runs the full window width while the graph keeps its size in the 1240px frame: the
+// curve's ends carry on past the frame at the same scale (the flat start to the left, the climb out of the top to the
+// right). Drawn outside the viewBox; the SVG overflows its box and the section clips it.
+const EXT = 1800; // viewBox units beyond each end (covers windows ~4,000px wide)
+const leftLine = `M${-EXT},${curve(0)} L0,${curve(0)}`;
+const rightPoints = Array.from({length:EXT/10+1},(_,i)=>`${i===0?'M':'L'}${1200+i*10},${curve(1200+i*10)}`).join(' ');
+const bars = (from:number, to:number) => Array.from({length:Math.floor((to-from)/12)+1},(_,i)=>from+i*12);
 // Milestones along the growth curve (positioned in HTML so they are not stretched by the SVG).
 const milestones = [
   { x: 250, label: 'Your first product' },
@@ -10,8 +17,10 @@ const milestones = [
 ].map((m, i) => ({ ...m, left: (m.x / 1200) * 100, top: (curve(m.x) / 650) * 100, delay: 0.35 + (m.x / 1200) * 2.1, pulse: i * 0.9 }));
 ---
 <section class="scale-section frame" aria-labelledby="scale-title">
- <svg viewBox="0 0 1200 650" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="scale-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#718de4" stop-opacity=".12"/><stop offset="1" stop-color="#718de4" stop-opacity="0"/></linearGradient><linearGradient id="scale-bars" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop stop-color="#c9d3ee"/><stop offset="1" stop-color="#e7ebf4" stop-opacity=".2"/></linearGradient></defs>
-  {[150,300,450].map((y)=><line class="scale-grid" x1="0" x2="1200" y1={y} y2={y}/>)}
+ <svg viewBox="0 0 1200 650" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="scale-fill" gradientUnits="userSpaceOnUse" x1="0" y1={curve(1200)} x2="0" y2="650"><stop stop-color="#718de4" stop-opacity=".12"/><stop offset="1" stop-color="#718de4" stop-opacity="0"/></linearGradient><linearGradient id="scale-bars" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop stop-color="#c9d3ee"/><stop offset="1" stop-color="#e7ebf4" stop-opacity=".2"/></linearGradient></defs>
+  {[150,300,450].map((y)=><line class="scale-grid" x1={-EXT} x2={1200+EXT} y1={y} y2={y}/>)}
+  <g class="scale-ext scale-ext-left"><path d={`${leftLine} L0,650 L${-EXT},650 Z`} fill="url(#scale-fill)"/>{bars(-EXT,-12).map((x)=><line x1={x} x2={x} y1={curve(0)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path d={leftLine} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/></g>
+  <g class="scale-ext scale-ext-right"><path d={`${rightPoints} L${1200+EXT},650 L1200,650 Z`} fill="url(#scale-fill)"/>{bars(1212,1200+EXT).map((x)=><line x1={x} x2={x} y1={Math.max(-2000,curve(x))} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path d={rightPoints} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/></g>
   <g class="scale-reveal"><path d={`${points} L1200,650 L0,650 Z`} fill="url(#scale-fill)"/>{Array.from({length:101},(_,i)=><line x1={i*12} x2={i*12} y1={curve(i*12)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path class="scale-line" d={points} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/>
   <circle class="scale-trail" r="7" fill="#7089d9"><animateMotion dur="7s" begin="-0.18s" repeatCount="indefinite" path={points}/></circle>
   <circle class="scale-spark" r="4" fill="#7089d9"><animateMotion dur="7s" repeatCount="indefinite" path={points}/></circle></g></svg>
@@ -20,6 +29,14 @@ const milestones = [
 </section>
 <style>
 .scale-section{position:relative;min-height:660px;overflow:hidden;background:#fff;border-top:1px solid #e9eaec;border-bottom:1px solid #e9eaec}.scale-section svg,.scale-marks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.scale-copy{position:relative;z-index:1;padding:85px 50px 160px;max-width:770px}.scale-copy h2{font-size:clamp(32px,4vw,48px);line-height:1.13;margin-top:27px}.scale-copy h2 span{color:#8a909b}.scale-details{display:grid;grid-template-columns:1fr 1fr;gap:28px 32px;margin-top:48px;max-width:540px}.scale-details p{border-left:2px solid #8295d1;padding-left:18px;line-height:1.4}.scale-details strong{display:block;font-size:21px;font-weight:500;color:#242528}.scale-details p span{display:block;font-size:13px;margin-top:5px;color:#72777e}
+/* full window width; the graph, its labels and the copy keep to the 1240px frame (their sizes as before) */
+.scale-section.frame{max-width:none;border-left:0;border-right:0;border-radius:0}
+.scale-section svg,.scale-marks{left:50%;width:min(100%,1240px);translate:-50% 0}
+.scale-section svg{overflow:visible}
+.scale-copy{margin-left:max(0px,calc((100% - 1240px) / 2))}
+/* the ends past the frame: the flat start shows with the curve, the climb on the right fades in once it is drawn */
+.scale-ext-right{opacity:0}.scale-section.is-visible .scale-ext-right{opacity:1;transition:opacity .8s 1.6s}
+@media(prefers-reduced-motion:reduce){.scale-ext-right{opacity:1;transition:none}}
 .scale-grid{stroke:#eef1f6;stroke-width:1;stroke-dasharray:2 6;vector-effect:non-scaling-stroke}
 .scale-reveal{clip-path:inset(0 100% 0 0);transition:clip-path 2.4s cubic-bezier(.22,1,.36,1)}.scale-section.is-visible .scale-reveal{clip-path:inset(0)}
 .scale-spark{filter:drop-shadow(0 0 6px #7089d9);opacity:0}.scale-trail{opacity:0}.scale-section.is-visible .scale-spark{opacity:1;transition:opacity 1s 2s}.scale-section.is-visible .scale-trail{opacity:.14;transition:opacity 1s 2s}

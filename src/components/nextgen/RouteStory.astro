@@ -46,10 +46,11 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
 <style>
   .route-story{--sea:#8b5cf6;--road:#22c55e;--rail:#f97316;--air:#facc15;position:relative;background:#050b18;color:#eef2fb;scroll-margin-top:90px}
   .route-pin{position:relative;height:clamp(620px,100svh,1000px);overflow:hidden;background:radial-gradient(ellipse 70% 60% at 62% 52%,#0b1a3d 0%,#050b18 70%)}
-  /* the pinned box ends 10px above the bottom of the screen: iOS Safari treats a sticky box at the screen's bottom edge
+  /* on touch screens the pinned box ends 10px above the bottom of the screen: iOS Safari treats a sticky box at the screen's bottom edge
      like an app bar and stops the page flowing under its toolbar; the section's own background fills below it */
   .route-story.is-pinned{height:calc(100svh + 7 * 70svh)}
-  .route-story.is-pinned .route-pin{position:sticky;top:0;height:calc(100svh - 10px)}
+  .route-story.is-pinned .route-pin{position:sticky;top:0;height:100svh}
+  @media(hover:none) and (pointer:coarse){.route-story.is-pinned .route-pin{height:calc(100svh - 10px)}} /* touch screens only */
   .route-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   .route-copy{position:absolute;z-index:2;left:6%;top:50%;translate:0 -50%;width:min(440px,40%);padding:28px 30px 30px;border:1px solid #1f2b4a;border-radius:14px;background:#060d1fd9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 24px 60px #00000066}
   .route-tag{display:inline-block;background:#1a2440;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
