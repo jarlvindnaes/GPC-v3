@@ -9,7 +9,7 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   base: process.env.SITE_BASE || "/",
-  site: "https://product-connect-nextgen.elven-grebe-3630.chatgpt.site",
+  site: process.env.SITE_URL || "https://xbuild.com", // absolute URLs for link previews (og:image etc.)
   // Emit build assets to "astro-assets" (no leading underscore) so GitHub Pages' Jekyll,
   // which strips "_"-prefixed folders, still serves the island scripts.
   build: { assets: "astro-assets" },
