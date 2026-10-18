@@ -293,6 +293,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
    }
   });
   if (!staged) document.getElementById('product-passports')?.removeAttribute('data-render-paused');
+  if (staged && stage) syncUnderColour(stage);
   if (staged) {
    // the chapters are stacked in the stage: only the current one takes the pointer (so faded-out chapters
    // above it don't swallow drags on the globe or clicks in the report)
@@ -342,6 +343,27 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
    });
   }
  };
+ // The stage ends a little above the bottom of the screen (iOS Safari, see home.css --edge); the strip below it, and
+ // what shows under Safari's toolbar, is .chapters behind it, painted in the stage's current colour: its base layer,
+ // the dark layer over it and the tint over that, composited the way the stage paints them.
+ function syncUnderColour(stage: HTMLElement) {
+  const rgb = (value: string): number[] => {
+   const srgb = value.match(/color\(srgb ([\d.e-]+) ([\d.e-]+) ([\d.e-]+)/);
+   if (srgb) return srgb.slice(1, 4).map((n) => Number(n) * 255);
+   const plain = value.match(/rgba?\(([\d.]+),? ([\d.]+),? ([\d.]+)/);
+   return plain ? plain.slice(1, 4).map(Number) : [255, 255, 255];
+  };
+  const over = (base: number[], layer: CSSStyleDeclaration) => {
+   const a = Number(layer.opacity) || 0;
+   const c = rgb(layer.backgroundColor);
+   return base.map((v, i) => v + (c[i] - v) * a);
+  };
+  const tint = stage.querySelector<HTMLElement>('.story-tint');
+  let colour = rgb(getComputedStyle(stage, '::before').backgroundColor);
+  colour = over(colour, getComputedStyle(stage, '::after'));
+  if (tint) colour = over(colour, getComputedStyle(tint));
+  stage.parentElement?.style.setProperty('--under', `rgb(${colour.map((v) => Math.round(v)).join(' ')})`);
+ }
  // Tabs: on the one-stage layout, scroll to the point where that chapter has fully arrived.
  storyLinks.forEach((link, i) => {
   link.addEventListener('click', (event) => {

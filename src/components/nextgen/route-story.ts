@@ -184,10 +184,6 @@ export function initRouteStory(root: HTMLElement) {
   let settle = 0;
   let w = 0;
   let h = 0;
-  let hv = 0; // visible height: h minus the strip iOS Safari's toolbar can cover and the out-of-sight bleed
-  const barProbe = document.createElement("div");
-  barProbe.style.cssText = "position:absolute;width:0;height:calc(var(--bar,0px) + var(--bleed,0px));visibility:hidden;pointer-events:none";
-  root.append(barProbe);
   let dpr = 1;
   let mk = 0;
   let visible = false;
@@ -201,11 +197,10 @@ export function initRouteStory(root: HTMLElement) {
   const stars = Array.from({ length: 170 }, (_, i) => ({ x: rand(i, 1), y: rand(i, 2), r: 0.4 + rand(i, 3) * 1.1, p: rand(i, 4) * 6.28 }));
 
   // globe placement: on wide screens to the right of the captions, on narrow ones below them
-  // (laid out in the always-visible height: the canvas also runs under iOS Safari's toolbar, see RouteStory.astro)
   const layout = (zoom: number) => {
     const wide = w >= 900;
-    const r = wide ? Math.min(w * 0.3, hv * 0.42) : Math.min(w * 0.46, hv * 0.3); // narrow: room for the whole route
-    return { cx: wide ? w * 0.62 : w * 0.5, cy: wide ? hv * 0.52 : hv * 0.66, r: r * zoom };
+    const r = wide ? Math.min(w * 0.3, h * 0.42) : Math.min(w * 0.46, h * 0.3); // narrow: room for the whole route
+    return { cx: wide ? w * 0.62 : w * 0.5, cy: wide ? h * 0.52 : h * 0.66, r: r * zoom };
   };
 
   function draw() {
@@ -457,7 +452,6 @@ export function initRouteStory(root: HTMLElement) {
     const box = canvas!.getBoundingClientRect();
     w = box.width;
     h = box.height;
-    hv = root.classList.contains("is-pinned") ? Math.max(1, h - barProbe.offsetHeight) : h;
     dpr = Math.min(window.devicePixelRatio || 1, w < 900 ? 1.5 : 2); // phones: fewer pixels to fill per frame
     canvas!.width = Math.round(w * dpr);
     canvas!.height = Math.round(h * dpr);

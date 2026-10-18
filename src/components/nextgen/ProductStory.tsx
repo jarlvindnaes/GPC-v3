@@ -367,7 +367,7 @@ export default function ProductStory({ base }: { base: string }) {
         return;
       }
       const rect = section.getBoundingClientRect();
-      // the pinned panel's own run (it is taller than the screen, see --bleed in nextgen.css)
+      // the pinned panel's own run (it ends a little above the bottom of the screen, see nextgen.css)
       const sticky = section.querySelector<HTMLElement>(".story-sticky");
       const travel = Math.max(1, rect.height - (sticky?.offsetHeight || window.innerHeight));
       progressRef.current = Math.max(0, Math.min(1, -rect.top / travel));
