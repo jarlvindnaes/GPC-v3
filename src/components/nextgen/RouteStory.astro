@@ -106,7 +106,8 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
   @media(max-width:899px){
     .route-head{left:6%;top:70px}
     .route-head h2{font-size:26px}
-    .route-copy{left:4%;right:4%;top:178px;translate:none;width:auto;padding:20px 20px 22px}
+    /* no backdrop blur on phones: re-blurring the globe behind the card every frame is costly */
+    .route-copy{left:4%;right:4%;top:178px;translate:none;width:auto;padding:20px 20px 22px;background:#060d1ff2;backdrop-filter:none;-webkit-backdrop-filter:none}
     .route-steps h3{font-size:18px}
     .route-steps p{font-size:14px}
     .route-legend{display:none}

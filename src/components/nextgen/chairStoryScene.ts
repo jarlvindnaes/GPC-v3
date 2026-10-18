@@ -72,7 +72,10 @@ export async function createChairStoryScene(
     onError();
     return () => {};
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // phones: a lower pixel ratio (the depth of field softens the image anyway), lighter multisampling and
+  // ~30 fps, since each frame renders the scene twice (depth + colour) and then blurs it
+  const phone = window.matchMedia("(max-width: 699px), (pointer: coarse)").matches;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, phone ? 1.25 : 2));
   renderer.toneMapping = Three.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.4;
   renderer.outputColorSpace = Three.SRGBColorSpace;
@@ -106,7 +109,7 @@ export async function createChairStoryScene(
   // Render -> tone map + sRGB (premultiplied-safe) -> depth-aware blur, as in the hero.
   const target = new Three.WebGLRenderTarget(1, 1, {
     type: Three.HalfFloatType,
-    samples: 4,
+    samples: phone ? 2 : 4,
   });
   const composer = new EffectComposer(renderer, target);
   composer.addPass(new RenderPass(scene, camera));
@@ -445,6 +448,7 @@ export async function createChairStoryScene(
       return;
     }
     frame = requestAnimationFrame(render);
+    if (phone && now - last < 31) return;
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     if (!visible || document.hidden) {

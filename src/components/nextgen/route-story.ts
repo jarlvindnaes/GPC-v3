@@ -80,6 +80,33 @@ function camera(mk: number) {
   return KEYS[KEYS.length - 1];
 }
 
+// A soft glowing dot pre-rendered once per colour, so the hundreds of hub dots are drawn with drawImage instead of
+// canvas shadowBlur (which is very slow on phones).
+const SPRITE = 64;
+const CORE = 0.25; // the solid dot's radius as a share of the sprite size
+const sprites = new Map<string, HTMLCanvasElement>();
+function sprite(color: string, core = color) {
+  const key = `${color}|${core}`;
+  let c = sprites.get(key);
+  if (c) return c;
+  c = document.createElement("canvas");
+  c.width = c.height = SPRITE;
+  const g = c.getContext("2d")!;
+  const m = SPRITE / 2;
+  const halo = g.createRadialGradient(m, m, 0, m, m, m);
+  halo.addColorStop(0.4, `${color}55`);
+  halo.addColorStop(0.65, `${color}18`);
+  halo.addColorStop(1, `${color}00`);
+  g.fillStyle = halo;
+  g.fillRect(0, 0, SPRITE, SPRITE);
+  g.fillStyle = core;
+  g.beginPath();
+  g.arc(m, m, SPRITE * CORE, 0, Math.PI * 2);
+  g.fill();
+  sprites.set(key, c);
+  return c;
+}
+
 export function initRouteStory(root: HTMLElement) {
   const canvas = root.querySelector<HTMLCanvasElement>("[data-route-canvas]");
   const ctx = canvas?.getContext("2d");
@@ -88,7 +115,8 @@ export function initRouteStory(root: HTMLElement) {
   const pinnedQuery = matchMedia("(min-height: 600px)");
   const dots = Array.from(root.querySelectorAll<HTMLElement>(".route-dots li"));
   const totals = root.querySelectorAll<HTMLElement>("[data-route-total]");
-  const steps = root.querySelectorAll(".route-steps article").length;
+  const articles = Array.from(root.querySelectorAll(".route-steps article"));
+  const steps = articles.length;
 
   const air = airLanes.map(([a, b]) => track([a, b]));
   const sea = seaLanes.map(track);
@@ -145,8 +173,14 @@ export function initRouteStory(root: HTMLElement) {
     el.textContent = `${Math.round(value / 10) * 10 >= 1000 ? Math.round(value / 10) * 10 : Math.round(value)}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " km";
   }
 
-  let land: GeoPermissibleObjects | null = null;
-  let borders: GeoPermissibleObjects | null = null;
+  // two levels of detail: the 1:110m outlines while the camera moves or the globe is small, the 1:50m ones once
+  // the view settles (re-rendering the detailed coastlines every frame is what made phones stutter)
+  type Outlines = { land: GeoPermissibleObjects; borders: GeoPermissibleObjects };
+  let coarse: Outlines | null = null;
+  let fine: Outlines | null = null;
+  let lastView = "";
+  let movedAt = 0;
+  let settle = 0;
   let w = 0;
   let h = 0;
   let dpr = 1;
@@ -192,7 +226,20 @@ export function initRouteStory(root: HTMLElement) {
     ctx.globalAlpha = 1;
 
     // globe: atmosphere glow, ocean, land and borders (cached while the view holds still)
-    const key = `${w}|${h}|${dpr}|${r.toFixed(1)}|${lon.toFixed(2)}|${lat.toFixed(2)}|${land ? 1 : 0}`;
+    const viewKey = `${w}|${h}|${dpr}|${r.toFixed(1)}|${lon.toFixed(2)}|${lat.toFixed(2)}`;
+    const now = performance.now();
+    if (viewKey !== lastView) {
+      lastView = viewKey;
+      movedAt = now;
+    }
+    const settled = now - movedAt > 150;
+    const outlines = (settled && r > 260 && fine) || coarse || fine;
+    const key = `${viewKey}|${outlines === fine ? 2 : outlines ? 1 : 0}`;
+    if (outlines !== fine && fine && r > 260) {
+      // upgrade to the detailed outlines once the camera has held still for a moment
+      clearTimeout(settle);
+      settle = window.setTimeout(draw, 170);
+    }
     if (key !== baseKey && baseCtx) {
       baseKey = key;
       base.width = Math.round(w * dpr);
@@ -214,14 +261,14 @@ export function initRouteStory(root: HTMLElement) {
       baseCtx.beginPath();
       baseCtx.arc(cx, cy, r, 0, Math.PI * 2);
       baseCtx.fill();
-      if (land && borders) {
+      if (outlines) {
         const path = geoPath(projection, baseCtx);
         baseCtx.beginPath();
-        path(land);
+        path(outlines.land);
         baseCtx.fillStyle = "#1a3a72";
         baseCtx.fill();
         baseCtx.beginPath();
-        path(borders);
+        path(outlines.borders);
         baseCtx.strokeStyle = "#3a62a8";
         baseCtx.lineWidth = 0.6;
         baseCtx.stroke();
@@ -244,10 +291,15 @@ export function initRouteStory(root: HTMLElement) {
       ctx.lineWidth = width;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-      ctx.shadowColor = color;
-      ctx.shadowBlur = glow;
+      if (glow) {
+        // glow: a wide, faint stroke under the line (cheaper than shadowBlur)
+        ctx.lineWidth = width + glow;
+        ctx.globalAlpha = alpha * 0.22;
+        ctx.stroke();
+        ctx.lineWidth = width;
+        ctx.globalAlpha = alpha;
+      }
       ctx.stroke();
-      ctx.shadowBlur = 0;
       ctx.globalAlpha = 1;
     };
 
@@ -268,6 +320,7 @@ export function initRouteStory(root: HTMLElement) {
       const groups: [Hub[], string, number][] = [[ports, MODE.sea, 0.02], [airports, MODE.air, 0.3], [stations, MODE.rail, 0.56]];
       const drop = span(mk, 1.15, 1.6);
       for (const [hubs, color, start] of groups) {
+        const dot = sprite(color);
         hubs.forEach((hub, i) => {
           const q = ease(span(mk, start + (i / hubs.length) * 0.28, start + (i / hubs.length) * 0.28 + 0.16));
           if (q <= 0 || !onFront(hub.at)) return;
@@ -285,13 +338,8 @@ export function initRouteStory(root: HTMLElement) {
           }
           if (alpha <= 0) return;
           ctx.globalAlpha = alpha;
-          ctx.fillStyle = color;
-          ctx.shadowColor = color;
-          ctx.shadowBlur = 6;
-          ctx.beginPath();
-          ctx.arc(x, y, size, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          const d = size / CORE; // sprite size whose core has radius `size`
+          ctx.drawImage(dot, x - d / 2, y - d / 2, d, d);
           if (!hub.freight && drop > 0 && drop < 1) {
             // a ring that opens up as the passenger-only hub is removed
             ctx.globalAlpha = (1 - drop) * 0.8 * network;
@@ -326,13 +374,8 @@ export function initRouteStory(root: HTMLElement) {
         const p = projection(pt);
         if (!p || !onFront(pt)) continue;
         ctx.globalAlpha = travel;
-        ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 12;
-        ctx.beginPath();
-        ctx.arc(p[0], p[1], 3.2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        const d = 3.2 / CORE;
+        ctx.drawImage(sprite(color, "#ffffff"), p[0] - d / 2, p[1] - d / 2, d, d);
         ctx.globalAlpha = 1;
       }
     }
@@ -382,13 +425,12 @@ export function initRouteStory(root: HTMLElement) {
       if (!p || q <= 0) return;
       const drop = (1 - q) * 26;
       ctx.globalAlpha = q;
+      const d = 6.5 / CORE;
+      ctx.drawImage(sprite(color), p[0] - d / 2, p[1] - drop - d / 2, d, d);
       ctx.fillStyle = color;
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 14;
       ctx.beginPath();
       ctx.arc(p[0], p[1] - drop, 6.5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowBlur = 0;
       ctx.strokeStyle = "#ffffffcc";
       ctx.lineWidth = 2;
       ctx.stroke();
@@ -409,7 +451,7 @@ export function initRouteStory(root: HTMLElement) {
     const box = canvas!.getBoundingClientRect();
     w = box.width;
     h = box.height;
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, w < 900 ? 1.5 : 2); // phones: fewer pixels to fill per frame
     canvas!.width = Math.round(w * dpr);
     canvas!.height = Math.round(h * dpr);
     baseKey = "";
@@ -417,22 +459,23 @@ export function initRouteStory(root: HTMLElement) {
   }
 
   function progress() {
+    const rootBox = root.getBoundingClientRect();
     const pinned = pinnedQuery.matches;
     root.classList.toggle("is-pinned", pinned);
     if (!pinned) {
       mk = steps; // stacked: show the finished route
     } else {
-      const box = root.getBoundingClientRect();
+      const box = rootBox;
       const run = Math.max(1, root.offsetHeight - window.innerHeight);
       mk = clamp(-box.top / run) * (steps + 0.4) - 0.2;
     }
     root.style.setProperty("--rk", mk.toFixed(3));
     // the heading fades up as the section scrolls into view (from transparent, over the lower half of the screen)
-    const enter = clamp((window.innerHeight - root.getBoundingClientRect().top) / (window.innerHeight * 0.55));
+    const enter = clamp((window.innerHeight - rootBox.top) / (window.innerHeight * 0.55));
     root.style.setProperty("--enter", enter.toFixed(3));
     const active = Math.min(steps - 1, Math.max(0, Math.floor(mk + 0.1)));
     dots.forEach((dot, i) => dot.classList.toggle("is-on", i === active));
-    root.querySelectorAll(".route-steps article").forEach((a, i) => a.classList.toggle("is-on", i === active));
+    articles.forEach((a, i) => a.classList.toggle("is-on", i === active));
     draw();
   }
 
@@ -456,8 +499,13 @@ export function initRouteStory(root: HTMLElement) {
     }
   };
 
+  // scroll events can fire several times per frame on phones: update at most once per frame
+  let queued = 0;
   const onScroll = () => {
-    if (visible) progress();
+    if (visible && !queued) queued = requestAnimationFrame(() => {
+      queued = 0;
+      progress();
+    });
   };
   const sizeObserver = new ResizeObserver(resize);
   sizeObserver.observe(canvas);
@@ -471,9 +519,14 @@ export function initRouteStory(root: HTMLElement) {
   const loader = new IntersectionObserver(async ([entry]) => {
     if (!entry.isIntersecting) return;
     loader.disconnect();
-    const world = (await import("world-atlas/countries-50m.json")).default as any;
-    land = feature(world, world.objects.land) as unknown as GeoPermissibleObjects;
-    borders = mesh(world, world.objects.countries, (a: unknown, b: unknown) => a !== b) as unknown as GeoPermissibleObjects;
+    const outlines = (world: any): Outlines => ({
+      land: feature(world, world.objects.land) as unknown as GeoPermissibleObjects,
+      borders: mesh(world, world.objects.countries, (a: unknown, b: unknown) => a !== b) as unknown as GeoPermissibleObjects
+    });
+    coarse = outlines((await import("world-atlas/countries-110m.json")).default);
+    baseKey = "";
+    draw();
+    fine = outlines((await import("world-atlas/countries-50m.json")).default);
     baseKey = "";
     draw();
   }, { rootMargin: "800px 0px" });
@@ -485,6 +538,8 @@ export function initRouteStory(root: HTMLElement) {
 
   return () => {
     cancelAnimationFrame(frame);
+    cancelAnimationFrame(queued);
+    clearTimeout(settle);
     sizeObserver.disconnect();
     io.disconnect();
     loader.disconnect();

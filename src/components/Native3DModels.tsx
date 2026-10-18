@@ -22,9 +22,14 @@ export function RenderController({ isActive }: { isActive: React.RefObject<boole
   // biome-ignore lint/correctness/useExhaustiveDependencies: isActive is a stable ref read inside rAF
   useEffect(() => {
     let animationFrameId: number;
-    const loop = () => {
+    let last = 0;
+    // phones: ~30 fps, half the GPU work for a phone that mostly holds still
+    const phone = window.matchMedia("(max-width: 699px), (pointer: coarse)").matches;
+    const loop = (now: number) => {
       animationFrameId = requestAnimationFrame(loop);
+      if (phone && now - last < 31) return;
       if (isActive.current) {
+        last = now;
         invalidate();
       }
     };
@@ -1197,6 +1202,10 @@ function StatusBarIcons({ color }: { color: string }) {
   );
 }
 
+// device pixel ratio for the phone canvases: capped lower on phones, where the fill rate is the limit
+const PHONE_DPR: [number, number] =
+  typeof window !== "undefined" && window.matchMedia("(max-width: 699px), (pointer: coarse)").matches ? [1, 1.5] : [1, 2];
+
 export function HtmlPhoneCanvas({
   children,
   isPlaying,
@@ -1231,7 +1240,12 @@ export function HtmlPhoneCanvas({
   const inPageActiveRef = useMemo(
     () => ({
       get current() {
-        return Boolean(isNearRef.current) && !document.documentElement.dataset.overlayOpen;
+        // [data-render-paused]: the page marks a host whose phone is out of sight (e.g. a faded-out story chapter)
+        return (
+          Boolean(isNearRef.current) &&
+          !document.documentElement.dataset.overlayOpen &&
+          !containerRef.current?.closest("[data-render-paused]")
+        );
       }
     }),
     [isNearRef]
@@ -1280,6 +1294,7 @@ export function HtmlPhoneCanvas({
         frameloop="demand"
         camera={{ position: cameraPosition, fov: 30 }}
         gl={{ alpha: true }}
+        dpr={PHONE_DPR}
         style={{ background: "transparent" }}
         // Size the canvas from the layout box (offsetWidth/Height), not the on-screen box, so a CSS scale on
         // a host (the homepage zooms the passport phone) doesn't make the canvas larger than its frame.

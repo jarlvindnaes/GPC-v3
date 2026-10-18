@@ -26,9 +26,9 @@ const links = [
     {links.map((link) => (
       <a href={link.href} class:list={{ active: link.key && link.key === current }} aria-current={link.key && link.key === current ? 'page' : undefined}>{link.label}</a>
     ))}
-    <a class="menu-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗</span></a>
+    <a class="menu-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗︎</span></a>
   </nav>
-  <a class="site-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗</span></a>
+  <a class="site-cta" href="mailto:contact@productconnect.com">Talk to sales <span aria-hidden="true">↗︎</span></a>
   <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Open menu" data-menu-toggle>
     <svg class="icon-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
     <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>

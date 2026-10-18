@@ -236,7 +236,7 @@ export function initDataScenes() {
       w = box.width;
       h = box.height;
       lead = Math.min(0.9, Math.max(0, Number.parseFloat(getComputedStyle(canvas).getPropertyValue("--scene-left")) || 0));
-      const dpr = Math.min(devicePixelRatio, 2);
+      const dpr = Math.min(devicePixelRatio, w < 700 ? 1.5 : 2); // phones: fewer pixels to fill per frame
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

@@ -96,7 +96,7 @@ function tick(now: number) {
   }
   const s = getShared();
   for (const thumb of thumbs) {
-    if (!(thumb.visible && thumb.object) || (still && thumb.drawn)) {
+    if (!(thumb.visible && thumb.object) || (still && thumb.drawn) || thumb.canvas.closest("[data-render-paused]")) {
       continue;
     }
     const { canvas } = thumb;

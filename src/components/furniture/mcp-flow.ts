@@ -275,7 +275,7 @@ export function initMcpFlow() {
     function resize() {
       const r = canvas.getBoundingClientRect();
       if (!r.width || !r.height) return;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, r.width < 700 ? 1.5 : 2); // phones: fewer pixels per frame
       canvas.width = Math.round(r.width * dpr);
       canvas.height = Math.round(r.height * dpr);
       scale = Math.min(r.width / W, r.height / H);

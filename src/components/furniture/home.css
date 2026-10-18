@@ -1295,7 +1295,7 @@ html.model-stage .model-pin .capabilities article.is-on .cap-link{pointer-events
 html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 64px) / 2);translate:-50% -50%}
 @media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 64px) / 2)}}
 html.model-stage .model-pin .capabilities{align-items:center}
-/* "Learn more ↗": the arrow sits close to its label */
+/* "Learn more ↗︎": the arrow sits close to its label */
 .capabilities .cap-link{gap:10px}
 /* Phones: the hero runs edge to edge without rounded corners, and "Explore its passport" sits on the photo just above
    the bottom of the first screen (100svh: the screen with the browser's bars shown), so it is always in view */
@@ -1306,3 +1306,8 @@ html.model-stage .model-pin .capabilities{align-items:center}
 @media(max-width:599px){main .brand-strip.frame{border-radius:0}}
 /* the closing call to action runs the full window width (not boxed in the 1240px frame), like the footer below it */
 main .closing.frame{max-width:none;border-left:0;border-right:0;border-radius:0}
+/* iOS Safari: with its toolbars collapsed the screen is taller than 100svh (the stage's height), so the stage's
+   background layers reach down to the large viewport height, and the story gets the same extra room at its end
+   so that strip only ever covers the story's own space when it releases */
+html.story-stage .story-stage::before,html.story-stage .story-stage::after{bottom:calc(100svh - 100lvh)}
+html.story-stage .story-markers{padding-bottom:calc(100lvh - var(--tab-row) - 1px)}

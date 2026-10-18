@@ -619,7 +619,9 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
 
     const renderer = new Three.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // phones: fewer pixels per frame (the dots stay crisp at 1.5)
+    const phone = window.matchMedia("(max-width: 699px), (pointer: coarse)").matches;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, phone ? 1.5 : 2));
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
@@ -728,18 +730,39 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
     const tooltipPosition = new Three.Vector3();
     const edgeNormal = new Three.Vector3();
     const cameraDirection = new Three.Vector3();
+    const groupNormalMatrix = new Three.Matrix3();
+    // hover offsets were applied last frame, so the buffers need resetting to their original values
+    let hoverApplied = true;
+    let parked = false;
+    let lastFrame = 0;
+    const cssNumber = (style: CSSStyleDeclaration, name: string) => Number.parseFloat(style.getPropertyValue(name));
 
-    function animate() {
+    function animate(now = performance.now()) {
       animationFrameId = requestAnimationFrame(animate);
 
       // Paused while off-screen, or while a full-screen overlay (the passport) covers the page.
       if (!isNearViewport.current || document.documentElement.dataset.overlayOpen) {
         return;
       }
+      // phones: ~30 fps is plenty for a slow spin and halves the GPU work
+      const elapsed = now - lastFrame;
+      if (phone && elapsed < 31) return;
+      lastFrame = now;
+      const frames = Math.min(4, Math.max(0, elapsed) / (1000 / 60)) || 1; // keep the spin speed per second
+
+      // the page's story values, read in one style lookup per frame
+      const style = getComputedStyle(container);
+      const scatter = Math.min(1, Math.max(0, cssNumber(style, "--globe-scatter") || 0));
+      const tint = Math.min(1, Math.max(0, cssNumber(style, "--globe-tint") || 0));
+      // fully dispersed and tinted on the way out: its chapter has handed over, so stop drawing (the last frame stays)
+      if (scatter >= 1 && tint >= 1) {
+        if (parked) return;
+        parked = true;
+      } else parked = false;
 
       if (!dragState.current.isDragging) {
         // reduced motion: no auto-spin (it can still be turned by dragging)
-        if (!reducedMotion.matches) globeGroup.rotation.y += AUTO_ROTATION_SPEED;
+        if (!reducedMotion.matches) globeGroup.rotation.y += AUTO_ROTATION_SPEED * frames;
       }
 
       if (!particleData) {
@@ -753,7 +776,15 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
       const canvasWidth = renderer.domElement.clientWidth;
       const canvasHeight = renderer.domElement.clientHeight;
 
-      for (let i = 0; i < particleData.particleCount; i++) {
+      const mouseX = mousePosition.current.x;
+      const mouseY = mousePosition.current.y;
+      const hovering = mouseX !== null && mouseY !== null;
+      // without a pointer over the globe (always, on touch screens) the buffers hold their original values:
+      // skip resetting and re-uploading them, and rebuilding the arcs, every frame
+      const reset = hovering || hoverApplied;
+      hoverApplied = hovering;
+
+      for (let i = 0; reset && i < particleData.particleCount; i++) {
         positionAttribute.setXYZ(
           i,
           particleData.originalPositions[i * 3],
@@ -769,10 +800,7 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
         sizeAttribute.setX(i, particleData.originalSizes[i]);
       }
 
-      const mouseX = mousePosition.current.x;
-      const mouseY = mousePosition.current.y;
-
-      if (mouseX !== null && mouseY !== null) {
+      if (hovering) {
         globeGroup.updateMatrixWorld();
         cameraRight.setFromMatrixColumn(camera.matrixWorld, 0);
         cameraUp.setFromMatrixColumn(camera.matrixWorld, 1);
@@ -829,14 +857,16 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
         }
       }
 
-      positionAttribute.needsUpdate = true;
-      colorAttribute.needsUpdate = true;
-      sizeAttribute.needsUpdate = true;
-
-      updateFlightPaths(particleData.flightPaths, particleData.supplyChainEdges, positionAttribute);
+      if (reset) {
+        positionAttribute.needsUpdate = true;
+        colorAttribute.needsUpdate = true;
+        sizeAttribute.needsUpdate = true;
+        updateFlightPaths(particleData.flightPaths, particleData.supplyChainEdges, positionAttribute);
+      }
 
       camera.getWorldDirection(cameraDirection);
       const positions = particleData.originalPositions;
+      groupNormalMatrix.setFromMatrix4(globeGroup.matrixWorld);
       for (let e = 0; e < particleData.supplyChainEdges.length; e++) {
         const edge = particleData.supplyChainEdges[e];
         const si = edge.sourceIndex * 3;
@@ -848,7 +878,7 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
           (positions[si + 2] + positions[ti + 2]) / 2
         );
         edgeNormal.normalize();
-        edgeNormal.applyMatrix3(new Three.Matrix3().setFromMatrix4(globeGroup.matrixWorld)).normalize();
+        edgeNormal.applyMatrix3(groupNormalMatrix).normalize();
 
         const facing = -edgeNormal.dot(cameraDirection);
         const smoothFacing = facing * 0.5 + 0.5;
@@ -863,15 +893,14 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
       pointsMaterial.uniforms.sizeScale.value = compactScale;
       // Scatter into stars (0 = globe, 1 = dispersed), set by the page through --globe-scatter. Arcs, rings,
       // labels and the backdrop disc fade out early so the dispersed dots read as pure stars.
-      const scatter = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-scatter")) || 0));
       pointsMaterial.uniforms.scatter.value = scatter;
       // Risk regions in red, set by the page through --globe-risk (0 = none, 1 = all lit).
-      pointsMaterial.uniforms.risk.value = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-risk")) || 0));
-      pointsMaterial.uniforms.exitTint.value = Math.min(1, Math.max(0, Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-tint")) || 0));
+      pointsMaterial.uniforms.risk.value = Math.min(1, Math.max(0, cssNumber(style, "--globe-risk") || 0));
+      pointsMaterial.uniforms.exitTint.value = tint;
       const extrasFade = 1 - Math.min(1, scatter * 3);
       (backdropMesh.material as Three.ShaderMaterial).uniforms.fade.value = extrasFade;
       // Placement of the supply-chain nodes (--globe-place): each node's ring, arcs and label follow its dot.
-      const placeValue = Number.parseFloat(getComputedStyle(container).getPropertyValue("--globe-place"));
+      const placeValue = cssNumber(style, "--globe-place");
       const place = Number.isNaN(placeValue) ? 1 : Math.min(1, Math.max(0, placeValue));
       pointsMaterial.uniforms.place.value = place;
       const nodeProgress = (particleIndex: number) =>

@@ -243,8 +243,19 @@ function useChairCanvas(
     composer.addPass(output);
 
     // ── Render loop ──
-    const animate = () => {
+    // Only while on screen and not in a story chapter the page has hidden ([data-render-paused]); ~30 fps on phones.
+    let onScreen = true;
+    const viewObserver = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+    });
+    viewObserver.observe(renderer.domElement);
+    const phone = window.matchMedia("(max-width: 699px), (pointer: coarse)").matches;
+    let lastFrame = 0;
+    const animate = (now: number) => {
       animFrameRef.current = requestAnimationFrame(animate);
+      if (!onScreen || document.hidden || renderer.domElement.closest("[data-render-paused]")) return;
+      if (phone && now - lastFrame < 31) return;
+      lastFrame = now;
       if (outline.selectedObjects.length) {
         composer.render();
       } else {
@@ -357,6 +368,7 @@ function useChairCanvas(
     return () => {
       alive = false;
       cancelAnimationFrame(animFrameRef.current);
+      viewObserver.disconnect();
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerup", onPointerUp);
