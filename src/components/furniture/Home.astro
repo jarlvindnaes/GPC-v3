@@ -344,25 +344,31 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   }
  };
  // The stage ends a little above the bottom of the screen (iOS Safari, see home.css --edge); the strip below it, and
- // what shows under Safari's toolbar, is .chapters behind it, painted in the stage's current colour: its base layer,
- // the dark layer over it and the tint over that, composited the way the stage paints them.
+ // what shows under Safari's toolbar, is .chapters behind it, painted in the stage's current colour. Computed here from
+ // the stage's colour values (--blue, --warm, --sage, --dark, --co2) and the colours home.css paints with them (the
+ // last .story-stage::before rule, ::after and .story-tint); reading those back from the computed styles fails in iOS Safari.
  function syncUnderColour(stage: HTMLElement) {
-  const rgb = (value: string): number[] => {
-   const srgb = value.match(/color\(srgb ([\d.e-]+) ([\d.e-]+) ([\d.e-]+)/);
-   if (srgb) return srgb.slice(1, 4).map((n) => Number(n) * 255);
-   const plain = value.match(/rgba?\(([\d.]+),? ([\d.]+),? ([\d.]+)/);
-   return plain ? plain.slice(1, 4).map(Number) : [255, 255, 255];
+  const value = (name: string, fallback: number) => {
+   const raw = stage.style.getPropertyValue(name);
+   return raw === '' ? fallback : Number(raw);
   };
-  const over = (base: number[], layer: CSSStyleDeclaration) => {
-   const a = Number(layer.opacity) || 0;
-   const c = rgb(layer.backgroundColor);
-   return base.map((v, i) => v + (c[i] - v) * a);
-  };
-  const tint = stage.querySelector<HTMLElement>('.story-tint');
-  let colour = rgb(getComputedStyle(stage, '::before').backgroundColor);
-  colour = over(colour, getComputedStyle(stage, '::after'));
-  if (tint) colour = over(colour, getComputedStyle(tint));
-  stage.parentElement?.style.setProperty('--under', `rgb(${colour.map((v) => Math.round(v)).join(' ')})`);
+  const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a: number[], b: number[], t: number) => a.map((v, i) => v * t + b[i] * (1 - t)); // a at t, over b
+  const dark = value('--dark', 1);
+  let colour = mix(hex('#0a1017'), mix(hex('#f6f4ef'), mix(hex('#e1edcc'), hex('#13285a'), value('--sage', 0)), value('--warm', 0)), value('--blue', 0));
+  colour = mix(hex('#152239'), colour, dark);
+  colour = mix(hex('#0e1615'), colour, value('--co2', 0) * dark);
+  // a real element with its colour set directly (iOS Safari can skip repainting a pseudo-element on a variable change)
+  const box = stage.parentElement;
+  if (!box) return;
+  let under = box.querySelector<HTMLElement>(':scope > .story-under');
+  if (!under) {
+   under = document.createElement('div');
+   under.className = 'story-under';
+   under.setAttribute('aria-hidden', 'true');
+   box.prepend(under);
+  }
+  under.style.backgroundColor = `rgb(${colour.map((v) => Math.round(v)).join(',')})`;
  }
  // Tabs: on the one-stage layout, scroll to the point where that chapter has fully arrived.
  storyLinks.forEach((link, i) => {
