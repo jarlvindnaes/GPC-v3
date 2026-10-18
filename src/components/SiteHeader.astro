@@ -256,6 +256,45 @@ const links = [
 </style>
 
 <script>
+  // iOS Safari tints the strip under its floating toolbar itself, from the page's colours, and does not follow the
+  // pinned stories as their colours change. On touch screens, keep the page background and theme-color set to the
+  // colour currently at the bottom of the screen: the benefits story's colour strip (.story-under, which takes no
+  // pointer hits) or the first solid background under that point.
+  if (matchMedia("(hover: none) and (pointer: coarse)").matches) {
+    const html = document.documentElement;
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const solid = (c: string) => c !== "transparent" && !/rgba\([^)]*,\s*0\)$/.test(c);
+    const colourAt = (y: number) => {
+      const under = document.querySelector<HTMLElement>(".story-under");
+      if (under) {
+        const r = under.getBoundingClientRect();
+        if (r.top <= y && r.bottom >= y && solid(under.style.backgroundColor)) return under.style.backgroundColor;
+      }
+      for (let el = document.elementFromPoint(window.innerWidth / 2, y); el; el = el.parentElement) {
+        const c = getComputedStyle(el).backgroundColor;
+        if (solid(c)) return c;
+      }
+      return "";
+    };
+    let shown = "";
+    let queued = 0;
+    const update = () => {
+      queued = 0;
+      const c = colourAt(window.innerHeight - 2);
+      if (!c || c === shown) return;
+      shown = c;
+      html.style.backgroundColor = c;
+      meta?.setAttribute("content", c);
+    };
+    const queue = () => {
+      if (!queued) queued = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    update();
+  }
+</script>
+<script>
   // Hide on scroll-down, reveal on a deliberate scroll-up; always shown near the top.
   // (Same thresholds as our wireframes' NavAutoHide.)
   for (const header of document.querySelectorAll<HTMLElement>('[data-site-header]')) {
