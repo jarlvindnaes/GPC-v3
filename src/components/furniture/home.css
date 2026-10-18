@@ -1311,3 +1311,8 @@ main .closing.frame{max-width:none;border-left:0;border-right:0;border-radius:0}
    so that strip only ever covers the story's own space when it releases */
 html.story-stage .story-stage::before,html.story-stage .story-stage::after{bottom:calc(100svh - 100lvh)}
 html.story-stage .story-markers{padding-bottom:calc(100lvh - var(--tab-row) - 1px)}
+/* the globe chapter's stage runs to the large viewport height too, so with Safari's toolbars collapsed the globe
+   reaches the bottom of the screen (with them shown, its lowest strip sits behind the toolbar) */
+html.story-stage .ui-stage.stage-0{height:calc(100lvh - var(--tab-row) - 1px - var(--hdr))}
+/* Safari: keep the fading steps on their own layers, or a faded-out headline can stay painted as a ghost */
+html.story-on .chapter .globe-points .step{will-change:opacity,transform}

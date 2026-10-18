@@ -428,3 +428,14 @@ html{scroll-padding-top:115px}
 .breaker h2{margin:0;font-size:32px;line-height:1.28;font-weight:500;letter-spacing:-.045em;color:#242528}
 .breaker h2 span{color:#80858d}
 @media(max-width:700px){.breaker{padding:55px 22px 50px}.breaker h2{font-size:25px}}
+/* phones: the headline card's copy keeps equal room from both edges of its frame */
+@media(max-width:700px){.enterprise .cinematic-hero .hero-copy{padding-left:24px;padding-right:24px}}
+/* phones with Safari's toolbars showing (~660px tall): a tighter product story, so step 3's chart stays on screen */
+@media(max-width:700px) and (max-height:760px){
+ .story-viewer{height:18svh;min-height:120px}
+ .story-narrative .chapter-nav{margin-bottom:16px}
+ .story-narrative .chapter-points{margin:12px 0 0}
+ .reuse-chart{margin-top:12px;padding:10px 14px 4px}
+ .reuse-chart svg{max-height:84px}
+}
+@media(max-width:700px) and (max-height:700px){.story-narrative .chapter-hint{display:none}}
