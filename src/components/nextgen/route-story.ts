@@ -184,9 +184,9 @@ export function initRouteStory(root: HTMLElement) {
   let settle = 0;
   let w = 0;
   let h = 0;
-  let hv = 0; // visible height: h minus the strip iOS Safari's toolbar can cover
+  let hv = 0; // visible height: h minus the strip iOS Safari's toolbar can cover and the out-of-sight bleed
   const barProbe = document.createElement("div");
-  barProbe.style.cssText = "position:absolute;width:0;height:var(--bar,0px);visibility:hidden;pointer-events:none";
+  barProbe.style.cssText = "position:absolute;width:0;height:calc(var(--bar,0px) + var(--bleed,0px));visibility:hidden;pointer-events:none";
   root.append(barProbe);
   let dpr = 1;
   let mk = 0;
@@ -457,7 +457,7 @@ export function initRouteStory(root: HTMLElement) {
     const box = canvas!.getBoundingClientRect();
     w = box.width;
     h = box.height;
-    hv = Math.max(1, h - barProbe.offsetHeight);
+    hv = root.classList.contains("is-pinned") ? Math.max(1, h - barProbe.offsetHeight) : h;
     dpr = Math.min(window.devicePixelRatio || 1, w < 900 ? 1.5 : 2); // phones: fewer pixels to fill per frame
     canvas!.width = Math.round(w * dpr);
     canvas!.height = Math.round(h * dpr);

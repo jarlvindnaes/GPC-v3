@@ -1193,16 +1193,16 @@ html.story-on #beat-regulation .eu-star{opacity:calc(clamp(0,var(--s) * 2.5,1) *
 .model-dots{display:none}
 /* the pin runs the full screen height (100lvh), under iOS Safari's floating toolbar; --bar is the strip that toolbar can
    cover, kept clear of the text and dots */
-html.model-stage .model-story{--bar:calc(100lvh - 100svh);height:calc(100lvh + 5 * 72svh)}
-html.model-stage .model-pin{position:sticky;top:0;height:100lvh;overflow:hidden}
-html.model-stage .model-pin .model-atmosphere{height:100%}
+html.model-stage .model-story{--bar:calc(100lvh - 100svh);height:calc(100lvh + var(--bleed) + 5 * 72svh)}
+html.model-stage .model-pin{position:sticky;top:0;height:calc(100lvh + var(--bleed));overflow:hidden}
+html.model-stage .model-pin .model-atmosphere{height:calc(100% - var(--bleed))}
 html.model-stage .model-pin .capabilities{position:absolute;left:50%;top:56%;width:min(460px,82%);translate:-50% 0;display:grid;border:0;z-index:2;pointer-events:none}
 html.model-stage .model-pin .capabilities article{grid-area:1/1;padding:0;border:0;text-align:center;--in:clamp(0,calc((var(--mk,0) - var(--i)) / .22),1);--out:clamp(0,calc((var(--mk,0) - var(--i) - .82) / .16),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 28px - var(--out) * 18px))}
 html.model-stage .model-pin .capabilities article:last-child{--out:0}
 html.model-stage .model-pin .cap-icon{margin:0 auto 18px;font-size:26px;color:#b4c0d8}
 html.model-stage .model-pin .capabilities h3{font-size:clamp(22px,2.2vw,28px);font-weight:500;letter-spacing:-.025em;margin-bottom:14px;color:#f8f9fc}
 html.model-stage .model-pin .capabilities p{--t:clamp(0,calc((var(--mk,0) - var(--i) - .16) / .2),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px));font-size:16px;line-height:1.6;color:#b1b6bf}
-html.model-stage .model-dots{display:flex;gap:10px;position:absolute;left:50%;bottom:calc(38px + var(--bar,0px));translate:-50% 0;margin:0;padding:0;list-style:none;z-index:2}
+html.model-stage .model-dots{display:flex;gap:10px;position:absolute;left:50%;bottom:calc(38px + var(--bar,0px) + var(--bleed));translate:-50% 0;margin:0;padding:0;list-style:none;z-index:2}
 html.model-stage .model-dots li{width:6px;height:6px;border-radius:50%;background:#ffffff33;transition:background .3s,transform .3s}
 html.model-stage .model-dots li.is-on{background:#d4ee9c;transform:scale(1.3)}
 @media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities :is(article,p){transform:none}}
@@ -1294,8 +1294,8 @@ html.model-stage .model-pin .capabilities article.is-on .cap-link{pointer-events
 @media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + 34px)}html.model-stage .model-pin .cap-icon{display:none}html.model-stage .model-pin .capabilities p{font-size:15px}}
 /* the capability text sits in the middle of the dark circle: centred between the sphere's rim (--dome) and the
    dots at the bottom, at every screen size */
-html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--bar,0px) - var(--dome,40%) - 64px) / 2);translate:-50% -50%}
-@media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--bar,0px) - var(--dome,40%) - 64px) / 2)}}
+html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--bleed) - var(--bar,0px) - var(--dome,40%) - 64px) / 2);translate:-50% -50%}
+@media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--bleed) - var(--bar,0px) - var(--dome,40%) - 64px) / 2)}}
 html.model-stage .model-pin .capabilities{align-items:center}
 /* "Learn more ↗︎": the arrow sits close to its label */
 .capabilities .cap-link{gap:10px}
@@ -1318,3 +1318,12 @@ html.story-stage .story-markers{padding-bottom:calc(100lvh - var(--tab-row) - 1p
 html.story-stage .ui-stage.stage-0{height:calc(100lvh - var(--tab-row) - 1px - var(--hdr))}
 /* Safari: keep the fading steps on their own layers, or a faded-out headline can stay painted as a ghost */
 html.story-on .chapter .globe-points .step{will-change:opacity,transform}
+/* iOS Safari treats a fixed or sticky box whose bottom edge sits within ~8px of the screen's bottom edge like an app
+   bar, and stops the page flowing under its toolbar. Every pinned story box therefore runs --bleed past the bottom of
+   the screen (always out of sight), with its content laid out above that. Benefits story: */
+:root{--bleed:120px}
+html.story-stage .story-stage{height:calc(100svh - var(--tab-row) - 1px + var(--bleed));padding-bottom:var(--bleed)}
+html.story-stage .story-stage .chapter{bottom:calc(var(--hdr) + var(--bleed))}
+html.story-stage .story-stage :is(#harvest-data,#trusted-co2){bottom:var(--bleed)}
+html.story-stage .story-stage .story-tint{bottom:var(--bleed)}
+html.story-stage .story-markers{margin-top:calc(-1 * (100svh - var(--tab-row) - 1px + var(--bleed)));padding-bottom:calc(100lvh - var(--tab-row) - 1px + var(--bleed))}

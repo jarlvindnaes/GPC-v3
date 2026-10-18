@@ -456,3 +456,10 @@ html{scroll-padding-top:115px}
 }
 @media(max-width:700px) and (max-height:700px){.story-viewer{height:calc(100svh - 405px)}}
 @media(max-width:700px) and (max-height:650px){.story-viewer{height:260px}}
+/* phones: the pinned product story box runs --bleed past the bottom of the screen, out of sight, so its bottom edge
+   never sits at the screen's edge (iOS Safari treats that like an app bar and stops the page flowing under its toolbar);
+   the section grows by the same amount, keeping the story's pace */
+@media(min-height:651px) and (max-width:700px) and (prefers-reduced-motion:no-preference){
+ .product-story{--bleed:120px;height:calc(220vh + var(--bleed));min-height:calc(1350px + var(--bleed))}
+ .story-sticky{height:calc(100svh + var(--bleed));min-height:calc(650px + var(--bleed));max-height:none;padding-bottom:calc(18px + var(--bleed))}
+}

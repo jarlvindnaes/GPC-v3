@@ -367,7 +367,9 @@ export default function ProductStory({ base }: { base: string }) {
         return;
       }
       const rect = section.getBoundingClientRect();
-      const travel = Math.max(1, rect.height - window.innerHeight);
+      // the pinned panel's own run (it is taller than the screen, see --bleed in nextgen.css)
+      const sticky = section.querySelector<HTMLElement>(".story-sticky");
+      const travel = Math.max(1, rect.height - (sticky?.offsetHeight || window.innerHeight));
       progressRef.current = Math.max(0, Math.min(1, -rect.top / travel));
     };
     window.addEventListener("scroll", scroll, { passive: true });
