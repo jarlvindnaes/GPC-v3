@@ -470,7 +470,7 @@ export default function ProductStory({ base }: { base: string }) {
                   aria-live="polite"
                 >
                   <i aria-hidden="true" />
-                  Soft Lounge Chair /{" "}
+                  Soft Lounge Chair ·{" "}
                   <b>
                     {separation > 0.2 ? "Component view" : "Assembled view"}
                   </b>

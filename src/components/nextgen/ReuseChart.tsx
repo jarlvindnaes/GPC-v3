@@ -1,6 +1,6 @@
 // "Reuse it everywhere" step: how much time each new product takes once its components are already in
 // the library. Visual-first take on our "Calculate each component once" chart, drawn in the style of
-// Jarl's Product memory chart (light version). Bars grow one by one, then a dashed blue→green curve
+// Jarl's Product memory chart (light version). Bars grow one by one, then a dashed slate-blue→sage curve
 // draws through their tops. Pure CSS animation, so it replays every time the step mounts.
 // Times are illustrative.
 const BARS = [
@@ -72,8 +72,8 @@ export function ReuseChart() {
       >
         <defs>
           <linearGradient id="rc-curve" x1="0" x2="1">
-            <stop stopColor="#6378e8" />
-            <stop offset="1" stopColor="#1f9d6b" />
+            <stop stopColor="#7283c9" />
+            <stop offset="1" stopColor="#6c8270" />
           </linearGradient>
           <mask id="rc-reveal">
             <path className="rc-reveal" d={CURVE} pathLength={1} />

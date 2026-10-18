@@ -1,0 +1,119 @@
+---
+// "How we route your supply chain" (How it works, #supply-chain): a pinned scroll story over a globe we draw
+// ourselves (route-story.ts). The captions describe what the route planner in the product does: curated container
+// port and rail freight terminal lists, cargo airports, maritime lanes, mainline rail, road legs to the nearest hubs.
+const steps = [
+  ['The freight hubs, mapped', 'We map container ports and freight terminals: the places where goods change from one mode of transport to another.'],
+  ['Cargo only', 'Cruise harbours, passenger stations and leisure airfields are left out, so a route only ever runs through hubs that handle freight.'],
+  ['The networks between them', 'Ships follow real maritime lanes, trains the mainline rail network, and air freight the great-circle arc between airports.'],
+  ['Mainline track only', 'Trams, metros and other passenger track are filtered out of the rail network.'],
+  ['Your supply chain, located', 'You and your suppliers tell us where each component and its materials come from. We geolocate every point.'],
+  ['The nearest freight hubs', 'From each point we look up the nearest freight hubs and calculate the road leg to them on the fly, keeping the one with the shortest road.'],
+  ['One route, every mode', 'Road, rail and sea legs join into one multi-segment route, with the distance per mode feeding the footprint.']
+];
+const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], ['road', 'Road']];
+---
+<section class="route-story" id="supply-chain" aria-labelledby="route-title" data-route-story>
+  <div class="route-pin">
+    <canvas class="route-canvas" data-route-canvas role="img" aria-label="A globe where freight hubs are plotted and filtered, the sea, rail and air networks are drawn, and an example supply chain from Kazakhstan via China to Denmark is routed by road, rail and sea"></canvas>
+    <div class="route-head">
+      <span class="route-tag">Supply chain routes</span>
+      <h2 id="route-title">From raw material<br/><span>to the factory door</span></h2>
+    </div>
+    <div class="route-copy">
+      <ol class="route-steps">
+        {steps.map(([title, text], i) => <li><article style={`--i:${i}`}><span class="route-num">{String(i + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{text}</p></article></li>)}
+      </ol>
+    </div>
+    <ul class="route-legend" aria-label="Line colours">
+      {legend.map(([mode, label]) => <li class={`is-${mode}`}>{label}</li>)}
+    </ul>
+    <div class="route-totals" aria-live="polite">
+      <div class="is-sea"><small>By sea</small><b data-route-total="sea">–</b></div>
+      <div class="is-rail"><small>By rail</small><b data-route-total="rail">–</b></div>
+      <div class="is-road"><small>By road</small><b data-route-total="road">–</b></div>
+      <div class="is-all"><small>Total distance</small><b data-route-total="all">–</b></div>
+      <span class="route-note">Illustrative route</span>
+    </div>
+    <ol class="route-dots" aria-hidden="true">{steps.map(() => <li></li>)}</ol>
+  </div>
+</section>
+<script>
+  import { initRouteStory } from "./route-story";
+  const root = document.querySelector<HTMLElement>("[data-route-story]");
+  if (root) initRouteStory(root);
+</script>
+<style>
+  .route-story{--sea:#8b5cf6;--road:#22c55e;--rail:#f97316;--air:#facc15;position:relative;background:#050b18;color:#eef2fb;scroll-margin-top:90px}
+  .route-story.is-pinned{height:calc(100svh + 7 * 70svh)}
+  .route-pin{position:relative;height:clamp(620px,100svh,1000px);overflow:hidden;background:radial-gradient(ellipse 70% 60% at 62% 52%,#0b1a3d 0%,#050b18 70%)}
+  .route-story.is-pinned .route-pin{position:sticky;top:0;height:100svh}
+  .route-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .route-copy{position:absolute;z-index:2;left:6%;top:50%;translate:0 -50%;width:min(440px,40%);padding:28px 30px 30px;border:1px solid #1f2b4a;border-radius:14px;background:#060d1fd9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 24px 60px #00000066}
+  .route-tag{display:inline-block;background:#1a2440;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
+  .route-head{position:absolute;z-index:2;left:6%;top:56px}
+  .route-head h2{margin:18px 0 0;font-size:clamp(26px,2.6vw,40px);line-height:1.1;letter-spacing:-.035em;font-weight:500;color:#f5f7fc;text-shadow:0 0 10px #050b18,0 0 24px #050b18}
+  .route-head h2 span{color:#97a1b8}
+  .route-story.is-pinned .route-head{opacity:var(--enter,1);transform:translateY(calc((1 - var(--enter,1)) * 28px))}
+  /* steps down below the site header while it is shown (scrolling up) */
+  .route-head{transition:translate .3s ease}
+  :global(html:has(.site-header:not(.is-hidden))) .route-story.is-pinned .route-head{translate:0 72px}
+  @media(max-width:899px){:global(html:has(.site-header:not(.is-hidden))) .route-story.is-pinned .route-head{translate:0 40px}}
+  .route-steps{display:grid;margin:0;padding:0;list-style:none}
+  .route-steps li{grid-area:1/1}
+  .route-steps article{border-left:2px solid #5b74c9;padding-left:18px}
+  .route-num{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#8b98b8}
+  .route-steps h3{margin:0;font-size:20px;font-weight:500;color:#f5f7fc}
+  .route-steps p{margin:8px 0 0;font-size:15px;line-height:1.6;color:#aab4ca}
+  .route-legend{position:absolute;z-index:2;right:22px;bottom:22px;display:flex;flex-direction:column;gap:9px;margin:0;padding:12px 18px;border:1px solid #1f2b4a;border-radius:10px;background:#060d1fd9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);list-style:none;font-size:12px;color:#9aa5bd}
+  .route-legend li{display:inline-flex;align-items:center;gap:7px}
+  .route-legend li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+  .route-legend .is-sea{--c:var(--sea)}.route-legend .is-air{--c:var(--air)}.route-legend .is-rail{--c:var(--rail)}.route-legend .is-road{--c:var(--road)}
+  .route-totals{position:absolute;z-index:2;right:4%;bottom:6%;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;max-width:60%}
+  .route-totals>div{min-width:128px;padding:12px 16px;border:1px solid #1f2b4a;border-radius:10px;background:#081127e6}
+  .route-totals>div.is-all{border-color:#5b74c9}
+  .route-totals small{display:flex;align-items:center;gap:7px;font-size:12px;color:#9aa5bd}
+  .route-totals small::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,#cfd6ea)}
+  .route-totals .is-sea{--c:var(--sea)}.route-totals .is-rail{--c:var(--rail)}.route-totals .is-road{--c:var(--road)}
+  .route-totals b{display:block;margin-top:6px;font-size:20px;font-weight:600;color:#f5f7fc}
+  .route-note{flex-basis:100%;text-align:right;font-size:11px;color:#8b95ad}
+  .route-dots{position:absolute;z-index:2;left:50%;bottom:22px;translate:-50% 0;display:none;gap:10px;margin:0;padding:0;list-style:none}
+  .route-dots li{width:6px;height:6px;border-radius:50%;background:#ffffff33;transition:background .3s,transform .3s}
+  .route-dots li.is-on{background:#d4ee9c;transform:scale(1.3)}
+
+  /* pinned: one caption at a time (--rk from route-story.ts), the totals at the end */
+  .route-story.is-pinned .route-dots{display:flex}
+  .route-story.is-pinned .route-steps article{--in:clamp(0,calc((var(--rk,0) - var(--i) + .12) / .2),1);--out:clamp(0,calc((var(--rk,0) - var(--i) - .72) / .14),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 22px - var(--out) * 14px))}
+  .route-story.is-pinned .route-steps li:last-child article{--out:0}
+  /* the card arrives with the first step, and fits the current step (the others are laid over it while they fade) */
+  .route-story.is-pinned .route-copy{opacity:clamp(0,calc((var(--rk,0) + .12) / .2),1)}
+  .route-story.is-pinned .route-steps{position:relative;display:block}
+  .route-story.is-pinned .route-steps li{position:absolute;top:0;left:0;right:0}
+  .route-story.is-pinned .route-steps li:has(article.is-on){position:relative}
+  .route-story.is-pinned .route-totals{--t:clamp(0,calc((var(--rk,0) - 6.55) / .3),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px))}
+  /* the legend sits in the lower right corner, giving way to the distance cards at the end */
+  .route-story.is-pinned .route-legend{--l:clamp(0,calc((var(--rk,0) - .2) / .3),1);--x:clamp(0,calc((var(--rk,0) - 6.35) / .2),1);opacity:calc(var(--l) * (1 - var(--x)))}
+  /* stacked (short screens): every caption listed, the finished route on the globe */
+  .route-story:not(.is-pinned) .route-steps{gap:22px}
+  .route-story:not(.is-pinned) .route-steps li{grid-area:auto}
+  .route-story:not(.is-pinned) .route-copy{position:relative;left:auto;top:auto;translate:none;width:auto;margin:28px 6% 24px;padding:28px}
+  .route-story:not(.is-pinned) .route-pin{height:auto}
+  .route-story:not(.is-pinned) .route-canvas{position:relative;height:560px}
+  .route-story:not(.is-pinned) .route-legend{display:none}
+  .route-story:not(.is-pinned) .route-head{position:relative;left:auto;top:auto;padding:60px 6% 0}
+  .route-story:not(.is-pinned) .route-totals{position:relative;right:auto;bottom:auto;max-width:none;justify-content:flex-start;padding:0 7% 50px}
+
+  @media(max-width:899px){
+    .route-head{left:6%;top:70px}
+    .route-head h2{font-size:26px}
+    .route-copy{left:4%;right:4%;top:178px;translate:none;width:auto;padding:20px 20px 22px}
+    .route-steps h3{font-size:18px}
+    .route-steps p{font-size:14px}
+    .route-legend{display:none}
+    .route-totals{left:4%;right:4%;bottom:44px;max-width:none;justify-content:center;gap:6px}
+    .route-totals>div{min-width:0;flex:1 1 40%;padding:8px 10px}
+    .route-totals b{font-size:16px}
+    .route-note{text-align:center}
+  }
+  @media(prefers-reduced-motion:reduce){.route-story.is-pinned .route-steps article,.route-story.is-pinned .route-totals,.route-story.is-pinned .route-head{transform:none}}
+</style>

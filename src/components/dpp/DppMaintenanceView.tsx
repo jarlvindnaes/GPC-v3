@@ -57,7 +57,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
       {/* Hero Image */}
       <div className="w-full shrink-0" data-name="hero image">
         <img
-          alt={`${data.categorization.displayName} — detail view`}
+          alt={`${data.categorization.displayName} · detail view`}
           className="pointer-events-none block w-full"
           src={data.commerce.photographs.detail}
         />
@@ -315,7 +315,7 @@ export function DppMaintenanceView({ scrollRef }: DppMaintenanceViewProps) {
       {/* Image 3 */}
       <div className="w-full shrink-0" data-name="image 3">
         <img
-          alt={`${data.materialsAndComponents.primaryMaterial} — material source`}
+          alt={`${data.materialsAndComponents.primaryMaterial} · material source`}
           className="pointer-events-none block w-full"
           src={data.commerce.photographs.materialSource}
         />

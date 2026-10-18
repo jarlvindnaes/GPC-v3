@@ -51,7 +51,7 @@ export default function DppInfoView({ scrollRef }: DppInfoViewProps) {
       {/* Hero Image */}
       <div className="w-full shrink-0" data-name="big 1">
         <img
-          alt={`${data.categorization.displayName} — ${data.categorization.category.toLowerCase()} by ${data.identity.brandName}`}
+          alt={`${data.categorization.displayName} · ${data.categorization.category.toLowerCase()} by ${data.identity.brandName}`}
           className="pointer-events-none block w-full"
           src={data.commerce.photographs.hero}
         />

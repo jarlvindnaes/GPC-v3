@@ -183,7 +183,7 @@ function RedListLogo() {
         preserveAspectRatio="none"
         viewBox="0 0 80 80"
         role="img"
-        aria-label="International Living Future Institute — Red List Free"
+        aria-label="International Living Future Institute · Red List Free"
       >
         <g clipPath="url(#clip0_dpp_impact_14988)">
           <path d={redListIcons.d1} fill="#EE4D24" />
@@ -224,7 +224,7 @@ function EpDverified() {
           preserveAspectRatio="none"
           viewBox="0 0 160 160"
           role="img"
-          aria-label="EPD Verified — Environmental Product Declaration"
+          aria-label="EPD Verified · Environmental Product Declaration"
         >
           <g clipPath="url(#clip0_dpp_impact_21244)" filter="url(#filter0_dd_dpp_impact_21244)" id="EPDverified">
             <path d={certIcons.p204ab580} fill="var(--fill-0, #62B345)" id="Union" />
@@ -319,7 +319,7 @@ export default function DppImpactView({ scrollRef }: DppImpactViewProps) {
       {/* Hero Image */}
       <div className="w-full shrink-0" data-name="hero image">
         <img
-          alt={`${data.materialsAndComponents.primaryMaterial} — sustainably sourced material`}
+          alt={`${data.materialsAndComponents.primaryMaterial} · sustainably sourced material`}
           className="pointer-events-none block w-full"
           src={data.commerce.photographs.materialSource}
         />

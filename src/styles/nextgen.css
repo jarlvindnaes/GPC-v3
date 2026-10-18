@@ -397,3 +397,34 @@ html{scroll-padding-top:115px}
 @media(max-width:1000px){.trust .trust-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.trust-body{grid-template-columns:1fr;gap:28px;margin-top:25px}.trust-body .trust-lead{font-size:17px}}
 @media(max-width:480px){.trust .trust-grid{grid-template-columns:1fr;gap:24px}}
+/* Trust's points carry more text than the sources: give them most of the width, and on medium screens put the lead
+   above them (full width) so no empty column is left beside it */
+.trust-body{grid-template-columns:minmax(0,.7fr) minmax(0,1.5fr);gap:6%}
+@media(max-width:1100px){.trust-body{grid-template-columns:1fr;gap:32px}.trust-body .trust-lead{max-width:none}}
+/* "Time to add each product" in the site's calmer palette: muted slate-blue for the first product, soft sage for the
+   reused ones (instead of mint green), and a slate→sage curve ending in a deep sage dot */
+.rc-bar{fill:#d6ddd3;stroke:none}
+.rc-bar.is-first{fill:#d3d9ee;stroke:none}
+.rc-start{fill:#7283c9;filter:drop-shadow(0 0 4px #7283c955)}
+.rc-head{fill:#6c8270;filter:drop-shadow(0 0 4px #6c827055)}
+/* Medium screens: the 3D chair reaches in behind the hero copy, so the text gets a dark halo in the hero's own
+   near-black to stay readable over the wood */
+@media(max-width:1180px){
+ .enterprise .cinematic-hero .hero-copy :is(.eyebrow,h1,.hero-description){text-shadow:0 0 4px #0a1017,0 0 12px #0a1017,0 0 24px #0a1017,0 0 40px #0a1017cc}
+ .enterprise .cinematic-hero .hero-description{color:#c3ccd8}
+}
+@media(max-width:1180px){.enterprise .hero-chair-stage::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#0a1017e6 0%,#0a1017b3 34%,#0a101700 62%)}}
+/* "From product to proof": its three steps in the same points design as the sources and trust sections: a blue left
+   rule, a small number, the title and a short line (no step names or arrows) */
+.process .steps{gap:30px 32px;margin-top:50px}
+.process .steps article{border-top:0;border-left:2px solid #8295d1;padding:0 0 0 18px}
+.process .step-top{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#5f6d8a}
+.process .steps h3{margin:0;font-size:19px;font-weight:500;letter-spacing:normal;color:var(--pc-ink,#111b30)}
+.process .steps p{margin:6px 0 0;font-size:14px;line-height:1.5;color:#617058}
+/* White breaker between Input interface and the route story, like the homepage's "A product expert that never
+   sleeps" intro: centred eyebrow and a two-tone headline */
+.breaker{padding:90px 48px 84px;background:#fff;text-align:center;color:#242528}
+.breaker .eyebrow{display:block;margin:0 0 30px;font-size:12px;font-weight:500;letter-spacing:.14em;color:#686d76}
+.breaker h2{margin:0;font-size:32px;line-height:1.28;font-weight:500;letter-spacing:-.045em;color:#242528}
+.breaker h2 span{color:#80858d}
+@media(max-width:700px){.breaker{padding:55px 22px 50px}.breaker h2{font-size:25px}}
