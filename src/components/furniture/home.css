@@ -1390,3 +1390,69 @@ html.story-stage #product-passports .passport-composition>.phone-caption{flex:no
  html.story-stage #product-passports .passport-composition>.phone-live{padding-bottom:4px}
  html.story-stage #product-passports .passport-composition>.phone-caption{padding-bottom:32px}
 }
+/* One bullet at a time in the story: a chapter's bullets share one spot under its headline, and each hands over to
+   the next (it has left just before the next arrives, at that bullet's own timing); the last one stays. */
+html.story-stage .story-stage .chapter-points{display:grid}
+html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li{grid-area:1/1;--in:clamp(0,calc((var(--k) - var(--a)) / .12),1);--out:clamp(0,calc((var(--k) - var(--o,9)) / .1),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px))}
+html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li:nth-child(1){--o:1.13}
+html.story-stage #connect-clients .chapter-points li:nth-child(1){--o:1.3}
+/* chapters 1 and 2: a step's bullets share one spot under its title the same way */
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step{display:grid;grid-template-columns:minmax(0,1fr);align-content:start}
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence{grid-row:2;grid-column:1}
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2){--o:clamp(0,calc((var(--k) - var(--b2,9) + .055) / .045),1);opacity:calc(var(--s) * (1 - var(--o)));transform:translateY(calc((1 - var(--s)) * 22px - var(--o) * 14px))}
+@media(prefers-reduced-motion:reduce){html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li,html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence{transform:none}}
+/* one bullet at a time needs more room: in a step the first bullet comes with the title and has the first half, the
+   second the rest; and chapters 1 and 2 run longer (everything in them plays proportionally slower) */
+html.story-stage [data-story-marker="harvest-data"]{height:520vh}
+html.story-stage [data-story-marker="trusted-co2"]{height:220vh}
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--b1:.76;--b2:.93}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--b1:1.112;--b2:1.27}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.47}
+html.story-stage #trusted-co2 .globe-points .step:nth-child(2){--b1:1.48;--b2:1.7}
+/* chapter 1 re-timed for one bullet at a time: longer steps (the globe disperses faster after them, Home.astro), each
+   step's first bullet with its title for the first half, the second for the rest */
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--a:.76;--b:1.16;--b1:.76;--b2:.99}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--a:1.19;--b:1.52;--b1:1.19;--b2:1.37}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--a:1.55;--b:1.7;--b1:1.55}
+html.story-stage #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.7) / .056),1)}
+/* chapter 2: "It's the world first…" stays longer before the days-not-months bullet takes over */
+html.story-stage #trusted-co2 .globe-points .step:nth-child(2){--b1:1.44;--b2:1.74}
+/* chapter 1's first step starts earlier (while the globe is still assembling), so "No spreadsheets." has time */
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--a:.64;--b1:.64;--b2:1}
+/* a step's title arrives first and its first bullet a beat later and more slowly (as the product model story's
+   capability title and text do), so the two are related but not simultaneous */
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2){--s:clamp(0,calc((var(--k) - var(--b1,0)) / .1),1)}
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--b1:.7;--b2:1.03}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--b1:1.25;--b2:1.39}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.61}
+html.story-stage #trusted-co2 .globe-points .step:nth-child(2){--b1:1.46}
+/* chapter 1, final timing: every bullet has its own window (title, then its first bullet a beat later over .1, the
+   second taking over halfway), and the chapter runs longer so each window has room */
+html.story-stage [data-story-marker="harvest-data"]{height:640vh}
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--a:.64;--b:1.12;--b1:.68;--b2:.98}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--a:1.15;--b:1.55;--b1:1.19;--b2:1.43}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--a:1.58;--b:1.8;--b1:1.62}
+html.story-stage #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.8) / .056),1)}
+/* chapter 1, timed in the pinned part only (its k below 1 is the short scroll that brings the stage in): the three
+   steps share k .96–1.92 evenly, with quicker fades between steps (.06), and the chapter runs long enough for each
+   bullet to have a comfortable stretch of scroll */
+html.story-stage [data-story-marker="harvest-data"]{height:900vh}
+html.story-on.story-stage #harvest-data .globe-points .step:nth-child(n){--in:clamp(0,calc((var(--k) - var(--a)) / .06),1);--out:clamp(0,calc((var(--k) - var(--b)) / .06),1)}
+html.story-stage #harvest-data .globe-points .step>.sentence:nth-child(2){--s:clamp(0,calc((var(--k) - var(--b1,0)) / .06),1)}
+html.story-stage #harvest-data .globe-points .step:nth-child(1){--a:.96;--b:1.3;--b1:.99;--b2:1.18}
+html.story-stage #harvest-data .globe-points .step:nth-child(2){--a:1.36;--b:1.7;--b1:1.39;--b2:1.58}
+html.story-stage #harvest-data .globe-points .step:nth-child(3){--a:1.76;--b:1.92;--b1:1.79}
+html.story-stage #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.92) / .04),1)}
+/* phones: the passport phone is laid out under the passports chapter's text but stays on through "Connect with
+   clients", whose text (pill, longer bullet) runs lower; start it lower so it clears both */
+@media(max-width:599px){html.story-stage #product-passports .passport-composition{padding-top:48px}}
+/* a headline's second sentence ("Ahead of the rest.") a little lighter than its first */
+.chapter h3 .title-after{display:inline;margin:0;font:inherit;color:inherit;opacity:.62}
+/* (keeps the headline's own fade-in: the second sentence settles at .62) */
+html.story-on .chapter h3>span.title-after{opacity:calc(var(--t,1) * .62)}
+/* phones: the passport hint tucked up against the phone, and both kept clear of the colour fade at the bottom of the
+   screen (SiteHeader.astro) */
+@media(max-width:599px){
+ html.story-stage #product-passports .passport-composition{padding-bottom:64px}
+ html.story-stage #product-passports .passport-composition>.phone-caption{margin-top:-14px;padding-bottom:0}
+}

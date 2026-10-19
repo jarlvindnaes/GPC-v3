@@ -162,8 +162,9 @@ export function PassportPhone() {
               onClick={() => {
                 setExpanded(false);
               }}
-              // Plain dark tint: the blur comes from the page itself (passport-overlay.css), not a backdrop-filter.
-              className="absolute inset-0 cursor-default border-0 bg-black/40"
+              // No tint, just the blurred page behind (the blur comes from the page itself, passport-overlay.css, not a
+              // backdrop-filter); this layer only catches the click outside the phone.
+              className="absolute inset-0 cursor-default border-0 bg-transparent"
             />
             <div
               className="relative z-10 cursor-grab active:cursor-grabbing"
@@ -179,7 +180,8 @@ export function PassportPhone() {
                 onClick={() => {
                   setExpanded(false);
                 }}
-                className="absolute top-2 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white transition-all duration-300 hover:bg-white/30"
+                // dark, so it stands out from the blurred (mostly light) page behind
+                className="absolute top-2 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#1d2433]/75 text-white shadow-lg transition-all duration-300 hover:bg-[#1d2433]/90"
               >
                 <svg
                   className="h-5 w-5"

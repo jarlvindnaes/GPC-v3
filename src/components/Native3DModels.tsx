@@ -1060,8 +1060,9 @@ function IphoneHtmlModel({ overlayRef }: { overlayRef: React.RefObject<HTMLDivEl
     };
   }, [originalScene]);
 
+  // a gentle float (was 0.3 at speed 1.2: too much bobbing for a passport you read)
   return (
-    <Float floatIntensity={0.3} rotationIntensity={0} speed={1.2}>
+    <Float floatIntensity={0.12} rotationIntensity={0} speed={0.9}>
       <group position={offset}>
         <primitive object={scene} />
         {/* Invisible group at display centre — ScreenProjector reads its

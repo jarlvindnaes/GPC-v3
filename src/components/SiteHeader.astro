@@ -347,14 +347,23 @@ const links = [
     const topHandover = handover(topBand);
     const update = () => {
       queued = 0;
+      // the full-screen passport overlay is open: it covers the screen edges itself, so Safari should take its colours
+      // from it, not from a band underneath (back on when it closes)
+      if (document.documentElement.dataset.overlayOpen) {
+        band.style.display = fade.style.display = topBand.style.display = "none";
+        return;
+      }
       const [c, story] = colourAt(window.innerHeight - 4);
       let on = Boolean(story && c);
       if (on) {
         // only once the story's top is 80px clear of where the fade starts (so never over the section or the menu
         // above the story while it scrolls in)
         const box = story!.getBoundingClientRect();
-        // (only where there is a fade: the product story and the footer get the band as soon as they reach the bottom)
-        on = story!.matches(".product-story, .site-footer") || box.top + 80 <= window.innerHeight - probe.offsetHeight;
+        // (only where there is a fade: the product story gets the band as soon as it reaches the bottom; the footer only
+        // over the last 80px of the page, so until then it shows through the toolbar like the rest of the page, and at
+        // the very end the toolbar takes the footer's colour instead of turning white)
+        const end = document.documentElement.scrollHeight - window.innerHeight - window.scrollY <= 80;
+        on = story!.matches(".site-footer") ? end : story!.matches(".product-story") || box.top + 80 <= window.innerHeight - probe.offsetHeight;
         const panel = story!.querySelector<HTMLElement>(PANELS);
         const gap = panel ? Math.max(0, window.innerHeight - panel.getBoundingClientRect().bottom - parseFloat(BAND)) : 0;
         fade.style.height = `${72 + Math.round(gap)}px`;
@@ -392,6 +401,10 @@ const links = [
     };
     window.addEventListener("scroll", queue, { passive: true });
     window.addEventListener("resize", queue);
+    new MutationObserver(() => {
+      if (!document.documentElement.dataset.overlayOpen) shown = shownTop = ""; // repaint the bands on close
+      queue();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-overlay-open"] });
     update();
   }
 </script>
