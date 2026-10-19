@@ -68,4 +68,44 @@ const howItWorks = `${base}how-it-works/`;
 {!enterprise && <section class="audience section"><p class="eyebrow">{enterprise ? 'SEEN HOW IT WORKS?' : 'MADE TO GROW WITH YOU'}</p><div><h2>{enterprise ? <>Now see<br/><em>what it does for you</em></> : <>Complex portfolio?<br/><em>Meet the bigger picture.</em></>}</h2><a class="button outline" href={enterprise ? `${home}#benefits` : enterpriseUrl}>{enterprise ? 'What we solve' : 'Explore enterprise'} <span>↗︎</span></a></div><p>{enterprise ? 'Less time chasing data, emission numbers you can trust, and Digital Product Passports that keep working after the sale.' : 'For larger manufacturers in furniture and building products: connect suppliers, shared components and your existing systems.'}</p></section>}
 <ClosingCta id="contact" text={enterprise ? 'Bring a product family and your data challenges. Let’s explore how a connected foundation could work for your organisation.' : 'Bring one of your products. We’ll walk through its data, its footprint and what its passport could look like.'} subject={enterprise ? 'Product Connect · How it works' : 'Product Connect · Product demo'} />
 </main><Footer />
+<script>
+  // Arriving from a link to one of this page's sections (the homepage's product model "Learn more" links): jump
+  // there once the page has its final layout (no smooth scroll; the hero and stories change heights as they
+  // load). The pinned route story is entered with its first caption already in (--rk .1, as route-story.ts counts).
+  const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+  if (target) {
+    window.addEventListener('load', () => requestAnimationFrame(() => {
+      if (target.matches('.route-story.is-pinned')) {
+        const pin = target.querySelector<HTMLElement>('.route-pin');
+        const run = Math.max(1, target.offsetHeight - (pin?.offsetHeight || window.innerHeight));
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY + run * (0.3 / 7.4), behavior: 'instant' });
+      } else {
+        target.scrollIntoView({ behavior: 'instant' });
+      }
+    }), { once: true });
+  }
+  // Came here from the homepage's product model story ("Learn more", ?from=product-model): a back button returns to
+  // the story where the reader left it (the browser's own back keeps that scroll; a fresh visit links to the story)
+  const params = new URLSearchParams(location.search);
+  if (params.get('from') === 'product-model') {
+    params.delete('from');
+    const query = params.toString();
+    history.replaceState(history.state, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
+    const home = `${import.meta.env.BASE_URL}#product-model`;
+    const back = document.createElement('a');
+    back.className = 'story-back';
+    back.href = home;
+    back.innerHTML = '<span aria-hidden="true">←</span> Back to the product model';
+    back.addEventListener('click', (event) => {
+      let fromHome = false;
+      try { fromHome = new URL(document.referrer).origin === location.origin && new URL(document.referrer).pathname === import.meta.env.BASE_URL; } catch {}
+      if (fromHome && history.length > 1) {
+        event.preventDefault();
+        history.back();
+      }
+    });
+    document.body.append(back);
+    requestAnimationFrame(() => requestAnimationFrame(() => back.classList.add('is-on')));
+  }
+</script>
 </body></html>

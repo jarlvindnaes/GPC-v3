@@ -1469,6 +1469,8 @@ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:l
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2):last-child{opacity:calc(var(--s) * (1 - var(--o)) * (1 - var(--e)));transform:translateY(calc((1 - var(--s)) * 22px - var(--o) * 14px - var(--e) * 14px))}
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(3):last-child{opacity:calc(var(--s) * (1 - var(--e)));transform:translateY(calc((1 - var(--s)) * 22px - var(--e) * 14px))}
 html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li:last-child{--e:clamp(0,calc((var(--k) - 1.86) / .06),1);opacity:calc(var(--in) * (1 - var(--out)) * (1 - var(--e)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px - var(--e) * 14px))}
+/* the story's last bullet stays: the next section follows straight on */
+html.story-stage #beat-regulation .chapter-points li:last-child{--e:0}
 @media(prefers-reduced-motion:reduce){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:last-child,html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li:last-child{transform:none}}
 /* (with the last bullet leaving a beat before its title, each step's second bullet takes over a little earlier, so
    both bullets keep about the same time) */

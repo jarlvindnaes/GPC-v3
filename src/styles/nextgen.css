@@ -465,3 +465,12 @@ html{scroll-padding-top:115px}
 @media(max-width:700px){.enterprise .cinematic-hero h1{font-size:clamp(42px,10vw,60px)}}
 /* How it works: the hero eyebrow closer to its headline */
 .enterprise .cinematic-hero .hero-copy .eyebrow{margin-bottom:14px}
+/* "Back to the product model": shown when arriving from the homepage's model story (Landing.astro), floating low
+   on the left, clear of the screen's bottom edge (iOS Safari would take a fixed bar there as its toolbar colour) */
+.story-back{position:fixed;z-index:40;left:max(20px,calc((100vw - 1240px) / 2));bottom:calc(24px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border:1px solid #ffffff40;border-radius:999px;background:#141c2bf2;color:#f5f6f0;font-size:14px;font-weight:550;text-decoration:none;box-shadow:0 12px 32px #050b1b66;opacity:0;transform:translateY(12px);transition:opacity .4s ease,transform .4s ease,background .2s}
+.story-back.is-on{opacity:1;transform:none}
+.story-back:hover{background:#1d2840}
+.story-back:focus-visible{outline:2px solid #d6ef8c;outline-offset:3px}
+html[data-overlay-open] .story-back{display:none}
+@media(max-width:700px){.story-back{left:16px;padding:10px 15px;font-size:13px}}
+@media(prefers-reduced-motion:reduce){.story-back{transition:none;transform:none}}

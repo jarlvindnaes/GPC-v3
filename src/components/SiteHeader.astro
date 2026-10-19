@@ -12,7 +12,8 @@ interface Props {
 const { theme = 'light', current } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const links = [
-  { label: 'What we solve', href: base, key: 'home' },
+  // on the homepage its own top (the page dives into the globe chapter from there); elsewhere straight to it
+  { label: 'What we solve', href: current ? `${base}#benefits` : base, key: 'home' },
   { label: 'The product model', href: `${base}#product-model` },
   { label: 'How it works', href: `${base}how-it-works/`, key: 'how-it-works' },
 ];
@@ -472,15 +473,18 @@ const links = [
     // its fixed `active` from the server.
     const here = window.location.pathname;
     const links = [...header.querySelectorAll<HTMLAnchorElement>('nav a:not(.menu-cta)')];
-    // A link to this page's top (What we solve → homepage): scroll up smoothly instead of reloading,
+    // A link to this page's top (What we solve → homepage): jump up instead of reloading,
     // and it holds the dot from the top until another section's link takes over.
     const topLink = links.find((link) => {
       const url = new URL(link.href, window.location.href);
       return url.pathname === here && !url.hash;
     });
+    // (the page may take the click over: the homepage dives into its first story chapter instead)
     topLink?.addEventListener('click', (event) => {
       event.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.dispatchEvent(new Event('site:top-link', { cancelable: true }))) {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
     });
     const spied = links
       .map((link) => {
