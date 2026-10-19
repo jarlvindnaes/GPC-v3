@@ -246,21 +246,21 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
    if (chapter.id === 'harvest-data') {
     // the globe assembles from scattered stars as the chapter arrives, holds while the bullets play, and
     // disperses back into stars at the end (read by SupplyChainGlobe as --globe-scatter)
-    // slow on purpose: fully assembled just as the second step ("Save time and effort") reaches full opacity (k 1.42)
+    // slow on purpose: fully assembled just as the second step ("Save time and effort") reaches full opacity (k 1.38)
     // Stacked layout (phones, short screens): k runs out while the globe is still on screen, so there it
     // assembles as the card scrolls in, its nodes follow, and it never disperses.
     const scatter = staged
-     ? Math.max(1 - clamp((k - 0.05) / 1.37), clamp((k - 1.86) / 0.1)) // exit = the entrance in reverse, starting as the last text fades out
+     ? Math.max(1 - clamp((k - 0.05) / 1.33), clamp((k - 1.82) / 0.14)) // exit = the entrance in reverse, starting as the last text fades out
      : 1 - clamp((k - 0.1) / 0.8);
     chapter.style.setProperty('--globe-scatter', scatter.toFixed(3));
     // leaving: the stars turn sage and the stage fades from navy to the CO₂ charcoal in step with the dispersal
-    harvestExit = staged ? clamp((k - 1.86) / 0.1) : 0;
+    harvestExit = staged ? clamp((k - 1.82) / 0.14) : 0;
     chapter.style.setProperty('--globe-tint', harvestExit.toFixed(3));
     // once the globe has assembled, the supply-chain nodes and their labels are placed one by one,
     // through the "Save time and effort" step and done as its second bullet ("Suppliers are rewarded") settles
-    chapter.style.setProperty('--globe-place', clamp(staged ? (k - 1.42) / 0.2 : (k - 0.7) / 0.4).toFixed(3));
-    // risk regions light up red with the last step ("Real risk assessments", k 1.76–1.92 on the stage)
-    chapter.style.setProperty('--globe-risk', clamp(staged ? (k - 1.76) / 0.1 : (k - 1.46) / 0.14).toFixed(3));
+    chapter.style.setProperty('--globe-place', clamp(staged ? (k - 1.38) / 0.18 : (k - 0.7) / 0.4).toFixed(3));
+    // risk regions light up red with the last step ("Real risk assessments", k 1.68–1.82 on the stage)
+    chapter.style.setProperty('--globe-risk', clamp(staged ? (k - 1.678) / 0.1 : (k - 1.46) / 0.14).toFixed(3));
    }
    if (chapter.id === 'trusted-co2') {
     window.dispatchEvent(new CustomEvent('co2report:scroll', { detail: { arrived: Math.min(1, k), held: clamp(k - 1) } }));
