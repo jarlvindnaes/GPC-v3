@@ -1110,7 +1110,7 @@ html.story-stage #beat-regulation .chapter-points li:nth-child(2){--a:1.25}
 html.story-stage #harvest-data .globe-points .step:nth-child(2){--a:1.112;--b:1.42}
 html.story-stage #harvest-data .globe-points .step:nth-child(3){--a:1.462;--b:1.602}
 /* Every step with two bullets places the second on its own once the first has settled (as in "Save time and
-   effort"): "Stop chasing suppliers" in chapter 1 and "Verified and validated end to end" in chapter 2 */
+   effort"): "Stop chasing suppliers" in chapter 1 and "Verified & validated" in chapter 2 */
 /* Chapters 1–2, like the passport-style chapters: each step title stands alone for a beat, then its bullets are
    placed one at a time (--b1, --b2 on the step), all leaving with the step */
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2){--s:clamp(0,calc((var(--k) - var(--b1,0)) / .045),1);opacity:var(--s);transform:translateY(calc((1 - var(--s)) * 22px))}
@@ -1294,8 +1294,8 @@ html.model-stage .model-pin .capabilities article.is-on .cap-link{pointer-events
 @media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + 34px)}html.model-stage .model-pin .cap-icon{display:none}html.model-stage .model-pin .capabilities p{font-size:15px}}
 /* the capability text sits in the middle of the dark circle: centred between the sphere's rim (--dome) and the
    dots at the bottom, at every screen size */
-html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 64px) / 2);translate:-50% -50%}
-@media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 64px) / 2)}}
+html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 44px) / 2);translate:-50% -50%}
+@media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 44px) / 2)}}
 html.model-stage .model-pin .capabilities{align-items:center}
 /* "Learn more ↗︎": the arrow sits close to its label */
 .capabilities .cap-link{gap:10px}
@@ -1338,3 +1338,55 @@ html.story-stage .story-under{display:block;position:absolute;top:0;bottom:0;lef
 /* phones: the globe's canvas runs a little past both screen edges; clip it sideways too (its box spans the screen
    exactly), as iOS Safari otherwise lets the page pan sideways into that overflow despite html{overflow-x:clip} */
 @media(max-width:599px){#harvest-data .hero-visual{overflow:clip}}
+/* the story's tab row: a solid fill (the colour fade at the bottom of the screen passes under it, see SiteHeader) */
+.benefit-nav::before{background:#fff}
+/* phones: a taller story tab row with larger labels, easier to hit with a finger (50px; --tab-row follows its height) */
+@media(max-width:599px){.benefit-nav nav a{padding:16px 12px 14px;font-size:14px;line-height:20px}}
+/* once the supplier chapter has handed over (no longer .is-live), its globe and the round navy glow behind it are
+   hidden outright: they fade out on their own (the chapter itself never fades as a whole), and iOS Safari can leave
+   such a faded layer painted over the following chapters */
+html.story-stage #harvest-data:not(.is-live) .hero-visual{visibility:hidden}
+/* phones: no EPD process note in the emissions chapter (kept on larger screens) */
+@media(max-width:599px){.co2-note,.epd-process-note{display:none!important}}
+/* the emissions chapter's "Illustrative data" label in the top right corner, above its report (like the analyse
+   chapter's label in the top right of its card); the report clips its own label, so on the pinned stage the card
+   shows this one instead (aria-hidden: the report's own label stays for screen readers) */
+.co2-illustrative{display:none}
+html.story-stage .co2-card .co2-illustrative{position:absolute;top:-24px;right:16px;z-index:2;display:flex;align-items:center;gap:8px;font-size:11px;color:#a8b5a2;pointer-events:none}
+html.story-stage .co2-card .co2-illustrative::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6ef8c}
+html.story-on.story-stage .chapter .co2-card .co2-illustrative{--q:clamp(0,calc((var(--k) - .5) / .2),1);opacity:var(--q)}
+html.story-stage .co2-card .co2-report-wrap .rep-note{visibility:hidden}
+/* the first two chapters' step titles at the same size as the other chapters' headlines (they were smaller, so the
+   analyse chapter's headline read as a jump up) */
+html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step-title{font-size:30px;font-weight:480;letter-spacing:-.035em;line-height:1.22}
+@media(max-width:599px){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step-title{font-size:26px}}
+@media(max-width:599px) and (max-height:740px){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step-title{font-size:22px}}
+/* phones: the emissions chapter's second title wraps to two lines at that size; a tighter title-to-bullet gap and the
+   label a little lower keep its bullet clear of the "Illustrative data" label above the report */
+@media(max-width:599px){
+ html.story-stage #trusted-co2 .globe-points .step{gap:12px}
+ html.story-stage .co2-card .co2-illustrative{top:-20px}
+}
+/* wider screens: the emissions report's "Illustrative data" sits in the current view's heading row (top right, next
+   to the "Top component contributors" label, or above the overview's cards), as in the analyse chapter's card; the
+   label above the report is for phones only */
+@media(min-width:600px){
+ html.story-stage .co2-card .co2-illustrative{display:none}
+ html.story-stage .co2-card .rep-view-note{display:flex;align-items:center;gap:8px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:400;letter-spacing:normal;text-transform:none;color:#a8b5a2}
+ html.story-stage .co2-card .rep-view-note::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6ef8c}
+ html.story-stage .co2-card .rep-view>.rep-view-note{align-self:flex-end}
+ html.story-stage .co2-card .rep-view h4{display:flex;align-items:baseline}
+ html.story-stage .co2-card .rep-view h4 .rep-view-note{margin-left:auto;align-self:center}
+}
+/* the passport hint sits right under the phone (the phone gives up the room it needs) */
+#product-passports .passport-composition{display:flex;flex-direction:column;align-items:center;gap:10px}
+#product-passports .passport-composition>.phone-caption{display:block;max-width:300px;margin:0;text-align:center;font-size:12px;line-height:1.5;color:color-mix(in srgb,#455630 calc(var(--sage,0) * 100%),#6f6450)}
+html.story-stage #product-passports .passport-composition{height:100%;min-height:0}
+html.story-stage #product-passports .passport-composition>.phone-live{flex:1 1 auto;min-height:0;height:auto}
+html.story-stage #product-passports .passport-composition>.phone-caption{flex:none;padding-bottom:6px}
+/* wider screens: more room under the passport hint, and the phone's own bottom padding trimmed so the hint stays
+   close to it */
+@media(min-width:600px){
+ html.story-stage #product-passports .passport-composition>.phone-live{padding-bottom:4px}
+ html.story-stage #product-passports .passport-composition>.phone-caption{padding-bottom:32px}
+}

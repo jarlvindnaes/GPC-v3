@@ -38,6 +38,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
 
   <div class="rep-views">
     <section class="rep-view is-active" data-view="0" aria-label="Overview">
+      <span class="rep-view-note" aria-hidden="true">Illustrative data</span>
       <div class="rep-metrics">
         {metrics.map((m) => (
           <div class="rep-card">
@@ -60,7 +61,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     </section>
 
     <section class="rep-view" data-view="1" aria-label="Top component contributors">
-      <h4>Top component contributors <small>kg CO₂ eq</small></h4>
+      <h4>Top component contributors <small>kg CO₂ eq</small><span class="rep-view-note" aria-hidden="true">Illustrative data</span></h4>
       <div class="rep-bars" aria-hidden="true">
         <div class="sk-tip bar-tip"><b></b><span></span></div>
         {[0, 5, 10, 15].map((g) => <span class="rep-grid" style={`bottom:calc(var(--lab) + (100% - var(--lab)) * ${g / barMax})`}><em>{g}</em></span>)}
@@ -215,6 +216,9 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
   }
   .rep-view h4 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
   .rep-view h4 small { margin-left: 6px; font-size: 11px; font-weight: 400; color: var(--muted); }
+  /* "Illustrative data" in a view's heading row (shown where the page asks for it: home.css, the pinned emissions
+     chapter on wider screens); the corner .rep-note covers everywhere else */
+  .rep-view-note { display: none; }
 
   .rep-card { border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
   .rep-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }

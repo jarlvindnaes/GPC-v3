@@ -11,7 +11,7 @@ import McpGraphic from './McpGraphic.astro';
   <McpGraphic />
 </section>
 <style>
-  .integrations{position:relative;isolation:isolate;display:flex;align-items:center;gap:20px;min-height:460px;padding:80px 7%;background:#111214;color:#f8f9fc;overflow:hidden;border-top:1px solid #292a2d}
+  .integrations{position:relative;isolation:isolate;display:flex;align-items:center;gap:20px;min-height:460px;padding:80px max(7%, calc((100% - 1240px) / 2));background:#111214;color:#f8f9fc;overflow:hidden;border-top:1px solid #292a2d}
   .integrations::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:48px 48px}
   .integrations-copy{flex:1;min-width:0;max-width:580px}
   .integrations-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}

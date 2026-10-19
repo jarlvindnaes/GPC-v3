@@ -31,5 +31,7 @@
      lens scene itself still sits in the right column (--scene-left: where that column begins) */
   .input-scene canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
   @media(min-width:701px){.input-scene{position:static}.input-scene canvas{z-index:-1;--scene-left:.45}}
+  /* wide screens: the copy starts at the site's 1240px content edge, like the other sections */
+  @media(min-width:701px){.input-copy{padding-left:max(7%, calc((100vw - 1240px) / 2))}}
   @media(max-width:700px){.input-interface{grid-template-columns:1fr;padding-bottom:48px}.input-copy{padding:65px 6% 10px}.input-scene{min-height:340px}} /* the scene's labels sit ~17px above its bottom edge; +48px matches the 65px above the copy */
 </style>

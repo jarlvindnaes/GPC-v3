@@ -1,0 +1,48 @@
+---
+// The closing call to action, shared by the homepage and How it works: "Your products. Let's connect the dots.",
+// with the animated logo turning in its top right corner (its dots connecting), on the navy of How it works.
+import PcLogoAnimated from './PcLogoAnimated.astro';
+
+interface Props {
+  id?: string;
+  text: string;
+  subject: string; // the email's subject line
+}
+const { id, text, subject } = Astro.props;
+---
+<section class="closing-cta" id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+  <PcLogoAnimated class="closing-cta-mark" seconds={4} />
+  <p class="closing-cta-eyebrow">LET’S MAKE IT CONCRETE</p>
+  <h2 id={id ? `${id}-title` : undefined}>Your products.<br/><em>Let’s connect the dots.</em></h2>
+  <div class="closing-cta-bottom">
+    <p>{text}</p>
+    <a class="closing-cta-button" href={`mailto:contact@productconnect.com?subject=${encodeURIComponent(subject)}`}>Let’s start a conversation <span aria-hidden="true">↗︎</span></a>
+  </div>
+  <p class="closing-cta-email">contact@productconnect.com</p>
+</section>
+<style>
+  .closing-cta{position:relative;padding:104px max(7%, calc((100% - 1240px) / 2));background:#1b2b45;color:#f5f6f0;border-top:1px solid #ffffff20;font-family:Inter,Arial,sans-serif}
+  .closing-cta-eyebrow{margin:0 0 27px;font-size:12px;font-weight:550;letter-spacing:1.4px;line-height:18px;color:#f5f6f0}
+  .closing-cta h2{margin:0;font-size:clamp(46px,6vw,90px);font-weight:480;line-height:1.07;letter-spacing:-.05em;color:#f5f6f0}
+  /* (font: inherit throughout, as the pages' own em styles differ) */
+  .closing-cta h2 em{display:inline;margin:0;font:inherit;font-style:normal;letter-spacing:inherit;text-transform:none;color:#a8b8d5}
+  .closing-cta-bottom{display:flex;justify-content:space-between;align-items:center;gap:40px;margin-top:40px}
+  .closing-cta-bottom>p{max-width:465px;margin:16px 0;font-size:16px;line-height:1.75;color:#b2bfaa}
+  .closing-cta-button{display:flex;align-items:center;gap:30px;flex:none;padding:18px 23px;border:1px solid #87997e;border-radius:6px;background:transparent;color:#f5f6f0;font-size:14px;font-weight:650;text-decoration:none;transition:background .2s}
+  .closing-cta-button:hover{background:#ffffff10}
+  .closing-cta-button:focus-visible{outline:2px solid #d6ef8c;outline-offset:3px}
+  .closing-cta-email{margin:25px 0 0;font-size:12px;color:#b2bfaa}
+  /* the animated logo as an illustration in the top right corner (still with reduced motion); sized by height, as the
+     logo component sets its height (its orbit reaches past its box on the right) */
+  .closing-cta :global(svg.closing-cta-mark){position:absolute;top:clamp(48px,6vw,90px);right:max(clamp(60px,9vw,170px), calc((100% - 1240px) / 2 + 60px));height:clamp(120px,14vw,200px);width:auto;color:#f5f6f0;--pc-logo-dot:#8fa0f2;opacity:.9;pointer-events:none}
+  /* content keeps to the site's 1240px width on wide screens (padding: its own, or the content edge if larger) */
+  @media(max-width:1000px){.closing-cta{padding:80px 6%}}
+  @media(max-width:700px){
+    .closing-cta{padding:65px 6%}
+    .closing-cta h2{font-size:49px}
+    .closing-cta-bottom{flex-direction:column;align-items:flex-start;gap:15px;margin-top:20px}
+    .closing-cta-bottom>p{font-size:15px;margin:15px 0}
+    .closing-cta-button{gap:18px;padding:16px 18px;font-size:12px}
+    .closing-cta :global(svg.closing-cta-mark){top:30px;right:36px;height:64px}
+  }
+</style>

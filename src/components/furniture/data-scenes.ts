@@ -1,5 +1,23 @@
 import { reducedMotion } from "../../utilities/motion";
 // Lightweight procedural data diagrams. No WebGL or animation dependencies.
+// the sphere's surface: a radial gradient from a highlight up and to the left of its centre out to its rim
+const SHADE: [number, string][] = [[0, "#10151d"], [0.65, "#080c12"], [1, "#030508"]];
+// the colour of that gradient at (px, py): solve for the gradient circle through the point (centre moving from the
+// focus f to c as the radius grows from 0 to r) and interpolate the colour stops
+function shadeAt(fx: number, fy: number, cx: number, cy: number, r: number, px: number, py: number) {
+  const dx = cx - fx, dy = cy - fy, ex = px - fx, ey = py - fy;
+  const a = dx * dx + dy * dy - r * r, b = -2 * (ex * dx + ey * dy), c = ex * ex + ey * ey;
+  const disc = Math.max(0, b * b - 4 * a * c);
+  const t = Math.min(1, Math.max(0, a === 0 ? -c / b : (-b - Math.sqrt(disc)) / (2 * a)));
+  const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  let i = 0;
+  while (i < SHADE.length - 2 && t > SHADE[i + 1][0]) i++;
+  const [t0, c0] = SHADE[i], [t1, c1] = SHADE[i + 1];
+  const k = Math.min(1, Math.max(0, (t - t0) / (t1 - t0)));
+  const a0 = rgb(c0), a1 = rgb(c1);
+  return `rgb(${a0.map((v, j) => Math.round(v + (a1[j] - v) * k)).join(", ")})`;
+}
+
 export function initDataScenes() {
   const cleanups: (() => void)[] = [];
   for (const canvas of document.querySelectorAll<HTMLCanvasElement>("canvas[data-scene]")) {
@@ -35,10 +53,15 @@ export function initDataScenes() {
         ctx.fillStyle = glow;
         ctx.fillRect(0, 0, w, h);
         const shade = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.5, 0, cx, cy, r);
-        shade.addColorStop(0, "#10151d");
-        shade.addColorStop(0.65, "#080c12");
-        shade.addColorStop(1, "#030508");
+        for (const [at, color] of SHADE) shade.addColorStop(at, color);
         dot(cx, cy, r, shade);
+        // the sphere's colour where it meets the bottom of the canvas (centre), for the colour band iOS Safari takes
+        // its toolbar colour from (SiteHeader.astro)
+        const key = `${w}|${h}`;
+        if (canvas.dataset.bottomKey !== key) {
+          canvas.dataset.bottomKey = key;
+          canvas.dataset.bottomColour = shadeAt(cx - r * 0.35, cy - r * 0.5, cx, cy, r, cx, h - 1);
+        }
         // Spectral atmosphere: warm amber at left, pale green overhead, cool blue at right.
         const atmosphere = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
         atmosphere.addColorStop(0, "#c77a55");
@@ -131,8 +154,11 @@ export function initDataScenes() {
           }
         }
       } else {
-        const ox = w * lead,
-          sw = w - ox,
+        // on wide screens the scene keeps to the site's 1240px content width on the right, as the copy does on the left
+        // (the streams still run in from the canvas's left edge); up to ~1440px wide nothing changes
+        const inset = Math.max(0, (w - 1240) / 2 - 0.07 * w),
+          ox = w * lead,
+          sw = w - inset - ox,
           lx = ox + sw * 0.43,
           cy = h * 0.47,
           ry = Math.min(h * 0.42, sw * 0.4),
@@ -203,8 +229,9 @@ export function initDataScenes() {
         ctx.fillText("Input interface", lx, cy + ry + 20);
         ctx.fillStyle = "#d9e2ef";
         ctx.font = "12px Inter, sans-serif";
-        ctx.fillText("Dynamic", focus, cy + 40);
-        ctx.fillText("Product Model", focus, cy + 57);
+        // under the orb, clear of it at any size (the orb grows with the scene)
+        ctx.fillText("Dynamic", focus, cy + orbR + 22);
+        ctx.fillText("Product Model", focus, cy + orbR + 39);
       }
     }
     function tick(now: number) {
