@@ -29,11 +29,20 @@ export const STORY_SNAP = {
 // quick: a stretch of it, from and to scroll positions, whose step-to-step glides take at most ms, for steps that sit
 // far apart in scroll but should feel as brisk as the rest; dots: its progress dots, one li per step, lit here for the
 // step the page rests on or is gliding to, so a dot moves the moment a step is chosen, not when the page arrives;
-// leads: per step, where a click on its dot jumps to before gliding onto it, default the step before it)
+// leads: per step, where a click on its dot jumps to before gliding onto it, default the step before it; entryPace:
+// the glide into its first step from above takes that many times as long as its other glides, default 1)
 type Quick = { from: number; to: number; ms: number };
 type Source = () =>
   | number[]
-  | { points: number[]; top: number; pace?: number; quick?: Quick; dots?: HTMLElement | null; leads?: number[] };
+  | {
+      points: number[];
+      top: number;
+      pace?: number;
+      entryPace?: number;
+      quick?: Quick;
+      dots?: HTMLElement | null;
+      leads?: number[];
+    };
 
 const sources = new Set<Source>();
 const TOUCH = "(hover: none) and (pointer: coarse)";
@@ -44,6 +53,7 @@ let stories: number[][] = []; // each story's points, as scroll positions, in or
 let entries: number[] = []; // per story: the scroll position where it fills half the screen, coming from above
 let exitsUp: number[] = []; // per story: the scroll position where its top edge is at the bottom of the screen (out of view above)
 let paces: number[] = []; // per story: how much longer its glides take
+let entryPaces: number[] = []; // per story: and its way in, relative to that
 let quicks: Quick[] = []; // stretches whose step-to-step glides are capped
 let dotLists: (HTMLElement | null)[] = []; // per story: its progress dots
 let leadLists: (number[] | undefined)[] = []; // per story: where a dot's jump starts, per step
@@ -99,7 +109,9 @@ function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
   // at most 2.7s (GLIDE_PACE scales it all: 1.5 = half as slow again as the first version)
   const length = Math.abs(distance);
   // (a story that asks for it glides slower: its steps, and the glide into it)
-  const storyPace = paces[stories.findIndex((list) => list.includes(target))] ?? 1;
+  const s = stories.findIndex((list) => list.includes(target));
+  const entering = s >= 0 && target === stories[s][0] && from < target - 3; // (into its first step, from above)
+  const storyPace = (paces[s] ?? 1) * (entering ? entryPaces[s] ?? 1 : 1);
   const quick = quicks.find((q) => from >= q.from - 3 && from <= q.to + 3 && target >= q.from - 3 && target <= q.to + 3);
   const duration = Math.min(
     Math.min(1800, 420 + Math.max(0, length - 500) * 0.9) * GLIDE_PACE * pace * storyPace,
@@ -677,6 +689,7 @@ function rebuild() {
       list: [...list].sort((a, b) => a - b),
       top: Array.isArray(result) ? undefined : result.top,
       pace: Array.isArray(result) ? 1 : result.pace ?? 1,
+      entryPace: Array.isArray(result) ? 1 : result.entryPace ?? 1,
       quick: Array.isArray(result) ? undefined : result.quick,
       dots: Array.isArray(result) ? null : result.dots ?? null,
       leads: Array.isArray(result) ? undefined : result.leads
@@ -686,6 +699,7 @@ function rebuild() {
   const kept = read.filter((story) => story.list.length > 1);
   stories = kept.map((story) => story.list);
   paces = kept.map((story) => story.pace);
+  entryPaces = kept.map((story) => story.entryPace);
   quicks = kept.flatMap((story) => (story.quick ? [story.quick] : []));
   dotLists = kept.map((story) => story.dots);
   leadLists = kept.map((story) => story.leads);

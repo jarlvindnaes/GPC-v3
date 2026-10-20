@@ -559,7 +559,8 @@ export function initRouteStory(root: HTMLElement) {
     const run = Math.max(1, root.offsetHeight - (pin?.offsetHeight || window.innerHeight));
     const top = root.getBoundingClientRect().top + window.scrollY;
     const rests = [...Array.from({ length: steps }, (_, i) => i + 0.5), steps + 0.05];
-    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5, dots: root.querySelector<HTMLElement>(".route-dots") }; // (and its exit)
+    // (slow glides, pace 5, to follow the route being drawn; the way in at double that speed)
+    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5, entryPace: 0.5, dots: root.querySelector<HTMLElement>(".route-dots") }; // (and its exit)
   });
 
   return () => {
