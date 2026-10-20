@@ -2,12 +2,11 @@ import { useEffect, useRef } from "react";
 import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
-import { DRACO_DECODER_PATH } from "../../utilities/draco";
+import { sharedDracoLoader } from "../../utilities/threeAssets";
 
 // A single metal screw lifted straight out of the Cross Chair GLB, isolated and slowly turning in the
 // top-right of the #components section. It reuses the chair model (already loaded + browser-cached on this
@@ -94,7 +93,7 @@ export function ScrewSpinner() {
       controls.update();
     };
 
-    const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
+    const draco = sharedDracoLoader(); // (one per page, not disposed here)
     const loader = new GLTFLoader().setDRACOLoader(draco);
     loader.setMeshoptDecoder(MeshoptDecoder);
 
@@ -192,7 +191,6 @@ export function ScrewSpinner() {
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
       controls.dispose();
-      draco.dispose();
 
       spinner.traverse((object) => {
         const mesh = object as Three.Mesh;

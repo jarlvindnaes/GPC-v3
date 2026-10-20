@@ -12,7 +12,7 @@ import ProductMemory from '../furniture/ProductMemory.astro';
 import Integrations from '../furniture/Integrations.astro';
 import RouteStory from './RouteStory.astro';
 import CinematicHero from './CinematicHero';
-import { ExplodingChair } from '../wireframe/ExplodingChair';
+import { LazyExplodingChair } from '../wireframe/LazyExplodingChair';
 interface Props { enterprise?: boolean }
 const { enterprise = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
@@ -26,9 +26,10 @@ const howItWorks = `${base}how-it-works/`;
 <head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{enterprise ? 'How it works · Product Connect' : 'Beautiful furniture. A clearer footprint · Product Connect'}</title>
-<meta name="description" content={enterprise ? 'How Product Connect turns a product into connected data: map its components and suppliers, build one product model, and put it to work for calculations, passports and teams.' : 'Calculate your furniture’s carbon footprint and create Digital Product Passports from connected product data.'} />
-{enterprise && <SeoMeta title="How it works · Product Connect" description="How Product Connect turns a product into connected data: map its components and suppliers, build one product model, and put it to work for calculations, passports and teams." path="how-it-works/" />}
+<meta name="description" content={enterprise ? 'How Product Connect turns a product into connected data: its components and suppliers in one product model, for calculations, passports and teams.' : 'Calculate your furniture’s carbon footprint and create Digital Product Passports from connected product data.'} />
+{enterprise && <SeoMeta title="How it works · Product Connect" description="How Product Connect turns a product into connected data: its components and suppliers in one product model, for calculations, passports and teams." path="how-it-works/" imageAlt="Product Connect: how a product becomes connected data" />}
 <meta name="theme-color" content="#141816" />
+<link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin />
 <link rel="icon" href={`${base}nextgen/favicon.svg`} type="image/svg+xml" /><link rel="icon" href={`${base}favicon-dark.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)" /><link rel="icon" href={`${base}favicon-light.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: light)" /><link rel="icon" href={`${base}favicon.ico`} sizes="48x48" /><link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
 <script is:inline>try{if(localStorage.getItem("pc-motion-paused")==="1")document.documentElement.classList.add("motion-paused")}catch(e){}</script>
 </head>
@@ -39,7 +40,7 @@ const howItWorks = `${base}how-it-works/`;
 <section class="hero cinematic-hero">
 {!enterprise && <div class="hero-topline"><span><i></i> PHYSICAL PRODUCTS. CONNECTED INTELLIGENCE.</span><span class="edition">PRODUCT INTELLIGENCE / MADE VISIBLE</span></div>}
 <div class="hero-layout">
-{enterprise && <div class="hero-chair-stage" aria-hidden="true"><span class="chair-placeholder"><img src={`${base}nextgen/hero-chair-placeholder.webp`} alt="" width="360" height="327" decoding="async" fetchpriority="high"/></span><ExplodingChair client:only="react" variant="soft" framePad={0.45} autoRotate={false} offsetX={0.304} offsetY={0.2} explodeAmount={0.15} view={[-0.4, 0.78, 1]} media="(min-width: 721px)" depthOfField={0.007} /></div>}
+{enterprise && <div class="hero-chair-stage" aria-hidden="true"><span class="chair-placeholder"><img src={`${base}nextgen/hero-chair-placeholder.webp`} alt="" width="360" height="327" decoding="async" fetchpriority="high"/></span><LazyExplodingChair client:only="react" variant="soft" framePad={0.45} autoRotate={false} offsetX={0.304} offsetY={0.2} explodeAmount={0.15} view={[-0.4, 0.78, 1]} media="(min-width: 721px)" depthOfField={0.007} /></div>}
 <div class="hero-copy"><p class="eyebrow">{enterprise ? 'HOW IT WORKS' : 'CO₂ CALCULATIONS + DIGITAL PRODUCT PASSPORTS'}</p>
 <h1>{enterprise ? <>Every product.<br/><em>Taken apart.<br/>Connected.</em></> : <>Beautiful outside.<br/><em>Intelligent<br/>inside.</em></>}</h1>
 <p class="hero-description">{enterprise ? 'See how Product Connect breaks a product down to its components, connects the data behind each one, and puts it to work for calculations, passports and the teams who need them.' : 'You make the furniture. We help you understand its impact · and turn your product data into a Digital Product Passport.'}</p>
@@ -59,7 +60,7 @@ const howItWorks = `${base}how-it-works/`;
 <section class="intro section" id="foundation"><p class="eyebrow">{enterprise ? 'CONNECTED AT THE COMPONENT LEVEL' : 'GOOD DESIGN DESERVES GOOD DATA'}</p><div class="intro-grid"><h2>{enterprise ? <>Better connected.<br/><em>At every level.</em></> : <>Know what’s in it.<br/>Show what<br/><em>it stands for.</em></>}</h2><div><p class="large-copy">{enterprise ? 'A material, a finish or a shared component can appear in thousands of products. Its data should stay connected to all of them.' : 'Your products have a story. The materials you choose. The way they’re made. The life they can have after the first sale.'}</p><p>{enterprise ? 'Product Connect organises that knowledge at the component level, so teams can work from the same foundation across calculations, documentation and product passports.' : 'Product Connect brings that information together. Calculate the carbon footprint, understand what drives it, and share the right information through a product passport.'}</p></div></div>
 <NodeFlow />
 </section>
-<section class="feature section" id="passport"><div class="feature-copy"><p class="eyebrow">{enterprise ? 'ACROSS THE ORGANISATION' : 'BEYOND THE FIRST SALE'}</p><h2>{enterprise ? <>One product.<br/>Many teams.<br/><em>Shared knowledge.</em></> : <>The relationship<br/>doesn’t end<br/><em>at checkout</em></>}</h2><p>{enterprise ? 'Design needs material insight. Sustainability needs traceable calculations. Operations needs reliable product information. Connect the source, so the knowledge travels with the product.' : 'A product passport makes useful information part of the product itself. A simple scan can connect its owner to the materials, the footprint and the guidance that helps it last.'}</p><a class="text-link" href={enterprise ? '#contact' : `${base}dpp/`}>{enterprise ? 'Talk through your use case' : 'Explore a sample passport'} <span>↗︎</span></a></div><div class="feature-panel">{enterprise ? <><p class="eyebrow">ONE FOUNDATION / MULTIPLE USES</p><div class="team-row"><strong>Design & engineering</strong><span>Materials + components</span></div><div class="team-row"><strong>Sustainability</strong><span>Impact + data provenance</span></div><div class="team-row"><strong>Procurement</strong><span>Suppliers + documentation</span></div><div class="team-row"><strong>Sales & aftercare</strong><span>Passports + product knowledge</span></div><div class="panel-bottom"><i></i> Connected through Product Connect</div></> : <><div class="sample-top"><span>PRODUCT IDENTITY / EXAMPLE</span><span>↗︎</span></div><h3>A story worth<br/>keeping</h3><div class="sample-material"><img src={`${base}nextgen/chair.png`} alt="Oak chair shown as a sample product" width="1536" height="1024" loading="lazy"/><span>Oak chair<br/><small>Material. Impact. Care.</small></span></div><div class="sample-links"><span>Explore materials <b>↗︎</b></span><span>Understand the footprint <b>↗︎</b></span><span>Care for your furniture <b>↗︎</b></span></div></>}</div></section>
+<section class="feature section" id="passport"><div class="feature-copy"><p class="eyebrow">{enterprise ? 'ACROSS THE ORGANISATION' : 'BEYOND THE FIRST SALE'}</p><h2>{enterprise ? <>One product.<br/>Many teams.<br/><em>Shared knowledge.</em></> : <>The relationship<br/>doesn’t end<br/><em>at checkout</em></>}</h2><p>{enterprise ? 'Design needs material insight. Sustainability needs traceable calculations. Operations needs reliable product information. Connect the source, so the knowledge travels with the product.' : 'A product passport makes useful information part of the product itself. A simple scan can connect its owner to the materials, the footprint and the guidance that helps it last.'}</p><a class="text-link" href={enterprise ? '#contact' : `${base}dpp/`}>{enterprise ? 'Talk through your use case' : 'Explore a sample passport'} <span aria-hidden="true">↗︎</span></a></div><div class="feature-panel">{enterprise ? <><p class="eyebrow">ONE FOUNDATION / MULTIPLE USES</p><div class="team-row"><strong>Design & engineering</strong><span>Materials + components</span></div><div class="team-row"><strong>Sustainability</strong><span>Impact + data provenance</span></div><div class="team-row"><strong>Procurement</strong><span>Suppliers + documentation</span></div><div class="team-row"><strong>Sales & aftercare</strong><span>Passports + product knowledge</span></div><div class="panel-bottom"><i></i> Connected through Product Connect</div></> : <><div class="sample-top"><span>PRODUCT IDENTITY / EXAMPLE</span><span>↗︎</span></div><h3>A story worth<br/>keeping</h3><div class="sample-material"><img src={`${base}nextgen/chair.png`} alt="Oak chair shown as a sample product" width="1536" height="1024" loading="lazy"/><span>Oak chair<br/><small>Material. Impact. Care.</small></span></div><div class="sample-links"><span>Explore materials <b>↗︎</b></span><span>Understand the footprint <b>↗︎</b></span><span>Care for your furniture <b>↗︎</b></span></div></>}</div></section>
 <section class="process section" id="how-it-works"><div class="section-heading"><div><p class="eyebrow">FROM PRODUCT TO PROOF</p><h2>{enterprise ? <>A shared foundation.<br/><em>A practical starting point.</em></> : <>Start with what you make.<br/><em>Build from there.</em></>}</h2></div></div><div class="steps"><article><div class="step-top"><span>01</span></div><h3>{enterprise ? 'Map the product model' : 'Bring your product data'}</h3><p>{enterprise ? 'Start with a representative product family. Map components, suppliers and the systems that hold the information.' : 'Start with a product, its materials and its bill of materials. We help you organise what you have and identify what is missing.'}</p></article><article><div class="step-top"><span>02</span></div><h3>{enterprise ? 'Build once. Reuse.' : 'See the impact'}</h3><p>{enterprise ? 'Link shared components across variants. Keep source information and data quality visible as the model grows.' : 'Calculate the footprint from the underlying data. See which components contribute most and where better data is needed.'}</p></article><article><div class="step-top"><span>03</span></div><h3>{enterprise ? 'Make the data useful' : 'Give it a passport'}</h3><p>{enterprise ? 'Use the connected model for LCA, product passports and documentation. Expand to additional families and teams.' : 'Publish product information in a Digital Product Passport. Connect customers to materials, care and repair information.'}</p></article></div></section>
 {enterprise && <div class="memory-band" id="product-memory"><ProductMemory /></div>}
 {enterprise && <section class="provenance section" id="provenance"><div class="section-heading"><div><p class="eyebrow">CONFIDENCE STARTS AT THE SOURCE</p><h2>Know the number.<br/><em>Know where it came from.</em></h2></div></div><div class="provenance-grid"><p>A useful calculation needs more than a result. Keep the origin of each input visible · and distinguish supplier information from team inputs and estimates.</p><div><div class="source-row"><span>01</span><strong>Supplier-provided</strong><p>Information from the people who make the component.</p></div><div class="source-row"><span>02</span><strong>Team-authored</strong><p>Product knowledge entered by your own organisation.</p></div><div class="source-row"><span>03</span><strong>File-extracted</strong><p>Information brought in from product files and models.</p></div><div class="source-row"><span>04</span><strong>Estimated</strong><p>Background data where primary information is missing.</p></div></div></div><div class="epd-note"><strong>Building products and EPDs</strong><p>Use the product model as a foundation for environmental documentation. EPD publication and independent verification depend on the product category, programme and agreed verification process.</p></div></section>}
@@ -71,14 +72,14 @@ const howItWorks = `${base}how-it-works/`;
 <script>
   // Arriving from a link to one of this page's sections (the homepage's product model "Learn more" links): jump
   // there once the page has its final layout (no smooth scroll; the hero and stories change heights as they
-  // load). The pinned route story is entered with its first caption already in (--rk .1, as route-story.ts counts).
+  // load). The pinned route story is entered on its first step (--rk .5, as route-story.ts counts and rests its steps).
   const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
   if (target) {
     window.addEventListener('load', () => requestAnimationFrame(() => {
       if (target.matches('.route-story.is-pinned')) {
         const pin = target.querySelector<HTMLElement>('.route-pin');
         const run = Math.max(1, target.offsetHeight - (pin?.offsetHeight || window.innerHeight));
-        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY + run * (0.3 / 7.4), behavior: 'instant' });
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY + run * (0.7 / 7.4), behavior: 'instant' });
       } else {
         target.scrollIntoView({ behavior: 'instant' });
       }
@@ -95,7 +96,8 @@ const howItWorks = `${base}how-it-works/`;
     const back = document.createElement('a');
     back.className = 'story-back';
     back.href = home;
-    back.innerHTML = '<span aria-hidden="true">←</span> Back to the product model';
+    back.setAttribute('aria-label', 'Back to the product model');
+    back.innerHTML = '<span aria-hidden="true">←</span> <span class="story-back-long">Back to the product model</span><span class="story-back-short">Back</span>';
     back.addEventListener('click', (event) => {
       let fromHome = false;
       try { fromHome = new URL(document.referrer).origin === location.origin && new URL(document.referrer).pathname === import.meta.env.BASE_URL; } catch {}
@@ -104,7 +106,7 @@ const howItWorks = `${base}how-it-works/`;
         history.back();
       }
     });
-    document.body.append(back);
+    document.querySelector('#main')?.prepend(back); // (inside the main landmark)
     requestAnimationFrame(() => requestAnimationFrame(() => back.classList.add('is-on')));
   }
 </script>

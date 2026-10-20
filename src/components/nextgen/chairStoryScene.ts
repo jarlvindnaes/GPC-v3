@@ -1,6 +1,5 @@
 import * as Three from "three";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
@@ -10,8 +9,8 @@ import { ChairDofShader } from "../wireframe/chair-dof";
 import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
 import { placeStaged, SOFT_RETURN_STAGES, softMovesFor } from "../wireframe/softChairStages";
 import { getStoryFrame } from "./productStoryMath";
-import { DRACO_DECODER_PATH } from "../../utilities/draco";
 import { SOFT_LIGHT } from "../wireframe/softChairLight";
+import { sharedDracoLoader } from "../../utilities/threeAssets";
 
 // "The intelligence inside" story, driven by scroll / the slider (same contract as productStoryScene).
 // It starts as a copy of the hero's exploding chair (wireframe/ExplodingChair.tsx): same model,
@@ -208,7 +207,7 @@ export async function createChairStoryScene(
     start.radius = assembled.radius;
   };
 
-  const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
+  const draco = sharedDracoLoader(); // (one per page, not disposed here)
   const loader = new GLTFLoader().setDRACOLoader(draco);
   loader.setMeshoptDecoder(MeshoptDecoder);
   let disposed = false;
@@ -448,7 +447,7 @@ export async function createChairStoryScene(
       return;
     }
     frame = requestAnimationFrame(render);
-    if (phone && now - last < 31) return;
+    if (now - last < (phone ? 31 : 15)) return; // ~30 fps on phones, ≤60 elsewhere
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     if (!visible || document.hidden) {
@@ -602,7 +601,6 @@ export async function createChairStoryScene(
     cancelAnimationFrame(frame);
     observer.disconnect();
     resize.disconnect();
-    draco.dispose();
     renderer.domElement.removeEventListener("pointerdown", onDown);
     renderer.domElement.removeEventListener("pointermove", onMove);
     renderer.domElement.removeEventListener("pointerup", onUp);

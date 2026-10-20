@@ -7,7 +7,6 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
@@ -15,8 +14,8 @@ import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { ChairDofShader } from "./chair-dof";
 import { placeStaged, SOFT_EXPLODE_SECONDS, softMovesFor } from "./softChairStages";
 import { CHAIR_MODEL as SOFT_CHAIR_MODEL } from "../dpp/dppChairModel";
-import { DRACO_DECODER_PATH } from "../../utilities/draco";
 import { SOFT_LIGHT } from "./softChairLight";
+import { sharedDracoLoader } from "../../utilities/threeAssets";
 
 // Exploded-assembly of the TAKT Cross Chair for the #components section. Adapted from
 // Drafts/wireframes/chair-scroll.js (vanilla three.js + CDN importmap) to a hydrated React island.
@@ -263,7 +262,7 @@ export function ExplodingChair({
       }
     };
 
-    const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
+    const draco = sharedDracoLoader(); // (one per page, not disposed here)
     const loader = new GLTFLoader().setDRACOLoader(draco);
     loader.setMeshoptDecoder(MeshoptDecoder);
 
@@ -412,8 +411,11 @@ export function ExplodingChair({
     const loopSeconds = holdSeconds + explodeSeconds;
 
     let raf = 0;
-    const animate = () => {
+    let lastFrame = 0;
+    const animate = (now = performance.now()) => {
       raf = requestAnimationFrame(animate);
+      if (now - lastFrame < 15) return; // at most ~60 fps (a depth pass and depth of field per frame)
+      lastFrame = now;
       const dt = clock.getDelta();
       if (!isNear.current) {
         return;
@@ -495,7 +497,6 @@ export function ExplodingChair({
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
       controls.dispose();
-      draco.dispose();
 
       scene.traverse((object) => {
         const mesh = object as Three.Mesh;

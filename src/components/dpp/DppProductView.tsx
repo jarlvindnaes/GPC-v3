@@ -3,7 +3,6 @@ import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import * as Three from "three";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
@@ -14,8 +13,8 @@ import { brandConfig } from "./dppBrandConfig";
 import { CHAIR_MODEL, partForPiece } from "./dppChairModel";
 import { slopeChair } from "./dppProductData";
 import type { PurchasablePart } from "./dppTypes";
-import { DRACO_DECODER_PATH } from "../../utilities/draco";
 import { SOFT_LIGHT } from "../wireframe/softChairLight";
+import { sharedDracoLoader } from "../../utilities/threeAssets";
 
 const data = slopeChair;
 
@@ -34,13 +33,11 @@ let studioEnvironment: Promise<Three.Texture> | null = null;
 
 export function preloadPartsView() {
   if (!chairSource) {
-    const draco = new DRACOLoader();
-    draco.setDecoderPath(DRACO_DECODER_PATH);
+    const draco = sharedDracoLoader();
     const loading = new GLTFLoader()
       .setDRACOLoader(draco)
       .loadAsync(CHAIR_MODEL)
       .then((gltf) => gltf.scene);
-    loading.finally(() => draco.dispose()).catch(() => undefined);
     loading.catch(() => {
       chairSource = null;
     });
@@ -254,7 +251,7 @@ function useChairCanvas(
     const animate = (now: number) => {
       animFrameRef.current = requestAnimationFrame(animate);
       if (!onScreen || document.hidden || renderer.domElement.closest("[data-render-paused]")) return;
-      if (phone && now - lastFrame < 31) return;
+      if (now - lastFrame < (phone ? 31 : 15)) return; // ~30 fps on phones, ≤60 elsewhere
       lastFrame = now;
       if (outline.selectedObjects.length) {
         composer.render();

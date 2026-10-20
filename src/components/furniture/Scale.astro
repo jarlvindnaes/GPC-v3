@@ -51,6 +51,7 @@ const milestones = [
 @media(min-width:600px) and (max-width:900px){.scale-copy{padding-bottom:250px}.scale-section svg,.scale-marks{top:auto;bottom:0;height:220px}} /* narrower screens: the curve runs below the text, not through it */
 @media(max-width:599px){.scale-copy{padding:60px 24px 230px}.scale-section{min-height:640px}.scale-details{gap:24px 20px}.scale-details strong{font-size:18px}.scale-section svg,.scale-marks{top:auto;bottom:0;height:200px}.scale-mark b{display:none}}
 @media(prefers-reduced-motion:reduce){.scale-reveal{clip-path:none;transition:none}.scale-spark,.scale-trail{display:none}.scale-mark{opacity:1;transform:none;transition:none}.scale-section.is-visible .scale-mark i::after{animation:none}}
+:global(html.motion-paused) :is(.scale-spark,.scale-trail){display:none} /* the footer's Pause animations (SMIL) */
 /* Same points design as How it works' "Know where it came from" sources: a numbered 2×2 grid, blue left rule,
    number, title and a short line */
 .scale-details{counter-reset:point;gap:30px 32px}

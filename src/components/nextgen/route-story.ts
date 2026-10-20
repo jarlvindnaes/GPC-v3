@@ -6,6 +6,7 @@
 import { geoDistance, geoInterpolate, geoLength, geoOrthographic, geoPath, type GeoPermissibleObjects } from "d3-geo";
 import { mesh, feature } from "topojson-client";
 import { reducedMotion } from "../../utilities/motion";
+import { registerSnapPoints } from "../../utilities/storySnap";
 import { MODE, airLanes, airports, example, localLines, ports, railLines, seaLanes, stations, type Hub, type LonLat } from "./route-data";
 
 const KM_PER_RADIAN = 6371;
@@ -52,16 +53,18 @@ function partial(t: Track, f: number): LonLat[] {
 // Camera keyframes over the chapters: the whole network, a close-up of Europe while the passenger track is
 // filtered out, then the example route, a close-up of the material extraction point while its road leg to the
 // nearest rail freight terminal is drawn, and back out for the main rail and sea legs.
+// Timed to the story's steps (each comes to rest at mk i + .5, utilities/storySnap.ts): what belongs to a step plays
+// during the glide into it and is done as it rests, so no step stops half way through a move.
 const KEYS: { mk: number; at: LonLat; zoom: number }[] = [
-  { mk: 3.0, at: [66, 30], zoom: 1 },
-  { mk: 3.3, at: [8.5, 50.6], zoom: 6.5 },
-  { mk: 3.75, at: [8.5, 50.6], zoom: 6.5 },
-  { mk: 4.0, at: [66, 30], zoom: 1 },
-  { mk: 4.7, at: [68, 42], zoom: 1.22 },
-  { mk: 5.05, at: [68, 42], zoom: 1.22 },
-  { mk: 5.35, at: [77.4, 45.6], zoom: 4.6 },
-  { mk: 5.85, at: [77.4, 45.6], zoom: 4.6 },
-  { mk: 6.2, at: [68, 42], zoom: 1.22 }
+  { mk: 2.55, at: [66, 30], zoom: 1 },
+  { mk: 2.95, at: [8.5, 50.6], zoom: 6.5 },
+  { mk: 3.55, at: [8.5, 50.6], zoom: 6.5 },
+  { mk: 3.85, at: [66, 30], zoom: 1 },
+  { mk: 4.15, at: [68, 42], zoom: 1.22 },
+  { mk: 4.6, at: [68, 42], zoom: 1.22 },
+  { mk: 5.0, at: [77.4, 45.6], zoom: 4.6 },
+  { mk: 5.6, at: [77.4, 45.6], zoom: 4.6 },
+  { mk: 5.95, at: [68, 42], zoom: 1.22 }
 ];
 function camera(mk: number) {
   if (mk <= KEYS[0].mk) return KEYS[0];
@@ -234,6 +237,7 @@ export function initRouteStory(root: HTMLElement) {
       movedAt = now;
     }
     const settled = now - movedAt > 150;
+    if (r > 260 && coarse && !fine) loadFine(); // only a globe this large shows the detailed outlines
     const outlines = (settled && r > 260 && fine) || coarse || fine;
     const key = `${viewKey}|${outlines === fine ? 2 : outlines ? 1 : 0}`;
     if (outlines !== fine && fine && r > 260) {
@@ -305,25 +309,25 @@ export function initRouteStory(root: HTMLElement) {
     };
 
     // chapters 1–4: the global network fades as the example route takes over
-    const network = 1 - span(mk, 4.0, 4.35);
+    const network = 1 - span(mk, 3.6, 3.95);
     if (network > 0) {
       // 3. networks drawn: air arcs, then sea lanes, then rail; 4. local passenger track filtered out
-      const airF = ease(span(mk, 2.05, 2.5));
-      const seaF = ease(span(mk, 2.35, 2.8));
-      const railF = ease(span(mk, 2.6, 3.0));
-      const localAlpha = 1 - span(mk, 3.42, 3.7);
+      const airF = ease(span(mk, 1.65, 2.05));
+      const seaF = ease(span(mk, 1.85, 2.25));
+      const railF = ease(span(mk, 2.05, 2.45));
+      const localAlpha = 1 - span(mk, 3.0, 3.45);
       for (const t of air) line(partial(t, airF), MODE.air, 1, 0.7 * network);
       for (const t of sea) line(partial(t, seaF), MODE.sea, 1.4, 0.85 * network);
       for (const t of rail) line(partial(t, railF), MODE.rail, 1.3, 0.85 * network);
       for (const t of local) line(partial(t, railF), MODE.rail, 1.1, 0.85 * network * localAlpha);
 
       // 1. hubs fly in from the stars (ports, then airports, then rail terminals); 2. passenger-only ones drop out
-      const groups: [Hub[], string, number][] = [[ports, MODE.sea, 0.02], [airports, MODE.air, 0.3], [stations, MODE.rail, 0.56]];
-      const drop = span(mk, 1.15, 1.6);
+      const groups: [Hub[], string, number][] = [[ports, MODE.sea, -0.15], [airports, MODE.air, 0], [stations, MODE.rail, 0.12]];
+      const drop = span(mk, 1.0, 1.45);
       for (const [hubs, color, start] of groups) {
         const dot = sprite(color);
         hubs.forEach((hub, i) => {
-          const q = ease(span(mk, start + (i / hubs.length) * 0.28, start + (i / hubs.length) * 0.28 + 0.16));
+          const q = ease(span(mk, start + (i / hubs.length) * 0.22, start + (i / hubs.length) * 0.22 + 0.16));
           if (q <= 0 || !onFront(hub.at)) return;
           const target = projection(hub.at);
           if (!target) return;
@@ -358,15 +362,15 @@ export function initRouteStory(root: HTMLElement) {
     // 5–7: the example supply chain
     // road legs: the long Kazakh leg in the close-up of the extraction point, then the supplier's and the home
     // factory's short legs as the camera pulls back out
-    const roadTimes: [number, number][] = [[5.35, 5.78], [5.8, 6.0], [5.85, 6.05], [5.9, 6.1]];
-    const railF2 = ease(span(mk, 6.05, 6.5));
-    const seaF2 = ease(span(mk, 6.4, 6.95));
+    const roadTimes: [number, number][] = [[5.05, 5.45], [5.65, 5.85], [5.7, 5.9], [5.75, 5.95]];
+    const railF2 = ease(span(mk, 5.85, 6.2));
+    const seaF2 = ease(span(mk, 6.05, 6.45));
     route.roads.forEach((t, i) => line(partial(t, ease(span(mk, roadTimes[i][0], roadTimes[i][1]))), MODE.road, 2.4, 1, 8));
     line(partial(route.rail, railF2), MODE.rail, 2.4, 1, 8);
     line(partial(route.sea, seaF2), MODE.sea, 2.4, 1, 8);
 
     // once the route is complete, goods keep travelling along it: dots from extraction to the home factory
-    const travel = span(mk, 6.9, 7.1) * (reducedMotion.matches ? 0 : 1);
+    const travel = span(mk, 6.75, 7.0) * (reducedMotion.matches ? 0 : 1);
     if (travel > 0) {
       const COUNT = 9;
       for (let k = 0; k < COUNT; k++) {
@@ -382,7 +386,7 @@ export function initRouteStory(root: HTMLElement) {
     }
 
     // freight hubs found for the route (chapter 6 on)
-    const hubAlpha = ease(span(mk, 5.2, 5.38));
+    const hubAlpha = ease(span(mk, 4.95, 5.1));
     const hubs: [LonLat, string, string][] = [
       [example.railFrom, MODE.rail, "Rail freight terminal"],
       [example.railTo, MODE.rail, "Rail freight terminal"],
@@ -421,7 +425,7 @@ export function initRouteStory(root: HTMLElement) {
       [example.home, "#60a5fa", "Home factory"]
     ];
     markers.forEach(([at, color, label], i) => {
-      const q = ease(span(mk, 4.45 + i * 0.14, 4.75 + i * 0.14));
+      const q = ease(span(mk, 4.1 + i * 0.1, 4.3 + i * 0.1));
       const p = projection(at);
       if (!p || q <= 0) return;
       const drop = (1 - q) * 26;
@@ -517,17 +521,27 @@ export function initRouteStory(root: HTMLElement) {
   });
   io.observe(root);
   // the outlines load once the section is near
+  function outlinesOf(world: any): Outlines {
+    return {
+      land: feature(world, world.objects.land) as unknown as GeoPermissibleObjects,
+      borders: mesh(world, world.objects.countries, (a: unknown, b: unknown) => a !== b) as unknown as GeoPermissibleObjects
+    };
+  }
+  // the detailed outlines (a 756KB atlas, and topology work) only once a large globe needs them, so phones skip it
+  let fineLoading = false;
+  function loadFine() {
+    if (fineLoading) return;
+    fineLoading = true;
+    import("world-atlas/countries-50m.json").then((m) => {
+      fine = outlinesOf(m.default);
+      baseKey = "";
+      draw();
+    });
+  }
   const loader = new IntersectionObserver(async ([entry]) => {
     if (!entry.isIntersecting) return;
     loader.disconnect();
-    const outlines = (world: any): Outlines => ({
-      land: feature(world, world.objects.land) as unknown as GeoPermissibleObjects,
-      borders: mesh(world, world.objects.countries, (a: unknown, b: unknown) => a !== b) as unknown as GeoPermissibleObjects
-    });
-    coarse = outlines((await import("world-atlas/countries-110m.json")).default);
-    baseKey = "";
-    draw();
-    fine = outlines((await import("world-atlas/countries-50m.json")).default);
+    coarse = outlinesOf((await import("world-atlas/countries-110m.json")).default);
     baseKey = "";
     draw();
   }, { rootMargin: "800px 0px" });
@@ -536,8 +550,19 @@ export function initRouteStory(root: HTMLElement) {
   pinnedQuery.addEventListener("change", progress);
   reducedMotion.addEventListener("change", start);
   progress();
+  // snap points (utilities/storySnap.ts): each caption fully shown, its step's animation done (--rk i + .5), then the
+  // finished route with its totals; at five times the usual glide time, so the moves on the globe can be followed
+  const removeSnapPoints = registerSnapPoints(() => {
+    if (!pinnedQuery.matches) return [];
+    const pin = root.querySelector<HTMLElement>(".route-pin");
+    const run = Math.max(1, root.offsetHeight - (pin?.offsetHeight || window.innerHeight));
+    const top = root.getBoundingClientRect().top + window.scrollY;
+    const rests = [...Array.from({ length: steps }, (_, i) => i + 0.5), steps + 0.05];
+    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5 }; // (and its exit)
+  });
 
   return () => {
+    removeSnapPoints();
     cancelAnimationFrame(frame);
     cancelAnimationFrame(queued);
     clearTimeout(settle);

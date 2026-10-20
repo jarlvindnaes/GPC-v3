@@ -474,3 +474,14 @@ html{scroll-padding-top:115px}
 html[data-overlay-open] .story-back{display:none}
 @media(max-width:700px){.story-back{left:16px;padding:10px 15px;font-size:13px}}
 @media(prefers-reduced-motion:reduce){.story-back{transition:none;transform:none}}
+html:has(.story-back){scroll-padding-bottom:90px} /* focused content scrolls clear of the floating back button */
+.screw-fact:focus-visible{outline:3px solid #6378e8;outline-offset:3px}
+
+/* Touch screens: the back button sits on the story controls' row (16px above the small viewport's bottom, so never
+   under Safari's toolbar), with a shadow that rises (iOS: nothing within 8px of the bottom edge, shadows included, or
+   the page stops running under the toolbar), and says just "Back" so it fits beside "Skip story" */
+@media(hover:none) and (pointer:coarse){
+ .story-back{top:calc(100svh - 16px - 40px);bottom:auto;height:40px;padding:0 15px;box-shadow:0 -2px 10px #050b1b33}
+}
+.story-back-short{display:none}
+@media(max-width:700px){.story-back-long{display:none}.story-back-short{display:inline}}

@@ -453,6 +453,8 @@ const links = [
       header.classList.toggle('is-menu-open', open);
       toggle?.setAttribute('aria-expanded', String(open));
       toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      // the links sit before the toggle in the markup, so opening hands focus to the first one
+      if (open) header.querySelector<HTMLElement>('#site-menu a')?.focus();
     };
     toggle?.addEventListener('click', () => setMenu(!header.classList.contains('is-menu-open')));
     header.querySelectorAll('nav a').forEach((link) => link.addEventListener('click', () => setMenu(false)));

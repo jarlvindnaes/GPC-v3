@@ -1,17 +1,19 @@
 ---
 const base = import.meta.env.BASE_URL;
+// photos sized for the panels (at most 248×400 CSS px, nearly square on phones) at 2x: landscape ones cropped to a
+// centred square, portrait ones kept whole (see public/v4/brands/sources.json)
 const brands = [
-  { id: 'takt', name: 'TAKT', url: 'https://taktcph.com/' },
-  { id: 'mater', name: 'Mater', url: 'https://materdesign.com/' },
-  { id: 'muuto', name: 'Muuto', url: 'https://www.muuto.com/' },
-  { id: 'new-works', name: 'New Works', url: 'https://newworks.dk/' },
-  { id: 'benchmark', name: 'Benchmark', url: 'https://benchmarkfurniture.com/' },
+  { id: 'takt', name: 'TAKT', url: 'https://taktcph.com/', w: 800, h: 800 },
+  { id: 'mater', name: 'Mater', url: 'https://materdesign.com/', w: 640, h: 800 },
+  { id: 'muuto', name: 'Muuto', url: 'https://www.muuto.com/', w: 600, h: 800 },
+  { id: 'new-works', name: 'New Works', url: 'https://newworks.dk/', w: 800, h: 800 },
+  { id: 'benchmark', name: 'Benchmark', url: 'https://benchmarkfurniture.com/', w: 800, h: 800 },
 ];
 ---
 <div class="brand-strip frame" role="group" aria-label="Product Connect community">
   {brands.map(brand => (
     <a class="brand-panel" href={brand.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${brand.name} (opens in a new tab)`}>
-      <img class="brand-photo" src={`${base}v4/brands/${brand.id}.webp`} alt="" width="1000" height="1000" loading="lazy" decoding="async" />
+      <img class="brand-photo" src={`${base}v4/brands/${brand.id}.webp`} alt="" width={brand.w} height={brand.h} loading="lazy" decoding="async" />
       <span class="brand-shade" aria-hidden="true"></span>
       <img class="brand-logo" src={`${base}wireframes/logos/${brand.id}.svg`} alt={brand.name} width="130" height="40" loading="lazy" />
     </a>

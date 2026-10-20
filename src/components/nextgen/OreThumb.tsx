@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import * as Three from "three";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DRACO_DECODER_PATH } from "../../utilities/draco";
+import { sharedDracoLoader } from "../../utilities/threeAssets";
 
 // Small turning 3D model for a label in the chair story: the ore in "Material information" (same model
 // as the raw-material step on our original How it works page) and the open cardboard box in
@@ -107,7 +106,7 @@ export function OreThumb({
     const pivot = new Three.Group();
     scene.add(pivot);
 
-    const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
+    const draco = sharedDracoLoader(); // (one per page, not disposed here)
     const loader = new GLTFLoader().setDRACOLoader(draco);
     let disposed = false;
     loader.load(`${base}${model}`, (gltf) => {
@@ -171,6 +170,7 @@ export function OreThumb({
     let last = performance.now();
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
+      if (now - last < 15) return; // at most ~60 fps
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       if (!activeRef.current || document.hidden) {
@@ -185,7 +185,6 @@ export function OreThumb({
       disposed = true;
       cancelAnimationFrame(frame);
       resize.disconnect();
-      draco.dispose();
       scene.traverse((object) => {
         const mesh = object as Three.Mesh;
         if (!mesh.isMesh) {

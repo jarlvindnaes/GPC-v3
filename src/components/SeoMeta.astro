@@ -1,15 +1,22 @@
 ---
 // Share and search metadata for a page: canonical URL, Open Graph and Twitter cards (the preview Slack, LinkedIn,
 // iMessage etc. show), with absolute URLs built from `site` in astro.config.mjs plus the deploy base path.
-interface Props { title: string; description: string; path?: string; image?: string }
-const { title, description, path = '', image = 'og-image.jpg' } = Astro.props;
+interface Props { title: string; description: string; path?: string; image?: string; imageAlt?: string }
+const { title, description, path = '', image = 'og-image.jpg', imageAlt = 'Product Connect: make better products, show the world' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const site = Astro.site ?? new URL('https://xbuild.com');
 const url = new URL(`${base}${path}`, site).href;
 const imageUrl = new URL(`${base}${image}`, site).href;
-const keywords = 'Digital Product Passport, DPP, product data platform, product carbon footprint, CO2 calculation, LCA, EPD, EN 15804, environmental impact, supply chain data, ESPR, product sustainability';
+// Who publishes the site, for search engines (schema.org): facts only, no ratings, reviews or offers.
+const home = new URL(base, site).href;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Organization', '@id': `${home}#organization`, name: 'Product Connect', url: home, logo: new URL(`${base}logo-rest.png`, site).href, email: 'contact@productconnect.com' },
+    { '@type': 'WebSite', '@id': `${home}#website`, name: 'Product Connect', url: home, inLanguage: 'en', publisher: { '@id': `${home}#organization` } }
+  ]
+};
 ---
-<meta name="keywords" content={keywords} />
 <link rel="canonical" href={url} />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Product Connect" />
@@ -19,8 +26,11 @@ const keywords = 'Digital Product Passport, DPP, product data platform, product 
 <meta property="og:image" content={imageUrl} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Product Connect: make better products, show the world" />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:locale" content="en_GB" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={imageAlt} />
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

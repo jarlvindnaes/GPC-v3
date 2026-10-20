@@ -746,7 +746,7 @@ export function SupplyChainGlobe({ size = 1 }: { size?: number } = {}) {
       }
       // phones: ~30 fps is plenty for a slow spin and halves the GPU work
       const elapsed = now - lastFrame;
-      if (phone && elapsed < 31) return;
+      if (elapsed < (phone ? 31 : 15)) return; // ≤60 fps elsewhere
       lastFrame = now;
       const frames = Math.min(4, Math.max(0, elapsed) / (1000 / 60)) || 1; // keep the spin speed per second
 

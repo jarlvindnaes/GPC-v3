@@ -1,3 +1,4 @@
+import { reducedMotion } from "../../utilities/motion";
 type Pt = { x: number; y: number };
 type Curve = [Pt, Pt, Pt, Pt];
 interface Strand { from: Pt; to: Pt; seed: number; amp: number; out: boolean; tool: number }
@@ -51,7 +52,7 @@ export function initMcpFlow() {
     if (!found || !context) return;
     const canvas = found;
     const g = context;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const reduced = reducedMotion; // reduced motion, or the footer's Pause animations
     const sprites = { in: sprite("#8fa3ff"), out: sprite("#dfe6ff"), back: sprite("#D4EE9C") };
 
     // Imperfect streams: database -> MCP, then MCP -> each AI tool.

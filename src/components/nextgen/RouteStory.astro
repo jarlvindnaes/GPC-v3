@@ -28,7 +28,7 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
     <ul class="route-legend" aria-label="Line colours">
       {legend.map(([mode, label]) => <li class={`is-${mode}`}>{label}</li>)}
     </ul>
-    <div class="route-totals" aria-live="polite">
+    <div class="route-totals">
       <div class="is-sea"><small>By sea</small><b data-route-total="sea">–</b></div>
       <div class="is-rail"><small>By rail</small><b data-route-total="rail">–</b></div>
       <div class="is-road"><small>By road</small><b data-route-total="road">–</b></div>
@@ -87,6 +87,11 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
 
   /* pinned: one caption at a time (--rk from route-story.ts), the totals at the end */
   .route-story.is-pinned .route-dots{display:flex}
+  /* touch screens: above the fade into Safari's toolbar (SiteHeader.astro; the pinned panel is its own layer, so the
+     dots can't rise over the fade from inside it), clear of the story controls below; they give way to the totals */
+  @media(hover:none) and (pointer:coarse){
+    .route-story.is-pinned .route-dots{bottom:100px;opacity:calc(1 - clamp(0,calc((var(--rk,0) - 6.55) / .2),1))}
+  }
   .route-story.is-pinned .route-steps article{--in:clamp(0,calc((var(--rk,0) - var(--i) + .12) / .2),1);--out:clamp(0,calc((var(--rk,0) - var(--i) - .72) / .14),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 22px - var(--out) * 14px))}
   .route-story.is-pinned .route-steps li:last-child article{--out:0}
   /* the card arrives with the first step, and fits the current step (the others are laid over it while they fade) */
@@ -94,9 +99,9 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
   .route-story.is-pinned .route-steps{position:relative;display:block}
   .route-story.is-pinned .route-steps li{position:absolute;top:0;left:0;right:0}
   .route-story.is-pinned .route-steps li:has(article.is-on){position:relative}
-  .route-story.is-pinned .route-totals{--t:clamp(0,calc((var(--rk,0) - 6.55) / .3),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px))}
+  .route-story.is-pinned .route-totals{--t:clamp(0,calc((var(--rk,0) - 6.65) / .3),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px))}
   /* the legend sits in the lower right corner, giving way to the distance cards at the end */
-  .route-story.is-pinned .route-legend{--l:clamp(0,calc((var(--rk,0) - .2) / .3),1);--x:clamp(0,calc((var(--rk,0) - 6.35) / .2),1);opacity:calc(var(--l) * (1 - var(--x)))}
+  .route-story.is-pinned .route-legend{--l:clamp(0,calc((var(--rk,0) - .2) / .3),1);--x:clamp(0,calc((var(--rk,0) - 6.55) / .2),1);opacity:calc(var(--l) * (1 - var(--x)))}
   /* stacked (short screens): every caption listed, the finished route on the globe */
   .route-story:not(.is-pinned) .route-steps{gap:22px}
   .route-story:not(.is-pinned) .route-steps li{grid-area:auto}

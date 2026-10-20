@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
 import * as Three from "three";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { CHAIR_MODEL, pieceName } from "./dppChairModel";
 import { slopeChair } from "./dppProductData";
-import { DRACO_DECODER_PATH } from "../../utilities/draco";
 import { SOFT_LIGHT } from "../wireframe/softChairLight";
+import { sharedDracoLoader } from "../../utilities/threeAssets";
 
 // Small turning 3D model of one purchasable part (one representative piece, e.g. one of the two
 // armrests), cut from the same product model as the parts viewer. Every thumbnail on the page shares
@@ -54,7 +53,7 @@ function getShared() {
   pivot.rotation.x = 0.35;
   scene.add(pivot);
 
-  const draco = new DRACOLoader().setDecoderPath(DRACO_DECODER_PATH);
+  const draco = sharedDracoLoader();
   const model = new Promise<Three.Object3D>((resolve, reject) => {
     new GLTFLoader().setDRACOLoader(draco).load(CHAIR_MODEL, (gltf) => resolve(gltf.scene), undefined, reject);
   });

@@ -1,5 +1,5 @@
 {
-  "note": "Photos supplied by the Product Connect team on 2026-10-08 (Benchmark.webp, mater.webp, muuto.webp, newworks.webp, takt.webp in the repo root), resized to 900px on the short side.",
+  "note": "Photos supplied by the Product Connect team on 2026-10-08 (Benchmark.webp, mater.webp, muuto.webp, newworks.webp, takt.webp in the repo root), re-exported at webp quality 80: landscape photos cropped to a centred 800px square, portrait ones 800px tall (the panels are at most 248x400 CSS px).",
   "takt": "takt.webp",
   "mater": "mater.webp",
   "muuto": "muuto.webp",

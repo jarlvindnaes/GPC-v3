@@ -333,26 +333,35 @@ html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 0.
 html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.0) / 0.3),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-1 .rep-note{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * -10px))}
 
-html.story-on .chapter .stage-1 .rep-views{--q:clamp(0,calc((var(--k) - 0.9) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+/* Played, not scrubbed: these cards ease in by themselves (timed CSS transitions) once the story reaches their point,
+   and back out when you scroll back above it (Home.astro sets .is-revealed from the chapter's --k: data-reveal-at),
+   so they finish their entrance after a step has come to rest, like the contributor chart's bars */
+html.story-on .chapter .stage-1 .rep-views{opacity:0;transform:translateY(26px);transition:opacity .5s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+html.story-on .chapter .stage-1 .rep-views.is-revealed{opacity:1;transform:none}
+/* (its overview cards wait for the panel, then play their own staggered entrance, Co2Report.astro) */
+html.story-on .chapter .stage-1 .rep-views:not(.is-revealed) :is(.rep-metrics .rep-card,.rep-hl){opacity:0;transform:translateY(14px) scale(.97);transition:none}
+html.story-on .chapter .stage-2 :is(.product-thumb,.compare-grid>div){opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+html.story-on .chapter .stage-2 .compare-grid>div:nth-child(2){transform:translateY(26px) scale(.96)}
+html.story-on .chapter .stage-2 :is(.product-thumb,.compare-grid>div).is-revealed{opacity:1;transform:none}
+html.story-on .chapter .stage-2 .compare-grid>div:nth-child(1).is-revealed{transition-delay:.12s}
+html.story-on .chapter .stage-2 .compare-line{transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+html.story-on .chapter .stage-2 .compare-grid>div.is-revealed .compare-line{transform:scaleX(1);transition-delay:.45s}
+@media(prefers-reduced-motion:reduce){html.story-on .chapter :is(.stage-1 .rep-views,.stage-2 .product-thumb,.stage-2 .compare-grid>div,.stage-2 .compare-line){transition:none}}
 html.story-on .chapter .stage-2 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-2 .product-thumb{--q:clamp(0,calc((var(--k) - 0.9) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-2 .compare-grid>div:nth-child(1){--q:clamp(0,calc((var(--k) - 1.05) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-2 .compare-grid>div:nth-child(2){--q:clamp(0,calc((var(--k) - 1.25) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px)) scale(calc(.96 + .04 * var(--q)))}
-html.story-on .chapter .stage-2 .compare-line{--q:clamp(0,calc((var(--k) - 1.35) / .35),1);transform:scaleX(var(--q));transform-origin:left}
 html.story-on .chapter .stage-2 .ui-footer{--q:clamp(0,calc((var(--k) - 1.6) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 
 html.story-on .chapter .stage-3 .phone-live{--q:clamp(0,calc((var(--k) - 0.8) / 0.45),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 50px)) scale(calc(.92 + .08 * var(--q)))}
-html.story-on .chapter .stage-4 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .report-label{--q:clamp(0,calc((var(--k) - 0.85) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .report-body>h4{--q:clamp(0,calc((var(--k) - 0.95) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .record:nth-of-type(1){--q:clamp(0,calc((var(--k) - 1.1) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .record:nth-of-type(1) .check{--c:clamp(0,calc((var(--k) - 1.1800000000000002) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
-html.story-on .chapter .stage-4 .record:nth-of-type(2){--q:clamp(0,calc((var(--k) - 1.3) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .record:nth-of-type(2) .check{--c:clamp(0,calc((var(--k) - 1.3800000000000001) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
-html.story-on .chapter .stage-4 .record:nth-of-type(3){--q:clamp(0,calc((var(--k) - 1.5) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .record:nth-of-type(3) .check{--c:clamp(0,calc((var(--k) - 1.58) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
-html.story-on .chapter .stage-4 .record:nth-of-type(4){--q:clamp(0,calc((var(--k) - 1.7) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
-html.story-on .chapter .stage-4 .record:nth-of-type(4) .check{--c:clamp(0,calc((var(--k) - 1.78) / .12),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .ui-bar{--q:clamp(0,calc((var(--k) - 0.6) / 0.15),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .report-label{--q:clamp(0,calc((var(--k) - 0.66) / 0.15),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .report-body>h4{--q:clamp(0,calc((var(--k) - 0.72) / 0.18),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(1){--q:clamp(0,calc((var(--k) - 0.8) / 0.14),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(1) .check{--c:clamp(0,calc((var(--k) - 0.84) / .1),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .record:nth-of-type(2){--q:clamp(0,calc((var(--k) - 0.88) / 0.14),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(2) .check{--c:clamp(0,calc((var(--k) - 0.92) / .1),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .record:nth-of-type(3){--q:clamp(0,calc((var(--k) - 1.42) / 0.14),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(3) .check{--c:clamp(0,calc((var(--k) - 1.46) / .1),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
+html.story-on .chapter .stage-4 .record:nth-of-type(4){--q:clamp(0,calc((var(--k) - 1.48) / 0.14),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
+html.story-on .chapter .stage-4 .record:nth-of-type(4) .check{--c:clamp(0,calc((var(--k) - 1.52) / .1),1);transform:scale(calc(.4 + .6 * var(--c)));transition:none}
 html.story-on .chapter .stage-5 .ui-bar{--q:clamp(0,calc((var(--k) - 0.7) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-5 .report-label{--q:clamp(0,calc((var(--k) - 0.85) / 0.2),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-5 .report-body>h4{--q:clamp(0,calc((var(--k) - 0.95) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
@@ -627,9 +636,11 @@ html.story-on .chapter .stage-0 .globe-stage astro-island{
 .story-markers{display:none}
 html.story-stage .story-stage{position:sticky;top:var(--tab-row);height:calc(100svh - var(--tab-row) - 1px);z-index:1;isolation:isolate;--dark:1;transition:top .3s ease}
 html.story-stage:has(.site-header:not(.is-hidden)) .story-stage{top:calc(var(--sh-h) + var(--tab-row))}
-html.story-stage .story-stage::before,html.story-stage .story-stage::after{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;pointer-events:none}
-html.story-stage .story-stage::before{z-index:-3;background:#fff}
-html.story-stage .story-stage::after{z-index:-2;background:#080c1f;opacity:var(--dark)}
+/* the stage's background: its own childless element (not the stage's ::before/::after), so the colour values the
+   story writes while scrolling restyle only this layer, not the whole stage (Home.astro writes them here) */
+.story-bg{display:none}
+html.story-stage .story-bg{display:block;position:absolute;top:0;bottom:0;left:calc(50% - 50vw);width:100vw;pointer-events:none;z-index:-3;background:#fff}
+html.story-stage .story-bg::after{content:"";position:absolute;inset:0;background:#080c1f;opacity:var(--dark)}
 html.story-stage .story-markers{display:block;margin-top:calc(-1 * (100svh - var(--tab-row) - 1px));padding-bottom:calc(100svh - var(--tab-row) - 1px)}
 html.story-stage [data-story-marker="harvest-data"]{height:120vh}
 html.story-stage [data-story-marker="trusted-co2"]{height:180vh}
@@ -715,7 +726,7 @@ html.story-stage .story-stage .chapter:not(.is-front){pointer-events:none}
 /* "Know exactly what to fix" (chapter 3) sits on the pale blue (#f6f7fa) the panels used to have: the stage's light
    base turns that blue under it (--blue, set by the story script) and back to white for the next chapter. */
 html.story-stage .story-stage{--blue:0}
-html.story-stage .story-stage::before{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),#fff)}
+html.story-stage .story-bg{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),#fff)}
 html:not(.story-stage) #analyse-improve{background:#f6f7fa;box-shadow:0 0 0 100vmax #f6f7fa;clip-path:inset(0 -100vmax)}
 /* Globe labels for nodes off the visible face are parked outside the canvas; clip them to the globe's own box so
    they never widen the page (on phones they stretched it to ~1460px). */
@@ -743,7 +754,7 @@ html.story-stage #harvest-data .globe-intro{--out:clamp(0,calc((var(--k) - 1.86)
 /* "Show your impact to the world" (chapter 4, the passport) sits on a subtle warm stone (#f6f4ef) that suits the
    passport's wood and leather: --warm crossfades it in from chapter 3's pale blue and out to white for the next chapter. */
 html.story-stage .story-stage{--warm:0}
-html.story-stage .story-stage::before{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),#fff))}
+html.story-stage .story-bg{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),#fff))}
 html:not(.story-stage) #product-passports{background:#f6f4ef;box-shadow:0 0 0 100vmax #f6f4ef;clip-path:inset(0 -100vmax)}
 
 /* Chapter 4 (passports): eyebrow + headline like chapters 1 and 2 ("Living Digital Product Passports…" above
@@ -819,7 +830,7 @@ html.story-stage #product-passports .chapter-heading .phone-caption{position:abs
    (the phone stays, only the colour behind it shifts) and out to white for the regulation chapter. Its text and
    check marks take matching greens. */
 html.story-stage .story-stage{--sage:0}
-html.story-stage .story-stage::before{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#eff3ec calc(var(--sage) * 100%),#fff)))}
+html.story-stage .story-bg{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#eff3ec calc(var(--sage) * 100%),#fff)))}
 html:not(.story-stage) #connect-clients{background:#eff3ec;box-shadow:0 0 0 100vmax #eff3ec}
 #connect-clients .chapter-heading .chapter-eyebrow{color:#71825f}
 #connect-clients .chapter-heading h3{color:#2e3529}
@@ -888,7 +899,7 @@ html:not(.story-stage) .globe-points{padding-top:30px}
 
 /* Connect with clients (the sales chapter) in the How it works "Let's make it concrete" theme: soft green ground,
    deep teal headline, olive text, grey-green accents */
-html.story-stage .story-stage::before{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
+html.story-stage .story-bg{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
 html:not(.story-stage) #connect-clients{background:#e1edcc;box-shadow:0 0 0 100vmax #e1edcc}
 #connect-clients .chapter-heading .chapter-eyebrow{color:#19220f}
 #connect-clients .chapter-heading h3{color:#172b2d}
@@ -898,7 +909,7 @@ html:not(.story-stage) #connect-clients{background:#e1edcc;box-shadow:0 0 0 100v
 
 /* "Know exactly what to fix" (chapter 3) in How it works' process blue: #eef1f7 ground, deep teal-navy headline,
    slate-blue continuation (a step darker than How it works' #61718b so it also passes as small text on phones) */
-html.story-stage .story-stage::before{background:color-mix(in srgb,#eef1f7 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
+html.story-stage .story-bg{background:color-mix(in srgb,#eef1f7 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
 html:not(.story-stage) #analyse-improve{background:#eef1f7;box-shadow:0 0 0 100vmax #eef1f7}
 #analyse-improve .chapter-heading h3{color:#102b38}
 #analyse-improve .chapter-heading h3>span{color:#56657e}
@@ -907,7 +918,7 @@ html:not(.story-stage) #analyse-improve{background:#eef1f7;box-shadow:0 0 0 100v
 /* Supplier chapter (globe) in How it works' "One product. Many teams." navy: #152239 ground, periwinkle eyebrow and
    headline, off-white step titles, cards in the section's lighter navy with a soft outline. (The CO₂ chapter keeps
    its charcoal, laid over this as it arrives.) */
-html.story-stage .story-stage::after{background:#152239}
+html.story-stage .story-bg::after{background:#152239}
 #harvest-data::before{background:#152239}
 .stage-0 .live-window::before{background:none}
 @media(max-width:599px){#harvest-data .globe-points{background:#152239}}
@@ -1068,7 +1079,7 @@ html.story-stage #analyse-improve .chapter-points li:nth-child(2){--a:1.25}
 
 /* "Know exactly what to fix" (chapter 3) in the How it works hero's palette: its near-black #0a1017 ground (flat, no
    glow), a sage-grey eyebrow, off-white headline, the hero's slate body grey for the bullets and sage checks */
-html.story-stage .story-stage::before{background:color-mix(in srgb,#0a1017 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
+html.story-stage .story-bg{background:color-mix(in srgb,#0a1017 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
 html:not(.story-stage) #analyse-improve{background:#0a1017;box-shadow:0 0 0 100vmax #0a1017}
 #analyse-improve .chapter-heading .chapter-eyebrow{color:#c7d0bb}
 #analyse-improve .chapter-heading h3{color:#f5f6f0}
@@ -1148,7 +1159,7 @@ html.story-stage #trusted-co2 .globe-points .step:nth-child(2){--b1:1.57;--b2:1.
 /* "Ahead of the rules" (chapter 6) in a deep blue in tone with the navy and near-black chapters (the stage's base
    colour, reached as the sage fades), light text, and the EU flag's stars as a background effect: they fly in from
    the right and settle into their circle low on the right, cut off by the bottom and right edges, with a soft glow */
-html.story-stage .story-stage::before{background:color-mix(in srgb,#0a1017 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#13285a)))}
+html.story-stage .story-bg{background:color-mix(in srgb,#0a1017 calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#13285a)))}
 html:not(.story-stage) #beat-regulation{background:#13285a;box-shadow:0 0 0 100vmax #13285a;clip-path:inset(0 -100vmax)}
 #beat-regulation .chapter-heading .chapter-eyebrow{color:#b4c0ff}
 #beat-regulation .chapter-heading h3{color:#f5f6f0}
@@ -1286,7 +1297,6 @@ html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}
    In the pinned story it follows the text in, and only the current capability's link can be clicked or tabbed to. */
 .capabilities .cap-link{margin-top:20px;font-size:13px;min-height:38px;padding:8px 14px}
 html.model-stage .model-pin .capabilities .cap-link{--l:clamp(0,calc((var(--mk,0) - var(--i) - .12) / .2),1);opacity:var(--l);transform:translateY(calc((1 - var(--l)) * 14px));margin-top:22px}
-html.model-stage .model-pin .capabilities article:not(.is-on) .cap-link{visibility:hidden}
 html.model-stage .model-pin .capabilities article.is-on .cap-link{pointer-events:auto}
 @media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities .cap-link{transform:none}}
 /* phones: room for the "Learn more" button inside the dome, above the dots (the text starts just inside the rim, and
@@ -1477,3 +1487,18 @@ html.story-stage #beat-regulation .chapter-points li:last-child{--e:0}
 html.story-stage #harvest-data .globe-points .step:nth-child(1){--b2:1.13}
 html.story-stage #harvest-data .globe-points .step:nth-child(2){--b2:1.49}
 html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
+/* Phones: "Explore its passport" stays 16px above the bottom of the screen while you scroll through the hero, and stops
+   16px above the hero's bottom edge as that comes up (native position: sticky, so it moves in step with the scroll).
+   It sits in the hero's flow after the photo, pulled up over its bottom right corner (60px button + 16px) so it takes
+   no room; the hero and its section clip instead of hiding overflow, as a hidden overflow would stop the sticking. */
+@media(max-width:599px){
+ .hero.frame,.hero-chair{overflow:clip}
+ .hero-chair .chair-passport-trigger{position:sticky;top:auto;bottom:16px;right:auto;left:auto;order:3;align-self:flex-end;margin:-76px -8px 16px 0;translate:none;box-shadow:0 -3px 10px #17263d26}
+}
+/* (its shadow rises rather than falls: held 16px above the screen's bottom edge, nothing it paints may come within 8px
+   of that edge, or iOS Safari stops running the page under its toolbar; see IOS_SCROLLING_BEHAVIOR.md. 10px blur,
+   3px up: at most 7px below the button, so 9px clear) */
+
+/* touch screens: the model story's dots above the fade into Safari's toolbar (SiteHeader.astro; the pinned panel is its
+   own layer, so they can't rise over the fade from inside it), clear of the story controls below */
+@media(hover:none) and (pointer:coarse){html.model-stage .model-dots{bottom:100px}}

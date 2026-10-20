@@ -173,6 +173,8 @@ export function PassportPhone() {
               <HtmlPhoneCanvas isPlaying={true} noChrome={true} resetKey={1}>
                 <DppPhoneScreen />
               </HtmlPhoneCanvas>
+              {/* while its model is still coming in (opened early), the same progress bar as the phone on the page */}
+              <PhoneLoadingOverlay />
               <button
                 ref={closeRef}
                 type="button"

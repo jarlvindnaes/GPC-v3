@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ReuseChart } from "./ReuseChart";
 import { OreThumb } from "./OreThumb";
 import { getStoryFrame } from "./productStoryMath";
+import { registerSnapPoints } from "../../utilities/storySnap";
 
 // Copy follows our "Component-level by design" section: one idea per step of the chair story.
 const chapters = [
@@ -374,6 +375,15 @@ export default function ProductStory({ base }: { base: string }) {
     };
     window.addEventListener("scroll", scroll, { passive: true });
     scroll();
+    // snap points (utilities/storySnap.ts): each chapter at rest (productStoryMath.ts): the whole chair, taken apart
+    // with its fact cards, and back together with the reuse chart
+    const removeSnapPoints = registerSnapPoints(() => {
+      if (modeRef.current !== "scroll" || reducedRef.current) return [];
+      const sticky = section.querySelector<HTMLElement>(".story-sticky");
+      const travel = Math.max(1, section.offsetHeight - (sticky?.offsetHeight || window.innerHeight));
+      const top = section.getBoundingClientRect().top + window.scrollY;
+      return { points: [0, 0.52, 0.94, 1].map((p) => top + travel * p), top }; // (1: its exit)
+    });
     // Our exploding chair (copied from the hero, then tweaked for the story); Jarl's original scene
     // stays in productStoryScene.ts.
     import("./chairStoryScene")
@@ -432,6 +442,7 @@ export default function ProductStory({ base }: { base: string }) {
     return () => {
       cancelled = true;
       cleanup?.();
+      removeSnapPoints();
       window.removeEventListener("scroll", scroll);
       media.removeEventListener("change", onPreference);
     };
@@ -469,7 +480,6 @@ export default function ProductStory({ base }: { base: string }) {
               <div className="story-viewer-top">
                 <span
                   className={`viewer-pill ${separation > 0.2 ? "is-components" : "is-assembled"}`}
-                  aria-live="polite"
                 >
                   <i aria-hidden="true" />
                   Soft Lounge Chair ·{" "}
@@ -509,6 +519,13 @@ export default function ProductStory({ base }: { base: string }) {
                     data-fact={fact.key}
                     className={`screw-fact fact-${fact.key}${fact.extra ? " is-extra" : ""}`}
                     onPointerEnter={(event) => measureFact(event.currentTarget)}
+                    // keyboard: a card opens while focused, as it does on hover (WCAG 2.1.1)
+                    tabIndex={showFacts && fact.points.length ? 0 : -1}
+                    onFocus={(event) => {
+                      measureFact(event.currentTarget);
+                      event.currentTarget.classList.add("is-open");
+                    }}
+                    onBlur={(event) => event.currentTarget.classList.remove("is-open")}
                     onPointerDown={onFactDown}
                     onPointerMove={onFactMove}
                     onPointerUp={onFactUp}

@@ -20,8 +20,16 @@ interface Props {
 const { class: className, seconds = 3, trigger = "loop" } = Astro.props;
 const id = `pc-logo-gap-${Math.random().toString(36).slice(2, 8)}`;
 const dur = `${seconds}s`;
+// The artwork (about 42KB of SVG) is written into the page once: the first logo on a page renders it, later ones
+// are empty and copy it from that one as the page parses, with their own mask ids and lap time (the only parts
+// that differ), so each keeps its own timeline. Astro.locals is per page render.
+const locals = Astro.locals as { pcLogoSource?: { id: string; dur: string } };
+const source = locals.pcLogoSource;
+if (!source) locals.pcLogoSource = { id, dur };
+const copyScript = `(function(s){var src=document.querySelector('[data-pc-logo-source]');if(!s||!src)return;var from=src.getAttribute('data-pc-logo-source'),d=src.getAttribute('data-dur');s.innerHTML=src.innerHTML.split(from).join(s.getAttribute('data-id')).split('dur="'+d+'"').join('dur="'+s.getAttribute('data-dur')+'"');})(document.currentScript.previousElementSibling)`;
 ---
-<svg class:list={['pc-logo pc-logo-animated', className]} viewBox="0 0 458 464" aria-hidden="true" focusable="false" data-pc-logo-animated={trigger} data-seconds={seconds}>
+<svg class:list={['pc-logo pc-logo-animated', className]} viewBox="0 0 458 464" aria-hidden="true" focusable="false" data-pc-logo-animated={trigger} data-seconds={seconds} data-pc-logo-source={source ? undefined : id} data-id={id} data-dur={dur}>
+{!source && <Fragment>
   <defs>
     <mask id={id} maskUnits="userSpaceOnUse" x="-200" y="-200" width="1000" height="900">
       <rect x="-200" y="-200" width="1000" height="900" fill="white" />
@@ -56,7 +64,9 @@ const dur = `${seconds}s`;
     <circle cx="349.69" cy="61.72" r="60.04" fill="var(--pc-logo-dot, #6f7dce)" />
     <circle cx="268.39" cy="174.7" r="37.47" fill="currentColor" />
   </g>
+</Fragment>}
 </svg>
+{source && <script is:inline set:html={copyScript} />}
 
 <script>
   // Hover / tap playback for trigger="hover". The SVG's own timeline stays paused and is scrubbed here
@@ -171,5 +181,12 @@ const dur = `${seconds}s`;
     .pc-logo-still {
       display: inline;
     }
+  }
+  /* the footer's "Pause animations" too (SMIL isn't paused by motion.css) */
+  :global(html.motion-paused) .pc-logo-motion {
+    display: none;
+  }
+  :global(html.motion-paused) .pc-logo-still {
+    display: inline;
   }
 </style>

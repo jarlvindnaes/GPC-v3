@@ -6,6 +6,7 @@ import * as Three from "three";
 import { useIsNearViewport } from "../utilities/useIsNearViewport";
 import { WebsiteButton } from "./WebsiteButton";
 import { DRACO_DECODER_PATH } from "../utilities/draco";
+import "../utilities/threeAssets"; // (three's shared file cache: the HDR and models download once per page)
 
 // drei's useGLTF decodes Draco models with our own copy of the decoder (it defaults to Google's CDN).
 useGLTF.setDecoderPath(DRACO_DECODER_PATH);
@@ -27,7 +28,7 @@ export function RenderController({ isActive }: { isActive: React.RefObject<boole
     const phone = window.matchMedia("(max-width: 699px), (pointer: coarse)").matches;
     const loop = (now: number) => {
       animationFrameId = requestAnimationFrame(loop);
-      if (phone && now - last < 31) return;
+      if (now - last < (phone ? 31 : 15)) return; // ~30 fps on phones, ≤60 elsewhere
       if (isActive.current) {
         last = now;
         invalidate();

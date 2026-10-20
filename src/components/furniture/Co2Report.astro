@@ -36,7 +36,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
 ---
 <div class="rep" data-co2-report>
 
-  <div class="rep-views">
+  <div class="rep-views" data-reveal-at="0.9">
     <section class="rep-view is-active" data-view="0" aria-label="Overview">
       <span class="rep-view-note" aria-hidden="true">Illustrative data</span>
       <div class="rep-metrics">
@@ -62,6 +62,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
 
     <section class="rep-view" data-view="1" aria-label="Top component contributors">
       <h4>Top component contributors <small>kg CO₂ eq</small><span class="rep-view-note" aria-hidden="true">Illustrative data</span></h4>
+      <ul class="sr-only" aria-label="Illustrative data">{contributors.map((c) => <li>{c.name}: {c.value} kg CO₂ eq</li>)}</ul>
       <div class="rep-bars" aria-hidden="true">
         <div class="sk-tip bar-tip"><b></b><span></span></div>
         {[0, 5, 10, 15].map((g) => <span class="rep-grid" style={`bottom:calc(var(--lab) + (100% - var(--lab)) * ${g / barMax})`}><em>{g}</em></span>)}
@@ -160,7 +161,7 @@ const nf = (v: number, d = 1) => v.toLocaleString('en-US', { minimumFractionDigi
     });
     const TICK = 250;
     window.setInterval(() => {
-      if (stopped || scrubbed || waiting || hovering || !visible || document.documentElement.classList.contains("story-stage")) {
+      if (stopped || motionPaused() || scrubbed || waiting || hovering || !visible || document.documentElement.classList.contains("story-stage")) {
         return;
       }
       elapsed += TICK;
