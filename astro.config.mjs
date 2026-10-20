@@ -35,7 +35,7 @@ export default defineConfig({
         "three/examples/jsm/libs/meshopt_decoder.module.js",
         "three/examples/jsm/loaders/DRACOLoader.js",
         "three/examples/jsm/loaders/GLTFLoader.js",
-        "three/examples/jsm/loaders/RGBELoader.js",
+        "three/examples/jsm/loaders/HDRLoader.js",
         "three/examples/jsm/postprocessing/EffectComposer.js",
         "three/examples/jsm/postprocessing/OutputPass.js",
         "three/examples/jsm/postprocessing/RenderPass.js",

@@ -44,8 +44,8 @@ export function preloadPartsView() {
     chairSource = loading;
   }
   if (!studioEnvironment) {
-    const loading = import("three/examples/jsm/loaders/RGBELoader.js")
-      .then(({ RGBELoader }) => new RGBELoader().loadAsync(STUDIO_HDR))
+    const loading = import("three/examples/jsm/loaders/HDRLoader.js")
+      .then(({ HDRLoader }) => new HDRLoader().loadAsync(STUDIO_HDR))
       .then((texture) => {
         texture.mapping = Three.EquirectangularReflectionMapping;
         return texture as Three.Texture;

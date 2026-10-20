@@ -75,6 +75,13 @@ export function ReuseChart({ id = "rc" }: { id?: string }) {
             <stop stopColor="#7283c9" />
             <stop offset="1" stopColor="#6c8270" />
           </linearGradient>
+          {/* the Input interface lens's glass (data-scenes.ts), for the first product's bar: bottom to top */}
+          <linearGradient id={`${id}-glass`} x1="0" x2="0" y1="1" y2="0">
+            <stop stopColor="#a5cde9" stopOpacity="0.17" />
+            <stop offset="0.4" stopColor="#a5cde9" stopOpacity="0.035" />
+            <stop offset="0.8" stopColor="#b4d6ed" stopOpacity="0.196" />
+            <stop offset="1" stopColor="#d7edff" stopOpacity="0.333" />
+          </linearGradient>
           <mask id={`${id}-reveal`}>
             <path className="rc-reveal" d={CURVE} pathLength={1} />
           </mask>
@@ -86,6 +93,8 @@ export function ReuseChart({ id = "rc" }: { id?: string }) {
               className={`rc-bar${b.first ? " is-first" : ""}`}
               d={barPath(b.x, b.top, b.h)}
             />
+            {/* the first bar's outline, open at the bottom (the same shape without its closing edge) */}
+            {b.first && <path className="rc-bar rc-edge" d={barPath(b.x, b.top, b.h).replace(" Z", "")} />}
             <text className="rc-value" x={b.cx} y={labelY(b.cx, b.top)}>
               {b.text}
             </text>

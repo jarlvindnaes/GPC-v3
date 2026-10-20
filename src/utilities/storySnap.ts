@@ -7,7 +7,7 @@
 // goes back to these settings):
 export const STORY_SNAP = {
   mobile: true, // touch screens (no hover, coarse pointer)
-  desktop: false, // mouse wheel and trackpad: a flick is one step
+  desktop: true, // mouse wheel and trackpad: a flick is one step
   // false: no stepping, only the browser's own gentle snapping (a scroll that ends near a step settles on it)
   strict: true
 };
@@ -143,10 +143,11 @@ function ownsTouch(target: EventTarget | null): boolean {
   return false;
 }
 
-// ---- story controls: a "Swipe ↓" hint top right in a story (until the first swipe of the visit) and a
+// ---- story controls: a "Swipe ↓" hint top right in a story (on each entry, until the first swipe there) and a
 // "Skip story ↓" button through the story (not on its last step), jumping to the next story's first step ----
 
-let swiped = false;
+let swiped = false; // (since entering the current story)
+let shownStory = -1; // the story the page is in (-1: none), so the hint returns on every entry
 let hint: HTMLElement | null = null;
 let skip: HTMLButtonElement | null = null;
 
@@ -174,7 +175,8 @@ function controls() {
   hint.className = "story-steps-hint";
   hint.setAttribute("aria-hidden", "true");
   hint.hidden = true;
-  hint.textContent = "Swipe ↓";
+  // "Swipe" on touch screens, "Scroll" with a mouse or trackpad
+  hint.textContent = matchMedia(TOUCH).matches ? "Swipe ↓" : "Scroll ↓";
   skip = document.createElement("button");
   skip.type = "button";
   skip.className = "story-steps-skip";
@@ -203,7 +205,13 @@ function controls() {
     const inStory = Boolean(points && y >= points[0] - 3);
     const lastStep = points ? points[points.length - 2] : 0; // (the last point is the exit)
     const skipOn = inStory && y < lastStep - 3;
-    const hintOn = inStory && !swiped; // (anywhere in a story, until the visit's first swipe)
+    // (anywhere in a story, until the first swipe or scroll step there; back each time a story is entered, even again)
+    const current = inStory && points ? stories.indexOf(points) : -1;
+    if (current !== shownStory) {
+      shownStory = current;
+      if (current >= 0) swiped = false;
+    }
+    const hintOn = inStory && !swiped;
     if (hintOn) {
       // below the site header (while shown) and the homepage story's chapter tabs
       let top = 0;
@@ -378,7 +386,13 @@ function start() {
   );
 
   // ---- wheel and trackpad: each flick (a burst of wheel events, momentum included) is one step ----
+  // A trackpad flick keeps sending (fading) events for a second or two after its glide has ended; all of them belong to
+  // that flick and are held back, or the page would coast on and take more steps. A new flick is a pause of 0.22s,
+  // or, within a fading flick, a sudden much stronger event (a deliberate second flick).
   let lastWheel = 0;
+  let lastStrength = 0;
+  let flickStart = 0;
+  let inFlick = false; // the current burst has made its step
   window.addEventListener(
     "wheel",
     (event) => {
@@ -386,16 +400,23 @@ function start() {
       const base = glide ? glide.target : window.scrollY;
       if (!storyAt(base) || ownsTouch(event.target)) return;
       const now = performance.now();
-      const fresh = now - lastWheel > 220; // a new flick, not its momentum tail
+      const strength = Math.abs(event.deltaY);
+      const paused = now - lastWheel > 220;
+      const harder = inFlick && now - flickStart > 350 && strength > 25 && strength > lastStrength * 2.5;
       lastWheel = now;
+      lastStrength = strength;
+      if (paused) inFlick = false;
       const direction = Math.sign(event.deltaY);
-      if (fresh && direction) {
+      if ((paused || harder) && direction) {
         const target = stepFrom(base, direction);
         if (target === undefined) return;
         event.preventDefault();
+        inFlick = true;
+        flickStart = now;
+        swiped = true; // (the hint has done its job)
         glideTo(target, 0, direction > 0 && isFirstStep(target) ? FIRST_STEP_PACE : 1);
-      } else if (glide) {
-        event.preventDefault(); // the rest of the flick
+      } else if (inFlick) {
+        event.preventDefault(); // the rest of the flick, its momentum included
       }
     },
     { passive: false }

@@ -8,7 +8,7 @@ import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { HDRLoader } from "three/examples/jsm/loaders/HDRLoader.js";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { ChairDofShader } from "./chair-dof";
@@ -115,7 +115,7 @@ export function ExplodingChair({
     // The scene counts as shown (host data-ready) only once the model AND its lighting are in, so a
     // loading stand-in (e.g. the hero's blurred chair image) can hand over without a lighting pop.
     let envReady = false;
-    const rgbeLoader = new RGBELoader();
+    const rgbeLoader = new HDRLoader();
     // Shared with the passport phone (hdri/studio_small_03_1k.hdr) so the SME page loads one HDR, not two.
     rgbeLoader.load(
       `${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`,
@@ -402,7 +402,7 @@ export function ExplodingChair({
     // Continuous "breathing" assembly (no scroll involvement): the chair eases from fully assembled
     // out to ~EXPLODE_START exploded and back, on a loop. The cosine easing dwells gently at each
     // extreme. Time only advances while the chair is on-screen, so it never jumps after being away.
-    const clock = new Three.Clock();
+    const clock = new Three.Timer(); // (Clock is deprecated in three.js)
     // Starts a little below zero: the chair rests assembled a moment longer while a stand-in fades out.
     let elapsed = variant === "soft" ? -0.4 : 0;
     const explodeSeconds = variant === "soft" ? SOFT_EXPLODE_SECONDS : EXPLODE_SECONDS;
@@ -416,6 +416,7 @@ export function ExplodingChair({
       raf = requestAnimationFrame(animate);
       if (now - lastFrame < 15) return; // at most ~60 fps (a depth pass and depth of field per frame)
       lastFrame = now;
+      clock.update(now);
       const dt = clock.getDelta();
       if (!isNear.current) {
         return;

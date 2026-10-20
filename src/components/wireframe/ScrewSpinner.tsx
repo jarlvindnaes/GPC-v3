@@ -3,7 +3,7 @@ import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { HDRLoader } from "three/examples/jsm/loaders/HDRLoader.js";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { sharedDracoLoader } from "../../utilities/threeAssets";
@@ -46,7 +46,7 @@ export function ScrewSpinner() {
     const pmrem = new Three.PMREMGenerator(renderer);
     pmrem.compileEquirectangularShader();
     let envMap: Three.Texture | null = null;
-    const rgbeLoader = new RGBELoader();
+    const rgbeLoader = new HDRLoader();
     // Shared with the chair + passport phone (hdri/studio_small_03_1k.hdr) so the page loads one HDR.
     rgbeLoader.load(`${import.meta.env.BASE_URL}hdri/studio_small_03_1k.hdr`, (hdr) => {
       hdr.mapping = Three.EquirectangularReflectionMapping;

@@ -1,11 +1,18 @@
 ---
 // "API. MCP." explainer (How it works, #integrations): the product database talking to AI tools through MCP.
+// headingOutside: the page shows the tag and headline itself, in a white breaker just above (How it works); the
+// section stays labelled by it (#integrations-title).
 import McpGraphic from './McpGraphic.astro';
+interface Props { headingOutside?: boolean }
+const { headingOutside = false } = Astro.props;
 ---
 <section class="integrations" id="integrations" aria-labelledby="integrations-title">
   <div class="integrations-copy">
+    {!headingOutside && <>
     <span class="integrations-tag">Built to connect</span>
     <h2 id="integrations-title">API. MCP.<br/><span>Connect to Product Connect.</span></h2>
+    </>}
+    {headingOutside && <h3 class="integrations-title">Build for AI tools and agents</h3>}
     <p>Structured access for your systems, and MCP access that makes your product model available to AI tools and agents, with the context they need to work.</p>
   </div>
   <McpGraphic />
@@ -17,6 +24,8 @@ import McpGraphic from './McpGraphic.astro';
   .integrations-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
   .integrations h2{margin:26px 0 0;font-size:clamp(28px,3.3vw,41px);line-height:1.1;letter-spacing:-.035em;font-weight:500;color:#f8f9fc}
   .integrations h2 span{color:#8b919c}
+  /* (with the headline in the page's breaker above: the section's own title) */
+  .integrations .integrations-title{margin:0;font-size:clamp(28px,3vw,40px);line-height:1.15;letter-spacing:-.035em;font-weight:500;color:#f8f9fc}
   .integrations-copy p{max-width:460px;margin:20px 0 0;font-size:16px;line-height:1.65;color:#a2a8b3}
   @media(max-width:700px){.integrations{display:block;padding:65px 6% 35px}}
 </style>

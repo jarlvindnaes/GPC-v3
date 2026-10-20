@@ -86,10 +86,10 @@ export async function createChairStoryScene(
   const scene = new Three.Scene();
   const pmrem = new Three.PMREMGenerator(renderer);
   let envMap: Three.Texture | null = null;
-  // RGBELoader is heavy-ish; load it lazily like the rest of the scene.
-  const { RGBELoader } =
-    await import("three/examples/jsm/loaders/RGBELoader.js");
-  new RGBELoader().load(`${base}hdri/studio_small_03_1k.hdr`, (hdr) => {
+  // HDRLoader is heavy-ish; load it lazily like the rest of the scene.
+  const { HDRLoader } =
+    await import("three/examples/jsm/loaders/HDRLoader.js");
+  new HDRLoader().load(`${base}hdri/studio_small_03_1k.hdr`, (hdr) => {
     hdr.mapping = Three.EquirectangularReflectionMapping;
     envMap = pmrem.fromEquirectangular(hdr).texture;
     scene.environment = envMap;

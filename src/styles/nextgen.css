@@ -236,6 +236,7 @@ fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-wid
 .rc-base{stroke:#e0e5ee;stroke-width:1}
 .rc-bar{fill:url(#rc-reuse);stroke:#7ccaa6;stroke-width:1;transform-box:fill-box;transform-origin:50% 100%;animation:rc-grow .7s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--i) * .22s + .15s)}
 .rc-bar.is-first{fill:url(#rc-first);stroke:#97a6ef}
+.rc-bar.rc-edge{fill:none;stroke:none} /* (an outline only, used by the dark chart in the product story) */
 .rc-value{font:600 12px Inter,sans-serif;fill:#26344d;text-anchor:middle;animation:rc-fade .4s ease both;animation-delay:calc(var(--i) * .22s + .6s)}
 .rc-label{font:500 11px Inter,sans-serif;fill:#8994a6;text-anchor:middle}
 .rc-curve{fill:none;stroke-width:2;stroke-dasharray:5 6;stroke-linecap:round}
@@ -448,7 +449,10 @@ html{scroll-padding-top:115px}
 @media(max-width:700px) and (max-height:700px){.story-viewer{height:calc(100svh - 530px)}} /* the scroll hint is hidden here */
 @media(max-width:700px) and (max-height:650px){.story-viewer{height:260px}} /* not pinned: the story is stacked */
 /* "Time to add each product": a card inside the 3D frame, once the chair is back together (ProductStory.tsx) */
-.product-story .reuse-chart{position:absolute;z-index:3;left:16px;bottom:16px;width:min(420px,calc(100% - 32px));margin:0;padding:12px 16px 6px;background:#fffffff2;box-shadow:0 12px 34px #1d2a5024}
+.product-story .reuse-chart{position:absolute;z-index:3;left:16px;right:16px;bottom:16px;width:auto;margin:0;padding:16px 20px 8px;background:#fff;box-shadow:0 12px 34px #1d2a5024}
+/* (across the frame's full width; its height follows, capped so the chair above stays in view) */
+.product-story .reuse-chart svg{max-height:210px}
+.product-story .reuse-chart-title{font-size:15px}
 @media(max-width:700px){
  .product-story .reuse-chart{left:10px;right:10px;bottom:10px;width:auto;padding:10px 14px 4px}
  .product-story .reuse-chart svg{max-height:84px}
@@ -485,3 +489,24 @@ html:has(.story-back){scroll-padding-bottom:90px} /* focused content scrolls cle
 }
 .story-back-short{display:none}
 @media(max-width:700px){.story-back-long{display:none}.story-back-short{display:inline}}
+/* How it works · Getting started: who works from the model, under the three steps */
+.process-teams{margin:40px 0 0;padding-top:24px;border-top:1px solid #ccd5e5;font-size:16px;line-height:1.6;color:#66748a}
+/* How it works · Getting started on white, apart from the light grey Audit-ready above it */
+.enterprise .process.getting-started-steps{background:#fff}
+/* "Time to add each product" in the product story: dark, in the Input interface's colours (its near-black, white and
+   greys, and the lens's pale steel blues) */
+.product-story .reuse-chart{background:#111214f5;border-color:#2a2e38;box-shadow:0 14px 36px #0000004d} /* (96%: the chair shows through, just) */
+.product-story .reuse-chart-title{color:#f8f9fc}
+.product-story .reuse-chart-note{color:#8b919c}
+.product-story .reuse-chart .rc-base{stroke:#2a2e38}
+.product-story .reuse-chart .rc-label{fill:#8b919c}
+.product-story .reuse-chart .rc-value{fill:#d9e2ef}
+.product-story .reuse-chart .rc-bar{fill:#2b3547}
+/* the first product's bar as the lens: its glass gradient, and its outline (not along the bottom: drawn on .rc-edge) */
+.product-story .reuse-chart .rc-bar.is-first{fill:url(#rc-glass);stroke:none}
+.product-story .reuse-chart .rc-bar.rc-edge{fill:none;stroke:#b9d9f38c;stroke-width:1.2}
+/* (the dotted curve: the colour of the Input interface's bright middle stream, data-scenes.ts; it is drawn on through
+   a mask, .rc-reveal, which stays white: white in a mask shows) */
+.product-story .reuse-chart linearGradient[id$="-curve"] stop{stop-color:#97b4d5;stop-opacity:.5}
+.product-story .reuse-chart .rc-start{fill:#97b4d5;filter:drop-shadow(0 0 5px #97b4d566)}
+.product-story .reuse-chart .rc-head{fill:#c5ddf2;filter:drop-shadow(0 0 6px #c5ddf280)}
