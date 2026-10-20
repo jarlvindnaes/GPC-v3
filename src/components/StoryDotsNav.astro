@@ -1,0 +1,18 @@
+---
+// A story's progress dots (the slot) between a previous and a next arrow. The arrows take one step, like a swipe or
+// a scroll; utilities/storySnap.ts handles their clicks, dims them at the story's ends and shows them only while
+// story stepping is on.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+<div class:list={["story-dots-nav", className]}>
+  <button type="button" class="story-step-arrow" data-story-step="-1" aria-label="Previous step">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.8 3.6 5.4 8l4.4 4.4" /></svg>
+  </button>
+  <slot />
+  <button type="button" class="story-step-arrow" data-story-step="1" aria-label="Next step">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.2 3.6 10.6 8l-4.4 4.4" /></svg>
+  </button>
+</div>

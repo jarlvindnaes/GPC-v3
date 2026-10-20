@@ -479,7 +479,8 @@ export function initRouteStory(root: HTMLElement) {
     const enter = clamp((window.innerHeight - rootBox.top) / (window.innerHeight * 0.55));
     root.style.setProperty("--enter", enter.toFixed(3));
     const active = Math.min(steps - 1, Math.max(0, Math.floor(mk + 0.1)));
-    dots.forEach((dot, i) => dot.classList.toggle("is-on", i === active));
+    // (with story steps on, storySnap lights the dots: the step chosen, not the one passed)
+    if (!document.documentElement.classList.contains("story-snap")) dots.forEach((dot, i) => dot.classList.toggle("is-on", i === active));
     articles.forEach((a, i) => a.classList.toggle("is-on", i === active));
     draw();
   }
@@ -558,7 +559,7 @@ export function initRouteStory(root: HTMLElement) {
     const run = Math.max(1, root.offsetHeight - (pin?.offsetHeight || window.innerHeight));
     const top = root.getBoundingClientRect().top + window.scrollY;
     const rests = [...Array.from({ length: steps }, (_, i) => i + 0.5), steps + 0.05];
-    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5 }; // (and its exit)
+    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5, dots: root.querySelector<HTMLElement>(".route-dots") }; // (and its exit)
   });
 
   return () => {

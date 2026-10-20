@@ -1202,7 +1202,7 @@ html:not(.story-stage) #beat-regulation .eu-flag{background:radial-gradient(circ
 /* Dynamic Product Model story (tablet width up, html.model-stage): the section pins for a few screens, the sphere
    stays as the canvas, and the five capabilities take turns centred in its dome (--mk from Home.astro: capability i
    arrives as --mk passes i, its title first, then its text, and leaves as the next one comes), with progress dots */
-.model-dots{display:none}
+.model-dots-nav{display:none}
 /* the pin ends --edge above the bottom of the screen (iOS Safari, see the end of this file); the section's own dark
    background fills below it */
 html.model-stage .model-story{height:calc(100svh + 5 * 72svh)}
@@ -1214,7 +1214,23 @@ html.model-stage .model-pin .capabilities article:last-child{--out:0}
 html.model-stage .model-pin .cap-icon{margin:0 auto 18px;font-size:26px;color:#b4c0d8}
 html.model-stage .model-pin .capabilities h3{font-size:clamp(22px,2.2vw,28px);font-weight:500;letter-spacing:-.025em;margin-bottom:14px;color:#f8f9fc}
 html.model-stage .model-pin .capabilities p{--t:clamp(0,calc((var(--mk,0) - var(--i) - .16) / .2),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px));font-size:16px;line-height:1.6;color:#b1b6bf}
-html.model-stage .model-dots{display:flex;gap:10px;position:absolute;left:50%;bottom:38px;translate:-50% 0;margin:0;padding:0;list-style:none;z-index:2}
+html.model-stage .model-dots-nav{display:flex;position:absolute;left:50%;bottom:26px;translate:-50% 0;z-index:2;color:#e6ebf5}
+html.model-stage .model-dots{display:flex;gap:10px;margin:0;padding:0;list-style:none}
+/* the benefits story's chapter dots and step arrows, bottom centre of the stage, like the other stories' (above the
+   strip the site header pushes below the screen, --hdr; on touch screens above the fade into Safari's toolbar);
+   in dark ink while the stage is light (.is-light, from the stage colour) */
+.benefit-dots-nav{display:none}
+html.story-stage .benefit-dots-nav{display:flex;position:absolute;left:50%;bottom:calc(26px + var(--hdr,0px));translate:-50% 0;z-index:3;color:#e6ebf5;transition:color .4s}
+html.story-stage .benefit-dots{display:flex;align-items:center;gap:8px;margin:0;padding:0;list-style:none}
+html.story-stage .benefit-dots li{width:5px;height:5px;border-radius:50%;background:#ffffff33;transition:background .3s,transform .3s}
+html.story-stage .benefit-dots li.is-chapter{width:8px;height:8px}
+html.story-stage .benefit-dots li.is-chapter:not(:first-child){margin-left:7px}
+@media(max-width:600px){html.story-stage .benefit-dots{gap:6px}html.story-stage .benefit-dots li.is-chapter:not(:first-child){margin-left:4px}}
+html.story-stage .benefit-dots li.is-on{background:#d4ee9c;transform:scale(1.3)}
+html.story-stage .benefit-dots-nav.is-light{color:#2f3644}
+html.story-stage .benefit-dots-nav.is-light li{background:#2f364433}
+html.story-stage .benefit-dots-nav.is-light li.is-on{background:#55703a}
+@media(hover:none) and (pointer:coarse){html.story-stage .benefit-dots-nav{bottom:calc(60px + var(--hdr,0px))}}
 html.model-stage .model-dots li{width:6px;height:6px;border-radius:50%;background:#ffffff33;transition:background .3s,transform .3s}
 html.model-stage .model-dots li.is-on{background:#d4ee9c;transform:scale(1.3)}
 @media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities :is(article,p){transform:none}}
@@ -1401,6 +1417,8 @@ html.story-stage #product-passports .passport-composition>.phone-caption{flex:no
  html.story-stage #product-passports .passport-composition>.phone-live{padding-bottom:4px}
  html.story-stage #product-passports .passport-composition>.phone-caption{padding-bottom:32px}
 }
+/* ...and clear of the story's dots and arrows at the bottom of the stage (26px up, 30px tall; on touch screens 60px) */
+html.story-stage #product-passports .passport-composition>.phone-caption{padding-bottom:72px}
 /* One bullet at a time in the story: a chapter's bullets share one spot under its headline, and each hands over to
    the next (it has left just before the next arrives, at that bullet's own timing); the last one stays. */
 html.story-stage .story-stage .chapter-points{display:grid}
@@ -1502,4 +1520,13 @@ html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
 
 /* touch screens: the model story's dots above the fade into Safari's toolbar (SiteHeader.astro; the pinned panel is its
    own layer, so they can't rise over the fade from inside it), clear of the story controls below */
-@media(hover:none) and (pointer:coarse){html.model-stage .model-dots{bottom:100px}}
+@media(hover:none) and (pointer:coarse){html.model-stage .model-dots-nav{bottom:60px}}
+/* touch screens: the passport and its hint clear of the story's dots and arrows (60px up, 30px tall) */
+@media(hover:none) and (pointer:coarse){html.story-stage #product-passports .passport-composition>.phone-caption{padding-bottom:0}html.story-stage #product-passports .passport-composition{padding-bottom:calc(132px + var(--hdr,0px))}}
+/* touch screens: the CO₂ report ends above the story's dots and arrows instead of running on under them (its chart
+   gives up the height; the report sits on the stage's bottom, which the site header pushes down by --hdr) */
+@media(hover:none) and (pointer:coarse){
+ html.story-stage #trusted-co2 .co2-report-wrap{padding-bottom:calc(92px + var(--hdr,0px))}
+ /* ...and the comparison card (centred in the room left above them) */
+ html.story-stage #analyse-improve .ui-stage{padding-bottom:calc(84px + var(--hdr,0px))}
+}

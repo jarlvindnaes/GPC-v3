@@ -27,9 +27,13 @@ export const STORY_SNAP = {
 // a story's resting points, and optionally where its top edge is on the page (for its entry: half a screen of it showing)
 // (pace: this story's glides take that many times longer, for a story whose moves need time to be followed;
 // quick: a stretch of it, from and to scroll positions, whose step-to-step glides take at most ms, for steps that sit
-// far apart in scroll but should feel as brisk as the rest)
+// far apart in scroll but should feel as brisk as the rest; dots: its progress dots, one li per step, lit here for the
+// step the page rests on or is gliding to, so a dot moves the moment a step is chosen, not when the page arrives;
+// leads: per step, where a click on its dot jumps to before gliding onto it, default the step before it)
 type Quick = { from: number; to: number; ms: number };
-type Source = () => number[] | { points: number[]; top: number; pace?: number; quick?: Quick };
+type Source = () =>
+  | number[]
+  | { points: number[]; top: number; pace?: number; quick?: Quick; dots?: HTMLElement | null; leads?: number[] };
 
 const sources = new Set<Source>();
 const TOUCH = "(hover: none) and (pointer: coarse)";
@@ -41,6 +45,8 @@ let entries: number[] = []; // per story: the scroll position where it fills hal
 let exitsUp: number[] = []; // per story: the scroll position where its top edge is at the bottom of the screen (out of view above)
 let paces: number[] = []; // per story: how much longer its glides take
 let quicks: Quick[] = []; // stretches whose step-to-step glides are capped
+let dotLists: (HTMLElement | null)[] = []; // per story: its progress dots
+let leadLists: (number[] | undefined)[] = []; // per story: where a dot's jump starts, per step
 
 function wanted(): boolean {
   if (typeof window === "undefined") return false;
@@ -77,7 +83,10 @@ const GLIDE_PACE = 1.5; // how slowly every step glides (1 = 0.42s for a short s
  * and a flick isn't held back; from rest (0) it eases in and out. `pace` stretches the time (the first step of a
  * story takes longer, as the story settles in).
  */
-function glideTo(target: number, speed = 0, pace = 1) {
+// (kick: for a click, not a swipe: the glide sets off at once, at that many times its average speed, and eases out as
+// it arrives, rather than easing in from a standstill, which after a click reads as a delay)
+const CLICK_KICK = 1.6;
+function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
   if (glide) cancelAnimationFrame(glide.frame);
   const from = window.scrollY;
   const distance = target - from;
@@ -99,7 +108,7 @@ function glideTo(target: number, speed = 0, pace = 1) {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = performance.now();
   // a curve that leaves at the given speed and arrives at rest (cubic Hermite), its start capped so it never overshoots
-  const lead = Math.min(Math.max(0, speed) * duration, length * 2.5) * Math.sign(distance);
+  const lead = Math.max(Math.min(Math.max(0, speed) * duration, length * 2.5), length * kick) * Math.sign(distance);
   const at = (u: number) => lead * (u * u * u - 2 * u * u + u) + distance * (3 * u * u - 2 * u * u * u);
   const step = (now: number) => {
     const u = reduce ? 1 : Math.min(1, (now - start) / duration);
@@ -108,7 +117,9 @@ function glideTo(target: number, speed = 0, pace = 1) {
     else glide = null;
   };
   glide = { target, frame: requestAnimationFrame(step) };
+  onGlide(); // (the dots and arrows follow the chosen step straight away)
 }
+let onGlide = () => {};
 
 /** Where a one-step move in `direction` from `base` goes: the next or previous step, or out of the story at its ends. */
 function stepFrom(base: number, direction: number): number | undefined {
@@ -137,6 +148,152 @@ function swipe(direction: number, speed = 0) {
   const target = stepFrom(base, direction);
   if (target === undefined) return;
   glideTo(target, speed, direction > 0 && isFirstStep(target) ? FIRST_STEP_PACE : 1);
+}
+
+/**
+ * A story's previous/next arrow (StoryDotsNav.astro): one step, like a swipe, but never out of the story at its ends
+ * (from above it, next goes to its first step).
+ */
+function arrowStep(direction: number) {
+  const base = glide ? glide.target : window.scrollY;
+  const points = storyAt(base);
+  if (!points) return;
+  const lastStep = points[points.length - 2]; // (the last point is the exit)
+  if (direction > 0 ? base >= lastStep - 3 : base <= points[0] + 3) return;
+  const target = base < points[0] - 3 ? points[0] : stepFrom(base, direction);
+  if (target === undefined) return;
+  swiped = true; // (the hint has done its job)
+  glideTo(target, 0, direction > 0 && isFirstStep(target) ? FIRST_STEP_PACE : 1, CLICK_KICK);
+}
+
+/**
+ * A click on one of a story's dots, like the homepage story's chapter tabs: the next or previous step glides there;
+ * further, the page jumps to that step's lead-in (the step before it, or where its story sets) and glides on from
+ * there, so it shows the way into the step rather than scrolling through everything between.
+ */
+function dotStep(dot: HTMLElement) {
+  const list = dot.parentElement;
+  const s = list ? dotLists.indexOf(list) : -1;
+  const points = stories[s];
+  if (!points) return;
+  const index = Math.min(Array.prototype.indexOf.call(list!.children, dot) as number, points.length - 2); // (never the exit)
+  const target = points[index];
+  if (target === undefined) return;
+  const base = glide ? glide.target : window.scrollY;
+  let current = 0;
+  for (let i = 0; i < points.length - 1; i++) if (points[i] <= base + 3) current = i;
+  swiped = true; // (the hint has done its job)
+  if (Math.abs(index - current) > 1 || base < points[0] - 3) {
+    const lead = leadLists[s]?.[index] ?? points[index - 1] ?? Math.max(0, target - window.innerHeight);
+    if (glide) {
+      cancelAnimationFrame(glide.frame);
+      glide = null;
+    }
+    window.scrollTo({ top: lead, behavior: "instant" });
+  }
+  glideTo(target, 0, 1, CLICK_KICK);
+}
+
+// ---- the dots like the macOS Dock (mouse and trackpad): they swell in a wave around the pointer and the ones near it
+// spread apart, the rest of the row closing up so its width (and its two ends) stay as they are; with a tooltip naming
+// the step under it (data-group over data-title) ----
+const FINE = "(hover: hover) and (pointer: fine)";
+function dockDots(nav: HTMLElement) {
+  const list = nav.querySelector<HTMLElement>("ol");
+  if (!list || nav.dataset.dock) return;
+  nav.dataset.dock = "1";
+  const tip = document.createElement("span");
+  tip.className = "story-dot-tip";
+  tip.setAttribute("aria-hidden", "true");
+  nav.append(tip);
+  let centres: number[] = []; // (the dots' centres at rest, so the wave doesn't chase its own spread)
+  let widths: number[] = [];
+  const GROW = 1.5; // (a dot right under the pointer: 2.5 times its size)
+  let over: HTMLElement | null = null;
+  const dots = () => Array.from(list.children) as HTMLElement[];
+  const nearestTo = (x: number) => {
+    let n = 0;
+    centres.forEach((c, i) => {
+      if (Math.abs(x - c) < Math.abs(x - centres[n])) n = i;
+    });
+    return n;
+  };
+  // only the dot under the pointer (in full) and the one either side of it (part way) swell
+  const wave = (x: number | null) => {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const n = x === null || reduce ? -1 : nearestTo(x);
+    const items = dots();
+    const swell = items.map((_, i) => (n < 0 ? 0 : i === n ? 1 : Math.abs(i - n) === 1 ? 0.45 : 0));
+    items.forEach((dot, i) => dot.style.setProperty("--dock", String(swell[i])));
+    // the spread: each gap widens by half of what its two dots grow, then all gaps scale back to the row's own width
+    const grow = swell.map((m, i) => m * widths[i] * GROW);
+    const gaps = centres.slice(1).map((c, i) => c - centres[i] + (grow[i] + grow[i + 1]) / 2);
+    const total = centres[centres.length - 1] - centres[0];
+    const fit = total / Math.max(1, gaps.reduce((sum, g) => sum + g, 0));
+    let at = centres[0];
+    items.forEach((dot, i) => {
+      if (i > 0) at += gaps[i - 1] * fit;
+      dot.style.setProperty("--dock-x", `${(at - centres[i]).toFixed(2)}px`);
+    });
+  };
+  const showTip = (dot: HTMLElement | null) => {
+    over = dot;
+    if (!dot || !dot.dataset.title) {
+      tip.classList.remove("is-on");
+      return;
+    }
+    tip.replaceChildren();
+    if (dot.dataset.group) {
+      const group = document.createElement("small");
+      group.textContent = dot.dataset.group;
+      tip.append(group);
+    }
+    tip.append(dot.dataset.title);
+    const box = nav.getBoundingClientRect();
+    const i = dots().indexOf(dot);
+    const centre = (centres[i] ?? 0) + (parseFloat(dot.style.getPropertyValue("--dock-x")) || 0);
+    tip.style.left = `${Math.round(centre - box.left)}px`;
+    tip.classList.add("is-on");
+  };
+  list.addEventListener("pointerenter", (event) => {
+    if (event.pointerType !== "mouse" || !matchMedia(FINE).matches) return;
+    for (const dot of dots()) {
+      dot.style.setProperty("--dock", "0");
+      dot.style.setProperty("--dock-x", "0px");
+      dot.style.transition = "background-color .3s, transform .3s, scale .16s ease-out, translate .16s ease-out";
+    }
+    const boxes = dots().map((dot) => dot.getBoundingClientRect());
+    centres = boxes.map((r) => r.left + r.width / 2);
+    widths = boxes.map((r) => r.width);
+  });
+  list.addEventListener("pointermove", (event) => {
+    if (event.pointerType !== "mouse" || !centres.length) return;
+    wave(event.clientX);
+    // the tooltip: the dot nearest the pointer
+    const nearest = dots()[nearestTo(event.clientX)] ?? null;
+    if (nearest !== over) showTip(nearest);
+  });
+  list.addEventListener("pointerleave", () => {
+    wave(null);
+    showTip(null);
+    centres = [];
+  });
+  // a click anywhere along the row goes to the dot nearest it (the dots are small; their gaps count too)
+  list.addEventListener("click", (event) => {
+    if (!stepping()) return;
+    const items = dots();
+    const at = centres.length
+      ? centres
+      : items.map((dot) => {
+          const r = dot.getBoundingClientRect();
+          return r.left + r.width / 2;
+        });
+    let nearest = 0;
+    at.forEach((c, i) => {
+      if (Math.abs(event.clientX - c) < Math.abs(event.clientX - at[nearest])) nearest = i;
+    });
+    if (items[nearest]) dotStep(items[nearest]);
+  });
 }
 
 /** True when this touch is on something that handles its own dragging or scrolls sideways. */
@@ -232,6 +389,22 @@ function controls() {
     show(hint!, hintOn);
     show(skip!, skipOn);
     skip!.tabIndex = skipOn ? 0 : -1;
+    // each story's dots: the step at or before where the page rests or glides to (its steps: every point but the exit)
+    stories.forEach((list, s) => {
+      const dots = dotLists[s]?.children;
+      if (!dots) return;
+      let on = 0;
+      for (let i = 0; i < list.length - 1; i++) if (list[i] <= y + 3) on = i;
+      on = Math.min(on, dots.length - 1); // (a story can rest once more past its last dot: the route's totals)
+      for (let i = 0; i < dots.length; i++) dots[i].classList.toggle("is-on", i === on);
+    });
+    // the arrows: dimmed at the story's first and last step (aria-disabled, so a focused one keeps its focus)
+    const atFirst = !points || y <= points[0] + 3;
+    const atLast = !points || y >= lastStep - 3;
+    for (const arrow of document.querySelectorAll<HTMLElement>("[data-story-step]")) {
+      const off = String(Number(arrow.dataset.storyStep) > 0 ? atLast : atFirst);
+      if (arrow.getAttribute("aria-disabled") !== off) arrow.setAttribute("aria-disabled", off);
+    }
   };
   const queue = () => {
     if (!queued) {
@@ -241,6 +414,12 @@ function controls() {
   };
   window.addEventListener("scroll", queue, { passive: true });
   window.addEventListener("resize", queue);
+  onGlide = update;
+  document.addEventListener("click", (event) => {
+    const arrow = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-story-step]") : null;
+    if (arrow && stepping()) arrowStep(Number(arrow.dataset.storyStep));
+  });
+  queue();
   // the site header slides in and out without a scroll: follow it once its slide (0.3s) is done
   const header = document.querySelector("[data-site-header]");
   if (header) new MutationObserver(() => window.setTimeout(queue, 340)).observe(header, { attributes: true, attributeFilter: ["class"] });
@@ -269,6 +448,21 @@ function start() {
     ".story-steps-skip.is-on{pointer-events:auto}" +
     ".story-steps-skip:focus-visible{outline:2px solid #d6ef8c;outline-offset:3px}" +
     "html[data-overlay-open] .story-steps-nav{display:none}" +
+    // a story's dots between its previous and next arrows (StoryDotsNav.astro); the arrows only while stepping is on
+    ".story-dots-nav{display:flex;align-items:center;gap:8px}" +
+    ".story-step-arrow{display:none;place-items:center;width:30px;height:30px;margin:0;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;opacity:.72;cursor:pointer;appearance:none;transition:opacity .25s,background-color .25s}" +
+    "html.story-snap-strict .story-step-arrow{display:grid}" +
+    ".story-step-arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}" +
+    "@media(hover:hover){.story-step-arrow:hover{opacity:1;background-color:color-mix(in srgb,currentColor 12%,transparent)}}" +
+    ".story-step-arrow[aria-disabled=true]{opacity:.22;cursor:default;background-color:transparent}" +
+    ".story-step-arrow:focus-visible{outline:2px solid #d6ef8c;outline-offset:2px;opacity:1}" +
+    // the dots: clickable, with a taller hit area than the dots themselves, swelling with --dock (dockDots)
+    ".story-dots-nav{position:relative}" +
+    "html.story-snap-strict .story-dots-nav ol{cursor:pointer;padding-block:10px!important;margin-block:-10px!important}" +
+    ".story-dots-nav li{scale:calc(1 + 1.5 * var(--dock,0));translate:var(--dock-x,0px) 0}" +
+    ".story-dot-tip{position:absolute;left:0;bottom:calc(100% + 10px);translate:-50% 4px;display:flex;flex-direction:column;gap:2px;max-width:280px;padding:7px 11px;border:1px solid #ffffff24;border-radius:9px;background:#1d2433f2;color:#f5f6f0;font:500 12px/1.35 Inter,Arial,sans-serif;text-align:center;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s,translate .18s;box-shadow:0 6px 18px #050b1b40}" +
+    ".story-dot-tip small{font-size:10.5px;font-weight:500;letter-spacing:.02em;color:#aeb6c6}" +
+    ".story-dot-tip.is-on{opacity:1;translate:-50% 0}" +
     "@media(prefers-reduced-motion:reduce){.story-steps-nav>*{transition:none;transform:none}}";
   document.head.append(style);
   controls();
@@ -483,7 +677,9 @@ function rebuild() {
       list: [...list].sort((a, b) => a - b),
       top: Array.isArray(result) ? undefined : result.top,
       pace: Array.isArray(result) ? 1 : result.pace ?? 1,
-      quick: Array.isArray(result) ? undefined : result.quick
+      quick: Array.isArray(result) ? undefined : result.quick,
+      dots: Array.isArray(result) ? null : result.dots ?? null,
+      leads: Array.isArray(result) ? undefined : result.leads
     };
   });
   const lists = read.map((story) => story.list);
@@ -491,6 +687,12 @@ function rebuild() {
   stories = kept.map((story) => story.list);
   paces = kept.map((story) => story.pace);
   quicks = kept.flatMap((story) => (story.quick ? [story.quick] : []));
+  dotLists = kept.map((story) => story.dots);
+  leadLists = kept.map((story) => story.leads);
+  for (const list of dotLists) {
+    const nav = list?.closest<HTMLElement>(".story-dots-nav");
+    if (nav) dockDots(nav);
+  }
   // entry: half a screen of the story showing (its top edge at the middle of the screen); without a top edge,
   // three quarters of a screen before its first step
   const vh = document.documentElement.clientHeight;
@@ -528,7 +730,7 @@ export function glideToStep(target: number) {
     window.scrollTo({ top: target, behavior: "smooth" });
     return;
   }
-  glideTo(target);
+  glideTo(target, 0, 1, CLICK_KICK);
 }
 
 /** Re-measures every story's resting points (on the next frame). */

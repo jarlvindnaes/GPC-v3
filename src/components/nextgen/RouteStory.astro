@@ -1,4 +1,5 @@
 ---
+import StoryDotsNav from "../StoryDotsNav.astro";
 // "How we route your supply chain" (How it works, #supply-chain): a pinned scroll story over a globe we draw
 // ourselves (route-story.ts). The captions describe what the route planner in the product does: curated container
 // port and rail freight terminal lists, cargo airports, maritime lanes, mainline rail, road legs to the nearest hubs.
@@ -35,7 +36,7 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
       <div class="is-all"><small>Total distance</small><b data-route-total="all">–</b></div>
       <span class="route-note">Illustrative route</span>
     </div>
-    <ol class="route-dots" aria-hidden="true">{steps.map(() => <li></li>)}</ol>
+    <StoryDotsNav class="route-dots-nav"><ol class="route-dots" aria-hidden="true">{steps.map(([title]) => <li data-title={title}></li>)}</ol></StoryDotsNav>
   </div>
 </section>
 <script>
@@ -81,16 +82,18 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
   .route-totals .is-sea{--c:var(--sea)}.route-totals .is-rail{--c:var(--rail)}.route-totals .is-road{--c:var(--road)}
   .route-totals b{display:block;margin-top:6px;font-size:20px;font-weight:600;color:#f5f7fc}
   .route-note{flex-basis:100%;text-align:right;font-size:11px;color:#8b95ad}
-  .route-dots{position:absolute;z-index:2;left:50%;bottom:22px;translate:-50% 0;display:none;gap:10px;margin:0;padding:0;list-style:none}
+  /* (the wrapper is StoryDotsNav's own element, outside this component's scope: :global) */
+  .route-story :global(.route-dots-nav){position:absolute;z-index:2;left:50%;bottom:10px;translate:-50% 0;display:none;color:#e6ebf5}
+  .route-dots{display:flex;gap:10px;margin:0;padding:0;list-style:none}
   .route-dots li{width:6px;height:6px;border-radius:50%;background:#ffffff33;transition:background .3s,transform .3s}
   .route-dots li.is-on{background:#d4ee9c;transform:scale(1.3)}
 
   /* pinned: one caption at a time (--rk from route-story.ts), the totals at the end */
-  .route-story.is-pinned .route-dots{display:flex}
+  .route-story.is-pinned :global(.route-dots-nav){display:flex}
   /* touch screens: above the fade into Safari's toolbar (SiteHeader.astro; the pinned panel is its own layer, so the
      dots can't rise over the fade from inside it), clear of the story controls below; they give way to the totals */
   @media(hover:none) and (pointer:coarse){
-    .route-story.is-pinned .route-dots{bottom:100px;opacity:calc(1 - clamp(0,calc((var(--rk,0) - 6.55) / .2),1))}
+    .route-story.is-pinned :global(.route-dots-nav){bottom:60px;opacity:calc(1 - clamp(0,calc((var(--rk,0) - 6.55) / .2),1))}
   }
   .route-story.is-pinned .route-steps article{--in:clamp(0,calc((var(--rk,0) - var(--i) + .12) / .2),1);--out:clamp(0,calc((var(--rk,0) - var(--i) - .72) / .14),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 22px - var(--out) * 14px))}
   .route-story.is-pinned .route-steps li:last-child article{--out:0}
@@ -100,7 +103,9 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
   .route-story.is-pinned .route-steps li{position:absolute;top:0;left:0;right:0}
   .route-story.is-pinned .route-steps li:has(article.is-on){position:relative}
   .route-story.is-pinned .route-totals{--t:clamp(0,calc((var(--rk,0) - 6.65) / .3),1);opacity:var(--t);transform:translateY(calc((1 - var(--t)) * 16px))}
-  /* the legend sits in the lower right corner, giving way to the distance cards at the end */
+  /* the legend sits in the lower right corner, above the story's Skip button (16px from the bottom, 40px tall),
+     giving way to the distance cards at the end */
+  .route-story.is-pinned .route-legend{bottom:76px}
   .route-story.is-pinned .route-legend{--l:clamp(0,calc((var(--rk,0) - .2) / .3),1);--x:clamp(0,calc((var(--rk,0) - 6.55) / .2),1);opacity:calc(var(--l) * (1 - var(--x)))}
   /* stacked (short screens): every caption listed, the finished route on the globe */
   .route-story:not(.is-pinned) .route-steps{gap:22px}
