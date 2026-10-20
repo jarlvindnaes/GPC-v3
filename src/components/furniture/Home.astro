@@ -103,7 +103,7 @@ const capabilities = [
 {i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-intro"><h3 class="sr-only">Supply chain management</h3><span class="intro-eyebrow" aria-hidden="true">Supply chain management</span></div><div class="globe-points">{supplierSteps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map(([Icon, point])=><p class="sentence"><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span>{point}</p>)}</div>)}</div><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><LazySupplyChainGlobe client:only="react" size={0.655} /></div></div></div>}
 {i===1&&<div class="co2-card"><div class="globe-intro co2-intro"><h3 class="sr-only">{b.title.replace(/\.$/, '')}</h3><span class="intro-eyebrow" aria-hidden="true">{b.title.replace(/\.$/, '')}</span></div><div class="globe-points co2-points">{co2Steps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map(([Icon, point])=><p class="sentence"><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span>{point}</p>)}</div>)}</div><small class="co2-note">EPD publication follows the applicable programme rules and independent verification.</small><div class="co2-report-wrap"><span class="co2-illustrative" aria-hidden="true">Illustrative data</span><Co2Report /></div></div>}
 {i===2&&<div class="screen-card compare"><div class="ui-bar"><span>Compare components</span><span class="pill">Illustrative data</span></div><div class="compare-body"><div class="product-thumb" data-reveal-at="0.62"><img src={`${base}v4/chair.webp`} width="640" height="427" alt="Oak chair used in the product comparison" loading="lazy"/><span>Cross Chair<small>Material comparison</small></span></div><div class="compare-grid"><div data-reveal-at="0.72"><small>Current material</small><h4>Oak / baseline</h4><strong>17.9 <em>kg CO₂e</em></strong><div class="compare-line"></div></div><div class="selected" data-reveal-at="1.22"><small>Alternative material</small><h4>Oak / scenario</h4><strong>14.2 <em>kg CO₂e</em></strong><div class="compare-line shorter"></div></div></div></div></div>}
-{b.id==='beat-regulation'&&<div class="eu-flag" aria-hidden="true">{euStars.map((st)=><svg class="eu-star" viewBox="-1 -1 2 2" aria-hidden="true" style={`--x:${st.x}%;--y:${st.y}%;--fx:${st.fx}px;--fy:${st.fy}px;--r:${st.r}deg;--a:${st.a}`}><polygon points={starPoints} /></svg>)}</div>}
+{b.id==='beat-regulation'&&<div class="eu-flag" data-reveal-at="0.87" aria-hidden="true">{euStars.map((st)=><svg class="eu-star" viewBox="-1 -1 2 2" aria-hidden="true" style={`--x:${st.x}%;--y:${st.y}%;--fx:${st.fx}px;--fy:${st.fy}px;--r:${st.r}deg;--a:${st.a}`}><polygon points={starPoints} /></svg>)}</div>}
 {i===3&&<div class="passport-composition"><div class="phone-live"><LazyPassportPhone client:only="react" /></div><small class="phone-caption">This passport is interactive. Enlarge it to explore.</small></div>}
 {b.id==='connect-clients'&&<div class="screen-card report"><div class="ui-bar"><span><span aria-hidden="true">◈</span> Customer channel</span><span class="pill">Coming this spring</span></div><div class="report-body"><span class="report-label">CROSS CHAIR / AFTER THE SALE</span><h4>Every passport,<br/>a storefront</h4><div class="record"><span class="check" aria-hidden="true">✓</span><span>Spare parts, matched to the exact product</span></div><div class="record"><span class="check" aria-hidden="true">✓</span><span>Accessories and upgrades</span></div><div class="record"><span class="check" aria-hidden="true">✓</span><span>Care and repair services</span></div><div class="record"><span class="check" aria-hidden="true">✓</span><span>A direct line to every product owner</span></div></div></div>}
 </div><BenefitProof index={i} /></div></section>)}</div><div class="story-markers" aria-hidden="true">{benefits.map((b)=><div class="story-marker" data-story-marker={b.id}></div>)}</div></div></div></section>
@@ -115,7 +115,7 @@ const capabilities = [
 <ClosingCta id="contact" text="Bring one of your products. We’ll walk through its data, its footprint and what its passport could look like." subject="Product Connect · Product demo" /></main><Footer />
 <script>
 import { motionPaused } from "../../utilities/motion";
-import { registerSnapPoints } from "../../utilities/storySnap";
+import { glideToStep, registerSnapPoints } from "../../utilities/storySnap";
 import { initDataScenes } from "./data-scenes";
 const disposeScenes = initDataScenes();
 document.addEventListener("astro:before-swap", disposeScenes, { once: true });
@@ -202,7 +202,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
  let harvestExit = 0;
  let shownPassportPart: string | null = null;
  let wantedPassportPart: string | null = null;
- let wantedPassportZoom = 1;
+ const wantedPassportZoom = 1; // (no zoom for now: the phone stays its size through Connect with clients)
  let shownPassportShift = 0;
  // Style writes skip unchanged values: each custom property write restyles everything under its element
  const written = new WeakMap<HTMLElement, Map<string, string>>();
@@ -323,8 +323,6 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     // shares the passport's canvas: while it is on screen the passport chapter's phone (and warm stone) stays
     // --pp-keep: 1 until Connect with clients itself fades out, so the passport leaves together with it
     stageVar('--pp-keep', (1 - clamp((k - 1.92) * 12.5)).toFixed(3));
-    // the passport phone zooms in a step with each of this chapter's bullets (they swap at k .3 and 1.42)
-    wantedPassportZoom = 1 + 0.1 * clamp((k - 0.26) / 0.14) + 0.12 * clamp((k - 1.36) / 0.14);
     // with its second bullet (k from 1.42, see home.css) the passport selects a part, as if tapped
     wantedPassportPart = staged && k >= 1.46 && k < 1.92 ? 'seat-cushion' : null;
    }
@@ -413,13 +411,59 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   }
   under.style.backgroundColor = `rgb(${colour.map((v) => Math.round(v)).join(',')})`;
  }
- // Tabs: on the one-stage layout, scroll to the point where that chapter has fully arrived.
+ // Steps (utilities/storySnap.ts): each bullet's resting point, where it is fully shown, read from its step's own
+ // timings in home.css (--a, --b, --b1, --b2, --o), and the scroll position for a chapter's --k
+ const stepNum = (el: Element, name: string) => parseFloat(getComputedStyle(el).getPropertyValue(name));
+ const chapterRests = (chapter: HTMLElement) => {
+  const rests: number[] = [];
+  chapter.querySelectorAll<HTMLElement>('.globe-points .step').forEach((step) => {
+   const sentences = step.querySelectorAll(':scope > .sentence').length;
+   const [a, b, b1, b2] = ['--a', '--b', '--b1', '--b2'].map((name) => stepNum(step, name));
+   const first = Number.isFinite(b1) ? b1 : a;
+   const end = Number.isFinite(b) && b < 2 ? b : 1.86; // (a step that stays to the chapter's end has --b 9)
+   if (!Number.isFinite(first)) return;
+   if (sentences >= 2 && Number.isFinite(b2)) rests.push((first + b2) / 2, (b2 + end) / 2);
+   else rests.push((first + end) / 2);
+  });
+  chapter.querySelectorAll<HTMLElement>('.chapter-points li').forEach((li) => {
+   const a = stepNum(li, '--a');
+   const o = stepNum(li, '--o');
+   if (Number.isFinite(a)) rests.push((a + (Number.isFinite(o) && o < 2 ? o : 1.86)) / 2);
+  });
+  return rests.filter((k) => k > 0 && k < 2);
+ };
+ const scrollForK = (i: number, k: number) => {
+  // (the layout viewport's height, which iOS Safari's toolbar doesn't change as you swipe, and the pin line without
+  // the header, which hides on the way down)
+  const vh = document.documentElement.clientHeight;
+  const pinLine = tabRow?.offsetHeight ?? 53;
+  const marker = markers[i];
+  const top = marker.getBoundingClientRect().top + window.scrollY;
+  const length = Math.max(1, marker.offsetHeight);
+  if (i === 0) return top - pinLine + (k - 1) * length; // (its steps all play past k 1)
+  const arrive = vh * ARRIVE;
+  const overlap = overlapFor(i);
+  const d = k <= 1 ? k * arrive : arrive + (k - 1) * Math.max(1, length - arrive + vh * (overlap - OVERLAP));
+  return top - (pinLine + vh * overlap - d);
+ };
+ // Tabs: on the one-stage layout, scroll to the point where that chapter has fully arrived; with story steps on, jump
+ // to where its lead-in starts (--k 0, either way) and glide from there through the lead-in, exactly onto its first
+ // step (anywhere near it, and the steps would settle the page one step on in the way it went)
  storyLinks.forEach((link, i) => {
   link.addEventListener('click', (event) => {
    if (!stageQuery.matches || !markers[i]) {
     return;
    }
    event.preventDefault();
+   const first = chapterRests(storyChapters[i])[0];
+   if (document.documentElement.classList.contains('story-snap-strict') && first !== undefined) {
+    // (the first chapter's --k 0 lies above the story: there, the lead-in starts where the stage pins)
+    const box = stage?.parentElement;
+    const pinned = box ? box.getBoundingClientRect().top + window.scrollY - (tabRow?.offsetHeight ?? 53) : -Infinity;
+    window.scrollTo({ top: Math.max(scrollForK(i, 0), Math.min(pinned, scrollForK(i, first))), behavior: 'instant' });
+    glideToStep(scrollForK(i, first));
+    return;
+   }
    const top = markers[i].getBoundingClientRect().top + window.scrollY;
    const offset = i === 0 ? 2 : window.innerHeight * (ARRIVE - overlapFor(i)) + 2;
    window.scrollTo({ top: top - pinLineNow() + offset, behavior: 'smooth' });
@@ -440,48 +484,18 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
  if (location.hash === '#benefits' && stageQuery.matches && markers[0] && (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type !== 'back_forward') {
   window.addEventListener('load', () => requestAnimationFrame(() => { window.scrollTo({ top: globeStepTop(), behavior: 'instant' }); storyUpdate(); }), { once: true });
  }
- // Snap points (utilities/storySnap.ts): one resting point per bullet, where it is fully shown, read from each step's
- // own timings in home.css (--a, --b, --b1, --b2, --o), then turned into the scroll position for that --k
+ // Snap points: every chapter's steps, then the exit (the last chapter at its end, where the story lets go)
  registerSnapPoints(() => {
   if (!stageQuery.matches) return [];
-  // (the layout viewport's height, which iOS Safari's toolbar doesn't change as you swipe)
-  const vh = document.documentElement.clientHeight;
-  const pinLine = tabRow?.offsetHeight ?? 53; // (the header hides on the way down)
-  const scrollFor = (i: number, k: number) => {
-   const marker = markers[i];
-   const top = marker.getBoundingClientRect().top + window.scrollY;
-   const length = Math.max(1, marker.offsetHeight);
-   if (i === 0) return top - pinLine + (k - 1) * length; // (its steps all play past k 1)
-   const arrive = vh * ARRIVE;
-   const overlap = overlapFor(i);
-   const d = k <= 1 ? k * arrive : arrive + (k - 1) * Math.max(1, length - arrive + vh * (overlap - OVERLAP));
-   return top - (pinLine + vh * overlap - d);
-  };
-  const num = (el: Element, name: string) => parseFloat(getComputedStyle(el).getPropertyValue(name));
-  const points: number[] = [];
-  storyChapters.forEach((chapter, i) => {
-   const rests: number[] = [];
-   chapter.querySelectorAll<HTMLElement>('.globe-points .step').forEach((step) => {
-    const sentences = step.querySelectorAll(':scope > .sentence').length;
-    const [a, b, b1, b2] = ['--a', '--b', '--b1', '--b2'].map((name) => num(step, name));
-    const first = Number.isFinite(b1) ? b1 : a;
-    const end = Number.isFinite(b) && b < 2 ? b : 1.86; // (a step that stays to the chapter's end has --b 9)
-    if (!Number.isFinite(first)) return;
-    if (sentences >= 2 && Number.isFinite(b2)) rests.push((first + b2) / 2, (b2 + end) / 2);
-    else rests.push((first + end) / 2);
-   });
-   chapter.querySelectorAll<HTMLElement>('.chapter-points li').forEach((li) => {
-    const a = num(li, '--a');
-    const o = num(li, '--o');
-    if (Number.isFinite(a)) rests.push((a + (Number.isFinite(o) && o < 2 ? o : 1.86)) / 2);
-   });
-   for (const k of rests) if (k > 0 && k < 2) points.push(scrollFor(i, k));
-  });
-  // the exit: the last chapter at its end, where the story lets go of the page
-  points.push(scrollFor(storyChapters.length - 1, 2));
+  const points = storyChapters.flatMap((chapter, i) => chapterRests(chapter).map((k) => scrollForK(i, k)));
+  points.push(scrollForK(storyChapters.length - 1, 2));
   // (its top edge: where the stage comes up from, for the entry)
   const box = stage?.parentElement ?? markers[0];
-  return { points, top: box.getBoundingClientRect().top + window.scrollY };
+  // the supplier chapter's steps sit far apart (its long runway gives the globe room), so its step-to-step glides are
+  // capped near the pace of the chapters after it rather than taking time from the distance
+  const supplier = chapterRests(storyChapters[0]).map((k) => scrollForK(0, k));
+  const quick = supplier.length > 1 ? { from: Math.min(...supplier), to: Math.max(...supplier), ms: 1050 } : undefined;
+  return { points, top: box.getBoundingClientRect().top + window.scrollY, quick };
  });
  // Keyboard: chapters that are not on screen stay focusable (transparent, not hidden), and focusing something in
  // one brings the story to that chapter, so the focused control is always visible (WCAG 2.1.1, 2.4.7, 2.4.11).

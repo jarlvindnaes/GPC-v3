@@ -799,7 +799,7 @@ html.story-stage :is(#product-passports,#connect-clients) .chapter-points li:nth
 html.story-stage #product-passports .chapter-points li:nth-child(2){--a:1.25}
 html.story-stage #connect-clients .chapter-points li:nth-child(2){--a:1.42}
 @media(prefers-reduced-motion:reduce){html.story-stage :is(#product-passports,#connect-clients) .chapter-points li{transform:none}}
-/* the passport phone zooms in a step per "Connect with clients" bullet (--pp-zoom, set by the story script) */
+/* the passport phone's zoom and shift (--pp-zoom, --pp-shift, set by the story script; at 1 for now) */
 html.story-stage .story-stage{--pp-zoom:1}
 html.story-stage #product-passports .phone-live{scale:var(--pp-zoom);translate:0 var(--pp-shift,0px);transform-origin:50% 50%}
 @media(prefers-reduced-motion:reduce){html.story-stage #product-passports .phone-live{scale:none;translate:none}}
@@ -1171,8 +1171,10 @@ html:not(.story-stage) #beat-regulation{background:#13285a;box-shadow:0 0 0 100v
 .eu-flag{position:absolute;right:-10vmin;bottom:-26vmin;width:min(72vmin,640px);aspect-ratio:1;background:radial-gradient(circle at 50% 50%,#4a6fe066 0%,#2c4fb033 34%,transparent 66%)}
 .eu-star{position:absolute;left:var(--x);top:var(--y);width:9%;aspect-ratio:1;overflow:visible;transform:translate(-50%,-50%);filter:drop-shadow(0 0 6px #ffcc0099) drop-shadow(0 0 22px #ffcc0055)}
 .eu-star polygon{fill:#ffcc00}
-html.story-on #beat-regulation .eu-flag{--q:clamp(0,calc((var(--k) - .45) / .3),1);opacity:var(--q)}
-html.story-on #beat-regulation .eu-star{--s:clamp(0,calc((var(--k) - var(--a)) / .3),1);--e:calc(1 - (1 - var(--s)) * (1 - var(--s)));opacity:clamp(0,calc(var(--s) * 2.5),1);transform:translate(-50%,-50%) translate(calc((1 - var(--e)) * var(--fx)),calc((1 - var(--e)) * var(--fy))) rotate(calc((1 - var(--e)) * var(--r))) scale(calc(.6 + .4 * var(--e)))}
+/* Played, not scrubbed: once the first bullet is reached (.is-revealed, data-reveal-at) the stars fly in by
+   themselves, staggered by --a, and settle smoothly into their circle; back out quickly above it */
+html.story-on #beat-regulation .eu-star{opacity:0;transform:translate(-50%,-50%) translate(var(--fx),var(--fy)) rotate(var(--r)) scale(.6);transition:opacity .3s ease,transform .4s ease-in}
+html.story-on #beat-regulation .eu-flag.is-revealed .eu-star{opacity:.5;transform:translate(-50%,-50%);transition:opacity .6s ease calc((var(--a) - .62) * 1.6s),transform 1.4s cubic-bezier(.16,.84,.24,1) calc((var(--a) - .62) * 1.6s)}
 @media(prefers-reduced-motion:reduce){html.story-on #beat-regulation .eu-star{transform:translate(-50%,-50%)}}
 html.motion-paused.story-on #beat-regulation .eu-star{transform:translate(-50%,-50%)}
 /* stacked chapters (phones, short screens): the stars get their own band under the text, cut off at its bottom
@@ -1195,7 +1197,6 @@ html:not(.story-stage) #beat-regulation .eu-flag{right:0;bottom:0;width:min(150v
 html:not(.story-stage) #beat-regulation .eu-flag{background:radial-gradient(circle at 50% 50%,#4a6fe059 0%,#2c4fb02e 22%,transparent 38%)}
 /* the stars as a quieter background: about half opacity, with a gentler glow */
 .eu-star{opacity:.5;filter:drop-shadow(0 0 6px #fff4cc66) drop-shadow(0 0 20px #ffe8a033)}
-html.story-on #beat-regulation .eu-star{opacity:calc(clamp(0,var(--s) * 2.5,1) * .5)}
 /* no haze at the circle's centre: just the stars on the flat blue */
 .eu-flag,html:not(.story-stage) #beat-regulation .eu-flag{background:none}
 /* Dynamic Product Model story (tablet width up, html.model-stage): the section pins for a few screens, the sphere

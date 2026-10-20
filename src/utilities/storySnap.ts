@@ -25,8 +25,11 @@ export const STORY_SNAP = {
 // glide to the next step once it comes to rest. Wheel and trackpad: each flick (a burst of wheel events) is one step.
 
 // a story's resting points, and optionally where its top edge is on the page (for its entry: half a screen of it showing)
-// (pace: this story's glides take that many times longer, for a story whose moves need time to be followed)
-type Source = () => number[] | { points: number[]; top: number; pace?: number };
+// (pace: this story's glides take that many times longer, for a story whose moves need time to be followed;
+// quick: a stretch of it, from and to scroll positions, whose step-to-step glides take at most ms, for steps that sit
+// far apart in scroll but should feel as brisk as the rest)
+type Quick = { from: number; to: number; ms: number };
+type Source = () => number[] | { points: number[]; top: number; pace?: number; quick?: Quick };
 
 const sources = new Set<Source>();
 const TOUCH = "(hover: none) and (pointer: coarse)";
@@ -37,6 +40,7 @@ let stories: number[][] = []; // each story's points, as scroll positions, in or
 let entries: number[] = []; // per story: the scroll position where it fills half the screen, coming from above
 let exitsUp: number[] = []; // per story: the scroll position where its top edge is at the bottom of the screen (out of view above)
 let paces: number[] = []; // per story: how much longer its glides take
+let quicks: Quick[] = []; // stretches whose step-to-step glides are capped
 
 function wanted(): boolean {
   if (typeof window === "undefined") return false;
@@ -87,7 +91,11 @@ function glideTo(target: number, speed = 0, pace = 1) {
   const length = Math.abs(distance);
   // (a story that asks for it glides slower: its steps, and the glide into it)
   const storyPace = paces[stories.findIndex((list) => list.includes(target))] ?? 1;
-  const duration = Math.min(1800, 420 + Math.max(0, length - 500) * 0.9) * GLIDE_PACE * pace * storyPace;
+  const quick = quicks.find((q) => from >= q.from - 3 && from <= q.to + 3 && target >= q.from - 3 && target <= q.to + 3);
+  const duration = Math.min(
+    Math.min(1800, 420 + Math.max(0, length - 500) * 0.9) * GLIDE_PACE * pace * storyPace,
+    quick?.ms ?? Infinity
+  );
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = performance.now();
   // a curve that leaves at the given speed and arrives at rest (cubic Hermite), its start capped so it never overshoots
@@ -474,13 +482,15 @@ function rebuild() {
     return {
       list: [...list].sort((a, b) => a - b),
       top: Array.isArray(result) ? undefined : result.top,
-      pace: Array.isArray(result) ? 1 : result.pace ?? 1
+      pace: Array.isArray(result) ? 1 : result.pace ?? 1,
+      quick: Array.isArray(result) ? undefined : result.quick
     };
   });
   const lists = read.map((story) => story.list);
   const kept = read.filter((story) => story.list.length > 1);
   stories = kept.map((story) => story.list);
   paces = kept.map((story) => story.pace);
+  quicks = kept.flatMap((story) => (story.quick ? [story.quick] : []));
   // entry: half a screen of the story showing (its top edge at the middle of the screen); without a top edge,
   // three quarters of a screen before its first step
   const vh = document.documentElement.clientHeight;
@@ -506,6 +516,19 @@ function rebuild() {
     }
     if (Math.abs(parseFloat(marker.style.top) - top) >= 4 || !marker.style.top) marker.style.top = `${top}px`;
   });
+}
+
+/**
+ * Glides the page to `target` (a story's step) the way a swipe would; a menu link uses it, since the browser's own
+ * smooth scroll can pause on the way and be settled onto a step next to the one it was going for.
+ */
+export function glideToStep(target: number) {
+  if (typeof window === "undefined") return;
+  if (!stepping()) {
+    window.scrollTo({ top: target, behavior: "smooth" });
+    return;
+  }
+  glideTo(target);
 }
 
 /** Re-measures every story's resting points (on the next frame). */
