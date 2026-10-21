@@ -58,6 +58,7 @@ export function initReveal() {
     },
     { rootMargin: "0px 0px -18% 0px", threshold: 0.2 }
   );
+  // (200px beyond the screen: the 36px a hidden piece sits lower can't carry it back into view and start a loop)
   const leave = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) continue;
@@ -68,7 +69,7 @@ export function initReveal() {
       el.style.removeProperty("--rv-d");
       el.classList.add("rv");
     }
-  });
+  }, { rootMargin: "200px 0px" });
   for (const el of targets) {
     arrive.observe(el);
     leave.observe(el);
