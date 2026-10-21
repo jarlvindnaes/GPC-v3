@@ -91,10 +91,9 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
   /* pinned: one caption at a time (--rk from route-story.ts), the totals at the end; a caption leaves the moment the
      page sets off from its step (its rest, --rk i + .5) and the next one comes straight in, while the globe moves */
   .route-story.is-pinned :global(.route-dots-nav){display:flex}
-  /* touch screens: above the fade into Safari's toolbar (SiteHeader.astro; the pinned panel is its own layer, so the
-     dots can't rise over the fade from inside it), clear of the story controls below; they give way to the totals */
+  /* touch screens: low, over the panel's own fade (story-teaser.css); they give way to the totals */
   @media(hover:none) and (pointer:coarse){
-    .route-story.is-pinned :global(.route-dots-nav){bottom:60px;opacity:calc(1 - clamp(0,calc((var(--rk,0) - 6.55) / .2),1))}
+    .route-story.is-pinned :global(.route-dots-nav){bottom:6px;opacity:calc(1 - clamp(0,calc((var(--rk,0) - 6.55) / .2),1))}
   }
   .route-story.is-pinned .route-steps article{--in:clamp(0,calc((var(--rk,0) - var(--i) + .42) / .22),1);--out:clamp(0,calc((var(--rk,0) - var(--i) - .53) / .12),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 22px - var(--out) * 14px))}
   /* (the first caption comes in from the story's top, as the page glides into its first step: text first) */

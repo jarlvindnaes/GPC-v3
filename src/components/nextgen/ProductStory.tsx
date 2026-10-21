@@ -536,7 +536,13 @@ export default function ProductStory({ base }: { base: string }) {
                     key={fact.key}
                     data-fact={fact.key}
                     className={`screw-fact fact-${fact.key}${fact.extra ? " is-extra" : ""}`}
-                    onPointerEnter={(event) => measureFact(event.currentTarget)}
+                    // hovered by a mouse (.is-hover): a touch screen's tap leaves a sticky :hover behind, which would
+                    // keep a closed card at its open width
+                    onPointerEnter={(event) => {
+                      measureFact(event.currentTarget);
+                      if (event.pointerType === "mouse") event.currentTarget.classList.add("is-hover");
+                    }}
+                    onPointerLeave={(event) => event.currentTarget.classList.remove("is-hover")}
                     // keyboard: a card opens while focused, as it does on hover (WCAG 2.1.1)
                     tabIndex={showFacts && fact.points.length ? 0 : -1}
                     onFocus={(event) => {

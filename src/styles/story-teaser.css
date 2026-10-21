@@ -14,3 +14,12 @@
 /* (the sage border of the closing call to action, its own buttons' too: the model story's Learn more) */
 .teaser-open:focus-visible{outline:2px solid #d6ef8c;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.teaser-open{transition:none}.teaser-open:hover{transform:none}}
+
+/* touch screens: each story's pinned panel above the page's fade into Safari's toolbar (SiteHeader.astro), drawing
+   that fade itself (in the colour and strength SiteHeader sets: --story-edge, --story-edge-o), so the story's dots sit
+   over it, low on the screen */
+@media(hover:none) and (pointer:coarse){
+ html.story-stage .story-stage,html.model-stage .model-pin,.route-story.is-pinned .route-pin{z-index:2}
+ html.story-stage .chapters{z-index:2} /* (the benefits stage sits in .chapters' own layer: that layer rises with it) */
+ html.story-stage .story-stage::after,html.model-stage .model-pin::after,.route-story.is-pinned .route-pin::after{content:"";position:absolute;left:0;right:0;bottom:0;height:72px;z-index:1;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--story-edge,transparent));opacity:var(--story-edge-o,1)}
+}
