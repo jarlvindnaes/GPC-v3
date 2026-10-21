@@ -447,8 +447,10 @@ html{scroll-padding-top:115px}
 .product-story .reuse-chart svg{max-height:210px}
 .product-story .reuse-chart-title{font-size:15px}
 @media(max-width:700px){
- .product-story .reuse-chart{left:0;right:0;bottom:0;width:auto;padding:10px 14px 4px}
- .product-story .reuse-chart svg{max-height:84px}
+ /* (the whole frame: its drawing grows to the height left under its caption, ReuseChart.tsx) */
+ .product-story .reuse-chart{inset:0;width:auto;padding:16px 16px 8px;display:flex;flex-direction:column;border-width:0}
+ .product-story .reuse-chart-plot{position:relative;flex:1;min-height:0}
+ .product-story .reuse-chart-plot svg{position:absolute;inset:0;width:100%;height:100%;max-height:none}
  .story-viewer{height:calc(100svh - 425px)}
 }
 @media(max-width:700px) and (max-height:700px){.story-viewer{height:calc(100svh - 405px)}}
@@ -508,3 +510,10 @@ html:has(.story-back){scroll-padding-bottom:90px} /* focused content scrolls cle
  .teaser-route .teaser-visual{position:relative;left:auto;right:auto;height:420px;margin:24px -24px 0;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 30%);mask-image:linear-gradient(to bottom,transparent,#000 30%)} /* (the still's globe runs off its top edge: faded in, rather than cut off under the copy) */
  .teaser-route .teaser-visual img{height:100%;margin-left:-12%}
 }
+
+/* the product story's chapter text (ProductStory.tsx): out, then the next chapter's in, line by line */
+.story-narrative :is(.chapter-copy>*,.chapter-points>li){animation:ch-in .55s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--n,0) * .07s)}
+.story-narrative .is-leaving:is(.chapter-copy,.chapter-points)>*{animation:ch-out .26s ease both}
+@keyframes ch-in{from{opacity:0;transform:translateY(14px)}}
+@keyframes ch-out{to{opacity:0;transform:translateY(-10px)}}
+@media(prefers-reduced-motion:reduce){.story-narrative :is(.chapter-copy>*,.chapter-points>li){animation:none}}

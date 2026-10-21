@@ -158,6 +158,29 @@ export default function ProductStory({ base }: { base: string }) {
   const [status, setStatus] = useState("Loading the product model…");
   const [ready, setReady] = useState(false);
   const { chapter, separation, assembled } = getStoryFrame(progress);
+  // The reuse chart only once the chair has visibly come back together: the scene's own (eased) assembly and camera
+  // settled at rest, then a short beat, not as soon as the scroll passes the assembled point
+  const [chartIn, setChartIn] = useState(false);
+  const atEnd = chapter === 2 && assembled;
+  useEffect(() => {
+    if (!atEnd) {
+      setChartIn(false);
+      return;
+    }
+    let settledSince = 0;
+    const timer = window.setInterval(() => {
+      const host = hostRef.current;
+      const settled = !host?.dataset.separation || (Number(host.dataset.separation) <= 0.005 && Number(host.dataset.closeUp ?? 0) <= 0.01);
+      const now = performance.now();
+      if (!settled) settledSince = 0;
+      else if (!settledSince) settledSince = now;
+      else if (now - settledSince >= 600) {
+        setChartIn(true);
+        window.clearInterval(timer);
+      }
+    }, 100);
+    return () => window.clearInterval(timer);
+  }, [atEnd]);
   // Labels around the screw while it is centre stage (step 2, fully apart); gone again in step 3.
   const showFacts = chapter === 1 && separation > 0.85;
   const factsRef = useRef<HTMLDivElement>(null);
@@ -343,6 +366,23 @@ export default function ProductStory({ base }: { base: string }) {
     }
   };
   const current = chapters[chapter];
+  // The chapter's text under the viewer: on a change, the old text eases out, then the new one comes in, line by line
+  const [shown, setShown] = useState(chapter);
+  const [leaving, setLeaving] = useState(false);
+  useEffect(() => {
+    if (chapter === shown) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(chapter);
+      return;
+    }
+    setLeaving(true);
+    const timer = window.setTimeout(() => {
+      setShown(chapter);
+      setLeaving(false);
+    }, 260);
+    return () => window.clearTimeout(timer);
+  }, [chapter, shown]);
+  const text = chapters[shown];
 
   useEffect(() => {
     const host = hostRef.current;
@@ -385,7 +425,7 @@ export default function ProductStory({ base }: { base: string }) {
       const sticky = section.querySelector<HTMLElement>(".story-sticky");
       const travel = Math.max(1, section.offsetHeight - (sticky?.offsetHeight || window.innerHeight));
       const top = section.getBoundingClientRect().top + window.scrollY;
-      return { points: [0, 0.52, 0.94, 1].map((p) => top + travel * p), top, pace: 2, entryMs: 1000 }; // (1: its exit)
+      return { points: [0, 0.52, 0.94, 1].map((p) => top + travel * p), top, pace: 3.5, launch: 1.2, steady: true, lead: false }; // (1: its exit; no lead-in, it carried the page on past step 1; slow, even glides whatever the swipe, so the chair can be followed coming apart and back together)
     });
     // Our exploding chair (copied from the hero, then tweaked for the story); Jarl's original scene
     // stays in productStoryScene.ts.
@@ -514,7 +554,7 @@ export default function ProductStory({ base }: { base: string }) {
               />
               {!ready && <output className="story-loading">{status}</output>}
               {/* once the chair is back together: what reusing its components saves on the next products */}
-              {chapter === 2 && assembled && <ReuseChart />}
+              {atEnd && chartIn && <ReuseChart />}
               <div
                 className={`screw-facts${showFacts ? " is-on" : ""}`}
                 aria-hidden={!showFacts}
@@ -626,13 +666,13 @@ export default function ProductStory({ base }: { base: string }) {
                 ))}
               </fieldset>
             </div>
-            <div className="chapter-copy">
-              <h2 id="inside-heading">{current.title}</h2>
-              <p>{current.text}</p>
+            <div className={`chapter-copy${leaving ? " is-leaving" : ""}`} key={`copy-${shown}`}>
+              <h2 id="inside-heading" style={{ "--n": 0 } as React.CSSProperties}>{text.title}</h2>
+              <p style={{ "--n": 1 } as React.CSSProperties}>{text.text}</p>
             </div>
-            <ul className="chapter-points">
-              {current.points.map((point) => (
-                <li key={point}>{point}</li>
+            <ul className={`chapter-points${leaving ? " is-leaving" : ""}`} key={`points-${shown}`}>
+              {text.points.map((point, i) => (
+                <li key={point} style={{ "--n": i + 2 } as React.CSSProperties}>{point}</li>
               ))}
             </ul>
             <p

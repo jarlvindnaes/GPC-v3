@@ -590,6 +590,7 @@ export async function createChairStoryScene(
     scene.overrideMaterial = null;
     composer.render();
     host.dataset.separation = separation.toFixed(3);
+    host.dataset.closeUp = closeUp.toFixed(3); // (with separation: ProductStory.tsx waits for both to settle)
   };
   frame = requestAnimationFrame(render);
 

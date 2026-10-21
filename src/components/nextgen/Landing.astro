@@ -71,9 +71,11 @@ const howItWorks = `${base}how-it-works/`;
 </main><Footer />
 <script>
   import { initStoryTakeovers } from "../../utilities/storyTakeover";
+  import { initReveal } from "../../utilities/reveal";
   // the route story waits behind its teaser (#supply-chain, where links to it land), and takes over the page when
   // opened (utilities/storyTakeover.ts)
   initStoryTakeovers();
+  initReveal(); // (the sections' text fades up into place as it is reached)
   // Arriving from a link to one of this page's sections (the homepage's product model "Learn more" links): jump
   // there once the page has its final layout (no smooth scroll; the hero and stories change heights as they load)
   const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;

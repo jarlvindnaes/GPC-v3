@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from "react";
 // "Reuse it everywhere" step: how much time each new product takes once its components are already in
 // the library. Visual-first take on our "Calculate each component once" chart, drawn in the style of
 // Jarl's Product memory chart (light version). Bars grow one by one, then a dashed slate-blue→sage curve
@@ -11,62 +12,82 @@ const BARS = [
   { label: "Product 5+", value: 0.25, text: "≈ 2 hrs" },
 ];
 const VW = 520;
-const BASE = 168; // baseline y
-const MAX_H = 128; // bar height for the largest value
 const SLOT = VW / BARS.length;
 const BAR_W = 22;
 const MAX = BARS[0].value;
-
-const bars = BARS.map((b, i) => {
-  const h = Math.max(4, (b.value / MAX) * MAX_H);
-  const cx = SLOT * i + SLOT / 2;
-  return { ...b, i, h, cx, x: cx - BAR_W / 2, top: BASE - h };
-});
-// One smooth curve from the first bar top to the last: the time roughly halves with each product, so
-// it follows a single exponential decay (sampled densely) rather than bending at every bar.
-const FIRST = bars[0];
-const END = bars.at(-1)!;
-const DECAY = END.h / FIRST.h;
-let CURVE = "";
-for (let s = 0; s <= 60; s++) {
-  const f = s / 60;
-  const x = FIRST.cx + (END.cx - FIRST.cx) * f;
-  const y = BASE - FIRST.h * DECAY ** f;
-  CURVE += `${s ? " L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`;
-}
-// Height of the curve at a given x, so a value label can sit above whichever is higher there: the bar
-// top or the curve (the smooth curve passes a little above some bars, e.g. Product 2).
-const curveY = (x: number) =>
-  BASE - FIRST.h * DECAY ** ((x - FIRST.cx) / (END.cx - FIRST.cx));
-// Lift each value label above the bar top and above the curve across the label's whole width
-// (the curve is steep near Product 2, so checking only the centre isn't enough).
 const LABEL_HALF = 30;
-const labelY = (cx: number, top: number) => {
-  let highest = top;
-  for (let x = cx - LABEL_HALF; x <= cx + LABEL_HALF; x += 3) {
-    if (x >= FIRST.cx && x <= END.cx) {
-      highest = Math.min(highest, curveY(x) - 4);
-    }
-  }
-  return highest - 8;
-};
-// Bars: rounded top corners only, square at the baseline.
 const R = 5;
-const barPath = (x: number, top: number, h: number) => {
-  const r = Math.min(R, h / 2, BAR_W / 2);
-  return `M ${x} ${BASE} V ${top + r} Q ${x} ${top} ${x + r} ${top} H ${x + BAR_W - r} Q ${x + BAR_W} ${top} ${x + BAR_W} ${top + r} V ${BASE} Z`;
-};
-const last = bars.at(-1)!;
+
+// The chart's geometry for a drawing VH units tall (200 as a strip; taller where its card fills the frame, phones):
+// the baseline 32 above the bottom, the tallest bar reaching 40 below the top.
+function geometry(VH: number) {
+  const BASE = VH - 32; // baseline y
+  const MAX_H = BASE - 40; // bar height for the largest value
+  const bars = BARS.map((b, i) => {
+    const h = Math.max(4, (b.value / MAX) * MAX_H);
+    const cx = SLOT * i + SLOT / 2;
+    return { ...b, i, h, cx, x: cx - BAR_W / 2, top: BASE - h };
+  });
+  // One smooth curve from the first bar top to the last: the time roughly halves with each product, so
+  // it follows a single exponential decay (sampled densely) rather than bending at every bar.
+  const FIRST = bars[0];
+  const END = bars.at(-1)!;
+  const DECAY = END.h / FIRST.h;
+  let CURVE = "";
+  for (let s = 0; s <= 60; s++) {
+    const f = s / 60;
+    const x = FIRST.cx + (END.cx - FIRST.cx) * f;
+    const y = BASE - FIRST.h * DECAY ** f;
+    CURVE += `${s ? " L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }
+  // Height of the curve at a given x, so a value label can sit above whichever is higher there: the bar
+  // top or the curve (the smooth curve passes a little above some bars, e.g. Product 2).
+  const curveY = (x: number) => BASE - FIRST.h * DECAY ** ((x - FIRST.cx) / (END.cx - FIRST.cx));
+  // Lift each value label above the bar top and above the curve across the label's whole width
+  // (the curve is steep near Product 2, so checking only the centre isn't enough).
+  const labelY = (cx: number, top: number) => {
+    let highest = top;
+    for (let x = cx - LABEL_HALF; x <= cx + LABEL_HALF; x += 3) {
+      if (x >= FIRST.cx && x <= END.cx) {
+        highest = Math.min(highest, curveY(x) - 4);
+      }
+    }
+    return highest - 8;
+  };
+  // Bars: rounded top corners only, square at the baseline.
+  const barPath = (x: number, top: number, h: number) => {
+    const r = Math.min(R, h / 2, BAR_W / 2);
+    return `M ${x} ${BASE} V ${top + r} Q ${x} ${top} ${x + r} ${top} H ${x + BAR_W - r} Q ${x + BAR_W} ${top} ${x + BAR_W} ${top + r} V ${BASE} Z`;
+  };
+  return { BASE, bars, FIRST, last: END, CURVE, labelY, barPath };
+}
 
 export function ReuseChart({ id = "rc" }: { id?: string }) {
+  // as tall as the room its drawing is given (CSS: the whole frame on phones), at least the strip's 200
+  const holder = useRef<HTMLDivElement>(null);
+  const [VH, setVH] = useState(200);
+  useEffect(() => {
+    const el = holder.current;
+    if (!el) return;
+    const fit = () => {
+      const { width, height } = el.getBoundingClientRect();
+      setVH(width && height > 1 ? Math.round(Math.min(760, Math.max(200, (VW * height) / width))) : 200);
+    };
+    const observer = new ResizeObserver(fit);
+    observer.observe(el);
+    fit();
+    return () => observer.disconnect();
+  }, []);
+  const { BASE, bars, FIRST, last, CURVE, labelY, barPath } = useMemo(() => geometry(VH), [VH]);
   return (
     <figure className="reuse-chart">
       <figcaption>
         <span className="reuse-chart-title">Time to add each product</span>
         <span className="reuse-chart-note">Illustrative</span>
       </figcaption>
+      <div className="reuse-chart-plot" ref={holder}>
       <svg
-        viewBox={`0 0 ${VW} 200`}
+        viewBox={`0 0 ${VW} ${VH}`}
         role="img"
         aria-label="The first product takes about a week to add. Each later product reuses its components and takes less time: two days, one day, then a few hours."
       >
@@ -107,6 +128,7 @@ export function ReuseChart({ id = "rc" }: { id?: string }) {
         <circle className="rc-start" cx={FIRST.cx} cy={FIRST.top} r="5" />
         <circle className="rc-head" cx={last.cx} cy={last.top} r="5" />
       </svg>
+      </div>
     </figure>
   );
 }

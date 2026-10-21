@@ -83,7 +83,10 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
 /* compact (the model story's step): the chart alone, no section padding or rule; its timeline controls hidden */
 .memory.memory-compact{padding:0;border-top:0}
 .memory-compact .memory-chart{margin:0}
-.memory-compact :is(.memory-legend,.memory-track,.memory-foot){display:none}
+.memory-compact .memory-legend{display:none}
+/* (its timeline's line and ends, as the base of the chart; not the controls or the note) */
+.memory-compact .memory-track{height:42px;margin-top:14px}
+.memory-compact :is(.memory-range,.track-event,.memory-foot){display:none}
 /* drawn at whatever size its step gives it, its labels and dots stay one size on screen: --u, chart units per
    screen pixel (set by the script below) */
 .memory-compact{--u:2}
@@ -98,7 +101,7 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
 .memory-compact .memory-bubble strong{font-size:13px}
 .memory-compact .memory-bubble b{font-size:16px}
 .memory{border-top:1px solid #292a2d;padding:100px max(50px, calc((100% - 1240px) / 2)) 64px;color:#f8f9fc}
-.memory-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
+.memory-tag{display:inline-block;font-size:12px;font-weight:550;letter-spacing:1.4px;text-transform:uppercase;color:#b4c0ff} /* (the site's eyebrow, as on the dark story teasers) */
 .memory h2{font-size:clamp(32px,3.8vw,52px);line-height:1.1;letter-spacing:-.035em;font-weight:500;margin:26px 0 0}
 .memory h2 span{color:#8b919c}
 .memory-lead{max-width:600px;margin:22px 0 0;font-size:17px;line-height:1.65;color:#a2a8b3}

@@ -19,6 +19,17 @@ function shadeAt(fx: number, fy: number, cx: number, cy: number, r: number, px: 
   return `rgb(${a0.map((v, j) => Math.round(v + (a1[j] - v) * k)).join(", ")})`;
 }
 
+/**
+ * The sphere's circle on its canvas (w × h): its top edge (Home.astro's --dome reads it here) a little higher than at
+ * first (1.055h less the first radius, min(0.53w, 0.69h)), and a larger radius, so the circle is wider and flatter and reaches
+ * further out to the sides, giving the story's chapters more room inside it.
+ */
+export function sphereCircle(w: number, h: number) {
+  const top = h * 1.015 - Math.min(w * 0.53, h * 0.69); // (4% of the height higher than it first was)
+  const r = Math.max(Math.min(w * 0.53, h * 0.69), Math.min(w * 0.6, h));
+  return { r, cx: w * 0.5, cy: top + r };
+}
+
 export function initDataScenes() {
   const cleanups: (() => void)[] = [];
   for (const canvas of document.querySelectorAll<HTMLCanvasElement>("canvas[data-scene]")) {
@@ -48,9 +59,7 @@ export function initDataScenes() {
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
       if (sphere) {
-        const r = Math.min(w * 0.53, h * 0.69),
-          cx = w * 0.5,
-          cy = h * 1.055;
+        const { r, cx, cy } = sphereCircle(w, h);
         const glow = ctx.createRadialGradient(cx, cy, r * 0.8, cx, cy, r * 1.3);
         glow.addColorStop(0, "#718ab31c");
         glow.addColorStop(1, "#11121400");
@@ -177,9 +186,10 @@ export function initDataScenes() {
           label = area ? lx - sw * 0.36 - 40 : ox + sw * 0.015;
         // (the sphere as the sphere scene draws it, in this canvas's coordinates)
         const sphereBox = rimSphere?.getBoundingClientRect();
-        const sr = sphereBox && Math.min(sphereBox.width * 0.53, sphereBox.height * 0.69),
-          scx = sphereBox ? sphereBox.left + sphereBox.width / 2 - own!.left : 0,
-          scy = sphereBox ? sphereBox.top + sphereBox.height * 1.055 - own!.top : 0;
+        const circle = sphereBox && sphereCircle(sphereBox.width, sphereBox.height);
+        const sr = circle?.r,
+          scx = sphereBox ? sphereBox.left + circle!.cx - own!.left : 0,
+          scy = sphereBox ? sphereBox.top + circle!.cy - own!.top : 0;
         // A convex lens gathers parallel information streams into a single focus.
         for (let i = 0; i < 9; i++) {
           const y = cy + (i - 4) * ry * 0.2;

@@ -33,7 +33,9 @@ export const STORY_SNAP = {
 // the glide into its first step from above takes that long, whatever the distance (default: as its other glides); hintLow: on
 // touch screens its "Swipe ↓" hint sits just above its dots, clear of text at the top of its screen; launch: its
 // step-to-step glides leave already moving, at that many times their average speed, and ease into the step, so a slow
-// story's move starts the moment it is asked for instead of easing out of rest)
+// story's move starts the moment it is asked for instead of easing out of rest; lead: false, no glide into its first
+// step as it comes into view (the page scrolls on as usual, and settles onto that first step, not the second); steady:
+// its glides keep their own pace whatever the swipe's speed (a flick doesn't rush them past what they show))
 type Quick = { from: number; to: number; ms: number };
 type Source = () =>
   | number[]
@@ -47,6 +49,8 @@ type Source = () =>
       leads?: number[];
       hintLow?: boolean;
       launch?: number;
+      lead?: boolean;
+      steady?: boolean;
     };
 
 const sources = new Set<Source>();
@@ -59,6 +63,9 @@ let entries: number[] = []; // per story: the scroll position where it fills hal
 let exitsUp: number[] = []; // per story: the scroll position where its top edge is at the bottom of the screen (out of view above)
 let paces: number[] = []; // per story: how much longer its glides take
 let launches: number[] = []; // per story: how fast its step-to-step glides leave (0: from rest)
+let leadsIn: boolean[] = []; // per story: whether it glides the page in onto its first step
+let steadies: boolean[] = []; // per story: whether its glides ignore the swipe's speed
+let outsideAt: number | null = null; // where the page last came to rest outside any story
 let entryMs: (number | undefined)[] = []; // per story: how long its way in takes, if set
 let quicks: Quick[] = []; // stretches whose step-to-step glides are capped
 let dotLists: (HTMLElement | null)[] = []; // per story: its progress dots
@@ -106,6 +113,9 @@ const CLICK_KICK = 1.6;
 function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
   if (glide) cancelAnimationFrame(glide.frame);
   const from = window.scrollY;
+  // (into a story without a lead-in, from above it: never past its first step, whatever asked for the glide)
+  const into = stories.findIndex((list, i) => !leadsIn[i] && from < list[0] - 3 && target > list[0] + 3 && target <= list[list.length - 1] + 3);
+  if (into >= 0) target = stories[into][0];
   const distance = target - from;
   if (Math.abs(distance) < 1) {
     glide = null;
@@ -128,7 +138,8 @@ function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
   const start = performance.now();
   // a curve that leaves at the given speed and arrives at rest (cubic Hermite), its start capped so it never overshoots
   const launch = s >= 0 ? launches[s] ?? 0 : 0;
-  const lead = Math.max(Math.min(Math.max(0, speed) * duration, length * 2.5), length * Math.max(kick, launch)) * Math.sign(distance);
+  const fromSwipe = s >= 0 && steadies[s] ? 0 : Math.min(Math.max(0, speed) * duration, length * 2.5);
+  const lead = Math.max(fromSwipe, length * Math.max(kick, launch)) * Math.sign(distance);
   const at = (u: number) => lead * (u * u * u - 2 * u * u + u) + distance * (3 * u * u - 2 * u * u * u);
   const step = (now: number) => {
     const u = reduce ? 1 : Math.min(1, (now - start) / duration);
@@ -143,10 +154,29 @@ function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
   onGlide(); // (the dots and arrows follow the chosen step straight away)
 }
 let onGlide = () => {};
+let reachedFirst: number | null = null; // a lead-less story whose first step a dragging finger has scrolled past
+/** Stops the page at y at once, also a momentum scroll (which a scrollTo alone doesn't end on iOS). */
+// where stopAt holds the page, against leftover momentum: iOS keeps a flick's momentum running for seconds after a
+// scrollTo, so the hold lasts at least 1.5s and while scroll events keep coming (until the page has been still for
+// 0.4s, at most 4s, or a finger touches the screen)
+let hold: { y: number; start: number; last: number } | null = null;
+let stoppedAt: { y: number; at: number } | null = null;
+function stopAt(y: number) {
+  hold = { y, start: performance.now(), last: performance.now() };
+  stoppedAt = { y, at: performance.now() };
+  const html = document.documentElement;
+  const before = html.style.overflow;
+  html.style.overflow = "hidden";
+  window.scrollTo({ top: y, behavior: "instant" });
+  requestAnimationFrame(() => {
+    if (html.style.overflow === "hidden") html.style.overflow = before;
+  });
+}
 // the step a glide last arrived at, and when: iOS keeps a swipe's momentum running under our glide, so the page can
 // drift on a little after arriving, and settling that drift must not count as a new step (the entry would skip step 1)
 let landed: { target: number; at: number } | null = null;
 const DRIFT_MS = 900;
+const DRIFT_PX = 48; // (resting this close to a step counts as resting on it)
 
 /** Where a one-step move in `direction` from `base` goes: the next or previous step, or out of the story at its ends. */
 function stepFrom(base: number, direction: number): number | undefined {
@@ -171,6 +201,11 @@ const isFirstStep = (target: number) => stories.some((list) => Math.abs(list[0] 
 
 /** A swipe or flick: one step on from where the page is (or is gliding to), picking up the finger's speed. */
 function swipe(direction: number, speed = 0) {
+  // (a steady story's glides are long: a swipe on the way, the same way, isn't another step on top of it)
+  if (glide) {
+    const s = stories.findIndex((list) => list.includes(glide!.target));
+    if (s >= 0 && steadies[s] && Math.sign(glide.target - window.scrollY) === direction) return;
+  }
   const base = glide ? glide.target : window.scrollY;
   const target = stepFrom(base, direction);
   if (target === undefined) return;
@@ -338,7 +373,11 @@ function dockDots(nav: HTMLElement) {
 }
 
 /** True when this touch is on something that handles its own dragging or scrolls sideways. */
+// the stories' own controls (the close button, the dots and arrows, the chapter tabs): a tap there, even one that
+// wobbles a few pixels, is always theirs, never a swipe
+const CONTROLS = ".story-takeover-close, .story-dots-nav, .benefit-nav, .model-tabs, .story-steps-nav";
 function ownsTouch(target: EventTarget | null): boolean {
+  if (target instanceof Element && target.closest(CONTROLS)) return true;
   for (let el = target instanceof Element ? target : null; el && el !== document.documentElement; el = el.parentElement) {
     const style = getComputedStyle(el);
     const action = style.touchAction;
@@ -421,6 +460,11 @@ function controls() {
       const dotsTop = dots?.getBoundingClientRect().top;
       let top = 0;
       for (const bar of document.querySelectorAll<HTMLElement>("[data-site-header], .benefit-nav, .model-tabs")) {
+        // (the site header by whether it is shown, not where its slide has got to, so the hint doesn't bob with it)
+        if (bar.matches("[data-site-header]")) {
+          if (!bar.classList.contains("is-hidden") && bar.getClientRects().length) top = Math.max(top, bar.offsetHeight);
+          continue;
+        }
         const box = bar.getBoundingClientRect();
         if (box.bottom > 0 && box.top < window.innerHeight / 3) top = Math.max(top, box.bottom);
       }
@@ -483,7 +527,7 @@ function start() {
     ".story-steps-nav>*{position:fixed;z-index:30;top:calc(100svh - 16px - 40px);height:40px;pointer-events:none;font:500 13px/1 Inter,Arial,sans-serif;display:inline-flex;align-items:center;gap:8px;padding:0 15px;border:1px solid #ffffff2e;border-radius:999px;background:#1d2433e0;color:#f5f6f0;box-shadow:0 -2px 10px #050b1b33;opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;white-space:nowrap}" +
     ".story-steps-nav>.is-on{opacity:1;transform:none}" +
     // the hint: top right, just below whatever bars are showing at the top (set as you scroll)
-    ".story-steps-nav>.story-steps-hint{top:var(--story-hint-top,80px);right:16px}" +
+    ".story-steps-nav>.story-steps-hint{top:var(--story-hint-top,80px);right:16px;transition:opacity .35s ease,transform .35s ease,top .3s ease}" +
     ".story-steps-nav>[hidden]{display:none}" +
     "html[data-overlay-open] .story-steps-nav{display:none}" +
     // a story's dots between its previous and next arrows (StoryDotsNav.astro); the arrows only while stepping is on
@@ -526,6 +570,7 @@ function start() {
   window.addEventListener(
     "touchstart",
     (event) => {
+      hold = null; // (a new touch: the page is the finger's again)
       x0 = event.touches[0]?.clientX ?? 0;
       y0 = event.touches[0]?.clientY ?? 0;
       t0 = event.timeStamp;
@@ -563,9 +608,32 @@ function start() {
     },
     { passive: false }
   );
-  const release = () => {
+  // a swipe the story took doesn't scroll the page, so the browser can count its end as a tap on whatever is under the
+  // finger (the chair story's chapter buttons, its labels): that tap is swallowed, or it would take a step of its own
+  let swallowUntil = 0;
+  window.addEventListener(
+    "click",
+    (event) => {
+      if (event.timeStamp > swallowUntil) return;
+      if (event.target instanceof Element && event.target.closest(CONTROLS)) return; // (never the controls' own taps)
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true
+  );
+  const release = (event: TouchEvent) => {
+    if (mode === "taken") swallowUntil = event.timeStamp + 450;
     const wasNative = mode === "native";
     mode = "none";
+    if (wasNative && reachedFirst !== null) {
+      const first = stories[reachedFirst]?.[0];
+      reachedFirst = null;
+      if (first !== undefined) {
+        if (Math.abs(window.scrollY - first) > 3) glideTo(first);
+        else stopAt(first);
+        return;
+      }
+    }
     // a story came half into view while the finger was still on the screen: take over now it's lifted, onto its first
     // step, also when the finger has dragged the page a little past it (short of the second step: settling would
     // otherwise carry it on to the second, skipping the first)
@@ -615,14 +683,32 @@ function start() {
       const before = lastY;
       lastY = y;
       lastT = now;
+      // (just stopped on a first step: leftover momentum moving the page on is put back, with no finger down)
+      if (hold && ((now - hold.last > 400 && now - hold.start > 1500) || now - hold.start > 4000 || glide || mode !== "none")) hold = null;
+      if (hold) {
+        hold.last = now;
+        if (Math.abs(y - hold.y) > 1) {
+          window.scrollTo({ top: hold.y, behavior: "instant" });
+          lastY = hold.y;
+        }
+        return;
+      }
       if (!glide) {
         lastDirection = Math.abs(y - before) > window.innerHeight ? 0 : Math.sign(y - before) || lastDirection;
         later();
       }
       if (!stepping() || glide || mode === "pending" || mode === "taken" || y <= before) return;
       if (y - before > window.innerHeight) return; // a jump (a menu link), not a scroll
+      // a story without a lead-in, scrolled into freely: the scroll stops on its first step (coasting, at once; with the
+      // finger still down, once it lifts)
+      const reached = stories.findIndex((list, i) => !leadsIn[i] && before < list[0] - 1 && y >= list[0] - 1 && y <= list[list.length - 1]);
+      if (reached >= 0) {
+        if (mode === "native") reachedFirst = reached;
+        else stopAt(stories[reached][0]);
+        return;
+      }
       // (or already a little past its first step, as a fast momentum scroll can be in one event: back onto it)
-      const crossed = entries.findIndex((entry, i) => before < entry && y >= entry && y < (stories[i][1] ?? stories[i][0]) - 3);
+      const crossed = entries.findIndex((entry, i) => leadsIn[i] && before < entry && y >= entry && y < (stories[i][1] ?? stories[i][0]) - 3);
       if (crossed < 0) return;
       if (mode === "native") {
         entering = crossed; // the finger is still down
@@ -680,14 +766,43 @@ function start() {
 function settle(to: number, direction: number) {
   if (!stepping()) return;
   const points = storyAt(to);
-  if (!points) return;
+  if (!points) {
+    outsideAt = to;
+    return;
+  }
   const index = stories.indexOf(points);
+  // (no lead-in: free scrolling until its first step is reached; scrolled into from above and coming to rest anywhere
+  // in it, however far a flick carried the page, onto its first step)
+  if (!leadsIn[index] && to < points[0] - 3) {
+    outsideAt = to;
+    return;
+  }
+  if (!leadsIn[index] && outsideAt !== null && outsideAt < points[0] - 3 && direction >= 0 && to < points[points.length - 1] - 3) {
+    outsideAt = null;
+    if (to > points[0] + 3) glideTo(points[0]);
+    return;
+  }
+  outsideAt = null;
   if (to < points[0] - 3) {
     if (direction > 0) glideTo(points[0], 0, FIRST_STEP_PACE);
     else if (direction < 0 && to > exitsUp[index] + 3) glideTo(exitsUp[index], 0, FIRST_STEP_PACE);
     return;
   }
   if (points.some((p) => Math.abs(p - to) <= 3)) return; // resting on a step
+  // (stopped on a first step a moment ago, then carried on by momentum the hold couldn't catch: back to it, short of
+  // the second step)
+  if (stoppedAt && performance.now() - stoppedAt.at < 4000 && stoppedAt.y === points[0] && to < (points[1] ?? Infinity) - 3) {
+    stoppedAt = null;
+    glideTo(points[0]);
+    return;
+  }
+  // (a few pixels off a step, as iOS's leftover momentum or its toolbar settling leave the page: back onto it, not on
+  // to the next one, which a drift of 9px "down" once carried it to)
+  const close = points.slice(0, -1).find((p) => Math.abs(p - to) <= DRIFT_PX);
+  if (close !== undefined) {
+    glideTo(close);
+    return;
+  }
   // (just arrived somewhere, and drifted off it: back onto that step)
   if (landed && performance.now() - landed.at < DRIFT_MS && points.includes(landed.target)) {
     const back = landed.target;
@@ -736,7 +851,9 @@ function rebuild() {
       dots: Array.isArray(result) ? null : result.dots ?? null,
       leads: Array.isArray(result) ? undefined : result.leads,
       hintLow: Array.isArray(result) ? false : result.hintLow ?? false,
-      launch: Array.isArray(result) ? 0 : result.launch ?? 0
+      launch: Array.isArray(result) ? 0 : result.launch ?? 0,
+      lead: Array.isArray(result) ? true : result.lead ?? true,
+      steady: Array.isArray(result) ? false : result.steady ?? false
     };
   });
   const lists = read.map((story) => story.list);
@@ -744,6 +861,8 @@ function rebuild() {
   stories = kept.map((story) => story.list);
   paces = kept.map((story) => story.pace);
   launches = kept.map((story) => story.launch);
+  leadsIn = kept.map((story) => story.lead);
+  steadies = kept.map((story) => story.steady);
   entryMs = kept.map((story) => story.entryMs);
   quicks = kept.flatMap((story) => (story.quick ? [story.quick] : []));
   dotLists = kept.map((story) => story.dots);
@@ -757,7 +876,11 @@ function rebuild() {
   // three quarters of a screen before its first step
   const vh = document.documentElement.clientHeight;
   entries = kept.map((story) =>
-    Math.min(story.list[0], story.top !== undefined ? story.top - vh / 2 : story.list[0] - vh * 0.75)
+    // (a story without a lead-in is taken over only from its first step: until then the page scrolls freely, and that
+    // scroll stops on the first step, see the scroll listener)
+    story.lead === false
+      ? story.list[0]
+      : Math.min(story.list[0], story.top !== undefined ? story.top - vh / 2 : story.list[0] - vh * 0.75)
   );
   exitsUp = entries.map((entry) => Math.max(0, entry - vh / 2));
   const points = lists
