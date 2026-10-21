@@ -373,14 +373,16 @@ const links = [
       }
       bandHandover(on, c, Boolean(story));
       if (!on) shown = "";
-      // the top band: not in the benefits story (.chapters), whose white tab row sits at the top of the screen
       const [top, topStory] = colourAt(parseFloat(BAND) + 2, "top");
-      // In the benefits story (.chapters) its white tab row sits at the top, so there the band is simply white: unseen
-      // over the tab row, never blinking through chapter colours, and still handed over when you leave the story (which
-      // Safari needs at the top edge too, or the page no longer flows under its toolbar). Decided by the story filling
-      // the screen, so it never flickers between the tab row and the story behind it.
+      // In the benefits story (.chapters) its chapter tab row sits at the top, in the stage's own colour (its bar,
+      // .benefit-nav::before, set by the story script as the chapters change), so there the band takes the tab row's
+      // colour: unseen over it, and still handed over when you leave the story (which Safari needs at the top edge too,
+      // or the page no longer flows under its toolbar). Decided by the story filling the screen, so it never flickers
+      // between the tab row and the story behind it.
       const benefits = Boolean(story?.matches(".chapters"));
-      const topColour = benefits ? "rgb(255, 255, 255)" : top;
+      const tabs = benefits ? document.querySelector<HTMLElement>(".benefit-nav") : null;
+      const tabColour = tabs ? getComputedStyle(tabs, "::before").backgroundColor : "";
+      const topColour = benefits ? (solid(tabColour) ? tabColour : "rgb(255, 255, 255)") : top;
       const topOn = on && Boolean(topColour) && (benefits || !topStory?.matches(".chapters"));
       topHandover(topOn, topColour, Boolean(topStory));
       if (!topOn) shownTop = "";

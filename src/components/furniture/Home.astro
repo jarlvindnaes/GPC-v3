@@ -1,12 +1,15 @@
 ---
 import '../../index.css';
 import './home.css';
+import '../../styles/story-teaser.css';
 import { LazyPassportPhone, LazySupplyChainGlobe } from '../LazyIslands';
 import Footer from './Footer.astro';
 import ClosingCta from '../ClosingCta.astro';
 import SeoMeta from '../SeoMeta.astro';
 import SiteHeader from '../SiteHeader.astro';
 import StoryDotsNav from '../StoryDotsNav.astro';
+import ProductMemory from './ProductMemory.astro';
+import McpGraphic from './McpGraphic.astro';
 import Scale from './Scale.astro';
 import BenefitProof from './BenefitProof.astro';
 import BrandStrip from './BrandStrip.astro';
@@ -79,13 +82,20 @@ const euStars = Array.from({ length: 12 }, (_, i) => {
   a: (0.62 + ((i * 5) % 12) * 0.05).toFixed(3)
  };
 });
-// Each capability's explainer section on How it works (its "Learn more" link).
+// Each capability's visual inside the dome: three from their explainer sections on How it works (Product memory's
+// chart, the Input interface's lens, the MCP graphic), two drawn for the story (model-scenes.ts), the chart with its key point (its
+// section's headline) under it
+const capKeys: Record<string, [string, string]> = {
+ 'product-memory': ['An EPD is a snapshot.', 'Your product model remembers.']
+};
+// the model story's chapter tabs (its menu along the top, like the What we solve story's): short names
+const capTabs: Record<string, string> = { 'input-interface': 'Connected knowledge', integrations: 'Built to connect', 'product-memory': 'Full traceability', 'supply-chain': 'Mapped supply chain', impact: 'Live impact' };
 const capabilities = [
+ ['Connected knowledge. Better decisions.','3D models, materials, components, and specifications · connected in one scalable data foundation.','input-interface'],
+ ['Built to connect','MCP access makes your product model available to AI tools and agents, with the context they need to work.','integrations'],
  ['Every change, traceable','A complete ledger of inputs, with timestamped field history. Know what changed, when, and where the data came from.','product-memory'],
- ['Data in every dimension','3D models, materials, components, and specifications · connected in one scalable data foundation.','input-interface'],
  ['Your supply chain, mapped','Suppliers, components, and their relationships. Trace how every part connects to the finished product.','supply-chain'],
- ['Impact built into the model','Impact calculations connected directly to your product data, alongside emissions and scores.',''], // (no Learn more until How it works has a section on impact)
- ['Built to connect','MCP access makes your product model available to AI tools and agents, with the context they need to work.','integrations']
+ ['Impact built into the model','Impact calculations connected directly to your product data, alongside emissions and scores.','impact'], // (no How it works section on impact yet)
 ];
 ---
 <!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{pageTitle}</title><meta name="description" content={pageDescription}/><SeoMeta title={pageTitle} description={pageDescription} /><link rel="icon" href={`${base}nextgen/favicon.svg`} type="image/svg+xml"/><link rel="icon" href={`${base}favicon-dark.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)"/><link rel="icon" href={`${base}favicon-light.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: light)"/><link rel="icon" href={`${base}favicon.ico`} sizes="48x48"/><link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`}/><link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin="anonymous"/><meta name="theme-color" content="#ffffff"/><style is:inline set:html={`@font-face{font-family:Inter;src:url("${base}fonts/inter-latin.woff2") format("woff2");font-display:swap;font-weight:100 900}`} /><script is:inline>try{if(localStorage.getItem("pc-motion-paused")==="1")document.documentElement.classList.add("motion-paused")}catch(e){}</script></head>
@@ -94,7 +104,9 @@ const capabilities = [
 <main id="main"><section class="hero frame"><div class="hero-copy hero-chair"><picture class="hero-picture"><source media="(max-width:599px)" srcset={`${base}v4/hero-chair-mobile-828.webp 828w, ${base}v4/hero-chair-mobile-1242.webp 1242w`} sizes="100vw" width="828" height="1028"/><img class="hero-backdrop" src={`${base}v4/hero-chair-closeup.webp`} alt="" width="976" height="1098" fetchpriority="high"/></picture><div class="hero-editorial"><span class="eyebrow"><i></i> PRODUCT CONNECT</span><h1><span>Make better products,</span><span>show the world</span></h1><p>One platform for all your product data. Calculate CO₂ and environmental impact, track every improvement, and show the proof in next-generation <strong>Digital Product Passports.</strong></p><div class="actions"><a class="button" href={contact}>Talk to sales</a><a class="button primary" href={getStarted}>Start for free <span aria-hidden="true">↗︎</span></a></div></div><button class="chair-passport-trigger" type="button" tabindex="0" aria-haspopup="dialog" data-open-passport><span class="qr-badge" aria-hidden="true"><svg class="qr" viewBox="0 0 25 25" aria-hidden="true" shape-rendering="crispEdges"><path stroke="currentColor" d="M0 0.5h7m1 0h2m3 0h1m2 0h1m1 0h7M0 1.5h1m5 0h1m6 0h1m2 0h1m1 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h4m1 0h4m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m2 0h1m2 0h1m1 0h1m3 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 7.5h1m1 0h1m2 0h2M0 8.5h4m2 0h1m1 0h1m5 0h1m1 0h2m2 0h3m1 0h1M0 9.5h2m3 0h1m1 0h1m1 0h1m6 0h2m1 0h1m3 0h1M1 10.5h7m9 0h1m2 0h1M1 11.5h1m1 0h1m1 0h1m1 0h1m3 0h4m3 0h2m1 0h2M0 12.5h3m2 0h5m1 0h10m1 0h3M1 13.5h1m1 0h2m5 0h2m2 0h7m3 0h1M1 14.5h2m1 0h1m1 0h2m1 0h1m2 0h1m4 0h2m1 0h1m1 0h2M0 15.5h1m1 0h4m1 0h1m1 0h2m3 0h1m2 0h1m1 0h2m3 0h1M3 16.5h1m2 0h1m3 0h1m2 0h1m2 0h9M8 17.5h1m2 0h4m1 0h1m3 0h1m1 0h1m1 0h1M0 18.5h7m3 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h3M0 19.5h1m5 0h1m2 0h2m1 0h1m1 0h3m3 0h1m2 0h2M0 20.5h1m1 0h3m1 0h1m3 0h2m4 0h6m2 0h1M0 21.5h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m3 0h2m1 0h5M0 22.5h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m1 0h2m1 0h1m1 0h2M0 23.5h1m5 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1M0 24.5h7m1 0h2m2 0h3m3 0h7"/></svg></span><span>Explore its passport ↗︎</span></button></div></section>
 <p class="eyebrow brand-eyebrow">Trusted with product data from circular market leaders</p>
 <BrandStrip />
-<section id="benefits" class="benefits frame"><div class="section-intro"><span class="eyebrow">PRODUCT CONNECT</span><h2><span class="sr-only">A product expert that never sleeps. Gathers the data. Spots the gains. Proves the progress. Opens new sales.</span><i class="expert-line" aria-hidden="true">A product expert that <span class="expert-rotator" data-expert-rotator>{expertPhrases.map((phrase,i)=><span class:list={['expert-phrase',{'is-active':i===0}]}>{phrase}</span>)}</span></i></h2></div><div class="benefit-layout"><aside class="benefit-nav"><nav aria-label="Product benefits">{benefits.map((b,i)=><a href={`#${b.id}`} data-benefit-link={b.id} aria-current={i===0?'location':undefined}><span class="nav-full">{b.label}</span><span class="nav-short">{b.short}</span><span class="nav-arrow" aria-hidden="true">↗︎</span></a>)}</nav><p>From product data<br/>to what comes next.</p></aside><div class="chapters"><div class="story-stage" data-story-stage><div class="story-bg" aria-hidden="true"></div><div class="story-tint" aria-hidden="true"></div>{benefits.map((b,i)=><section id={b.id} class="chapter" data-chapter><div class="chapter-pin">{i>1&&<div class="chapter-heading">{eyebrowChapters.includes(b.id) ? <><span class="chapter-eyebrow">{b.lead.replace(/\.$/,'')}</span><h3>{b.title.split(/(?<=\.) /).map((part, j) => j > 0 ? <><br/><span class="title-after">{part}</span></> : part)}</h3>{chapterPoints[b.id] ? <ul class="chapter-points">{chapterPoints[b.id].map(([Icon, p, title])=><li data-title={title}><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{p.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></li>)}</ul> : <p>{b.text}</p>}</> : <><h3>{b.title} <span>{b.lead}</span></h3><p>{b.text}</p>{i===1&&<small class="epd-process-note">EPD publication follows the applicable programme rules and independent verification.</small>}</>}</div>}
+<section class="benefits benefits-intro frame" aria-label="What Product Connect does"><div class="section-intro"><span class="eyebrow">PRODUCT CONNECT</span><h2><span class="sr-only">A product expert that never sleeps. Gathers the data. Spots the gains. Proves the progress. Opens new sales.</span><i class="expert-line" aria-hidden="true">A product expert that <span class="expert-rotator" data-expert-rotator>{expertPhrases.map((phrase,i)=><span class:list={['expert-phrase',{'is-active':i===0}]}>{phrase}</span>)}</span></i></h2></div></section>
+<section id="benefits" class="story-teaser teaser-globe" data-story-teaser="what-we-solve" aria-labelledby="teaser-globe-title"><div class="teaser-inner frame"><div class="teaser-copy"><p class="teaser-eyebrow">What we solve</p><h2 id="teaser-globe-title">From supplier data<br/><span>to new sales.</span></h2><p class="teaser-text">Learn how we turn your supply chain data into impact numbers you can trust and act on, and connect you with the people who own your products.</p><ul class="teaser-points"><li>Suppliers enter their data directly</li><li>Audit-ready EPD calculations</li><li>Passports that open new sales channels</li></ul><button type="button" class="teaser-open" data-story-open="what-we-solve">Experience the full story <span aria-hidden="true">↗︎</span></button></div><div class="teaser-visual globe-stage" role="img" aria-label="An interactive globe tracing one product's supply chain. Drag to turn it."><LazySupplyChainGlobe client:only="react" size={0.6} /></div></div></section>
+<section id="benefits-story" class="benefits frame" data-story-takeover="what-we-solve" data-story-name="the What we solve story"><div class="benefit-layout"><aside class="benefit-nav"><nav aria-label="Product benefits">{benefits.map((b,i)=><a href={`#${b.id}`} data-benefit-link={b.id} aria-current={i===0?'location':undefined}><span class="nav-full">{b.label}</span><span class="nav-short">{b.short}</span><span class="nav-arrow" aria-hidden="true">↗︎</span></a>)}</nav><p>From product data<br/>to what comes next.</p></aside><div class="chapters"><div class="story-stage" data-story-stage><div class="story-bg" aria-hidden="true"></div><div class="story-tint" aria-hidden="true"></div>{benefits.map((b,i)=><section id={b.id} class="chapter" data-chapter><div class="chapter-pin">{i>1&&<div class="chapter-heading">{eyebrowChapters.includes(b.id) ? <><span class="chapter-eyebrow">{b.lead.replace(/\.$/,'')}</span><h3>{b.title.split(/(?<=\.) /).map((part, j) => j > 0 ? <><br/><span class="title-after">{part}</span></> : part)}</h3>{chapterPoints[b.id] ? <ul class="chapter-points">{chapterPoints[b.id].map(([Icon, p, title])=><li data-title={title}><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{p.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></li>)}</ul> : <p>{b.text}</p>}</> : <><h3>{b.title} <span>{b.lead}</span></h3><p>{b.text}</p>{i===1&&<small class="epd-process-note">EPD publication follows the applicable programme rules and independent verification.</small>}</>}</div>}
 <div class:list={['ui-stage',`stage-${i}`]}>
 {i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-intro"><h3 class="sr-only">Supply chain management</h3><span class="intro-eyebrow" aria-hidden="true">Supply chain management</span></div><div class="globe-points">{supplierSteps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map(([Icon, point])=><p class="sentence"><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{point.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></p>)}</div>)}</div><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><LazySupplyChainGlobe client:only="react" size={0.655} /></div></div></div>}
 {i===1&&<div class="co2-card"><div class="globe-intro co2-intro"><h3 class="sr-only">{b.title.replace(/\.$/, '')}</h3><span class="intro-eyebrow" aria-hidden="true">{b.title.replace(/\.$/, '')}</span></div><div class="globe-points co2-points">{co2Steps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map(([Icon, point])=><p class="sentence"><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{point.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></p>)}</div>)}</div><small class="co2-note">EPD publication follows the applicable programme rules and independent verification.</small><div class="co2-report-wrap"><span class="co2-illustrative" aria-hidden="true">Illustrative data</span><Co2Report /></div></div>}
@@ -104,7 +116,9 @@ const capabilities = [
 
 </div><BenefitProof index={i} /></div></section>)}<StoryDotsNav class="benefit-dots-nav" before="Product Connect community" after="Dynamic Product Model"><ol class="benefit-dots" aria-hidden="true"></ol></StoryDotsNav></div><div class="story-markers" aria-hidden="true">{benefits.map((b)=><div class="story-marker" data-story-marker={b.id}></div>)}</div></div></div></section>
 
-<section class="model" id="product-model"><div class="model-inner frame"><div class="model-story" data-model-story><div class="model-pin"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text,anchor],i)=><article style={`--i:${i}`}><span class="cap-icon" aria-hidden="true">{['▤','◎','◈','⌁','⌘'][i]}</span><h3>{title}</h3><p>{text}</p>{anchor && <a class="button dark-button cap-link" href={`${base}how-it-works/?from=product-model#${anchor}`}>Learn more<span class="sr-only"> about {title.toLowerCase()}</span> <span aria-hidden="true">↗︎</span></a>}</article>)}</div><StoryDotsNav class="model-dots-nav" before="What we solve" after="Built for your team"><ol class="model-dots" aria-hidden="true">{capabilities.map(([title])=><li data-title={title}></li>)}</ol></StoryDotsNav></div></div></div></section>
+<section class="customer-story user-quote frame" aria-label="What our users say"><figure><svg class="quote-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/></svg><blockquote class="quote-balance">Adding data to Product Connect <span>reminds me of how it was to play ‘The Sims’</span></blockquote><figcaption class="quote-person"><img src={`${base}v4/alex-williamson.webp`} alt="" width="56" height="56" loading="lazy"/><span><strong>Alex Williamson</strong><small>Experience Sustainability Specialist · New Works</small></span></figcaption></figure></section>
+<section id="product-model" class="story-teaser teaser-model model" data-story-teaser="product-model" aria-labelledby="teaser-model-title"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2 id="teaser-model-title">Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div><div class="teaser-copy"><p class="teaser-text">Learn how one living model of your products <br class="dome-break"/>lets you work fast and see insights the moment your data changes.</p><button type="button" class="teaser-open" data-story-open="product-model">Experience the full story <span aria-hidden="true">↗︎</span></button></div></div></div></section>
+<section class="model" id="product-model-story" data-story-takeover="product-model" data-story-name="the Dynamic Product Model story"><div class="model-inner frame"><div class="model-story" data-model-story><div class="model-pin"><nav class="model-tabs" aria-label="Dynamic Product Model chapters"><div class="model-tabs-row">{capabilities.map(([title,,anchor],i)=><button type="button" data-model-tab={i} aria-current={i===0?'step':undefined} title={title}>{capTabs[anchor] ?? title}</button>)}<span class="nav-dot" aria-hidden="true"></span></div></nav><div class="model-atmosphere"><div class="model-title"><p>A new way to understand your products.</p><h2>Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div></div><div class="capabilities">{capabilities.map(([title,text,anchor],i)=><article style={`--i:${i}`}><h3>{title}</h3><p>{text}</p>{anchor === 'product-memory' && <div class="cap-visual cap-memory"><ProductMemory compact /></div>}{anchor === 'input-interface' && <div class="cap-visual cap-lens" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" data-rim aria-hidden="true"></canvas></div>}{anchor === 'integrations' && <div class="cap-visual cap-mcp"><McpGraphic /></div>}{anchor === 'supply-chain' && <div class="cap-visual cap-scene" role="img" aria-label="Materials, components and suppliers mapped into the finished product, one path traced at a time"><canvas data-scene="supply" aria-hidden="true"></canvas></div>}{anchor === 'impact' && <div class="cap-visual cap-scene" role="img" aria-label="Product data flows into the product model, which updates its impact breakdown by life cycle stage as changes come in (illustrative figures)"><canvas data-scene="impact" aria-hidden="true"></canvas></div>}{capKeys[anchor] && <p class="cap-key">{capKeys[anchor][0]} <span>{capKeys[anchor][1]}</span></p>}</article>)}</div><StoryDotsNav class="model-dots-nav" before="What we solve" after="Built for your team"><ol class="model-dots" aria-hidden="true">{capabilities.map(([title])=><li data-title={title}></li>)}</ol></StoryDotsNav></div></div></div></section>
 {SHOW_DRAFT_TESTIMONIAL && <section class="customer-story frame" aria-label="Customer testimonial preview"><span class="tag">Testimonial · copy to be confirmed</span><blockquote>“A clearer picture of every product.<br/><span>A better foundation for what comes next.”</span></blockquote><img class="quote-portrait" src={`${base}v4/testimonial-portrait.webp`} alt="Fictional bearded man, placeholder portrait" width="80" height="80" loading="lazy"/><p class="quote-attribution">Mikkel Sørensen<small>Head of Design · Fjordform Studio, Denmark</small></p><p class="quote-note">Fictional testimonial, person and company for design preview.</p></section>}
 <Scale />
 
@@ -112,6 +126,9 @@ const capabilities = [
 <script>
 import { motionPaused } from "../../utilities/motion";
 import { glideToStep, registerSnapPoints } from "../../utilities/storySnap";
+import { initStoryTakeovers } from "../../utilities/storyTakeover";
+// the big stories wait behind their teasers, and take over the page when opened (utilities/storyTakeover.ts)
+initStoryTakeovers();
 import { initDataScenes } from "./data-scenes";
 const disposeScenes = initDataScenes();
 document.addEventListener("astro:before-swap", disposeScenes, { once: true });
@@ -418,8 +435,12 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
    box.prepend(under);
   }
   under.style.backgroundColor = `rgb(${colour.map((v) => Math.round(v)).join(',')})`;
-  // the chapter dots and arrows in dark ink while the stage is light (the passport and sales chapters)
-  benefitDots?.classList.toggle('is-light', (0.2126 * colour[0] + 0.7152 * colour[1] + 0.0722 * colour[2]) / 255 > 0.6);
+  // the chapter dots and arrows in dark ink while the stage is light (the passport chapter); the chapter tabs take the
+  // stage's colour as their own background, their ink following the same way (home.css)
+  const light = (0.2126 * colour[0] + 0.7152 * colour[1] + 0.0722 * colour[2]) / 255 > 0.6;
+  benefitDots?.classList.toggle('is-light', light);
+  tabRow?.style.setProperty('--nav-bg', `rgb(${colour.map((v) => Math.round(v)).join(',')})`);
+  tabRow?.classList.toggle('is-light', light);
  }
  // Steps (utilities/storySnap.ts): each bullet's resting point, where it is fully shown, read from its step's own
  // timings in home.css (--a, --b, --b1, --b2, --o), and the scroll position for a chapter's --k
@@ -488,24 +509,17 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
    window.scrollTo({ top: top - pinLineNow() + offset, behavior: 'smooth' });
   });
  });
- // "What we solve" in the site menu jumps straight into the globe chapter, its first step already in (k 1.03),
- // rather than the top of the page (the header asks first with a cancelable site:top-link event; other pages link
- // here as #benefits). The pin line without the header, as it hides on the way down.
- const globeStepTop = () => {
-  const marker = markers[0];
-  return marker.getBoundingClientRect().top + window.scrollY - (tabRow?.offsetHeight ?? 53) + 0.03 * marker.offsetHeight;
- };
+ // The menu's What we solve (its top link on this page; the header asks first with a cancelable site:top-link event,
+ // other pages link here as #benefits) goes to the story's teaser, smoothly: the reader opens the story from there
  window.addEventListener('site:top-link', (event) => {
-  if (!stageQuery.matches || !markers[0]) return;
+  const teaser = document.getElementById('benefits');
+  if (!teaser || document.documentElement.dataset.storyOpen) return;
   event.preventDefault();
-  window.scrollTo({ top: globeStepTop(), behavior: 'instant' });
+  teaser.scrollIntoView({ behavior: 'smooth', block: 'start' });
  });
- if (location.hash === '#benefits' && stageQuery.matches && markers[0] && (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type !== 'back_forward') {
-  window.addEventListener('load', () => requestAnimationFrame(() => { window.scrollTo({ top: globeStepTop(), behavior: 'instant' }); storyUpdate(); }), { once: true });
- }
  // Snap points: every chapter's steps, then the exit (the last chapter at its end, where the story lets go)
  registerSnapPoints(() => {
-  if (!stageQuery.matches) return [];
+  if (!stageQuery.matches || !stage?.getClientRects().length) return []; // (none while the story waits, hidden)
   const steps = storyChapters.flatMap((chapter, i) =>
    chapterSteps(chapter).map(({ k, title }, n, all) => ({ i, title, top: scrollForK(i, k), lead: n === 0 ? chapterLead(i, all[0].k) : undefined }))
   );
@@ -561,7 +575,7 @@ window.addEventListener('resize', updateActive);
 updateActive();
 </script>
 <script>
- import { registerSnapPoints } from "../../utilities/storySnap";
+ import { glideToStep, registerSnapPoints } from "../../utilities/storySnap";
  // Dynamic Product Model as a second scroll story: on tablet width and up the section pins, the sphere stays as the
  // canvas, and the five capabilities take turns inside its dome (--mk counts through them; home.css places and fades
  // each one). Phones and short screens keep the capabilities as a grid under the sphere.
@@ -603,51 +617,37 @@ updateActive();
   window.addEventListener('resize', queue);
   query.addEventListener('change', update);
   update();
-  // links to #product-model land inside the pinned story, with the first capability already in (--mk .1), rather
-  // than above the section; capability i's own point is --mk i + .1
+  // where capability i is in its turn (--mk i + .1 is its own point)
   const storyStart = (i = 0) => {
    const pin = modelStory.querySelector<HTMLElement>('.model-pin');
    const run = Math.max(1, modelStory.offsetHeight - (pin?.offsetHeight || window.innerHeight));
    return modelStory.getBoundingClientRect().top + window.scrollY + run * ((i + 0.35) / (count + 0.5));
   };
   // snap points (utilities/storySnap.ts): each capability in the middle of its turn, fully shown (--mk i + .55)
+  // chapter tabs along the top: the current one follows the lit dot (storySnap's chosen step, or the one passed);
+  // a tab glides to its capability, like a swipe; one dot slides under the current tab
+  const tabs = Array.from(modelStory.querySelectorAll<HTMLButtonElement>('[data-model-tab]'));
+  const tabRow = modelStory.querySelector<HTMLElement>('.model-tabs-row');
+  const tabDot = tabRow?.querySelector<HTMLElement>('.nav-dot');
+  const placeTab = () => {
+   const on = Math.max(0, dots.findIndex((dot) => dot.classList.contains('is-on')));
+   tabs.forEach((tab, i) => (i === on ? tab.setAttribute('aria-current', 'step') : tab.removeAttribute('aria-current')));
+   const current = tabs[on];
+   if (!current || !tabDot || !tabRow) return;
+   tabDot.style.transform = `translateX(${current.offsetLeft + current.offsetWidth / 2 - 2}px)`;
+   if (tabRow.scrollWidth > tabRow.clientWidth + 1) tabRow.scrollTo({ left: current.offsetLeft - (tabRow.clientWidth - current.offsetWidth) / 2, behavior: 'smooth' });
+  };
+  new MutationObserver(placeTab).observe(modelStory.querySelector('.model-dots')!, { subtree: true, attributeFilter: ['class'] });
+  new ResizeObserver(placeTab).observe(tabRow ?? modelStory);
+  placeTab();
+  requestAnimationFrame(() => tabRow?.classList.add('has-dot')); // (first placement without the slide)
+  tabs.forEach((tab, i) => tab.addEventListener('click', () => glideToStep(storyStart(i + 0.45))));
   registerSnapPoints(() => {
-   if (!query.matches) return [];
+   if (!query.matches || !modelStory.getClientRects().length) return []; // (none while the story waits, hidden)
    const pin = modelStory.querySelector<HTMLElement>('.model-pin');
    const run = Math.max(1, modelStory.offsetHeight - (pin?.offsetHeight || window.innerHeight));
    const exit = modelStory.getBoundingClientRect().top + window.scrollY + run; // where it lets go
    return { points: [...articles.map((_, i) => storyStart(i + 0.45)), exit], top: modelStory.getBoundingClientRect().top + window.scrollY, dots: modelStory.querySelector<HTMLElement>('.model-dots'), hintLow: true };
   });
-  // keyboard: tabbing to a capability's Learn more link brings that capability in, so the link is visible (WCAG 2.4.7)
-  articles.forEach((article, i) => article.addEventListener('focusin', () => {
-   if (query.matches && !article.classList.contains('is-on')) window.scrollTo({ top: storyStart(i + 0.3), behavior: 'instant' });
-  }));
-  document.addEventListener('click', (event) => {
-   const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href$="#product-model"]');
-   if (!link || link.pathname !== location.pathname || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
-   event.preventDefault();
-   history.pushState(null, '', '#product-model');
-   // a jump, not a scroll (the page's smooth scrolling is for in-page reading); stacked layouts go to the section
-   if (query.matches) window.scrollTo({ top: storyStart(), behavior: 'instant' });
-   else document.getElementById('product-model')?.scrollIntoView({ behavior: 'instant' });
-  });
-  // "Learn more" remembers its capability, so How it works' back button returns to it: the browser's own restored
-  // scroll lands before this page's layout has settled, so the story re-places itself once loaded
-  const RETURN_KEY = 'pc-model-return';
-  articles.forEach((article, i) => article.querySelector('.cap-link')?.addEventListener('click', () => {
-   try { sessionStorage.setItem(RETURN_KEY, String(i)); } catch {}
-  }));
-  let returnTo: number | null = null;
-  try {
-   const stored = sessionStorage.getItem(RETURN_KEY);
-   sessionStorage.removeItem(RETURN_KEY);
-   const backForward = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'back_forward';
-   if (stored !== null && (backForward || location.hash === '#product-model')) returnTo = Math.min(count - 1, Math.max(0, Number(stored) || 0));
-  } catch {}
-  if (query.matches && (returnTo !== null || location.hash === '#product-model')) {
-   window.addEventListener('load', () => requestAnimationFrame(() => window.scrollTo({ top: storyStart(returnTo ?? 0), behavior: 'instant' })), { once: true });
-  }
-  // (back from the browser's page cache: the page and its scroll come back exactly as they were)
-  window.addEventListener('pageshow', (event) => { if (event.persisted) try { sessionStorage.removeItem(RETURN_KEY); } catch {} });
  }
 </script></body></html>

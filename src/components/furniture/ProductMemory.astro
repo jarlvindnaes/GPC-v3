@@ -28,12 +28,19 @@ line += ` H ${lastX}`;
 const area = `${line} V 320 H ${events[0].x} Z`;
 const staticY = toY(staticEpd);
 const first = events[0];
+// compact: just the chart (its bubble playing through the changes), for the model story's "Every change, traceable"
+// step on the homepage; the timeline controls stay (the script drives them), out of sight
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const Root = compact ? 'div' : 'section';
 const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac, x, y, label, change, who, value, delta }) => ({ frac, x, y, label, change, who, value, delta })) };
 ---
-<section class="memory" aria-labelledby="memory-title" data-memory data-config={JSON.stringify(config)}>
+<Root class:list={['memory', { 'memory-compact': compact }]} aria-labelledby={compact ? undefined : 'memory-title'} data-memory data-config={JSON.stringify(config)}>
+  {!compact && <>
   <span class="memory-tag">Product memory</span>
   <h2 id="memory-title">An EPD is a snapshot.<br/><span>Your product model remembers.</span></h2>
   <p class="memory-lead">A traditional EPD is calculated once, so every improvement you make afterwards goes unseen. In Product Connect, each change is time-stamped and reflected in your numbers straight away. Your figures get better as your products do, while others are stuck with yesterday’s.</p>
+  </>}
 
   <div class="memory-chart">
     <svg viewBox={`0 0 ${VW} ${VH}`} role="img" aria-label="The static EPD stays at 31.4 kilograms CO₂e while the living product model improves to 24.8 as changes are recorded over time">
@@ -70,9 +77,26 @@ const config = { start, end, VW, VH, X0, XW, staticY, events: events.map(({ frac
     <button type="button" class="memory-play" aria-label="Pause the timeline"><span aria-hidden="true">❚❚</span></button>
     <span class="memory-note">Illustrative data</span>
   </div>
-</section>
+</Root>
 
 <style>
+/* compact (the model story's step): the chart alone, no section padding or rule; its timeline controls hidden */
+.memory.memory-compact{padding:0;border-top:0}
+.memory-compact .memory-chart{margin:0}
+.memory-compact :is(.memory-legend,.memory-track,.memory-foot){display:none}
+/* drawn at whatever size its step gives it, its labels and dots stay one size on screen: --u, chart units per
+   screen pixel (set by the script below) */
+.memory-compact{--u:2}
+.memory-compact :is(.static-label,.live-label){font-size:calc(13px * var(--u))}
+.memory-compact .memory-bubble{padding:8px 11px;text-align:left}
+/* (the lines' strokes in screen pixels, a touch finer than the original's) */
+.memory-compact svg :is(path,line){vector-effect:non-scaling-stroke}
+.memory-compact .live-line{stroke-width:1.8}
+.memory-compact :is(.static-line,.ghost-line,.gap-line){stroke-width:1}
+.memory-compact .event-mark{r:calc(3.4px * var(--u));stroke-width:calc(1.3px * var(--u))}
+.memory-compact .head-dot{r:calc(5.2px * var(--u))}
+.memory-compact .memory-bubble strong{font-size:13px}
+.memory-compact .memory-bubble b{font-size:16px}
 .memory{border-top:1px solid #292a2d;padding:100px max(50px, calc((100% - 1240px) / 2)) 64px;color:#f8f9fc}
 .memory-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
 .memory h2{font-size:clamp(32px,3.8vw,52px);line-height:1.1;letter-spacing:-.035em;font-weight:500;margin:26px 0 0}
@@ -148,6 +172,13 @@ document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
   const play = root.querySelector<HTMLButtonElement>(".memory-play")!;
   const reduced = reducedMotion; // system setting or the footer's "Pause animations"
   const DURATION = 14000, HOLD = 3000;
+  // compact: chart units per screen pixel, for the labels and dots that keep one size (the CSS's --u)
+  const sizer = root.classList.contains("memory-compact")
+    ? new ResizeObserver(([entry]) => {
+        if (entry.contentRect.width) root.style.setProperty("--u", String(cfg.VW / entry.contentRect.width));
+      })
+    : null;
+  sizer?.observe(root.querySelector("svg")!);
   let t = 0, active = -1, playing = !reduced.matches, visible = false, frame = 0, last = 0, hold = 0;
 
   function render(next: number) {
@@ -211,7 +242,7 @@ document.querySelectorAll<HTMLElement>("[data-memory]").forEach((root) => {
   document.addEventListener("visibilitychange", onVis);
   if (reduced.matches) { setPlaying(false); render(1); } else render(0);
   reduced.addEventListener("change", () => { if (reduced.matches) setPlaying(false); });
-  memoryCleanups.push(() => { stop(); io.disconnect(); document.removeEventListener("visibilitychange", onVis); range.removeEventListener("input", onInput); });
+  memoryCleanups.push(() => { stop(); io.disconnect(); sizer?.disconnect(); document.removeEventListener("visibilitychange", onVis); range.removeEventListener("input", onInput); });
 });
 document.addEventListener("astro:before-swap", () => memoryCleanups.forEach((c) => c()), { once: true });
 </script>

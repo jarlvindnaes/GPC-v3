@@ -359,7 +359,7 @@ html{scroll-padding-top:115px}
 /* Explainers moved from the homepage (Product memory, Input interface, API and MCP), each linked from a chapter of
    the homepage's Dynamic Product Model story, keep their dark technical ground */
 .memory-band{background:#111214;scroll-margin-top:90px}
-#input-interface,#integrations,#provenance,#foundation{scroll-margin-top:90px}
+#integrations,#provenance,#foundation{scroll-margin-top:90px}
 #product-memory .memory{padding-left:max(7%, calc((100% - 1240px) / 2));padding-right:max(7%, calc((100% - 1240px) / 2))} /* (the site's 1240px content edge on wide screens) */
 @media(max-width:700px){#product-memory .memory{padding-left:6%;padding-right:6%}}
 /* How it works ends on the closing call to action in the navy of the former "Now see what it does for you" band
@@ -386,7 +386,6 @@ html{scroll-padding-top:115px}
 .trust-body .trust-lead{margin:0;font-size:19px;line-height:1.7;color:#596650;max-width:410px}
 .trust .trust-grid{grid-template-columns:1fr 1fr;gap:30px 32px;margin-top:0;align-content:start}
 .trust .trust-grid article{border-top:0;border-left:2px solid #8295d1;padding:0 0 0 18px}
-.trust .trust-grid span{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#5f6d8a}
 .trust .trust-grid h3{margin:0;font-size:19px;font-weight:500;letter-spacing:normal;color:var(--pc-ink,#111b30)}
 .trust .trust-grid p{margin:6px 0 0;font-size:14px;line-height:1.5;color:#617058}
 .trust .trust-standards{margin-top:45px;padding-top:25px;border-top:1px solid #c5cebb}
@@ -417,8 +416,7 @@ html{scroll-padding-top:115px}
 .process .step-top{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#5f6d8a}
 .process .steps h3{margin:0;font-size:19px;font-weight:500;letter-spacing:normal;color:var(--pc-ink,#111b30)}
 .process .steps p{margin:6px 0 0;font-size:14px;line-height:1.5;color:#617058}
-/* White breaker between Input interface and the route story, like the homepage's "A product expert that never
-   sleeps" intro: centred eyebrow and a two-tone headline */
+/* White breaker (above Integrations), like the homepage's intro: centred eyebrow and a two-tone headline */
 .breaker{padding:90px 48px 84px;background:#fff;text-align:center;color:#242528}
 .breaker .eyebrow{display:block;margin:0 0 30px;font-size:12px;font-weight:500;letter-spacing:.14em;color:#686d76}
 .breaker h2{margin:0;font-size:32px;line-height:1.28;font-weight:500;letter-spacing:-.045em;color:#242528}
@@ -497,3 +495,16 @@ html:has(.story-back){scroll-padding-bottom:90px} /* focused content scrolls cle
 .product-story .reuse-chart .rc-bar.rc-edge{fill:none;stroke:#7f9fc4;stroke-width:1.2}
 .product-story .reuse-chart .rc-bar{fill:#d5dcea}
 .product-story .reuse-chart .rc-head{fill:#4f5f9e;filter:drop-shadow(0 0 4px #4f5f9e55)}
+/* the route teaser (story-teaser.css): the route story's deep navy, the copy on the left and the finished route on
+   the globe on the right (a still, public/v4/route-end.webp, from the story's last step: the globe runs off its top
+   and bottom, as in the story, so it spans the section's full height and the section's edges cut it) */
+.teaser-route{position:relative;background:#050b18;overflow:hidden}
+.teaser-route .teaser-inner{position:relative;max-width:1240px;min-height:640px;margin:0 auto;padding:96px 48px;display:flex;align-items:center}
+.teaser-route .teaser-copy{position:relative;z-index:1;max-width:460px}
+.teaser-route .teaser-visual{position:absolute;top:0;bottom:0;left:38%;right:calc(50% - 50vw)}
+.teaser-route .teaser-visual img{display:block;width:auto;height:100%;max-width:none}
+@media(max-width:860px){
+ .teaser-route .teaser-inner{display:block;min-height:0;padding:64px 24px 0}
+ .teaser-route .teaser-visual{position:relative;left:auto;right:auto;height:420px;margin:24px -24px 0;overflow:hidden}
+ .teaser-route .teaser-visual img{height:100%;margin-left:-12%}
+}

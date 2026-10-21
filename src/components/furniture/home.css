@@ -1274,22 +1274,13 @@ html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}
    and a cool slate outline instead of the CO₂ report's green-grey */
 #analyse-improve :is(.product-thumb,.compare-grid>div){background:#111923;border-color:#222d3b;box-shadow:0 12px 30px #00000066}
 #analyse-improve .compare-grid .selected{background:#16202d;border-color:#8796ad80}
-/* "Learn more" under each capability, to its explainer on How it works (the "Explore integrations" button style).
-   In the pinned story it follows the text in, and only the current capability's link can be clicked or tabbed to. */
-.capabilities .cap-link{margin-top:20px;font-size:13px;min-height:38px;padding:8px 14px}
-html.model-stage .model-pin .capabilities .cap-link{--l:clamp(0,calc((var(--mk,0) - var(--i) - .12) / .2),1);opacity:var(--l);transform:translateY(calc((1 - var(--l)) * 14px));margin-top:22px}
-html.model-stage .model-pin .capabilities article.is-on .cap-link{pointer-events:auto}
-@media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities .cap-link{transform:none}}
-/* phones: room for the "Learn more" button inside the dome, above the dots (the text starts just inside the rim, and
-   the small symbol above each title is left out) */
-@media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + 34px)}html.model-stage .model-pin .cap-icon{display:none}html.model-stage .model-pin .capabilities p{font-size:15px}}
+/* phones: the capability text a size smaller */
+@media(max-width:599px){html.model-stage .model-pin .capabilities p{font-size:15px}}
 /* the capability text sits in the middle of the dark circle: centred between the sphere's rim (--dome) and the
    dots at the bottom, at every screen size */
 html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 44px) / 2);translate:-50% -50%}
 @media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 44px) / 2)}}
 html.model-stage .model-pin .capabilities{align-items:center}
-/* "Learn more ↗︎": the arrow sits close to its label */
-.capabilities .cap-link{gap:10px}
 /* Phones: the hero runs edge to edge without rounded corners, and "Explore its passport" sits on the photo just above
    the bottom of the first screen (100svh: the screen with the browser's bars shown), so it is always in view */
 @media(max-width:599px){
@@ -1501,3 +1492,111 @@ html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
    stone) */
 .chapter .pt-hl{font-weight:600;color:color-mix(in srgb,#f5f6f0 45%,currentColor)}
 #product-passports .pt-hl{color:#36322c}
+/* (the story teasers' shared look: src/styles/story-teaser.css) */
+/* the globe: the supplier chapter's own navy (as the story's stage paints it, #152239), the copy on the left and the
+   assembled globe, draggable, on the right */
+.teaser-globe{background:#152239}
+.teaser-globe .teaser-inner{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:32px;min-height:640px;padding:80px 48px;border-color:#ffffff12}
+/* (its frame runs the section's full height, into the padding, so the globe and the arcs rising off it have room) */
+.teaser-globe .teaser-visual{height:calc(100% + 160px);min-height:640px;margin:-80px 0;background:none;overflow:visible}
+/* (it borrows the story's globe-stage for the globe's labels; not its shade, nor its canvas offsets) */
+.teaser-globe .teaser-visual::after{display:none}
+.teaser-globe .teaser-visual astro-island{inset:0}
+@media(max-width:860px){
+ .teaser-globe .teaser-inner{grid-template-columns:1fr;gap:8px;min-height:0;padding:64px 24px 24px}
+ .teaser-globe .teaser-visual{height:420px;min-height:0;margin:0 -24px}
+}
+/* the sphere: the model story's first screen (its title over the dark sphere), the copy inside the dome */
+.teaser-model .model-atmosphere{height:760px}
+/* (centred in the dome, between its rim and the section's foot: its line and the button) */
+.teaser-model .teaser-copy{position:absolute;z-index:2;left:50%;top:41%;bottom:56px;width:min(600px,88%);translate:-50% 0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.teaser-model .teaser-text{max-width:none;margin:0 auto;color:#b1b6bf}
+/* (its two lines widening downwards, as the dome does; phones let it wrap) */
+@media(max-width:699px){.teaser-model .dome-break{display:none}}
+.teaser-model .teaser-open{margin-top:30px}
+@media(max-width:599px){
+ .teaser-model .model-atmosphere{height:720px}
+ .teaser-model .model-atmosphere .model-horizon.data-sphere{left:-50%;width:200%}
+ .teaser-model .teaser-copy{top:52%;bottom:32px}
+}
+/* the What we solve story, full screen (storyTakeover.ts): its ✕ below the chapter tabs, level with the hint there */
+html[data-story-open="what-we-solve"]{--story-close-top:calc(var(--tab-row) + 22px)}
+/* The chapter tabs blend into the story: the stage's own colour behind them (--nav-bg, from the story script as it
+   changes chapter to chapter), white text and a green dot on the dark chapters; dark ink and a deeper green on the
+   light ones (.is-light) */
+html.story-stage .benefit-nav::before{background:var(--nav-bg,#152239);border-top-color:transparent;border-bottom-color:#ffffff14}
+html.story-stage .benefit-nav nav a{color:#ffffffa6}
+html.story-stage .benefit-nav nav a:hover,html.story-stage .benefit-nav nav a[aria-current]{color:#fff}
+html.story-stage .benefit-nav .nav-dot,html.story-stage .benefit-nav nav a[aria-current]::after{background:#d6ef8c}
+html.story-stage .benefit-nav.is-light::before{border-bottom-color:#0000000f}
+html.story-stage .benefit-nav.is-light nav a{color:#4a4f57}
+html.story-stage .benefit-nav.is-light nav a:hover,html.story-stage .benefit-nav.is-light nav a[aria-current]{color:#242528}
+html.story-stage .benefit-nav.is-light .nav-dot,html.story-stage .benefit-nav.is-light nav a[aria-current]::after{background:#55703a}
+/* The model story's steps with a How it works visual (Home.astro: Product memory's chart, the Input interface's lens,
+   the MCP graphic), between the step's text and its key point, inside the dome; they fade in with the text. Only in
+   the pinned story and where the dome has room for them (tall enough screens); elsewhere the steps stay text only. */
+.cap-visual{display:none}
+@media(min-height:740px){
+ /* the steps' column wider, so the visuals can fill more of the dome; the text keeps its own measure */
+ html.model-stage .model-pin .capabilities{width:min(680px,88%);top:calc(var(--dome,40%) + (100% - var(--dome,40%) - 70px) / 2)} /* (centred between the rim and the dots) */
+ html.model-stage .model-pin .capabilities p{max-width:460px;margin-inline:auto}
+ /* each visual as large as the dome allows: about a quarter of the screen's height (24vh) */
+ html.model-stage .model-pin .capabilities .cap-visual{display:block;--v:clamp(0,calc((var(--mk,0) - var(--i) - .2) / .22),1);opacity:var(--v);transform:translateY(calc((1 - var(--v)) * 16px));width:100%;margin:22px auto 0}
+ html.model-stage .model-pin :is(.cap-lens,.cap-scene){position:relative;height:clamp(150px,24vh,250px)}
+ html.model-stage .model-pin .cap-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+ html.model-stage .model-pin .cap-lens canvas{position:absolute;top:0;left:calc(50% - 50vw);width:100vw;height:100%;display:block} /* (screen wide: its streams start at the sphere's rim) */
+ html.model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(37vh * 560 / 360));margin:0 auto;translate:2.8% 0} /* (no key line under it: the largest of the visuals; nudged right, as its drawing (database to AI tools) sits left of its box's centre) */
+ html.model-stage .model-pin .capabilities .cap-memory{--cw:min(60vw,920px,92vh,calc(32vh * 1200 / 340));width:var(--cw);margin-inline:calc((100% - var(--cw)) / 2)} /* (wider than the steps' column, centred on it, its corners inside the dome (92vh); its text and dots keep their size, ProductMemory.astro) */
+}
+@media(min-height:740px) and (max-width:599px){
+ html.model-stage .model-pin .capabilities{width:calc(100% - 32px)}
+ html.model-stage .model-pin :is(.cap-lens,.cap-scene){height:clamp(120px,20vh,180px)}
+ html.model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(20vh * 560 / 360))}
+}
+@media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities .cap-visual{transform:none}}
+html.motion-paused.model-stage .model-pin .capabilities .cap-visual{transform:none}
+
+/* each step's key point (Home.astro, capKeys: its How it works section's headline), under its visual, fading in with
+   the text */
+.cap-key{margin:18px 0 0;font-size:15px;font-weight:500;line-height:1.4;letter-spacing:-.01em;color:#f8f9fc}
+.cap-key span{color:#8b919c}
+html.model-stage .model-pin .capabilities .cap-key{--k:clamp(0,calc((var(--mk,0) - var(--i) - .26) / .2),1);opacity:var(--k);transform:translateY(calc((1 - var(--k)) * 12px))}
+@media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities .cap-key{transform:none}}
+html.motion-paused.model-stage .model-pin .capabilities .cap-key{transform:none}
+
+/* the quote between the two stories, after earlier versions of the site: V4's large centred serif, the V3
+   testimonials' tinted quote mark, portrait-and-name row and brand hairline along the top */
+.user-quote{position:relative;min-height:0;padding:110px 48px 100px}
+.user-quote::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#8295d180,transparent)}
+.user-quote figure{margin:0;display:flex;flex-direction:column;align-items:center}
+.user-quote .quote-mark{width:40px;height:40px;fill:#8295d1;opacity:.35}
+.user-quote blockquote{margin:28px auto 36px;font-size:clamp(24px,2.6vw,34px);line-height:1.25;text-wrap:balance}
+.user-quote blockquote span{display:block;text-wrap:balance} /* (the lighter half on lines of its own) */
+.user-quote .quote-person{display:flex;align-items:center;gap:14px;text-align:left}
+.user-quote .quote-person img{width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 4px #fff,0 0 0 5px #e3e6ee}
+.user-quote .quote-person strong{display:block;font-size:15px;font-weight:600;color:#2c3038}
+.user-quote .quote-person small{display:block;margin-top:3px;font-size:13px;color:#7d838e}
+@media(max-width:599px){.user-quote{padding:72px 24px 64px}.user-quote .quote-mark{width:30px;height:30px}.user-quote blockquote{margin:22px auto 30px}}
+
+/* the model story's chapter tabs, along the top of its pinned screen: the What we solve story's menu in the model's
+   own black (white labels, the current one marked by a sliding green dot); only while it pins */
+.model-tabs{display:none}
+html.model-stage .model-tabs{display:block;position:absolute;top:0;left:0;right:0;z-index:3;background:#111214;border-bottom:1px solid #ffffff14}
+.model-tabs-row{position:relative;display:flex;justify-content:center;overflow-x:auto;padding:0 12px;scrollbar-width:none}
+.model-tabs-row::-webkit-scrollbar{display:none}
+.model-tabs button{flex:none;margin:0;padding:24px 18px 22px;border:0;background:none;font:500 14px/20px Inter,Arial,sans-serif;color:#ffffffa6;white-space:nowrap;cursor:pointer;transition:color .2s}
+.model-tabs button:hover,.model-tabs button[aria-current]{color:#fff}
+.model-tabs button:focus-visible{outline:2px solid #d6ef8c;outline-offset:-6px;border-radius:8px}
+.model-tabs .nav-dot{position:absolute;left:0;bottom:11px;width:4px;height:4px;border-radius:50%;background:#d6ef8c;pointer-events:none}
+.model-tabs-row.has-dot .nav-dot{transition:transform .5s cubic-bezier(.65,0,.35,1)}
+/* (the title further down, clear of the tabs; the ✕ below them) */
+html.model-stage .model-pin .model-atmosphere .model-title{padding-top:120px}
+html[data-story-open="product-model"]{--story-close-top:88px}
+@media(max-width:599px){
+ .model-tabs-row{justify-content:flex-start;padding:0 6px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 28px),transparent)}
+ .model-tabs button{padding:16px 12px 14px;font-size:13px}
+ .model-tabs .nav-dot{bottom:6px}
+ html.model-stage .model-pin .model-atmosphere .model-title{padding-top:84px}
+ html[data-story-open="product-model"]{--story-close-top:64px}
+}
+@media(prefers-reduced-motion:reduce){.model-tabs-row.has-dot .nav-dot{transition:none}}

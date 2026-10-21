@@ -1,4 +1,5 @@
 import { reducedMotion } from "../../utilities/motion";
+import { drawImpact, drawSupply } from "./model-scenes";
 // Lightweight procedural data diagrams. No WebGL or animation dependencies.
 // the sphere's surface: a radial gradient from a highlight up and to the left of its centre out to its rim
 const SHADE: [number, string][] = [[0, "#10151d"], [0.65, "#080c12"], [1, "#030508"]];
@@ -34,6 +35,9 @@ export function initDataScenes() {
       // the streams always run in from the canvas's left edge, everything else keeps its place
       lead = 0;
     const sphere = canvas.dataset.scene === "sphere";
+    const rimSphere = canvas.hasAttribute("data-rim")
+      ? (canvas.closest(".model-pin")?.querySelector<HTMLCanvasElement>('canvas[data-scene="sphere"]') ?? null)
+      : null;
     const dot = (x: number, y: number, r: number, color: string | CanvasGradient) => {
       ctx.beginPath();
       ctx.fillStyle = color;
@@ -153,22 +157,33 @@ export function initDataScenes() {
             ctx.restore();
           }
         }
-      } else {
+      } else if (canvas.dataset.scene === "supply") drawSupply(ctx, w, h, t);
+      else if (canvas.dataset.scene === "impact") drawImpact(ctx, w, h, t);
+      else {
         // on wide screens the scene keeps to the site's 1240px content width on the right, as the copy does on the left
         // (the streams still run in from the canvas's left edge); up to ~1440px wide nothing changes
-        const inset = Math.max(0, (w - 1240) / 2 - 0.07 * w),
-          ox = w * lead,
-          sw = w - inset - ox,
-          lx = ox + sw * 0.43,
+        // in the model story (data-rim): drawn on a canvas as wide as the screen, the lens centred on its step's column
+        // (the scene's area, the canvas's parent) and the streams running in from the sphere's rim
+        const area = rimSphere ? canvas.parentElement!.getBoundingClientRect() : null,
+          own = area ? canvas.getBoundingClientRect() : null;
+        const inset = area ? 0 : Math.max(0, (w - 1240) / 2 - 0.07 * w),
+          ox = area ? area.left - own!.left : w * lead,
+          sw = area ? area.width : w - inset - ox,
+          lx = ox + sw * (area ? 0.5 : 0.43),
           cy = h * 0.47,
           ry = Math.min(h * 0.42, sw * 0.4),
           rx = sw * 0.075,
-          focus = ox + sw * 0.85,
-          label = ox + sw * 0.015,
-          start = 0;
+          focus = lx + sw * 0.42,
+          label = area ? lx - sw * 0.36 - 40 : ox + sw * 0.015;
+        // (the sphere as the sphere scene draws it, in this canvas's coordinates)
+        const sphereBox = rimSphere?.getBoundingClientRect();
+        const sr = sphereBox && Math.min(sphereBox.width * 0.53, sphereBox.height * 0.69),
+          scx = sphereBox ? sphereBox.left + sphereBox.width / 2 - own!.left : 0,
+          scy = sphereBox ? sphereBox.top + sphereBox.height * 1.055 - own!.top : 0;
         // A convex lens gathers parallel information streams into a single focus.
         for (let i = 0; i < 9; i++) {
           const y = cy + (i - 4) * ry * 0.2;
+          const start = sr && sr > Math.abs(y - scy) ? Math.max(0, scx - Math.sqrt(sr * sr - (y - scy) ** 2)) : 0;
           ctx.beginPath();
           ctx.moveTo(start, y);
           ctx.lineTo(lx, y);

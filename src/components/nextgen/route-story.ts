@@ -554,13 +554,14 @@ export function initRouteStory(root: HTMLElement) {
   // snap points (utilities/storySnap.ts): each caption fully shown, its step's animation done (--rk i + .5), then the
   // finished route with its totals; at five times the usual glide time, so the moves on the globe can be followed
   const removeSnapPoints = registerSnapPoints(() => {
-    if (!pinnedQuery.matches) return [];
+    if (!pinnedQuery.matches || !root.getClientRects().length) return []; // (none while the story waits, hidden)
     const pin = root.querySelector<HTMLElement>(".route-pin");
     const run = Math.max(1, root.offsetHeight - (pin?.offsetHeight || window.innerHeight));
     const top = root.getBoundingClientRect().top + window.scrollY;
     const rests = [...Array.from({ length: steps }, (_, i) => i + 0.5), steps + 0.05];
-    // (slow glides, pace 5, to follow the route being drawn; the way in takes 1s)
-    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5, entryMs: 1000, dots: root.querySelector<HTMLElement>(".route-dots"), hintLow: true }; // (and its exit)
+    // (slow glides, pace 5, to follow the route being drawn, leaving at once (launch: the route starts drawing the
+    // moment a step is asked for, then eases in); the way in, now that the story opens at its top, the same)
+    return { points: [...rests.map((rk) => top + run * ((rk + 0.2) / (steps + 0.4))), top + run], top, pace: 5, launch: 2, dots: root.querySelector<HTMLElement>(".route-dots"), hintLow: true }; // (and its exit)
   });
 
   return () => {
