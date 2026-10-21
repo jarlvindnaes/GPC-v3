@@ -25,7 +25,7 @@ const milestones = [
   <circle class="scale-trail" r="7" fill="#7089d9"><animateMotion dur="7s" begin="-0.18s" repeatCount="indefinite" path={points}/></circle>
   <circle class="scale-spark" r="4" fill="#7089d9"><animateMotion dur="7s" repeatCount="indefinite" path={points}/></circle></g></svg>
  <div class="scale-marks" aria-hidden="true">{milestones.map((m)=><span class:list={['scale-mark',{flip:m.flip}]} style={`left:${m.left}%;top:${m.top}%;--delay:${m.delay}s;--pulse:${m.pulse}s`}><i></i><b>{m.label}</b></span>)}</div>
- <div class="scale-copy"><h2 id="scale-title">Built for your team.<br/><span>Ready for your entire company.</span></h2><div class="scale-details"><p><strong>Tenant isolation</strong><span>Designed to keep each organisation’s data separate</span></p><p><strong>Elastic architecture</strong><span>Built to grow with your data and workloads</span></p><p><strong>Multi-tenant core</strong><span>Shared infrastructure. Distinct company workspaces.</span></p><p><strong>API &amp; MCP</strong><span>Structured access for systems and AI tools</span></p></div></div>
+ <div class="scale-copy"><h2 id="scale-title">Built for your team.<br/><span>Ready for your entire company.</span></h2><div class="scale-details"><p><strong>Multi-tenant core</strong><span>Shared infrastructure, with a workspace for each company, designed to keep its data separate</span></p><p><strong>Elastic architecture</strong><span>Built to grow with your data and workloads</span></p><p><strong>API &amp; MCP</strong><span>Structured access for systems and AI tools</span></p></div></div>
 </section>
 <style>
 .scale-section{position:relative;min-height:660px;overflow:hidden;background:#fff;border-top:1px solid #e9eaec;border-bottom:1px solid #e9eaec}.scale-section svg,.scale-marks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.scale-copy{position:relative;z-index:1;padding:85px 50px 160px;max-width:770px}.scale-copy h2{font-size:clamp(32px,4vw,48px);line-height:1.13;margin-top:27px}.scale-copy h2 span{color:#8a909b}.scale-details{display:grid;grid-template-columns:1fr 1fr;gap:28px 32px;margin-top:48px;max-width:540px}.scale-details p{border-left:2px solid #8295d1;padding-left:18px;line-height:1.4}.scale-details strong{display:block;font-size:21px;font-weight:500;color:#242528}.scale-details p span{display:block;font-size:13px;margin-top:5px;color:#72777e}
@@ -52,13 +52,15 @@ const milestones = [
 @media(max-width:599px){.scale-copy{padding:60px 24px 230px}.scale-section{min-height:640px}.scale-details{gap:24px 20px}.scale-details strong{font-size:18px}.scale-section svg,.scale-marks{top:auto;bottom:0;height:200px}.scale-mark b{display:none}}
 @media(prefers-reduced-motion:reduce){.scale-reveal{clip-path:none;transition:none}.scale-spark,.scale-trail{display:none}.scale-mark{opacity:1;transform:none;transition:none}.scale-section.is-visible .scale-mark i::after{animation:none}}
 :global(html.motion-paused) :is(.scale-spark,.scale-trail){display:none} /* the footer's Pause animations (SMIL) */
-/* Same points design as How it works' "Know where it came from" sources: a numbered 2×2 grid, blue left rule,
-   number, title and a short line */
+/* Same points design as How it works' "Know where it came from" sources: numbered points with a blue left rule,
+   number, title and a short line; two on top and the third below the first, so the block steps down on the left,
+   where the curve below it is low (one column on phones) */
 .scale-details{counter-reset:point;gap:30px 32px}
 .scale-details p{counter-increment:point;border-left:2px solid #8295d1;padding-left:18px}
 .scale-details p::before{content:counter(point,decimal-leading-zero);display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#5f6d8a}
 .scale-details strong{font-size:19px}
 .scale-details p span{font-size:14px;line-height:1.5;margin-top:6px}
+@media(max-width:599px){.scale-details{grid-template-columns:1fr}}
 </style>
 <script>
 const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting)entry.target.classList.add('is-visible');const svg=entry.target.querySelector('svg');if(entry.isIntersecting)svg?.unpauseAnimations();else svg?.pauseAnimations();}},{threshold:.15});document.querySelectorAll('.scale-section').forEach(section=>observer.observe(section));document.addEventListener('astro:before-swap',()=>observer.disconnect(),{once:true});

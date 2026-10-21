@@ -23,7 +23,7 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
     </div>
     <div class="route-copy">
       <ol class="route-steps">
-        {steps.map(([title, text], i) => <li><article style={`--i:${i}`}><span class="route-num">{String(i + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{text}</p></article></li>)}
+        {steps.map(([title, text], i) => <li><article style={`--i:${i}`}><h3>{title}</h3><p>{text}</p></article></li>)}
       </ol>
     </div>
     <ul class="route-legend" aria-label="Line colours">
@@ -36,7 +36,7 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
       <div class="is-all"><small>Total distance</small><b data-route-total="all">–</b></div>
       <span class="route-note">Illustrative route</span>
     </div>
-    <StoryDotsNav class="route-dots-nav"><ol class="route-dots" aria-hidden="true">{steps.map(([title]) => <li data-title={title}></li>)}</ol></StoryDotsNav>
+    <StoryDotsNav class="route-dots-nav" before="Knows how the world works" after="Audit-ready. Portable. Secure by design."><ol class="route-dots" aria-hidden="true">{steps.map(([title]) => <li data-title={title}></li>)}</ol></StoryDotsNav>
   </div>
 </section>
 <script>
@@ -67,7 +67,6 @@ const legend = [['sea', 'Port'], ['air', 'Airport'], ['rail', 'Rail terminal'], 
   .route-steps{display:grid;margin:0;padding:0;list-style:none}
   .route-steps li{grid-area:1/1}
   .route-steps article{border-left:2px solid #5b74c9;padding-left:18px}
-  .route-num{display:block;margin-bottom:10px;font-size:12px;letter-spacing:.08em;color:#8b98b8}
   .route-steps h3{margin:0;font-size:20px;font-weight:500;color:#f5f7fc}
   .route-steps p{margin:8px 0 0;font-size:15px;line-height:1.6;color:#aab4ca}
   .route-legend{position:absolute;z-index:2;right:22px;bottom:22px;display:flex;flex-direction:column;gap:9px;margin:0;padding:12px 18px;border:1px solid #1f2b4a;border-radius:10px;background:#060d1fd9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);list-style:none;font-size:12px;color:#9aa5bd}

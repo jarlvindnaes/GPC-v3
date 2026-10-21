@@ -29,8 +29,9 @@ export const STORY_SNAP = {
 // quick: a stretch of it, from and to scroll positions, whose step-to-step glides take at most ms, for steps that sit
 // far apart in scroll but should feel as brisk as the rest; dots: its progress dots, one li per step, lit here for the
 // step the page rests on or is gliding to, so a dot moves the moment a step is chosen, not when the page arrives;
-// leads: per step, where a click on its dot jumps to before gliding onto it, default the step before it; entryPace:
-// the glide into its first step from above takes that many times as long as its other glides, default 1)
+// leads: per step, where a click on its dot jumps to before gliding onto it, default the step before it; entryMs:
+// the glide into its first step from above takes that long, whatever the distance (default: as its other glides); hintLow: on
+// touch screens its "Swipe ↓" hint sits just above its dots, clear of text at the top of its screen)
 type Quick = { from: number; to: number; ms: number };
 type Source = () =>
   | number[]
@@ -38,10 +39,11 @@ type Source = () =>
       points: number[];
       top: number;
       pace?: number;
-      entryPace?: number;
+      entryMs?: number;
       quick?: Quick;
       dots?: HTMLElement | null;
       leads?: number[];
+      hintLow?: boolean;
     };
 
 const sources = new Set<Source>();
@@ -53,10 +55,11 @@ let stories: number[][] = []; // each story's points, as scroll positions, in or
 let entries: number[] = []; // per story: the scroll position where it fills half the screen, coming from above
 let exitsUp: number[] = []; // per story: the scroll position where its top edge is at the bottom of the screen (out of view above)
 let paces: number[] = []; // per story: how much longer its glides take
-let entryPaces: number[] = []; // per story: and its way in, relative to that
+let entryMs: (number | undefined)[] = []; // per story: how long its way in takes, if set
 let quicks: Quick[] = []; // stretches whose step-to-step glides are capped
 let dotLists: (HTMLElement | null)[] = []; // per story: its progress dots
 let leadLists: (number[] | undefined)[] = []; // per story: where a dot's jump starts, per step
+let hintLows: boolean[] = []; // per story: its hint above its dots on touch screens
 
 function wanted(): boolean {
   if (typeof window === "undefined") return false;
@@ -111,12 +114,12 @@ function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
   // (a story that asks for it glides slower: its steps, and the glide into it)
   const s = stories.findIndex((list) => list.includes(target));
   const entering = s >= 0 && target === stories[s][0] && from < target - 3; // (into its first step, from above)
-  const storyPace = (paces[s] ?? 1) * (entering ? entryPaces[s] ?? 1 : 1);
+  const storyPace = paces[s] ?? 1;
   const quick = quicks.find((q) => from >= q.from - 3 && from <= q.to + 3 && target >= q.from - 3 && target <= q.to + 3);
-  const duration = Math.min(
-    Math.min(1800, 420 + Math.max(0, length - 500) * 0.9) * GLIDE_PACE * pace * storyPace,
-    quick?.ms ?? Infinity
-  );
+  const duration =
+    entering && entryMs[s] !== undefined
+      ? entryMs[s]!
+      : Math.min(Math.min(1800, 420 + Math.max(0, length - 500) * 0.9) * GLIDE_PACE * pace * storyPace, quick?.ms ?? Infinity);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = performance.now();
   // a curve that leaves at the given speed and arrives at rest (cubic Hermite), its start capped so it never overshoots
@@ -248,12 +251,14 @@ function dockDots(nav: HTMLElement) {
       dot.style.setProperty("--dock-x", `${(at - centres[i]).toFixed(2)}px`);
     });
   };
+  // (a dot, or one of the buttons: those by their own box, as they don't move with the wave)
   const showTip = (dot: HTMLElement | null) => {
     over = dot;
     if (!dot || !dot.dataset.title) {
       tip.classList.remove("is-on");
       return;
     }
+    const isDot = dot.parentElement === list;
     tip.replaceChildren();
     if (dot.dataset.group) {
       const group = document.createElement("small");
@@ -263,7 +268,8 @@ function dockDots(nav: HTMLElement) {
     tip.append(dot.dataset.title);
     const box = nav.getBoundingClientRect();
     const i = dots().indexOf(dot);
-    const centre = (centres[i] ?? 0) + (parseFloat(dot.style.getPropertyValue("--dock-x")) || 0);
+    const own = dot.getBoundingClientRect();
+    const centre = isDot ? (centres[i] ?? 0) + (parseFloat(dot.style.getPropertyValue("--dock-x")) || 0) : own.left + own.width / 2;
     tip.style.left = `${Math.round(centre - box.left)}px`;
     tip.classList.add("is-on");
   };
@@ -290,6 +296,17 @@ function dockDots(nav: HTMLElement) {
     showTip(null);
     centres = [];
   });
+  // the arrows, « and »: their tooltip on hover (mouse) and on keyboard focus
+  for (const button of nav.querySelectorAll<HTMLElement>("[data-story-leave], [data-story-step]")) {
+    button.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") showTip(button);
+    });
+    button.addEventListener("pointerleave", () => showTip(null));
+    button.addEventListener("focus", () => {
+      if (button.matches(":focus-visible")) showTip(button);
+    });
+    button.addEventListener("blur", () => showTip(null));
+  }
   // a click anywhere along the row goes to the dot nearest it (the dots are small; their gaps count too)
   list.addEventListener("click", (event) => {
     if (!stepping()) return;
@@ -320,13 +337,28 @@ function ownsTouch(target: EventTarget | null): boolean {
   return false;
 }
 
-// ---- story controls: a "Swipe ↓" hint top right in a story (on each entry, until the first swipe there) and a
-// "Skip story ↓" button through the story (not on its last step), jumping to the next story's first step ----
+// ---- story controls: a "Swipe ↓" hint top right in a story (on each entry, until the first swipe there); the way
+// out of a story is the « and » buttons beside its dots (StoryDotsNav.astro, leaveStory) ----
 
 let swiped = false; // (since entering the current story)
 let shownStory = -1; // the story the page is in (-1: none), so the hint returns on every entry
 let hint: HTMLElement | null = null;
-let skip: HTMLButtonElement | null = null;
+
+/**
+ * A story's « or » button: a jump (not a glide) out of the story it sits in, » to the section after it (its top at
+ * the top of the screen), « to the one before it (the story's top edge at the bottom of the screen).
+ */
+function leaveStory(button: HTMLElement, direction: number) {
+  const story = button.closest<HTMLElement>("section");
+  if (!story) return;
+  if (glide) {
+    cancelAnimationFrame(glide.frame);
+    glide = null;
+  }
+  const box = story.getBoundingClientRect();
+  const top = direction > 0 ? box.bottom + window.scrollY : Math.max(0, box.top + window.scrollY - window.innerHeight);
+  window.scrollTo({ top, behavior: "instant" });
+}
 
 /** Fades a control in or out; while out it is taken off the page (display: none), not just made invisible. */
 function show(el: HTMLElement, on: boolean) {
@@ -354,25 +386,7 @@ function controls() {
   hint.hidden = true;
   // "Swipe" on touch screens, "Scroll" with a mouse or trackpad
   hint.textContent = matchMedia(TOUCH).matches ? "Swipe ↓" : "Scroll ↓";
-  skip = document.createElement("button");
-  skip.type = "button";
-  skip.className = "story-steps-skip";
-  skip.tabIndex = -1;
-  skip.hidden = true;
-  skip.innerHTML = 'Skip story <span aria-hidden="true">↓</span>';
-  skip.addEventListener("click", () => {
-    const points = storyAt(glide ? glide.target : window.scrollY);
-    if (!points) return;
-    // a jump, not a glide: straight to the next story's first step (or, after the last story, past this one's exit)
-    if (glide) {
-      cancelAnimationFrame(glide.frame);
-      glide = null;
-    }
-    const exit = points[points.length - 1];
-    const next = stories.filter((list) => list[0] > exit).sort((a, b) => a[0] - b[0])[0];
-    window.scrollTo({ top: next ? next[0] : exit + window.innerHeight * 0.85, behavior: "instant" });
-  });
-  bar.append(hint, skip);
+  bar.append(hint);
   document.body.append(bar);
   let queued = false;
   const update = () => {
@@ -381,26 +395,26 @@ function controls() {
     const points = stepping() ? storyAt(y) : undefined;
     const inStory = Boolean(points && y >= points[0] - 3);
     const lastStep = points ? points[points.length - 2] : 0; // (the last point is the exit)
-    const skipOn = inStory && y < lastStep - 3;
     // (anywhere in a story, until the first swipe or scroll step there; back each time a story is entered, even again)
     const current = inStory && points ? stories.indexOf(points) : -1;
     if (current !== shownStory) {
       shownStory = current;
       if (current >= 0) swiped = false;
     }
-    const hintOn = inStory && !swiped;
+    const hintOn = inStory && !swiped && y < lastStep - 3; // (not on the last step: nothing further to swipe to there)
     if (hintOn) {
-      // below the site header (while shown) and the homepage story's chapter tabs
+      // below the site header (while shown) and the homepage story's chapter tabs; or, for a story that asks, on touch
+      // screens just above its dots (its own height, 40px, and 12px clear)
+      const dots = hintLows[current] && matchMedia(TOUCH).matches ? dotLists[current]?.closest(".story-dots-nav") : null;
+      const dotsTop = dots?.getBoundingClientRect().top;
       let top = 0;
       for (const bar of document.querySelectorAll<HTMLElement>("[data-site-header], .benefit-nav")) {
         const box = bar.getBoundingClientRect();
         if (box.bottom > 0 && box.top < window.innerHeight / 3) top = Math.max(top, box.bottom);
       }
-      hint!.style.setProperty("--story-hint-top", `${Math.round(top + 24)}px`);
+      hint!.style.setProperty("--story-hint-top", `${Math.round(dotsTop ? dotsTop - 40 - 12 : top + 24)}px`);
     }
     show(hint!, hintOn);
-    show(skip!, skipOn);
-    skip!.tabIndex = skipOn ? 0 : -1;
     // each story's dots: the step at or before where the page rests or glides to (its steps: every point but the exit)
     stories.forEach((list, s) => {
       const dots = dotLists[s]?.children;
@@ -428,8 +442,11 @@ function controls() {
   window.addEventListener("resize", queue);
   onGlide = update;
   document.addEventListener("click", (event) => {
-    const arrow = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-story-step]") : null;
+    const target = event.target instanceof Element ? event.target : null;
+    const arrow = target?.closest<HTMLElement>("[data-story-step]");
     if (arrow && stepping()) arrowStep(Number(arrow.dataset.storyStep));
+    const leave = target?.closest<HTMLElement>("[data-story-leave]");
+    if (leave) leaveStory(leave, Number(leave.dataset.storyLeave));
   });
   queue();
   // the site header slides in and out without a scroll: follow it once its slide (0.3s) is done
@@ -456,9 +473,6 @@ function start() {
     // the hint: top right, just below whatever bars are showing at the top (set as you scroll)
     ".story-steps-nav>.story-steps-hint{top:var(--story-hint-top,80px);right:16px}" +
     ".story-steps-nav>[hidden]{display:none}" +
-    ".story-steps-nav>.story-steps-skip{right:16px;margin:0;min-width:0;cursor:pointer;font:inherit;appearance:none}" +
-    ".story-steps-skip.is-on{pointer-events:auto}" +
-    ".story-steps-skip:focus-visible{outline:2px solid #d6ef8c;outline-offset:3px}" +
     "html[data-overlay-open] .story-steps-nav{display:none}" +
     // a story's dots between its previous and next arrows (StoryDotsNav.astro); the arrows only while stepping is on
     ".story-dots-nav{display:flex;align-items:center;gap:8px}" +
@@ -540,12 +554,19 @@ function start() {
   const release = () => {
     const wasNative = mode === "native";
     mode = "none";
-    // a story came half into view while the finger was still on the screen: take over now it's lifted
+    // a story came half into view while the finger was still on the screen: take over now it's lifted, onto its first
+    // step, also when the finger has dragged the page a little past it (short of the second step: settling would
+    // otherwise carry it on to the second, skipping the first)
     if (wasNative && entering !== null) {
-      const first = stories[entering]?.[0];
+      const [first, second] = stories[entering] ?? [];
       entering = null;
-      if (first !== undefined && velocity > 0 && window.scrollY < first - 3) {
+      const y = window.scrollY;
+      if (first !== undefined && velocity > 0 && y < first - 3) {
         glideTo(first, Math.min(3, velocity), FIRST_STEP_PACE);
+        return;
+      }
+      if (first !== undefined && y >= first - 3 && (second === undefined || y < second - 3)) {
+        glideTo(first);
         return;
       }
     }
@@ -588,13 +609,15 @@ function start() {
       }
       if (!stepping() || glide || mode === "pending" || mode === "taken" || y <= before) return;
       if (y - before > window.innerHeight) return; // a jump (a menu link), not a scroll
-      const crossed = entries.findIndex((entry, i) => before < entry && y >= entry && y < stories[i][0] - 3);
+      // (or already a little past its first step, as a fast momentum scroll can be in one event: back onto it)
+      const crossed = entries.findIndex((entry, i) => before < entry && y >= entry && y < (stories[i][1] ?? stories[i][0]) - 3);
       if (crossed < 0) return;
       if (mode === "native") {
         entering = crossed; // the finger is still down
         return;
       }
-      glideTo(stories[crossed][0], Math.min(3, Math.max(0, velocity)), FIRST_STEP_PACE);
+      const first = stories[crossed][0];
+      glideTo(first, y < first ? Math.min(3, Math.max(0, velocity)) : 0, FIRST_STEP_PACE);
     },
     { passive: true }
   );
@@ -689,20 +712,22 @@ function rebuild() {
       list: [...list].sort((a, b) => a - b),
       top: Array.isArray(result) ? undefined : result.top,
       pace: Array.isArray(result) ? 1 : result.pace ?? 1,
-      entryPace: Array.isArray(result) ? 1 : result.entryPace ?? 1,
+      entryMs: Array.isArray(result) ? undefined : result.entryMs,
       quick: Array.isArray(result) ? undefined : result.quick,
       dots: Array.isArray(result) ? null : result.dots ?? null,
-      leads: Array.isArray(result) ? undefined : result.leads
+      leads: Array.isArray(result) ? undefined : result.leads,
+      hintLow: Array.isArray(result) ? false : result.hintLow ?? false
     };
   });
   const lists = read.map((story) => story.list);
   const kept = read.filter((story) => story.list.length > 1);
   stories = kept.map((story) => story.list);
   paces = kept.map((story) => story.pace);
-  entryPaces = kept.map((story) => story.entryPace);
+  entryMs = kept.map((story) => story.entryMs);
   quicks = kept.flatMap((story) => (story.quick ? [story.quick] : []));
   dotLists = kept.map((story) => story.dots);
   leadLists = kept.map((story) => story.leads);
+  hintLows = kept.map((story) => story.hintLow);
   for (const list of dotLists) {
     const nav = list?.closest<HTMLElement>(".story-dots-nav");
     if (nav) dockDots(nav);

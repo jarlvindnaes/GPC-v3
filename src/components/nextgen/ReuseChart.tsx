@@ -73,7 +73,7 @@ export function ReuseChart({ id = "rc" }: { id?: string }) {
         <defs>
           <linearGradient id={`${id}-curve`} x1="0" x2="1">
             <stop stopColor="#7283c9" />
-            <stop offset="1" stopColor="#6c8270" />
+            <stop offset="1" stopColor="#8e9bbd" />
           </linearGradient>
           {/* the Input interface lens's glass (data-scenes.ts), for the first product's bar: bottom to top */}
           <linearGradient id={`${id}-glass`} x1="0" x2="0" y1="1" y2="0">

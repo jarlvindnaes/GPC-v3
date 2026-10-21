@@ -401,10 +401,13 @@ export async function createChairStoryScene(
     onError,
   );
 
-  // Drag to turn the chair (yaw), damped; the story keeps control of the camera.
+  // Drag to turn the chair (yaw), damped; the story keeps control of the camera. In the close-up a drag turns the
+  // screw in focus instead (spinDrag, taken up by its turn below), and its own slow turn waits while it is held.
   let yaw = 0;
   let yawTarget = 0;
   let dragX: number | null = null;
+  let screwHeld = false; // (the close-up is on: set every frame)
+  let spinDrag = 0;
   const onDown = (event: PointerEvent) => {
     dragX = event.clientX;
     renderer.domElement.setPointerCapture(event.pointerId);
@@ -413,8 +416,9 @@ export async function createChairStoryScene(
     if (dragX === null) {
       return;
     }
-    yawTarget +=
-      ((event.clientX - dragX) / Math.max(1, host.clientWidth)) * Math.PI * 1.4;
+    const turn = ((event.clientX - dragX) / Math.max(1, host.clientWidth)) * Math.PI * 1.4;
+    if (screwHeld) spinDrag += turn * 1.6;
+    else yawTarget += turn;
     dragX = event.clientX;
   };
   const onUp = () => {
@@ -526,9 +530,18 @@ export async function createChairStoryScene(
         const h: Part = hero;
         // (The Soft chair's bolt only turns while it is fully out, so it is square again before it
         // slides back in.)
-        if (e > 0.97 && !reduceMotion() && (variant !== "soft" || s > 0.98)) {
+        const held = e > 0.97 && (variant !== "soft" || s > 0.98);
+        screwHeld = Boolean(hero) && e > 0.6;
+        if (screwHeld && spinDrag !== 0) {
+          // a drag's turn, eased in over a few frames
+          const step = spinDrag * Math.min(1, dt * 14);
+          spin += step;
+          spinDrag -= step;
+          if (Math.abs(spinDrag) < 0.0005) spinDrag = 0;
+        }
+        if (held && !reduceMotion() && dragX === null) {
           spin += SPIN_SPEED * dt;
-        } else {
+        } else if (!held) {
           spin = Three.MathUtils.damp(
             spin,
             Math.round(spin / (Math.PI * 2)) * Math.PI * 2,

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ReuseChart } from "./ReuseChart";
 import { OreThumb } from "./OreThumb";
 import { getStoryFrame } from "./productStoryMath";
-import { registerSnapPoints } from "../../utilities/storySnap";
+import { glideToStep, registerSnapPoints } from "../../utilities/storySnap";
 
 // Copy follows our "Component-level by design" section: one idea per step of the chair story.
 const chapters = [
@@ -376,13 +376,16 @@ export default function ProductStory({ base }: { base: string }) {
     window.addEventListener("scroll", scroll, { passive: true });
     scroll();
     // snap points (utilities/storySnap.ts): each chapter at rest (productStoryMath.ts): the whole chair, taken apart
-    // with its fact cards, and back together with the reuse chart
+    // with its fact cards, and back together with the reuse chart; its glides twice the usual time, as the chair comes
+    // apart and back together on the way (the way in: 1s)
+    // (touch screens only: with a mouse or trackpad the chair follows the scroll freely, without steps)
     const removeSnapPoints = registerSnapPoints(() => {
       if (modeRef.current !== "scroll" || reducedRef.current) return [];
+      if (!window.matchMedia("(hover: none) and (pointer: coarse)").matches) return [];
       const sticky = section.querySelector<HTMLElement>(".story-sticky");
       const travel = Math.max(1, section.offsetHeight - (sticky?.offsetHeight || window.innerHeight));
       const top = section.getBoundingClientRect().top + window.scrollY;
-      return { points: [0, 0.52, 0.94, 1].map((p) => top + travel * p), top }; // (1: its exit)
+      return { points: [0, 0.52, 0.94, 1].map((p) => top + travel * p), top, pace: 2, entryMs: 1000 }; // (1: its exit)
     });
     // Our exploding chair (copied from the hero, then tweaked for the story); Jarl's original scene
     // stays in productStoryScene.ts.
@@ -463,6 +466,21 @@ export default function ProductStory({ base }: { base: string }) {
     const top = window.scrollY + section.getBoundingClientRect().top;
     const travel = Math.max(1, section.offsetHeight - window.innerHeight);
     window.scrollTo({ top: top + value * travel, behavior });
+  };
+
+  // A chapter button: a glide (like the other stories' steps) to that chapter at rest, the chair playing on the way as
+  // the scroll drives it (not set first, which made it jump ahead and back); with reduced motion, or once the story is
+  // driven by its controls, straight there.
+  const goToChapter = (index: number) => {
+    const value = [0, 0.52, 0.94][index];
+    const section = sectionRef.current;
+    if (reducedRef.current || modeRef.current !== "scroll" || !section) {
+      seek(value);
+      return;
+    }
+    const sticky = section.querySelector<HTMLElement>(".story-sticky");
+    const travel = Math.max(1, section.offsetHeight - (sticky?.offsetHeight || window.innerHeight));
+    glideToStep(window.scrollY + section.getBoundingClientRect().top + value * travel);
   };
 
   return (
@@ -592,25 +610,15 @@ export default function ProductStory({ base }: { base: string }) {
                     type="button"
                     className={chapter === index ? "selected" : ""}
                     aria-pressed={chapter === index}
-                    onClick={() => seek([0, 0.52, 1][index], "smooth")}
+                    onClick={() => goToChapter(index)}
+                    // its line fills as the story moves through it (the chapters change at 0.3 and 0.72,
+                    // productStoryMath.ts; the last is full at its rest, 0.94): full once passed, empty ahead
+                    style={{ "--fill": Math.min(1, Math.max(0, (progress - [0, 0.3, 0.72][index]) / [0.3, 0.42, 0.22][index])) } as React.CSSProperties}
                   >
-                    <span>0{index + 1}</span>
                     {item.label}
                   </button>
                 ))}
               </fieldset>
-              <input
-                id="assembly-progress"
-                aria-label="Product story progress: product, components, connected product"
-                className="chapter-progress"
-                type="range"
-                min="0"
-                max="100"
-                value={Math.round(progress * 100)}
-                style={{ "--p": `${progress * 100}%` } as React.CSSProperties}
-                onChange={(event) => seek(Number(event.target.value) / 100)}
-                aria-valuetext={`${current.label}, ${Math.round(progress * 100)} percent of story`}
-              />
             </div>
             <div className="chapter-copy">
               <h2 id="inside-heading">{current.title}</h2>

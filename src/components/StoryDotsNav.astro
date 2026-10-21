@@ -1,18 +1,28 @@
 ---
-// A story's progress dots (the slot) between a previous and a next arrow. The arrows take one step, like a swipe or
-// a scroll; utilities/storySnap.ts handles their clicks, dims them at the story's ends and shows them only while
-// story stepping is on.
+// A story's progress dots (the slot) between a previous and a next arrow, with « and » at the ends. The arrows take
+// one step, like a swipe or a scroll; « and » leave the story, for the section before or after it.
+// utilities/storySnap.ts handles their clicks, dims the arrows at the story's ends and shows all four only while story
+// stepping is on. before/after: the names of the sections « and » go to, for their tooltips ("Rewind to …",
+// "Fast forward to …", shown like the dots' own) and accessible names; the arrows' tooltips name them too.
 interface Props {
   class?: string;
+  before: string;
+  after: string;
 }
-const { class: className } = Astro.props;
+const { class: className, before, after } = Astro.props;
 ---
 <div class:list={["story-dots-nav", className]}>
-  <button type="button" class="story-step-arrow" data-story-step="-1" aria-label="Previous step">
+  <button type="button" class="story-step-arrow" data-story-leave="-1" data-group="Rewind to" data-title={before} aria-label={`Rewind to ${before}`}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8.2 3.6 3.8 8l4.4 4.4M12.4 3.6 8 8l4.4 4.4" /></svg>
+  </button>
+  <button type="button" class="story-step-arrow" data-story-step="-1" data-title="Previous step" aria-label="Previous step">
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.8 3.6 5.4 8l4.4 4.4" /></svg>
   </button>
   <slot />
-  <button type="button" class="story-step-arrow" data-story-step="1" aria-label="Next step">
+  <button type="button" class="story-step-arrow" data-story-step="1" data-title="Next step" aria-label="Next step">
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.2 3.6 10.6 8l-4.4 4.4" /></svg>
+  </button>
+  <button type="button" class="story-step-arrow" data-story-leave="1" data-group="Fast forward to" data-title={after} aria-label={`Fast forward to ${after}`}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.6 3.6 8 8l-4.4 4.4M7.8 3.6 12.2 8l-4.4 4.4" /></svg>
   </button>
 </div>

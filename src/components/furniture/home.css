@@ -327,7 +327,7 @@ html.story-on .chapter{--k:2}
 html.story-on #harvest-data .chapter-runway{height:50vh}
 html.story-on #trusted-co2 .chapter-runway{height:140vh} /* four report views to scroll through */
 html.story-on #analyse-improve .chapter-runway{height:60vh}
-html.story-on #beat-regulation .chapter-runway,html.story-on #connect-clients .chapter-runway{height:75vh}
+html.story-on #beat-regulation .chapter-runway{height:75vh}
 html.story-on .chapter .stage-0 .globe-stage astro-island{--q:clamp(0,calc((var(--k) - .45) / .6),1);transform:scale(calc(.8 + .2 * var(--q) + .06 * clamp(0, var(--k) - 1, 1)));transform-origin:72% 55%}
 html.story-on .chapter .stage-0 .stage-copy>span{--q:clamp(0,calc((var(--k) - 0.85) / 0.25),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
 html.story-on .chapter .stage-0 .stage-copy>strong{--q:clamp(0,calc((var(--k) - 1.0) / 0.3),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 26px))}
@@ -646,7 +646,7 @@ html.story-stage [data-story-marker="harvest-data"]{height:120vh}
 html.story-stage [data-story-marker="trusted-co2"]{height:180vh}
 html.story-stage [data-story-marker="analyse-improve"]{height:100vh}
 html.story-stage [data-story-marker="product-passports"]{height:95vh}
-html.story-stage [data-story-marker="beat-regulation"],html.story-stage [data-story-marker="connect-clients"]{height:115vh}
+html.story-stage [data-story-marker="beat-regulation"]{height:115vh}
 /* the chapters become layers of the stage */
 html.story-stage .story-stage .chapter{position:absolute;inset:0;min-height:0;opacity:calc(clamp(0,var(--k) * 8,1) * (1 - clamp(0,(var(--k) - 1.92) * 12.5,1)))}
 html.story-stage .story-stage .chapter:last-of-type{opacity:clamp(0,var(--k) * 8,1)}
@@ -771,34 +771,19 @@ html.story-on .chapter-heading>.chapter-points{--s:.22}
 #beat-regulation .chapter-heading .chapter-eyebrow{color:#7d8698}
 #beat-regulation .chapter-heading h3{font-weight:480;color:#242528}
 
-/* "Connect with clients" shares the passport chapter's canvas (pinned stage): the passport chapter stays on screen
-   while it shows (--pp-keep, set by the story script), only its text fades out; Connect with clients brings just its
-   text, beside the same passport phone, which stays usable (.is-held). Its own report card is for phones only. */
-html.story-stage .story-stage{--pp-keep:1}
-html.story-stage .story-stage #product-passports{opacity:calc(clamp(0,var(--k) * 8,1) * var(--pp-keep))}
-/* the passport's text fades as Connect with clients takes over, except its 3D-model note, which stays with the phone */
+/* Connect with clients (the passport chapter, pinned stage): it fades out as a whole at its end; its text a beat
+   before, except its 3D-model note, which stays with the phone */
+html.story-stage .story-stage #product-passports{opacity:calc(clamp(0,var(--k) * 8,1) * (1 - clamp(0,(var(--k) - 1.92) * 12.5,1)))}
 html.story-stage #product-passports .chapter-heading>:not(.phone-caption){opacity:calc(var(--t) * (1 - clamp(0,(var(--k) - 1.92) * 12.5,1)))}
-html.story-stage #product-passports.is-held .ui-stage{pointer-events:auto}
-html.story-stage #connect-clients .ui-stage{visibility:hidden}
-#connect-clients .chapter-heading .chapter-eyebrow{color:#8c7a5e}
-#connect-clients .chapter-heading h3{font-weight:480;color:#36322c}
-#connect-clients .chapter-heading>p{color:#5a554c}
-html:not(.story-stage) #connect-clients{background:#f6f4ef;box-shadow:0 0 0 100vmax #f6f4ef;clip-path:inset(0 -100vmax)}
-html.story-stage .story-stage #connect-clients{pointer-events:none}
-html.story-stage .story-stage #connect-clients.is-front .chapter-heading{pointer-events:auto}
-#connect-clients .chapter-points li{color:#5a554c}
 
-/* Passport and Connect with clients, pinned stage: the bullets are placed one after another as you scroll, each
-   staying as the next appears below it. As Connect with clients' second arrives the passport selects a part
-   (Home.astro, "dpp:part"). */
-html.story-stage [data-story-marker="connect-clients"]{height:160vh}
-html.story-stage :is(#product-passports,#connect-clients) .chapter-points li{
+/* its bullets, pinned stage: placed one after another as you scroll. As the second arrives the passport turns to its
+   parts shop and selects a part (Home.astro, "dpp:tab" and "dpp:part"). */
+html.story-stage #product-passports .chapter-points li{
  --in:clamp(0,calc((var(--k) - var(--a)) / .12),1);opacity:var(--in);transform:translateY(calc((1 - var(--in)) * 26px))}
 /* the first bullet waits a beat after the headline, as the first step does in chapters 1 and 2 (k .76–.78) */
-html.story-stage :is(#product-passports,#connect-clients) .chapter-points li:nth-child(1){--a:.87}
+html.story-stage #product-passports .chapter-points li:nth-child(1){--a:.87}
 html.story-stage #product-passports .chapter-points li:nth-child(2){--a:1.25}
-html.story-stage #connect-clients .chapter-points li:nth-child(2){--a:1.42}
-@media(prefers-reduced-motion:reduce){html.story-stage :is(#product-passports,#connect-clients) .chapter-points li{transform:none}}
+@media(prefers-reduced-motion:reduce){html.story-stage #product-passports .chapter-points li{transform:none}}
 /* the passport phone's zoom and shift (--pp-zoom, --pp-shift, set by the story script; at 1 for now) */
 html.story-stage .story-stage{--pp-zoom:1}
 html.story-stage #product-passports .phone-live{scale:var(--pp-zoom);translate:0 var(--pp-shift,0px);transform-origin:50% 50%}
@@ -826,16 +811,10 @@ html.story-stage #product-passports .phone-live .passport-scope{min-height:0}
 #product-passports .chapter-heading .phone-caption{display:block;max-width:360px;margin-top:22px;text-align:left;font-size:12px;line-height:1.5;color:#9a8f7d}
 html.story-stage #product-passports .chapter-heading .phone-caption{position:absolute;left:36px;bottom:26px;margin:0}
 
-/* Connect with clients gets its own soft sage (#eff3ec): --sage crossfades it in from the passport's warm stone
-   (the phone stays, only the colour behind it shifts) and out to white for the regulation chapter. Its text and
-   check marks take matching greens. */
+/* (--sage: a soft sage the stage could crossfade to; no chapter sets it since Connect with clients became the
+   passport chapter, in its warm stone) */
 html.story-stage .story-stage{--sage:0}
 html.story-stage .story-bg{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#eff3ec calc(var(--sage) * 100%),#fff)))}
-html:not(.story-stage) #connect-clients{background:#eff3ec;box-shadow:0 0 0 100vmax #eff3ec}
-#connect-clients .chapter-heading .chapter-eyebrow{color:#71825f}
-#connect-clients .chapter-heading h3{color:#2e3529}
-#connect-clients .chapter-points li{color:#535c4c}
-#connect-clients .chapter-points li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%2371825f' fill-opacity='.16'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%2371825f' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 /* the passport's 3D-model note follows the background: warm grey on the stone, sage grey on Connect with clients */
 #product-passports .chapter-heading .phone-caption{color:color-mix(in srgb,#7f8a74 calc(var(--sage,0) * 100%),#9a8f7d)}
 html.story-stage [data-story-marker="product-passports"]{height:130vh} /* room for its two bullets to arrive in turn */
@@ -844,11 +823,6 @@ html.story-stage [data-story-marker="product-passports"]{height:130vh} /* room f
 html.story-stage #product-passports .ui-stage>*{--v:clamp(0,calc((var(--e) - .08) / .3),1)}
 html.story-stage #product-passports .phone-live{--q:1}
 
-/* "Coming this spring" on Connect with clients: a prominent badge (dark pill, lime dot), pinned to the chapter's
-   top-left corner on the stage; above the eyebrow when the chapters stack. */
-#connect-clients .chapter-heading .coming{margin:0 0 16px;align-items:center;gap:8px;padding:8px 14px 8px 12px;border:0;border-radius:999px;background:#2e3529;color:#f1f5e9;font-size:13px;font-weight:600;letter-spacing:.01em;box-shadow:0 6px 18px #2e352922}
-#connect-clients .chapter-heading .coming::before{content:"";width:8px;height:8px;border-radius:50%;background:#d6ef8c;box-shadow:0 0 0 3px #d6ef8c33}
-html.story-stage #connect-clients .chapter-heading .coming{position:absolute;left:36px;top:28px}
 
 /* One headline style across the site, after How it works' hero ("Every product. Taken apart. Connected."): Inter at
    weight 480 with tight tracking, the continuation in the same weight in a muted tone (each section keeps its own
@@ -878,7 +852,6 @@ main .product-thumb>span>small,main .compare-grid small,main .compare-grid stron
 main .ui-footer{color:#646c78}
 #product-passports .chapter-heading .chapter-eyebrow{color:#6f5f45}
 #product-passports .chapter-heading .phone-caption{color:color-mix(in srgb,#56663f calc(var(--sage,0) * 100%),#6f6450)}
-#connect-clients .chapter-heading .chapter-eyebrow{color:#56663f}
 #beat-regulation .chapter-heading .chapter-eyebrow{color:#5f6878}
 /* keep focused and scrolled-to items clear of the sticky header (WCAG 2.4.11) */
 html{scroll-padding-top:120px}
@@ -897,14 +870,7 @@ html:not(.story-stage) .globe-points{padding-top:30px}
  #trusted-co2 .globe-points .step-title{color:#e4eadf}
 }
 
-/* Connect with clients (the sales chapter) in the How it works "Let's make it concrete" theme: soft green ground,
-   deep teal headline, olive text, grey-green accents */
 html.story-stage .story-bg{background:color-mix(in srgb,#f6f7fa calc(var(--blue) * 100%),color-mix(in srgb,#f6f4ef calc(var(--warm) * 100%),color-mix(in srgb,#e1edcc calc(var(--sage) * 100%),#fff)))}
-html:not(.story-stage) #connect-clients{background:#e1edcc;box-shadow:0 0 0 100vmax #e1edcc}
-#connect-clients .chapter-heading .chapter-eyebrow{color:#19220f}
-#connect-clients .chapter-heading h3{color:#172b2d}
-#connect-clients .chapter-points li{color:#455630}
-#connect-clients .chapter-points li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='7' fill='%235e7663' fill-opacity='.18'/%3E%3Cpath d='M4.1 7.3l2 2 3.9-4.1' fill='none' stroke='%235e7663' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 #product-passports .chapter-heading .phone-caption{color:color-mix(in srgb,#455630 calc(var(--sage,0) * 100%),#6f6450)}
 
 /* "Know exactly what to fix" (chapter 3) in How it works' process blue: #eef1f7 ground, deep teal-navy headline,
@@ -960,8 +926,8 @@ html.story-stage .story-tint{background:#0e1615}
 /* report menu kept quiet: dimmer labels (still ≥4.5:1), a hairline track and a softer progress line */
 /* chapters that are not on screen take no pointer at all, including content that turns pointer events back on
    inline (the 3D passport phone's screen), so nothing invisible blocks dragging the globe or clicking the report.
-   The passport while it is held for Connect with clients is the exception. Keyboard focus still reaches them. */
-html.story-stage .story-stage .chapter:not(.is-front):not(.is-held) *{pointer-events:none !important}
+   Keyboard focus still reaches them. */
+html.story-stage .story-stage .chapter:not(.is-front) *{pointer-events:none !important}
 #trusted-co2 .globe-intro .intro-eyebrow{color:#f5f6f0}
 /* Chapter 1, pinned stage: 400vh (was 280vh) so the globe can break back into stars as slowly as it formed (the
    exit mirrors the entrance). Every step timing is rescaled by 280/400 after k 1, so the steps, the globe forming,
@@ -1026,12 +992,11 @@ html:not(.story-stage) .story-stage .chapter .chapter-pin{background:transparent
  html.story-stage .story-stage .chapter:nth-of-type(n+3) .ui-stage{align-self:stretch;justify-self:stretch;display:flex;align-items:center;justify-content:center;min-height:0}
  html.story-stage .story-stage .chapter:nth-of-type(n+3) .screen-card{max-width:560px;width:100%}
  html.story-stage #product-passports .chapter-heading .phone-caption{position:static;margin-top:16px}
- html.story-stage #connect-clients .chapter-heading .coming{position:static;margin:0 0 14px}
 }
 /* the shared passport phone sits below both chapters' text: equal text heights, no zoom (no room), and the
    passport's note leaves with its text */
 @media(max-width:900px){
- html.story-stage :is(#product-passports,#connect-clients) .chapter-heading{min-height:300px}
+ html.story-stage #product-passports .chapter-heading{min-height:300px}
  html.story-stage #product-passports .phone-live{scale:none;translate:none}
  html.story-stage #product-passports .chapter-heading>.phone-caption{opacity:calc(var(--t) * (1 - clamp(0,(var(--k) - 1.92) * 12.5,1)))}
 }
@@ -1109,7 +1074,6 @@ html.story-stage #beat-regulation .chapter-points li:nth-child(2){--a:1.25}
 #harvest-data .pt-icon{color:#a0aff7}
 #trusted-co2 .pt-icon{color:#c5d1c0}
 #analyse-improve .pt-icon{color:#c5d1c0}
-#connect-clients .pt-icon{color:#5e7663}
 #beat-regulation .pt-icon{color:#5f6878}
 /* larger icon badges so the icons read at a glance: 28px badge, 16px icon, centred on the first line of text */
 .pt-icon{width:28px;height:28px;margin-top:calc((1lh - 28px) / 2)}
@@ -1276,7 +1240,7 @@ html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}
 @media(max-width:599px){
  html.story-stage #product-passports .passport-composition{height:100%;min-height:0;width:100%;justify-content:center}
  html.story-stage #product-passports .phone-live{height:100%;width:auto;padding:6px 0}
- html.story-stage :is(#product-passports,#connect-clients) .chapter-heading{min-height:0}
+ html.story-stage #product-passports .chapter-heading{min-height:0}
  html.story-stage .story-stage .chapter:nth-of-type(n+3) .chapter-pin{gap:18px;padding:28px 20px 16px}
 }
 /* phones in portrait: the sphere's canvas is twice the screen width, so the planet is big and rises well up the
@@ -1422,14 +1386,13 @@ html.story-stage #product-passports .passport-composition>.phone-caption{padding
 /* One bullet at a time in the story: a chapter's bullets share one spot under its headline, and each hands over to
    the next (it has left just before the next arrives, at that bullet's own timing); the last one stays. */
 html.story-stage .story-stage .chapter-points{display:grid}
-html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li{grid-area:1/1;--in:clamp(0,calc((var(--k) - var(--a)) / .12),1);--out:clamp(0,calc((var(--k) - var(--o,9)) / .1),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px))}
+html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li{grid-area:1/1;--in:clamp(0,calc((var(--k) - var(--a)) / .12),1);--out:clamp(0,calc((var(--k) - var(--o,9)) / .1),1);opacity:calc(var(--in) * (1 - var(--out)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px))}
 html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li:nth-child(1){--o:1.13}
-html.story-stage #connect-clients .chapter-points li:nth-child(1){--o:1.3}
 /* chapters 1 and 2: a step's bullets share one spot under its title the same way */
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step{display:grid;grid-template-columns:minmax(0,1fr);align-content:start}
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence{grid-row:2;grid-column:1}
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2){--o:clamp(0,calc((var(--k) - var(--b2,9) + .055) / .045),1);opacity:calc(var(--s) * (1 - var(--o)));transform:translateY(calc((1 - var(--s)) * 22px - var(--o) * 14px))}
-@media(prefers-reduced-motion:reduce){html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li,html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence{transform:none}}
+@media(prefers-reduced-motion:reduce){html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li,html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence{transform:none}}
 /* one bullet at a time needs more room: in a step the first bullet comes with the title and has the first half, the
    second the rest; and chapters 1 and 2 run longer (everything in them plays proportionally slower) */
 html.story-stage [data-story-marker="harvest-data"]{height:520vh}
@@ -1497,14 +1460,17 @@ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step{--step-b:va
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:last-child{--e:clamp(0,calc((var(--k) - var(--step-b) + .04) / .05),1)}
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(2):last-child{opacity:calc(var(--s) * (1 - var(--o)) * (1 - var(--e)));transform:translateY(calc((1 - var(--s)) * 22px - var(--o) * 14px - var(--e) * 14px))}
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(3):last-child{opacity:calc(var(--s) * (1 - var(--e)));transform:translateY(calc((1 - var(--s)) * 22px - var(--e) * 14px))}
-html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li:last-child{--e:clamp(0,calc((var(--k) - 1.86) / .06),1);opacity:calc(var(--in) * (1 - var(--out)) * (1 - var(--e)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px - var(--e) * 14px))}
+html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li:last-child{--e:clamp(0,calc((var(--k) - 1.86) / .06),1);opacity:calc(var(--in) * (1 - var(--out)) * (1 - var(--e)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px - var(--e) * 14px))}
 /* the story's last bullet stays: the next section follows straight on */
 html.story-stage #beat-regulation .chapter-points li:last-child{--e:0}
-@media(prefers-reduced-motion:reduce){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:last-child,html.story-stage :is(#analyse-improve,#product-passports,#connect-clients,#beat-regulation) .chapter-points li:last-child{transform:none}}
-/* (with the last bullet leaving a beat before its title, each step's second bullet takes over a little earlier, so
-   both bullets keep about the same time) */
-html.story-stage #harvest-data .globe-points .step:nth-child(1){--b2:1.13}
-html.story-stage #harvest-data .globe-points .step:nth-child(2){--b2:1.49}
+@media(prefers-reduced-motion:reduce){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:last-child,html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li:last-child{transform:none}}
+/* (each step has one bullet, which stays until its title goes: no --b2, the earlier rules' hand-over to a second
+   bullet) */
+html.story-stage #harvest-data .globe-points .step:is(:nth-child(1),:nth-child(2)){--b2:9}
+html.story-stage #trusted-co2 .globe-points .step:nth-child(2){--b2:9}
+/* Analyse & improve and the EU chapter have one bullet: it stays until the chapter ends (no --o hand-over to a
+   second one) */
+html.story-stage :is(#analyse-improve,#beat-regulation) .chapter-points li:nth-child(1){--o:9}
 html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
 /* Phones: "Explore its passport" stays 16px above the bottom of the screen while you scroll through the hero, and stops
    16px above the hero's bottom edge as that comes up (native position: sticky, so it moves in step with the scroll).
@@ -1530,3 +1496,8 @@ html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
  /* ...and the comparison card (centred in the room left above them) */
  html.story-stage #analyse-improve .ui-stage{padding-bottom:calc(84px + var(--hdr,0px))}
 }
+/* each bullet's key phrase (Home.astro, **marked**): a heavier weight and a step lighter than its bullet, so the
+   bullet reads at a glance (on the dark chapters half way to off-white; the warm headline ink on the passport's
+   stone) */
+.chapter .pt-hl{font-weight:600;color:color-mix(in srgb,#f5f6f0 45%,currentColor)}
+#product-passports .pt-hl{color:#36322c}
