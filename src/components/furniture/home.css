@@ -1609,3 +1609,6 @@ html[data-story-open="product-model"]{--story-close-top:88px}
 
 /* phones, the story open full screen: a chapter's eyebrow keeps clear of the ✕ at the top right */
 @media(max-width:599px){html[data-story-open="what-we-solve"] .chapter-eyebrow{display:block;padding-right:56px}}
+
+/* the passport opened from the hero on a phone: on plain white (Home.astro, data-passport-plain) */
+html[data-passport-plain][data-overlay-open] .passport-overlay{background:#fff}

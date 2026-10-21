@@ -558,7 +558,14 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
  storyUpdate();
 }
 // (the trigger takes focus first, so the dialog can hand it back on close: Safari doesn't focus clicked buttons)
-document.querySelectorAll<HTMLElement>('[data-open-passport]').forEach(el=>el.addEventListener('click',()=>{el.focus();window.dispatchEvent(new CustomEvent('passport:open'));}));
+document.querySelectorAll<HTMLElement>('[data-open-passport]').forEach(el=>el.addEventListener('click',()=>{
+ el.focus();
+ // phones, from the hero: the passport on plain white (there the blurred page's edges would leave Safari's toolbar
+ // white anyway, so the whole backdrop is); from the stories, over the blurred page as ever
+ if (el.closest('.hero') && matchMedia('(hover: none) and (pointer: coarse)').matches) document.documentElement.dataset.passportPlain = '';
+ window.dispatchEvent(new CustomEvent('passport:open'));
+}));
+new MutationObserver(() => { if (!document.documentElement.dataset.overlayOpen) delete document.documentElement.dataset.passportPlain; }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-overlay-open'] });
 const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-benefit-link]'));
 const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-chapter]'));
 let pending = false;

@@ -134,12 +134,19 @@ function glideTo(target: number, speed = 0, pace = 1, kick = 0) {
     const u = reduce ? 1 : Math.min(1, (now - start) / duration);
     window.scrollTo({ top: from + at(u), behavior: "instant" });
     if (u < 1 && glide) glide.frame = requestAnimationFrame(step);
-    else glide = null;
+    else {
+      if (glide) landed = { target, at: performance.now() };
+      glide = null;
+    }
   };
   glide = { target, frame: requestAnimationFrame(step) };
   onGlide(); // (the dots and arrows follow the chosen step straight away)
 }
 let onGlide = () => {};
+// the step a glide last arrived at, and when: iOS keeps a swipe's momentum running under our glide, so the page can
+// drift on a little after arriving, and settling that drift must not count as a new step (the entry would skip step 1)
+let landed: { target: number; at: number } | null = null;
+const DRIFT_MS = 900;
 
 /** Where a one-step move in `direction` from `base` goes: the next or previous step, or out of the story at its ends. */
 function stepFrom(base: number, direction: number): number | undefined {
@@ -681,6 +688,13 @@ function settle(to: number, direction: number) {
     return;
   }
   if (points.some((p) => Math.abs(p - to) <= 3)) return; // resting on a step
+  // (just arrived somewhere, and drifted off it: back onto that step)
+  if (landed && performance.now() - landed.at < DRIFT_MS && points.includes(landed.target)) {
+    const back = landed.target;
+    landed = null;
+    glideTo(back);
+    return;
+  }
   const ahead = points.find((p) => p > to);
   const behind = [...points].reverse().find((p) => p < to);
   const nearest =
