@@ -144,7 +144,7 @@ export function initDataScenes() {
             if (i % 9 === 0) {
               ctx.fillStyle = "#a4b6ca80";
               ctx.font = "9px monospace";
-              ctx.fillText(["01", "CO₂", "BOM", "SKU", "MAT"][i % 5], head.x + 6, head.y - 6);
+              ctx.fillText(["01", "CO₂", "PARTS", "SKU", "MAT"][i % 5] /* (not "BOM": in Dutch it reads as "bomb", falling on a globe) */, head.x + 6, head.y - 6);
             }
           } else {
             const age = (phase - 0.79) / 0.21,

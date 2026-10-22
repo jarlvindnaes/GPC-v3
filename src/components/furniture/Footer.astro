@@ -1,4 +1,5 @@
 ---
+import ArrowIcon from '../ArrowIcon.astro';
 import MotionToggle from '../MotionToggle.astro';
 import PcLogoAnimated from '../PcLogoAnimated.astro';
 // the old site's connected dots (wireframe/ParticleField.tsx), faint behind the footer
@@ -12,7 +13,7 @@ const groups = [
 ---
 <footer class="site-footer frame">
  <ParticleField client:visible={{ rootMargin: "400px" }} />
- <div class="footer-main"><div class="footer-identity"><a class="brand" href={base} aria-label="Product Connect home"><PcLogoAnimated class="footer-mark" trigger="hover" /><span>product<br/>connect</span></a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:contact@productconnect.com">contact@productconnect.com <span aria-hidden="true">↗︎</span></a></div>
+ <div class="footer-main"><div class="footer-identity"><a class="brand" href={base} aria-label="Product Connect home"><PcLogoAnimated class="footer-mark" trigger="hover" /><span>product<br/>connect</span></a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:contact@productconnect.com">contact@productconnect.com <ArrowIcon /></a></div>
  {groups.map(group=><nav aria-label={group.title}><h2>{group.title}</h2>{group.links.map(([label,url])=><a href={url}>{label}</a>)}</nav>)}</div>
  <div class="footer-bottom"><span>© {new Date().getFullYear()} Product Connect</span><span>Product data. Connected.</span><MotionToggle /><a href="#main">Back to top <span aria-hidden="true">↑</span></a></div>
 </footer>
@@ -33,4 +34,8 @@ const groups = [
 .site-footer{position:relative;isolation:isolate}
 .site-footer :global(.particle-field){position:absolute;inset:0;z-index:-1;overflow:hidden;opacity:.18;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.site-footer :global(.particle-field){opacity:.14}}
+</style>
+<style>
+/* the bottom row's items on one centre line (the motion toggle is taller than the text beside it) */
+.footer-bottom{align-items:center}
 </style>

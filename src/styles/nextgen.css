@@ -517,3 +517,6 @@ html:has(.story-back){scroll-padding-bottom:90px} /* focused content scrolls cle
 @keyframes ch-in{from{opacity:0;transform:translateY(14px)}}
 @keyframes ch-out{to{opacity:0;transform:translateY(-10px)}}
 @media(prefers-reduced-motion:reduce){.story-narrative :is(.chapter-copy>*,.chapter-points>li){animation:none}}
+
+/* desktop, the site header staying put (SiteHeader.astro): the product story pins below it, not under it */
+@media(hover:hover) and (pointer:fine) and (min-width:941px){.product-story .story-sticky{top:102px;height:calc(100svh - 102px)}}

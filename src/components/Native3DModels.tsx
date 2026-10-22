@@ -929,7 +929,21 @@ function ScreenProjector({
     [halfW, halfH]
   );
 
-  useFrame(() => {
+  // Right after each frame is drawn (not before it, in useFrame): the phone's rotation, which its controls' spring
+  // moves on its own schedule, is then exactly the one just drawn, so the screen moves with the phone instead of a
+  // frame behind it, like a sheet laid on top
+  const scene = useThree((state) => state.scene);
+  useEffect(() => {
+    const before = scene.onAfterRender;
+    scene.onAfterRender = (...args) => {
+      before.apply(scene, args);
+      project();
+    };
+    return () => {
+      scene.onAfterRender = before;
+    };
+  });
+  const project = () => {
     const group = screenGroupRef.current;
     const overlay = overlayRef.current;
     if (!group || !overlay) {
@@ -975,7 +989,7 @@ function ScreenProjector({
     );
 
     overlay.style.transform = matrix;
-  });
+  };
 
   return null;
 }
@@ -1338,6 +1352,7 @@ export function HtmlPhoneCanvas({
       >
         <div
           ref={phoneContentRef}
+          data-phone-screen={true}
           style={{
             width: PHONE_SCREEN_WIDTH,
             height: PHONE_SCREEN_HEIGHT,

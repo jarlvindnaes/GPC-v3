@@ -155,7 +155,7 @@ const STATES = [
   [13.1, 4.4, 1.8, 2.7]
 ];
 const STATE_S = 3.6;
-const SOURCES = ["BOM", "MAT", "kWh", "km"];
+const SOURCES = ["PARTS", "MAT", "kWh", "km"]; // (not "BOM": in Dutch it reads as "bomb")
 
 export function drawImpact(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) {
   const cy = h * 0.46;

@@ -42,6 +42,12 @@ import '../styles/motion.css';
     line-height: 1.2;
     cursor: pointer;
   }
+  /* with the system's reduced motion on, nothing plays anyway: no toggle */
+  @media (prefers-reduced-motion: reduce) {
+    .motion-toggle {
+      display: none;
+    }
+  }
   .motion-toggle:hover {
     background: color-mix(in srgb, currentColor 8%, transparent);
   }

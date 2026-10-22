@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { useIsNearViewport } from "../../utilities/useIsNearViewport";
 import { useIsTouchDevice } from "../../utilities/useIsTouchDevice";
+import { reducedMotion } from "../../utilities/motion";
 
 // Connected-particle background island for dark "data layer" sections.
 // Ported from the static wireframe's particles.js to a hydrated React island:
@@ -66,7 +67,7 @@ export function ParticleField() {
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const color = readBrandColor();
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const baseColor = `rgb(${color.r},${color.g},${color.b})`;
 
     let width = 0;
@@ -174,7 +175,8 @@ export function ParticleField() {
 
     function loop() {
       raf = requestAnimationFrame(loop);
-      if (!isNear.current || !width) {
+      // (held still while motion is paused: the system's reduced motion, or the footer's "Pause animations")
+      if (!isNear.current || !width || reducedMotion.matches) {
         return;
       }
       draw();
@@ -195,9 +197,7 @@ export function ParticleField() {
 
     resize();
     draw(); // always paint one frame, even under reduced motion
-    if (!reduceMotion) {
-      raf = requestAnimationFrame(loop);
-    }
+    raf = requestAnimationFrame(loop);
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseout", onLeave);

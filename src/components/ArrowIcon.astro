@@ -1,0 +1,10 @@
+---
+// The site's "go" arrow (up and to the right) for buttons and links, in place of the ↗︎ glyph, which drew small and
+// hairline thin: a drawn icon, sized to its text (1.2em, the arrow filling most of it) with a firmer line. Buttons holding one keep one gap between
+// their label and it (0.6em), whatever their own gap was.
+---
+<svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5M5.25 3.5h7.25v7.25" /></svg>
+<style is:global>
+  .arrow-icon{flex:none;width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em}
+  :is(a,button):has(> .arrow-icon){gap:.6em!important} /* (over the buttons' own gaps, which differed) */
+</style>

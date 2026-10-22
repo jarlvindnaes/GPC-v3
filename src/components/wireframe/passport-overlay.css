@@ -53,3 +53,10 @@ html[data-overlay-open] body > *:not(.passport-overlay) {
     animation-duration: 2.4s;
   }
 }
+
+/* The passport on the phone: no scrollbar (a phone shows none), and the pointer cursor on what can be pressed; the
+   phone's screen is not for dragging (only the phone around it turns), so no drag cursor there either */
+[data-phone-scroll]::-webkit-scrollbar{display:none}
+[data-phone-screen]{cursor:default}
+[data-phone-screen] :is(button,a,[role="button"],[role="tab"],summary,label[for]){cursor:pointer}
+.passport-overlay button{cursor:pointer}

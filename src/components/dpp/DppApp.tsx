@@ -132,7 +132,8 @@ export function DppApp() {
           paddingTop: HEADER_HEIGHT,
           paddingBottom: NAV_HEIGHT,
           WebkitOverflowScrolling: "touch",
-          overscrollBehavior: "none"
+          overscrollBehavior: "none",
+          scrollbarWidth: "none" // (a phone shows no scrollbar; WebKit's is hidden in passport-overlay.css)
         }}
         id="main-content"
         role="tabpanel"
