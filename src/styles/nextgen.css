@@ -136,7 +136,7 @@ fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-wid
 .fact-body li:before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:#a7b1c2}
 .fact-body ul{display:none}
 /* Bullets open on hover (mouse) or when tapped (.is-open); the open card sits above the others. */
-@media(hover.is-hover){.screw-facts.is-on .screw-fact.is-hover .fact-body ul{display:flex}.screw-facts.is-on .screw-fact.is-hover:has(li){border-radius:14px;padding:9px 14px 10px;max-width:250px;white-space:normal;z-index:4}}
+@media(hover:hover){.screw-facts.is-on .screw-fact.is-hover .fact-body ul{display:flex}.screw-facts.is-on .screw-fact.is-hover:has(li){border-radius:14px;padding:9px 14px 10px;max-width:250px;white-space:normal;z-index:4}}
 .screw-facts.is-on .screw-fact.is-open .fact-body ul{display:flex}
 .screw-facts.is-on .screw-fact.is-open:has(li){border-radius:14px;padding:9px 14px 10px;max-width:250px;white-space:normal;z-index:4}
 .fact-material:is(.is-hover,.is-open){padding-right:16px}
@@ -147,7 +147,7 @@ fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-wid
 .screw-fact .fact-body ul,
 .screw-facts.is-on .screw-fact .fact-body ul{display:flex;width:auto;max-width:0;max-height:0;margin-top:0;opacity:0;overflow:hidden;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .2s ease}
 .screw-facts.is-on .screw-fact.is-open .fact-body ul{max-width:280px;max-height:140px;margin-top:4px;opacity:1;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .25s ease .12s}
-@media(hover.is-hover){.screw-facts.is-on .screw-fact.is-hover .fact-body ul{max-width:280px;max-height:140px;margin-top:4px;opacity:1;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .25s ease .12s}}
+@media(hover:hover){.screw-facts.is-on .screw-fact.is-hover .fact-body ul{max-width:280px;max-height:140px;margin-top:4px;opacity:1;transition:max-width .35s cubic-bezier(.2,.7,.3,1),max-height .35s cubic-bezier(.2,.7,.3,1),margin-top .35s ease,opacity .25s ease .12s}}
 .screw-facts.is-on .screw-fact.is-open:has(li),.screw-facts.is-on .screw-fact:has(li).is-hover{max-width:none;white-space:nowrap;border-radius:14px;box-shadow:0 12px 32px #354b7226}
 .fact-material{border-radius:22px}
 .screw-fact .fact-body li{white-space:nowrap} /* one line each, so the card grows evenly while opening */
@@ -168,7 +168,7 @@ fieldset.chapter-tabs{border:0;border-bottom:1px solid #dce2ee;padding:0;min-wid
 .screw-facts.is-on .screw-fact.is-dragging{transition:opacity .45s ease,border-radius .4s cubic-bezier(.2,.7,.3,1),box-shadow .4s cubic-bezier(.2,.7,.3,1)}
 .screw-facts.is-on .screw-fact .fact-body ul{transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}
 .screw-facts.is-on .screw-fact.is-open .fact-body ul{max-width:var(--open-w,280px);max-height:var(--open-h,140px);transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}
-@media(hover.is-hover){.screw-facts.is-on .screw-fact.is-hover .fact-body ul{max-width:var(--open-w,280px);max-height:var(--open-h,140px);transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}}
+@media(hover:hover){.screw-facts.is-on .screw-fact.is-hover .fact-body ul{max-width:var(--open-w,280px);max-height:var(--open-h,140px);transition:max-width .4s cubic-bezier(.2,.7,.3,1),max-height .4s cubic-bezier(.2,.7,.3,1),margin-top .4s cubic-bezier(.2,.7,.3,1),opacity .4s cubic-bezier(.2,.7,.3,1)}}
 /* same padding open and closed (no padding jump) */
 .screw-facts.is-on .screw-fact.is-open:has(li),.screw-facts.is-on .screw-fact:has(li).is-hover{padding:8px 14px}
 .screw-facts.is-on .fact-material:is(.is-open,.is-hover),.screw-facts.is-on .fact-packaging:is(.is-open,.is-hover){padding:6px 16px 6px 6px}

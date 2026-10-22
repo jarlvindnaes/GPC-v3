@@ -4,7 +4,6 @@
 // the networks are drawn, non-mainline track is filtered, then one example supply chain is routed leg by leg.
 // Only renders while on screen, at most ~30 fps; with reduced motion / "Pause animations" the stars hold still.
 import { geoDistance, geoInterpolate, geoLength, geoOrthographic, geoPath, type GeoPermissibleObjects } from "d3-geo";
-import { mesh, feature } from "topojson-client";
 import { reducedMotion } from "../../utilities/motion";
 import { registerSnapPoints } from "../../utilities/storySnap";
 import { MODE, airLanes, airports, example, localLines, ports, railLines, seaLanes, stations, type Hub, type LonLat } from "./route-data";
@@ -177,14 +176,12 @@ export function initRouteStory(root: HTMLElement) {
     el.textContent = `${Math.round(value / 10) * 10 >= 1000 ? Math.round(value / 10) * 10 : Math.round(value)}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " km";
   }
 
-  // two levels of detail: the 1:110m outlines while the camera moves or the globe is small, the 1:50m ones once
-  // the view settles (re-rendering the detailed coastlines every frame is what made phones stutter)
+  // one map, two levels of detail in it (route-map.json, made by scripts/build-route-map.mjs): the 1:50m outlines
+  // inside a box around where the story zooms in (Central Europe and Kazakhstan), the 1:110m ones everywhere else,
+  // which is never seen up close; so the globe is sharp where it matters, light to redraw while it moves, and never
+  // swaps one map for another
   type Outlines = { land: GeoPermissibleObjects; borders: GeoPermissibleObjects };
-  let coarse: Outlines | null = null;
-  let fine: Outlines | null = null;
-  let lastView = "";
-  let movedAt = 0;
-  let settle = 0;
+  let outlines: Outlines | null = null;
   let w = 0;
   let h = 0;
   let dpr = 1;
@@ -231,20 +228,7 @@ export function initRouteStory(root: HTMLElement) {
 
     // globe: atmosphere glow, ocean, land and borders (cached while the view holds still)
     const viewKey = `${w}|${h}|${dpr}|${r.toFixed(1)}|${lon.toFixed(2)}|${lat.toFixed(2)}`;
-    const now = performance.now();
-    if (viewKey !== lastView) {
-      lastView = viewKey;
-      movedAt = now;
-    }
-    const settled = now - movedAt > 150;
-    if (r > 260 && coarse && !fine) loadFine(); // only a globe this large shows the detailed outlines
-    const outlines = (settled && r > 260 && fine) || coarse || fine;
-    const key = `${viewKey}|${outlines === fine ? 2 : outlines ? 1 : 0}`;
-    if (outlines !== fine && fine && r > 260) {
-      // upgrade to the detailed outlines once the camera has held still for a moment
-      clearTimeout(settle);
-      settle = window.setTimeout(draw, 170);
-    }
+    const key = `${viewKey}|${outlines ? 1 : 0}`;
     if (key !== baseKey && baseCtx) {
       baseKey = key;
       base.width = Math.round(w * dpr);
@@ -333,25 +317,30 @@ export function initRouteStory(root: HTMLElement) {
           if (!target) return;
           const angle = rand(i, start * 10) * Math.PI * 2;
           const from = [cx + Math.cos(angle) * r * 1.9, cy + Math.sin(angle) * r * 1.9];
-          const x = from[0] + (target[0] - from[0]) * q;
-          const y = from[1] + (target[1] - from[1]) * q;
+          let x = from[0] + (target[0] - from[0]) * q;
+          let y = from[1] + (target[1] - from[1]) * q;
           let alpha = Math.min(1, q * 1.6) * network;
           let size = 2.4;
           if (!hub.freight) {
-            alpha *= 1 - drop;
-            size *= 1 + drop * 1.4;
+            // removed: back out into space the way it came, gathering speed, each a moment apart, fading on the way
+            const own = rand(i, start * 10 + 7) * 0.18;
+            const away = span(mk, 1.0 + own, 1.27 + own) ** 2;
+            x += (from[0] - target[0]) * away;
+            y += (from[1] - target[1]) * away;
+            alpha *= 1 - away ** 0.7;
+            size *= 1 + away * 0.8;
           }
           if (alpha <= 0) return;
           ctx.globalAlpha = alpha;
           const d = size / CORE; // sprite size whose core has radius `size`
           ctx.drawImage(dot, x - d / 2, y - d / 2, d, d);
           if (!hub.freight && drop > 0 && drop < 1) {
-            // a ring that opens up as the passenger-only hub is removed
+            // a ring that opens up where the passenger-only hub was, as it is removed
             ctx.globalAlpha = (1 - drop) * 0.8 * network;
             ctx.strokeStyle = color;
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.arc(x, y, 3 + drop * 10, 0, Math.PI * 2);
+            ctx.arc(target[0], target[1], 3 + drop * 10, 0, Math.PI * 2);
             ctx.stroke();
           }
           ctx.globalAlpha = 1;
@@ -521,28 +510,11 @@ export function initRouteStory(root: HTMLElement) {
     start();
   });
   io.observe(root);
-  // the outlines load once the section is near
-  function outlinesOf(world: any): Outlines {
-    return {
-      land: feature(world, world.objects.land) as unknown as GeoPermissibleObjects,
-      borders: mesh(world, world.objects.countries, (a: unknown, b: unknown) => a !== b) as unknown as GeoPermissibleObjects
-    };
-  }
-  // the detailed outlines (a 756KB atlas, and topology work) only once a large globe needs them, so phones skip it
-  let fineLoading = false;
-  function loadFine() {
-    if (fineLoading) return;
-    fineLoading = true;
-    import("world-atlas/countries-50m.json").then((m) => {
-      fine = outlinesOf(m.default);
-      baseKey = "";
-      draw();
-    });
-  }
+  // the map loads once the section is near
   const loader = new IntersectionObserver(async ([entry]) => {
     if (!entry.isIntersecting) return;
     loader.disconnect();
-    coarse = outlinesOf((await import("world-atlas/countries-110m.json")).default);
+    outlines = (await import("./route-map.json")).default as unknown as Outlines;
     baseKey = "";
     draw();
   }, { rootMargin: "800px 0px" });
@@ -568,7 +540,6 @@ export function initRouteStory(root: HTMLElement) {
     removeSnapPoints();
     cancelAnimationFrame(frame);
     cancelAnimationFrame(queued);
-    clearTimeout(settle);
     sizeObserver.disconnect();
     io.disconnect();
     loader.disconnect();
