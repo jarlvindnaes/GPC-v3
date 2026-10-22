@@ -35,8 +35,8 @@ export function initReveal() {
   for (const el of pending) el.classList.add("rv");
   document.documentElement.classList.add("reveal-on");
 
-  // arriving: well into view, so it is seen; leaving: only once wholly off screen (never vanishing in sight), it is set
-  // back, to arrive again next time
+  // arriving: as soon as it is a little way onto the screen; leaving: only once well off it (never vanishing in sight),
+  // it is set back, to arrive again next time
   const timers = new Map<HTMLElement, number>();
   const arrive = new IntersectionObserver(
     (entries) => {
@@ -56,7 +56,7 @@ export function initReveal() {
         }, 1800 + Math.min(i, 6) * 120));
       });
     },
-    { rootMargin: "0px 0px -18% 0px", threshold: 0.2 }
+    { rootMargin: "0px 0px -4% 0px", threshold: 0 } // (starts as soon as it is a little way onto the screen; the reset, below, waits until it is well off)
   );
   // (200px beyond the screen: the 36px a hidden piece sits lower can't carry it back into view and start a loop)
   const leave = new IntersectionObserver((entries) => {
