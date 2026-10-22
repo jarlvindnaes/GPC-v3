@@ -1,6 +1,8 @@
 ---
 import MotionToggle from '../MotionToggle.astro';
 import PcLogoAnimated from '../PcLogoAnimated.astro';
+// the old site's connected dots (wireframe/ParticleField.tsx), faint behind the footer
+import { ParticleField } from '../wireframe/ParticleField';
 const base = import.meta.env.BASE_URL;
 const groups = [
  {title:'Platform', links:[['What we solve',base],['How it works',`${base}how-it-works/`],['Digital Product Passports',`${base}#product-passports`]]},
@@ -9,6 +11,7 @@ const groups = [
 ];
 ---
 <footer class="site-footer frame">
+ <ParticleField client:visible={{ rootMargin: "400px" }} />
  <div class="footer-main"><div class="footer-identity"><a class="brand" href={base} aria-label="Product Connect home"><PcLogoAnimated class="footer-mark" trigger="hover" /><span>product<br/>connect</span></a><p>Make better products,<br/>show the world.</p><a class="footer-email" href="mailto:contact@productconnect.com">contact@productconnect.com <span aria-hidden="true">↗︎</span></a></div>
  {groups.map(group=><nav aria-label={group.title}><h2>{group.title}</h2>{group.links.map(([label,url])=><a href={url}>{label}</a>)}</nav>)}</div>
  <div class="footer-bottom"><span>© {new Date().getFullYear()} Product Connect</span><span>Product data. Connected.</span><MotionToggle /><a href="#main">Back to top <span aria-hidden="true">↑</span></a></div>
@@ -23,4 +26,11 @@ const groups = [
 @media(min-width:801px){.site-footer{padding-inline:max(48px,calc((100% - 1240px) / 2 + 48px))}}
 .site-footer :global(.footer-mark){height:34px;--pc-mark-dot:#7887d8;--pc-logo-dot:#d6ef8c} /* dark footer: lime logo dot */
 .site-footer{background:#111214;color:#9298a2;border-color:#292b30}.site-footer .brand,.site-footer nav h2{color:#f0f2f5}.site-footer .footer-bottom{border-color:#292b30}.site-footer a:hover{color:#c4cef2}.footer-identity p{color:#9298a2}
+</style>
+<style>
+/* the dots: just above the footer's background, under all else, faint; never taking the pointer (on the field itself:
+   its island wrapper is display: contents) */
+.site-footer{position:relative;isolation:isolate}
+.site-footer :global(.particle-field){position:absolute;inset:0;z-index:-1;overflow:hidden;opacity:.18;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.site-footer :global(.particle-field){opacity:.14}}
 </style>

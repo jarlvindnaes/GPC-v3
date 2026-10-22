@@ -3,10 +3,13 @@
 // headingOutside: the page shows the tag and headline itself, in a white breaker just above (How it works); the
 // section stays labelled by it (#integrations-title).
 import McpGraphic from './McpGraphic.astro';
+// TEST: the grid behind it reacts to the mouse (wireframe/GridField.tsx: its points spring away and brighten)
+import { GridField } from '../wireframe/GridField';
 interface Props { headingOutside?: boolean }
 const { headingOutside = false } = Astro.props;
 ---
 <section class="integrations" id="integrations" aria-labelledby="integrations-title">
+  <div class="integrations-grid" aria-hidden="true"><GridField client:visible={{ rootMargin: "600px" }} push={6} glow={0.1} /></div>
   <div class="integrations-copy">
     {!headingOutside && <>
     <span class="integrations-tag">Built to connect</span>
@@ -19,7 +22,10 @@ const { headingOutside = false } = Astro.props;
 </section>
 <style>
   .integrations{position:relative;isolation:isolate;display:flex;align-items:center;gap:20px;min-height:460px;padding:80px max(7%, calc((100% - 1240px) / 2));background:#111214;color:#f8f9fc;overflow:hidden;border-top:1px solid #292a2d}
-  .integrations::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:48px 48px}
+  /* (its grid: the mouse-reactive one, behind everything, very faint, never taking the pointer; in a wrapper of its own,
+     as the field's own class, trust-grid, is also the Trust section's card grid on How it works) */
+  .integrations-grid{position:absolute;inset:0;z-index:-1;opacity:.5;pointer-events:none}
+  .integrations-grid :global(.trust-grid){display:block;position:absolute;inset:0;margin:0}
   .integrations-copy{flex:1;min-width:0;max-width:580px}
   .integrations-tag{display:inline-block;background:#252a37;color:#c3cbe0;border-radius:5px;padding:6px 10px;font-size:13px}
   .integrations h2{margin:26px 0 0;font-size:clamp(28px,3.3vw,41px);line-height:1.1;letter-spacing:-.035em;font-weight:500;color:#f8f9fc}

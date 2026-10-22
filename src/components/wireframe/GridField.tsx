@@ -35,7 +35,8 @@ const CANVAS_STYLE = {
   display: "block"
 } as const;
 
-export function GridField() {
+// push: how far the grid's points spring from the cursor (px); glow: how much the lines brighten near it
+export function GridField({ push = PUSH_STRENGTH, glow = BRIGHTEN_BOOST }: { push?: number; glow?: number } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isNear = useIsNearViewport(canvasRef);
   const { isTouchRef } = useIsTouchDevice();
@@ -90,7 +91,7 @@ export function GridField() {
     }
 
     function line(a: GridNode, b: GridNode) {
-      const boost = Math.min(a.brighten, b.brighten) * BRIGHTEN_BOOST;
+      const boost = Math.min(a.brighten, b.brighten) * glow;
       const alpha = Math.min(1, BASE_ALPHA + boost);
       ctx.strokeStyle = `rgba(${LINE},${alpha})`;
       ctx.lineWidth = 1;
@@ -113,7 +114,7 @@ export function GridField() {
             const dy = mouse.y - n.by;
             const dist = Math.hypot(dx, dy);
             if (dist < PUSH_R && dist > 0.1) {
-              const p = (1 - dist / PUSH_R) * PUSH_STRENGTH;
+              const p = (1 - dist / PUSH_R) * push;
               pushX = -(dx / dist) * p;
               pushY = -(dy / dist) * p;
             }
@@ -181,7 +182,7 @@ export function GridField() {
       }
       resizeObserver.disconnect();
     };
-  }, [isNear, isTouchRef]);
+  }, [isNear, isTouchRef, push, glow]);
 
   return (
     <div className="trust-grid" id="trust-grid" aria-hidden={true}>
