@@ -1580,7 +1580,8 @@ html.motion-paused.model-stage .model-pin .capabilities .cap-key{transform:none}
 .user-quote .quote-person img{width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 4px #fff,0 0 0 5px #e3e6ee}
 .user-quote .quote-person strong{display:block;font-size:15px;font-weight:600;color:#2c3038}
 .user-quote .quote-person small{display:block;margin-top:3px;font-size:13px;color:#7d838e}
-@media(max-width:599px){.user-quote{padding:72px 24px 64px}.user-quote .quote-mark{width:30px;height:30px}.user-quote blockquote{margin:22px auto 30px}}
+@media(max-width:599px){.user-quote{padding:72px 24px 64px}.user-quote .quote-mark{width:30px;height:30px}.user-quote blockquote{margin:22px auto 30px}.user-quote .quote-person{gap:12px}.user-quote .quote-person img{width:46px;height:46px}.user-quote .quote-person small{font-size:12px}} /* (the title on one line, within the screen) */
+@media(max-width:379px){.user-quote .quote-person small{font-size:11px}.user-quote .quote-person{gap:10px}}
 
 /* the model story's chapter tabs, along the top of its pinned screen: the What we solve story's menu in the model's
    own black (white labels, the current one marked by a sliding green dot); only while it pins */

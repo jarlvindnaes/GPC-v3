@@ -1,0 +1,21 @@
+/* Natural line breaks, site-wide (homepage and How it works, their stories included): headings break into lines of
+   even length (no lone last word: "Dynamic Product / Model" becomes "Dynamic / Product Model"), body text avoids a
+   single short word on its last line. Browsers without text-wrap simply break as before. A heading with its own
+   <br> keeps it; its parts are balanced on their own. */
+:is(h1, h2, h3, h4, blockquote, figcaption, .eyebrow, .teaser-eyebrow, .chapter-eyebrow, .cap-key) {
+  text-wrap: balance;
+}
+:is(p, li, dd, .teaser-text) {
+  text-wrap: pretty;
+}
+
+/* Exceptions */
+/* the homepage intro ("A product expert that / opens new sales"): its fixed words stay together on the first line,
+   the rotating phrase below them; balancing moved "that" down beside the phrase */
+h2:has(.expert-line) {
+  text-wrap: wrap;
+}
+/* a quote's person: their title on one line beside the portrait (it fits; balancing split it in two) */
+.quote-person small {
+  white-space: nowrap;
+}
