@@ -1,0 +1,29 @@
+---
+// The product model page: the Dynamic Product Model's sphere, then its five capabilities as chapters (ModelChapters).
+// The homepage shows only the collapsed dome, linking here.
+import '../../index.css';
+import './home.css';
+import '../../styles/typography.css';
+import '../../styles/story-teaser.css';
+import Footer from './Footer.astro';
+import ClosingCta from '../ClosingCta.astro';
+import SeoMeta from '../SeoMeta.astro';
+import SiteHeader from '../SiteHeader.astro';
+import ModelChapters from './ModelChapters.astro';
+const base = import.meta.env.BASE_URL;
+const pageTitle = 'Dynamic Product Model · Product Connect';
+const pageDescription = 'One living model of your products: connected knowledge, MCP access for AI tools, full traceability, your supply chain mapped and impact built in.';
+---
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{pageTitle}</title><meta name="description" content={pageDescription}/><SeoMeta title={pageTitle} description={pageDescription} /><link rel="icon" href={`${base}nextgen/favicon.svg`} type="image/svg+xml"/><link rel="icon" href={`${base}favicon-dark.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)"/><link rel="icon" href={`${base}favicon-light.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: light)"/><link rel="icon" href={`${base}favicon.ico`} sizes="48x48"/><link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`}/><link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin="anonymous"/><meta name="theme-color" content="#111214"/><style is:inline set:html={`@font-face{font-family:Inter;src:url("${base}fonts/inter-latin.woff2") format("woff2");font-display:swap;font-weight:100 900}`} /><script is:inline>try{if(localStorage.getItem("pc-motion-paused")==="1")document.documentElement.classList.add("motion-paused")}catch(e){}</script></head>
+<body class="model-page-body"><a class="skip" href="#main">Skip to content</a>
+<SiteHeader theme="dark" current="product-model" />
+<main id="main"><section class="story-teaser teaser-model model model-flow model-page" aria-labelledby="model-page-title"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>Understand your products in a new way</p><h1 id="model-page-title">Dynamic Product Model</h1></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div><div class="teaser-copy"><p class="teaser-text">One living model of your products <br class="dome-break"/>lets you work fast and see insights the moment your data changes.</p></div></div>
+<ModelChapters /></div></section>
+<ClosingCta id="contact" text="Bring one of your products. We’ll walk through its data, its footprint and what its passport could look like." subject="Product Connect · Product demo" /></main><Footer />
+<script>
+import { initReveal } from "../../utilities/reveal";
+import { initDataScenes } from "./data-scenes";
+initReveal(); // (the sections' text fades up into place as it is reached)
+const disposeScenes = initDataScenes();
+document.addEventListener("astro:before-swap", disposeScenes, { once: true });
+</script></body></html>

@@ -40,6 +40,7 @@ interface PartUserData {
   leads: boolean; // moves over the full cycle (out first, back last); others move inside the LEAD margin
   // Soft chair only: staged moves [start, end, dx, dy, dz] over the disassembly (0..1), in metres.
   moves?: number[][];
+  centre?: Three.Vector3; // the piece's centre in its own space (for onFrame)
 }
 
 
@@ -57,6 +58,9 @@ export function ExplodingChair({
   media,
   depthOfField = 0,
   variant = "cross",
+  restApart = false,
+  holdSeconds,
+  onFrame,
 }: {
   framePad?: number;
   autoRotate?: boolean;
@@ -72,7 +76,17 @@ export function ExplodingChair({
   // into named pieces (see dppChairModel.ts). The Soft chair keeps its own textures; its bolts back
   // out sideways and the leather seat lifts off the shell.
   variant?: "cross" | "soft";
+  // The loop's resting state: assembled (default) or apart, with the parts floating (the homepage hero). The hold
+  // (holdSeconds, default 1s / 0.3s for the Soft chair) is spent in that state; the rest of the loop goes to the
+  // other state and back.
+  restApart?: boolean;
+  holdSeconds?: number;
+  // Each frame: the loop's disassembly progress (0 = assembled, 1 = apart) and where each part's centre is on the
+  // canvas (CSS px from its top left, and its distance from the camera), so callouts can follow the parts.
+  onFrame?: (frame: { progress: number; parts: { name: string; x: number; y: number; z: number }[] }) => void;
 } = {}) {
+  const onFrameRef = useRef(onFrame);
+  onFrameRef.current = onFrame;
   const hostRef = useRef<HTMLDivElement>(null);
   const isNear = useIsNearViewport(hostRef);
   const [active, setActive] = useState(
@@ -347,7 +361,9 @@ export function ExplodingChair({
             const moves = softMovesFor(name, outward);
             const dir = new Three.Vector3();
             const leads = false;
-            piece.userData = { basePos: piece.position.clone(), dir, leads, moves } satisfies PartUserData;
+            piece.updateWorldMatrix(true, false);
+            const centre = piece.worldToLocal(c.clone());
+            piece.userData = { basePos: piece.position.clone(), dir, leads, moves, centre } satisfies PartUserData;
             parts.push(piece);
           }
         }
@@ -407,8 +423,8 @@ export function ExplodingChair({
     let elapsed = variant === "soft" ? -0.4 : 0;
     const explodeSeconds = variant === "soft" ? SOFT_EXPLODE_SECONDS : EXPLODE_SECONDS;
     // The Soft chair rests only briefly assembled, so it visibly starts coming apart right away.
-    const holdSeconds = variant === "soft" ? 0.3 : HOLD_ASSEMBLED;
-    const loopSeconds = holdSeconds + explodeSeconds;
+    const hold = holdSeconds ?? (variant === "soft" ? 0.3 : HOLD_ASSEMBLED);
+    const loopSeconds = hold + explodeSeconds;
 
     let raf = 0;
     let lastFrame = 0;
@@ -430,8 +446,8 @@ export function ExplodingChair({
         // the hold is seamless. reduceMotion never advances elapsed, so it stays assembled.
         const phase = elapsed % loopSeconds;
         const m =
-          phase > holdSeconds
-            ? (phase - holdSeconds) / explodeSeconds
+          phase > hold
+            ? (phase - hold) / explodeSeconds
             : 0;
         const ease = (t: number) =>
           (explodeAmount *
@@ -444,10 +460,11 @@ export function ExplodingChair({
         // Coming apart starts at pace and settles as it opens (ease-out); going back together eases in
         // and out (cosine).
         const mm = Math.min(Math.max(m, 0), 1);
-        const progress =
+        const swing =
           mm < 0.5
             ? 1 - (1 - mm * 2) ** 2
             : (1 - Math.cos(mm * Math.PI * 2)) / 2;
+        const progress = restApart ? 1 - swing : swing; // (resting apart: the hold is spent floating)
         for (const part of parts) {
           const data = part.userData as PartUserData;
           if (data.moves) {
@@ -458,6 +475,19 @@ export function ExplodingChair({
           const d = data.dir;
           const k = data.leads ? kLead : kRest;
           part.position.set(b.x + d.x * k, b.y + d.y * k, b.z + d.z * k);
+        }
+        if (onFrameRef.current) {
+          const w = host.clientWidth, h = host.clientHeight;
+          const v = new Three.Vector3();
+          const screen = parts.map((part) => {
+            const data = part.userData as PartUserData;
+            v.copy(data.centre ?? new Three.Vector3());
+            part.localToWorld(v);
+            const z = v.distanceTo(camera.position);
+            v.project(camera);
+            return { name: part.name.replace(/_/g, " "), x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z };
+          });
+          onFrameRef.current({ progress, parts: screen });
         }
       }
       controls.update();
@@ -552,6 +582,8 @@ export function ExplodingChair({
     explodeAmount,
     depthOfField,
     variant,
+    restApart,
+    holdSeconds,
     ...view,
   ]);
 

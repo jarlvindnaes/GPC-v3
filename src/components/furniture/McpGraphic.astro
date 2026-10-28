@@ -1,12 +1,65 @@
-<div class="mcp-graphic" role="img" aria-label="Product data streams from your product database through MCP to AI tools, and their answers flow back to the product model">
+---
+// Database-to-MCP-to-AI illustration: an orb inside the product database answers AI tools through the MCP gateway.
+// A card replays one illustrative exchange at a time (question, tool call, answer) in step with the request and
+// response travelling along the streams. Figures match the illustrative data used elsewhere on the page.
+const tools = [
+  { name: 'Sales assistant', x: 500, y: 178 },
+  { name: 'Design agent', x: 500, y: 268 },
+  { name: 'Compliance agent', x: 500, y: 358 }
+];
+const exchanges = [
+  { tool: 0, ask: 'What’s the carbon footprint of the Cross Chair?', call: 'get_impact(product: "Cross Chair")', answer: '24.8 kg CO₂e · 72% from materials' },
+  { tool: 1, ask: 'Which products share the oak seat?', call: 'find_components(material: "Oak")', answer: '14 components · used in 3 products' },
+  { tool: 2, ask: 'Is the Cross Chair passport ready to publish?', call: 'get_passport(product: "Cross Chair")', answer: 'Ready · 4 of 4 checks complete' }
+];
+const W = 640, H = 420;
+const pct = (v: number, of: number) => `${(v / of) * 100}%`;
+---
+<div class="mcp-graphic" role="img" aria-label="AI tools ask questions through MCP; the request reaches the orb inside your product database, and the answer flows back with the context the tools need" data-tools={JSON.stringify(tools)} data-exchanges={JSON.stringify(exchanges)}>
+  <div class="mcp-card" aria-hidden="true">
+    <div class="mcp-card-head"><span class="mcp-card-tool"><i></i><b data-mcp="tool">{tools[0].name}</b></span><span class="mcp-card-via">via MCP</span></div>
+    <div class="mcp-card-ask" data-mcp="ask">{exchanges[0].ask}</div>
+    <div class="mcp-card-call"><span>→</span><code data-mcp="call">{exchanges[0].call}</code></div>
+    <div class="mcp-card-answer"><span>←</span><strong data-mcp="answer">{exchanges[0].answer}</strong></div>
+  </div>
+  <div class="mcp-stage">
   <canvas class="mcp-canvas" aria-hidden="true"></canvas>
-  <div class="mcp-labels" aria-hidden="true"><span style="left:17.9%">Product database</span><span style="left:53.6%">MCP gateway</span><span style="left:85.4%">AI tools</span></div>
+  <div class="mcp-labels" aria-hidden="true">
+    <span class="mcp-label-node" style={`left:${pct(105, W)};top:${pct(268 + 112, H)}`}>Product database</span>
+    <span class="mcp-label-node" style={`left:${pct(310, W)};top:${pct(268 + 82, H)}`}>MCP</span>
+    {tools.map((t, i) => <span class="mcp-label-tool" data-mcp-tool={i} style={`left:${pct(t.x + 30, W)};top:${pct(t.y, H)}`}>{t.name}</span>)}
+  </div>
+  <span class="mcp-note" aria-hidden="true">Illustrative exchange</span>
+  </div>
 </div>
 <style>
-.mcp-graphic{position:relative;width:50%;flex-shrink:0;aspect-ratio:560/360}
+.mcp-graphic{position:relative;width:58%;flex-shrink:0;margin-right:-10px}
+.mcp-stage{position:relative;aspect-ratio:640/420}
 .mcp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.mcp-labels span{position:absolute;bottom:3%;transform:translateX(-50%);font:500 11px/1 Inter,sans-serif;letter-spacing:.02em;color:#a3afbe;white-space:nowrap}
-@media(max-width:599px){.mcp-graphic{width:100%;margin-top:24px}}
+.mcp-labels span{position:absolute;font:500 11px/1 Inter,sans-serif;letter-spacing:.02em;color:#8f9bab;white-space:nowrap}
+.mcp-label-node{transform:translateX(-50%)}
+.mcp-label-tool{transform:translateY(-50%);transition:color .4s}
+.mcp-label-tool.is-active{color:#e8ecf7}
+/* the exchange card: top of the graphic, above the streams */
+.mcp-card{text-align:left;position:absolute;left:24%;right:0;top:0;padding:14px 16px 13px;border:1px solid #ffffff1f;border-radius:12px;background:linear-gradient(180deg,#22252ccc,#17191ee6);box-shadow:0 18px 40px #0000004d,inset 0 1px 0 #ffffff14;font:400 13px/1.35 Inter,sans-serif;color:#c9d0dc;transition:opacity .4s,transform .4s}
+.mcp-card.is-out{opacity:0;transform:translateY(-4px)}
+.mcp-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:11px;letter-spacing:.02em}
+.mcp-card-tool{display:flex;align-items:center;gap:7px;color:#eef1f7}.mcp-card-tool b{font-weight:500}
+.mcp-card-tool i{width:6px;height:6px;border-radius:50%;background:#D4EE9C;box-shadow:0 0 8px #D4EE9C}
+.mcp-card-via{color:#7f8a9b}
+.mcp-card-ask{color:#f1f3f8;font-size:14px;margin:0 0 9px}
+.mcp-card-call,.mcp-card-answer{display:flex;gap:8px;align-items:baseline;margin:0;opacity:0;transform:translateY(3px);transition:opacity .35s,transform .35s}
+.mcp-card-call{margin-bottom:5px}
+.mcp-card-call span{color:#8fa3ff}.mcp-card-answer span{color:#D4EE9C}
+.mcp-card-call code{font:400 12px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;color:#aebbff;overflow-wrap:anywhere}
+.mcp-card-answer strong{font-weight:500;color:#e4f5c2}
+.mcp-card.is-call .mcp-card-call,.mcp-card.is-answer .mcp-card-call,.mcp-card.is-answer .mcp-card-answer{opacity:1;transform:none}
+.mcp-note{position:absolute;right:0;bottom:0;font:400 10px/1 Inter,sans-serif;letter-spacing:.04em;color:#6b7482}
+@media(max-width:1000px){.mcp-graphic{width:54%}.mcp-card{left:8%}.mcp-label-tool{font-size:10px}}
+@media(max-width:720px){.mcp-graphic{width:100%;margin:28px 0 0;padding-top:0}.mcp-card{left:0;font-size:12px}.mcp-card-ask{font-size:13px}}
+/* phones: the card above the drawing (the drawing's empty top band tucked under it), the tool names under their tiles */
+@media(max-width:599px){.mcp-card{position:relative;z-index:1}.mcp-stage{margin-top:-19%}.mcp-label-tool{transform:translateX(-50%);margin:4.2% 0 0 -4.69%;font-size:10px}.mcp-graphic{padding-bottom:22px}.mcp-note{bottom:-22px}}
+@media(prefers-reduced-motion:reduce){.mcp-card,.mcp-card-call,.mcp-card-answer{transition:none}}
 </style>
 <script>
 import { initMcpFlow } from './mcp-flow';

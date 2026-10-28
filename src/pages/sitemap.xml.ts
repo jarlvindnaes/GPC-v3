@@ -2,7 +2,7 @@
 // robots.txt (at the domain root) can point to it, or it can be submitted in Search Console.
 import type { APIRoute } from 'astro';
 
-const pages = ['', 'how-it-works/'];
+const pages = ['', 'product-model/', 'how-it-works/'];
 
 export const GET: APIRoute = ({ site }) => {
   const base = import.meta.env.BASE_URL;

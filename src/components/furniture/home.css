@@ -1248,7 +1248,7 @@ html.model-stage .model-pin .model-title{translate:0 var(--hdr,0px)}
 @media(max-width:599px){html.model-stage .model-pin .model-atmosphere .model-horizon.data-sphere{left:-50%;width:200%}}
 /* (opened full screen, with no site menu above it: a larger sphere, its dome higher, so the chapters get the room) */
 @media(max-width:599px){html[data-story-open="product-model"].model-stage .model-pin .model-atmosphere .model-horizon.data-sphere{left:-80%;width:260%}}
-@media(min-height:740px) and (max-width:599px){html[data-story-open="product-model"].model-stage .model-pin :is(.cap-lens,.cap-scene){height:clamp(140px,24vh,220px)}html[data-story-open="product-model"].model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(25vh * 560 / 360))}} /* (and its visuals larger) */
+@media(min-height:740px) and (max-width:599px){html[data-story-open="product-model"].model-stage .model-pin :is(.cap-lens,.cap-scene){height:clamp(140px,24vh,220px)}html[data-story-open="product-model"].model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(25vh * 640 / 420))}} /* (and its visuals larger) */
 @media(max-width:599px){html.model-stage .model-pin .capabilities{top:calc(var(--dome,40%) + (100% - var(--dome,40%)) * .16);width:calc(100% - 40px)}}
 /* short phones (iPhone SE size): tighter type and spacing so each chapter's text and visual still fit one screen */
 @media(max-width:599px) and (max-height:740px){
@@ -1549,13 +1549,13 @@ html.story-stage .benefit-nav.is-light .nav-dot,html.story-stage .benefit-nav.is
  html.model-stage .model-pin :is(.cap-lens,.cap-scene){position:relative;height:clamp(150px,24vh,250px)}
  html.model-stage .model-pin .cap-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
  html.model-stage .model-pin .cap-lens canvas{position:absolute;top:0;left:calc(50% - 50vw);width:100vw;height:100%;display:block} /* (screen wide: its streams start at the sphere's rim) */
- html.model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(37vh * 560 / 360));margin:0 auto;translate:2.8% 0} /* (no key line under it: the largest of the visuals; nudged right, as its drawing (database to AI tools) sits left of its box's centre) */
+ html.model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(37vh * 640 / 420));margin:0 auto} /* (no key line under it: the largest of the visuals) */
  html.model-stage .model-pin .capabilities .cap-memory{--cw:min(60vw,920px,92vh,calc(32vh * 1200 / 340));width:var(--cw);margin-inline:calc((100% - var(--cw)) / 2)} /* (wider than the steps' column, centred on it, its corners inside the dome (92vh); its text and dots keep their size, ProductMemory.astro) */
 }
 @media(min-height:740px) and (max-width:599px){
  html.model-stage .model-pin .capabilities{width:calc(100% - 32px)}
  html.model-stage .model-pin :is(.cap-lens,.cap-scene){height:clamp(120px,20vh,180px)}
- html.model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(20vh * 560 / 360))}
+ html.model-stage .model-pin .cap-mcp .mcp-graphic{width:min(100%,calc(20vh * 640 / 420))}
 }
 @media(prefers-reduced-motion:reduce){html.model-stage .model-pin .capabilities .cap-visual{transform:none}}
 html.motion-paused.model-stage .model-pin .capabilities .cap-visual{transform:none}
@@ -1615,3 +1615,107 @@ html[data-story-open="product-model"]{--story-close-top:88px}
 
 /* the passport opened from the hero on a phone: on plain white (Home.astro, data-passport-plain) */
 html[data-passport-plain][data-overlay-open] .passport-overlay{background:#fff}
+/* ---------- Dynamic Product Model, on the page (no takeover, no pinning, no snapping) ----------
+   The dome opens the section (the old teaser's first screen, its line without the button), then the five capabilities
+   follow as plain chapters: copy and visual side by side, alternating sides, a hairline between them. */
+.model-flow .teaser-copy{bottom:40px}
+.model-flow .model-atmosphere{height:640px}
+.model-chapters{position:relative;z-index:1;padding:8px 50px 120px}
+.model-chapter{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:72px;align-items:center;padding:84px 0;border-top:1px solid #ffffff14}
+.model-chapter:first-child{border-top:0;padding-top:40px}
+.model-chapter:nth-child(even){grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.model-chapter:nth-child(even) .model-chapter-copy{order:2}
+.model-chapter-label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8790a2;margin-bottom:18px}
+.model-chapter-copy h3{font-size:clamp(26px,2.7vw,38px);line-height:1.14;letter-spacing:-.03em;font-weight:500;color:#f3f5f9;text-wrap:balance}
+.model-chapter-copy p{font-size:16px;line-height:1.6;color:#a9afba;max-width:440px;margin-top:16px}
+.model-chapter-copy .model-chapter-key{margin-top:22px;color:#e8ecf3}.model-chapter-key span{color:#D4EE9C}
+.model-visual{position:relative;min-width:0;display:flex;align-items:center;justify-content:center}
+.model-scene{position:relative;width:100%;height:360px}
+.model-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.model-flow .model-visual .mcp-graphic{width:100%;max-width:640px;margin:0}
+.model-visual .memory{width:100%}
+@media(max-width:860px){
+ .model-chapters{padding:0 24px 72px}
+ .model-chapter,.model-chapter:nth-child(even){grid-template-columns:1fr;gap:28px;padding:56px 0}
+ .model-chapter:nth-child(even) .model-chapter-copy{order:0}
+ .model-scene{height:280px}
+}
+@media(max-width:599px){.model-flow .model-atmosphere{height:600px}}
+/* (the dome fades into the chapters below rather than stopping at the box's edge) */
+.model-flow .model-atmosphere::after{content:"";position:absolute;left:0;right:0;bottom:0;height:220px;z-index:1;pointer-events:none;background:linear-gradient(#11121400,#111214)}
+/* the product model page's title: an h1, set as the homepage dome's h2 */
+.model-page .model-title h1{margin:0 auto;max-width:1100px;font-size:clamp(34px,4.5vw,60px);line-height:1.05;letter-spacing:-.05em;font-weight:480;color:#f5f6f0}
+@media(max-width:599px){.model-page .model-title h1{font-size:34px;padding-inline:16px}}
+/* hero copy: the body is one paragraph of five sentences (never bullets or columns), a little wider than before so it
+   reads as a paragraph; the secondary action is a text link beside the primary button */
+.hero-chair p.hero-body{max-width:540px}
+.hero-chair .actions{align-items:center}
+.hero-textlink{font-size:15px;font-weight:500;color:#25282c;text-decoration:underline;text-decoration-color:#25282c59;text-underline-offset:4px;padding:10px 4px}
+.hero-textlink:hover{text-decoration-color:currentColor}
+@media(max-width:599px){.hero-chair .actions{display:flex;flex-wrap:wrap;gap:12px 20px}.hero-chair .actions>*{white-space:nowrap;flex:0 0 auto;width:auto}}
+/* ---------- Hero: the chair in pieces, in space (HeroChairScene.tsx) ----------
+   Full width, edge to edge, in the How it works hero's near-black. The copy keeps to the 1240px grid on the left; the
+   scene spans the whole section behind it, the chair in the right half, parts drifting with depth of field. Thin
+   callouts follow five parts, naming where their data lives today. A hairline spec strip closes the section. */
+.hero.hero-space{position:relative;isolation:isolate;overflow:hidden;max-width:none;padding:0;margin:0;color:#f5f6f0;background:radial-gradient(ellipse 46% 62% at 70% 44%,#2a3634a6 0%,#141c2266 45%,transparent 72%),#0a1017;min-height:clamp(620px,calc(100svh - var(--sh-h,102px)),880px);display:flex;flex-direction:column}
+.hero-space-stage{position:absolute;inset:0 0 54px 0;z-index:0}
+.hero-space-scene{position:absolute;inset:0}
+.hero-space-scene .chair-explode{position:absolute;inset:0;cursor:grab}
+.hero-space-scene .chair-explode:active{cursor:grabbing}
+.hero-space-scene .chair-explode canvas{opacity:0;transition:opacity 1.4s ease}
+.hero-space-scene .chair-explode[data-ready] canvas{opacity:1}
+/* a soft shadow under the copy so the headline reads over parts drifting behind it */
+.hero.hero-space::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#0a1017e6 0%,#0a1017b8 28%,#0a101700 52%)}
+.hero-space-inner{position:relative;z-index:2;flex:1;display:flex;align-items:center;width:100%;max-width:1240px;margin:0 auto;padding:72px max(4.2%,0px) 110px;pointer-events:none}
+@media(min-width:600px){.hero-space-inner{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2));max-width:none}}
+.hero-space .hero-editorial{width:min(100%,560px);pointer-events:auto}
+.hero-space .eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#9aa4b0}
+.hero-space .eyebrow i{width:6px;height:6px;border-radius:50%;background:#d6ef8c;box-shadow:0 0 10px #d6ef8c99}
+.hero-space h1{margin-top:26px;font-size:clamp(38px,4.4vw,64px);line-height:1.02;letter-spacing:-.045em;font-weight:480;text-wrap:initial;max-width:none}
+.hero-space h1>span{display:block;white-space:nowrap}
+main .hero.hero-space h1>span:first-child{color:#7f8893}
+main .hero.hero-space h1>span:last-child{color:#f7f8f4}
+.hero-space p.hero-body{margin-top:26px;max-width:520px;font-size:16px;line-height:1.7;color:#b4bcc6}
+.hero-space .actions{display:flex;align-items:center;gap:22px;margin-top:34px}
+.hero-space .button.primary{background:#f7f7f2;border-color:#f7f7f2;color:#15181c}
+.hero-space .button.primary:hover{background:#fff}
+.hero-space .hero-textlink{color:#d7dde6;text-decoration-color:#d7dde659;padding:10px 2px}
+.hero-space .hero-textlink:hover{color:#fff;text-decoration-color:#fff}
+/* callouts: a dot on the part, a hairline to a small label; the sources while apart, the data as it comes together */
+.hero-callout-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.hero-callout-lines line{stroke:#ffffff3d;stroke-width:1;vector-effect:non-scaling-stroke}
+.hero-callout-lines circle{fill:#0a1017;stroke:#d6ef8c;stroke-width:1.2}
+/* (on a near-black chip, so a label reads even where it must sit over a part; no backdrop blur: it flickers over 3D canvases) */
+.hero-callout{position:absolute;left:0;top:0;display:flex;flex-direction:column;gap:4px;padding:7px 10px 7px 11px;border-left:1px solid #ffffff4d;border-radius:0 6px 6px 0;background:#0a1017d9;color:#c7cfd9;font:400 12px/1.3 Inter,sans-serif;white-space:nowrap;will-change:transform}
+.hero-callout[data-side="left"]{padding:7px 11px 7px 10px;border-left:0;border-right:1px solid #ffffff4d;border-radius:6px 0 0 6px;text-align:right}
+.hc-part{font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#eef1f5}
+.hc-raw,.hc-value{display:block;transition:opacity .5s}
+.hc-raw{font:400 11px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8e98a4}
+.hc-raw b{display:inline-block;margin-right:8px;padding:2px 5px;border-radius:3px;background:#ffffff14;color:#c7cfd9;font-weight:500;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.hero-callout[data-side="left"] .hc-raw b{margin:0 0 0 8px}
+.hc-value{position:absolute;left:11px;bottom:7px;color:#e4f5c2;opacity:0}
+.hero-callout[data-side="left"] .hc-value{left:auto;right:11px}
+.hero-callout-lines g,.hero-callout{opacity:0;transition:opacity .6s}
+.hero-space-scene[data-callouts="raw"] :is(.hero-callout-lines g,.hero-callout),.hero-space-scene[data-callouts="resolved"] :is(.hero-callout-lines g,.hero-callout){opacity:1}
+.hero-space-scene[data-callouts="resolved"] .hc-raw{opacity:0}
+.hero-space-scene[data-callouts="resolved"] .hc-value{opacity:1}
+/* the spec strip */
+.hero-spec{position:relative;z-index:2;border-top:1px solid #ffffff14;background:#0a1017cc}
+.hero-spec-inner{display:flex;align-items:center;gap:36px;max-width:1240px;margin:0 auto;padding:0 max(4.2%,calc((100% - 1240px) / 2));height:54px;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8e98a4}
+.spec-product{color:#eef1f5}.spec-product em{font-style:normal;color:#8e98a4}
+.spec-passport{display:inline-flex;align-items:center;gap:6px;margin:0;padding:6px 0;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:#d6ef8c;cursor:pointer}
+.spec-passport:hover{color:#fff}.spec-passport:focus-visible{outline:3px solid #627de7;outline-offset:3px}
+.spec-passport svg{width:12px;height:12px}
+.spec-note{margin-left:auto;color:#5f6975;letter-spacing:.06em;text-transform:none;font-family:Inter,sans-serif}
+@media(max-width:1100px){.hero-spec-inner{gap:24px}.hero-spec-inner>span:nth-child(2){display:none}}
+@media(max-width:1150px) and (min-width:721px){.hero-space .hero-editorial{width:min(100%,450px)}.hero-space p.hero-body{max-width:430px;font-size:15px}.hero-space h1{font-size:clamp(36px,4.2vw,48px)}}
+@media(max-width:720px){
+ .hero.hero-space{min-height:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,#1d2a2c99 0%,transparent 70%),#0a1017}
+ .hero.hero-space::before{display:none}
+ .hero-space-stage{display:none}
+ .hero-space-inner{padding:48px 20px 40px}
+ .hero-space h1{font-size:clamp(34px,9.6vw,46px)}.hero-space h1>span{white-space:normal}
+ .hero-space .actions{justify-content:flex-start;flex-wrap:wrap;gap:12px 20px}.hero-space .actions>*{white-space:nowrap;flex:0 0 auto;width:auto}
+ .hero-spec-inner{height:auto;flex-wrap:wrap;gap:12px 20px;padding:14px 20px}.hero-spec-inner>span:nth-child(4){display:none}.spec-note{margin-left:0;width:100%}
+}
+@media(prefers-reduced-motion:reduce){.hero-space-scene .chair-explode canvas,.hero-callout,.hero-callout-lines g,.hc-raw,.hc-value{transition:none}}
