@@ -1809,3 +1809,5 @@ main .teaser-model .teaser-open:hover{background:#d6ef8c14;border-color:#d6ef8c}
 html.story-stage .story-stage #product-passports{opacity:clamp(0,var(--k) * 8,1)}
 html.story-stage #product-passports .chapter-heading>:not(.phone-caption){opacity:var(--t)}
 @media(max-width:900px){html.story-stage #product-passports .chapter-heading>.phone-caption{opacity:var(--t)}}
+/* a two-sentence section headline: the second sentence in the model green ("Your product model remembers.") */
+.model-chapter-copy h3 span{color:#D4EE9C}

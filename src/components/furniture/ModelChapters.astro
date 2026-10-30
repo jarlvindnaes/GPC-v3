@@ -1,31 +1,18 @@
 ---
-// The Dynamic Product Model's key points (four short USPs under the globe), then its five capabilities as plain chapters
-// down the page: copy and visual side by side, alternating sides; traceability (the EPD chart) runs the full width.
-// The order tells the story: data in, mapped, measured, remembered, then out to AI tools (MCP) last.
+// The product model's four sections down the page: copy and visual side by side, alternating sides; the snapshot-vs-
+// living section (the EPD chart) runs the full width. It leads because it is the page's core argument: a model beats
+// a one-off report. Then the parts, the supply chain, and out to your systems and AI tools (MCP) last.
+// (No summary bullets: they repeated the sections one to one. "Live impact" folded into the snapshot section.)
 // No pinning, no snapping. Their canvases are drawn by data-scenes.ts.
 import ProductMemory from './ProductMemory.astro';
 import McpGraphic from './McpGraphic.astro';
-// Each capability's visual: three from their explainer sections on How it works (Product memory's chart, the Input
-// interface's lens, the MCP graphic), two drawn for the model (model-scenes.ts); the chart has its key point under it
-const capKeys: Record<string, [string, string]> = {
- 'product-memory': ['An EPD is a snapshot.', 'Your product model remembers.']
-};
-// each chapter's short name, in its label
-const capTabs: Record<string, string> = { 'input-interface': 'Connected knowledge', integrations: 'Built to connect', 'product-memory': 'Full traceability', 'supply-chain': 'Mapped supply chain', impact: 'Live impact' };
+// each section's short name, in its label
+const capTabs: Record<string, string> = { 'product-memory': 'Snapshot vs. living model', 'input-interface': 'Every part, connected', 'supply-chain': 'Mapped supply chain', integrations: 'Built to connect' };
 const capabilities = [
- ['Connected knowledge. Better decisions.','3D models, materials, components, and specifications · connected in one scalable data foundation.','input-interface'],
- ['Your supply chain, mapped','Suppliers, components, and their relationships. Trace how every part connects to the finished product.','supply-chain'],
- ['Impact built into the model','Impact calculations connected directly to your product data, alongside emissions and scores.','impact'], // (no How it works section on impact yet)
- ['Every change, traceable','A complete ledger of inputs, with timestamped field history. Know what changed, when, and where the data came from.','product-memory'],
- ['Built to connect','MCP access makes your product model available to AI tools and agents, with the context they need to work.','integrations'],
-];
-// the key points, under the globe
-const usps = [
- ['One model','3D models, materials, components and specifications in one data foundation.'],
- ['Mapped','Every supplier and component, traced to the finished product.'],
- ['Always current','Impact numbers update the moment your data changes.'],
- ['Ready for AI','MCP access gives AI tools and agents the context they need.'],
+ ['An EPD is a snapshot. Your product model remembers.','A report goes out of date the day a supplier changes. The model updates with your data, logs every change with its date and source, and recalculates everything that depends on it, from cost drivers to CO₂.','product-memory'],
+ ['Every part of the product, in one place','3D geometry, BOMs, materials, specs and certificates, linked down to the last bolt. Design sees what drives cost and impact. Sales sees what it can claim.','input-interface'],
+ ['Know where every part comes from','Suppliers and sub-suppliers, linked to the components they deliver. When a supplier changes, you see every product it touches.','supply-chain'],
+ ['Ready for your systems and your AI','API and MCP access give your ERP, PIM and AI agents unified, structured product context instead of loose files.','integrations'],
 ];
 ---
-<ul class="model-usps">{usps.map(([title, text]) => <li><strong>{title}</strong><p>{text}</p><i class="model-usp-ticks" aria-hidden="true"></i></li>)}</ul>
-<div class="model-chapters">{capabilities.map(([title,text,anchor],i)=><article class:list={["model-chapter", { "model-chapter-wide": anchor === "product-memory" }]} id={`model-${anchor}`}><div class="model-chapter-copy"><span class="model-chapter-label">{`0${i+1}`} · {capTabs[anchor] ?? title}</span><h3>{title}</h3><p>{text}</p>{capKeys[anchor] && <p class="model-chapter-key">{capKeys[anchor][0]} <span>{capKeys[anchor][1]}</span></p>}</div><div class:list={["model-visual", `model-visual-${anchor}`]}>{anchor === 'product-memory' && <ProductMemory compact />}{anchor === 'input-interface' && <div class="model-scene" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div>}{anchor === 'integrations' && <McpGraphic />}{anchor === 'supply-chain' && <div class="model-scene" role="img" aria-label="Materials, components and suppliers mapped into the finished product, one path traced at a time"><canvas data-scene="supply" aria-hidden="true"></canvas></div>}{anchor === 'impact' && <div class="model-scene" role="img" aria-label="Product data flows into the product model, which updates its impact breakdown by life cycle stage as changes come in (illustrative figures)"><canvas data-scene="impact" aria-hidden="true"></canvas></div>}</div></article>)}</div>
+<div class="model-chapters">{capabilities.map(([title,text,anchor],i)=><article class:list={["model-chapter", { "model-chapter-wide": anchor === "product-memory" }]} id={`model-${anchor}`}><div class="model-chapter-copy"><span class="model-chapter-label">{`0${i+1}`} · {capTabs[anchor] ?? title}</span><h3>{title.split(/(?<=\.) /).map((part, j) => j > 0 ? <><br/><span>{part}</span></> : part)}</h3><p>{text}</p></div><div class:list={["model-visual", `model-visual-${anchor}`]}>{anchor === 'product-memory' && <ProductMemory compact />}{anchor === 'input-interface' && <div class="model-scene" role="img" aria-label="Incoming product data passes through our Input interface and converges at the Dynamic Product Model"><canvas data-scene="lens" aria-hidden="true"></canvas></div>}{anchor === 'integrations' && <McpGraphic />}{anchor === 'supply-chain' && <div class="model-scene" role="img" aria-label="Materials, components and suppliers mapped into the finished product, one path traced at a time"><canvas data-scene="supply" aria-hidden="true"></canvas></div>}</div></article>)}</div>

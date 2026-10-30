@@ -8,7 +8,7 @@ const tools = [
   { name: 'Compliance agent', x: 500, y: 358 }
 ];
 const exchanges = [
-  { tool: 0, ask: 'What’s the carbon footprint of the Cross Chair?', call: 'get_impact(product: "Cross Chair")', answer: '24.8 kg CO₂e · 72% from materials' },
+  { tool: 0, ask: 'Which of our chairs use FSC-certified oak from Supplier A?', call: 'find_products(oak: "FSC", supplier: "A")', answer: '3 chairs · FSC certificates on file' },
   { tool: 1, ask: 'Which products share the oak seat?', call: 'find_components(material: "Oak")', answer: '14 components · used in 3 products' },
   { tool: 2, ask: 'Is the Cross Chair passport ready to publish?', call: 'get_passport(product: "Cross Chair")', answer: 'Ready · 4 of 4 checks complete' }
 ];
