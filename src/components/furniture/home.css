@@ -1497,8 +1497,21 @@ html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
 /* (the story teasers' shared look: src/styles/story-teaser.css) */
 /* the globe: the supplier chapter's own navy (as the story's stage paints it, #152239), the copy on the left and the
    assembled globe, draggable, on the right */
-.teaser-globe{background:#152239}
-.teaser-globe .teaser-inner{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:32px;min-height:640px;padding:80px 48px;border-color:#ffffff12}
+/* "What we solve": the hero's near-black with its soft glow, a faint dot grid behind the copy, a hairline of light along the top */
+.teaser-globe{background:radial-gradient(ellipse 46% 62% at 72% 46%,#2a3634a6 0%,#141c2266 45%,transparent 72%),#0a1017;overflow:hidden}
+.teaser-globe::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#ffffff1a 1px,transparent 1.6px);background-size:28px 28px;-webkit-mask-image:radial-gradient(ellipse 55% 70% at 28% 50%,#000 10%,transparent 70%);mask-image:radial-gradient(ellipse 55% 70% at 28% 50%,#000 10%,transparent 70%)}
+.teaser-globe::after{content:"";position:absolute;left:0;right:0;top:0;height:1px;pointer-events:none;background:linear-gradient(90deg,transparent,#d6ef8c73 35%,#8fb3ff59 65%,transparent)}
+.teaser-globe .teaser-eyebrow{display:inline-flex;align-items:center;gap:10px;margin:0 0 24px;padding:8px 14px 8px 12px;border:1px solid #ffffff24;border-radius:999px;background:#ffffff0a;backdrop-filter:blur(8px);font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#c3cad3}
+.teaser-globe .teaser-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6ef8c;box-shadow:0 0 10px #d6ef8c99}
+.teaser-globe h2{color:#7f8893}.teaser-globe h2 span{color:#f7f8f4}
+.teaser-globe .teaser-text{color:#b4bcc6}
+.teaser-globe .teaser-points{padding-left:0;gap:0;margin-top:30px;counter-reset:pt}
+.teaser-globe .teaser-points li{counter-increment:pt;gap:16px;padding:13px 0;border-top:1px solid #ffffff12;color:#e9edf0}
+.teaser-globe .teaser-points li:last-child{border-bottom:1px solid #ffffff12}
+.teaser-globe .teaser-points li::before{content:counter(pt,decimal-leading-zero);width:auto;height:auto;border-radius:0;background:none;box-shadow:none;font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:#d6ef8c}
+.teaser-globe .teaser-open{border-color:#d6ef8c66;color:#f3f5f1}
+.teaser-globe .teaser-open:hover{background:#d6ef8c14;border-color:#d6ef8c}
+.teaser-globe .teaser-inner{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:32px;min-height:640px;padding:80px 48px;border-color:#ffffff12}
 /* (its frame runs the section's full height, into the padding, so the globe and the arcs rising off it have room) */
 .teaser-globe .teaser-visual{height:calc(100% + 160px);min-height:640px;margin:-80px 0;background:none;overflow:visible}
 /* (it borrows the story's globe-stage for the globe's labels; not its shade, nor its canvas offsets) */
@@ -1509,7 +1522,7 @@ html.story-stage #harvest-data .globe-points .step:nth-child(3){--b1:1.69}
  .teaser-globe .teaser-visual{height:420px;min-height:0;margin:0 -24px}
 }
 /* the sphere: the model story's first screen (its title over the dark sphere), the copy inside the dome */
-.teaser-model .model-atmosphere{height:760px;width:100vw;margin-left:calc(50% - 50vw)} /* (the full window width, as the pinned story: the sphere runs off the screen's sides, never cut off by the content frame) */
+.teaser-model .model-atmosphere{height:900px;width:100vw;margin-left:calc(50% - 50vw)} /* (the full window width, as the pinned story: the sphere runs off the screen's sides, never cut off by the content frame) */
 /* (centred in the dome, between its rim and the section's foot: its line and the button) */
 .teaser-model .teaser-copy{position:absolute;z-index:2;left:50%;top:41%;bottom:56px;width:min(600px,88%);translate:-50% 0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .teaser-model .teaser-text{max-width:none;margin:0 auto;color:#b1b6bf}
@@ -1658,15 +1671,15 @@ html[data-passport-plain][data-overlay-open] .passport-overlay{background:#fff}
    scene spans the whole section behind it, the chair in the right half, parts drifting with depth of field. Thin
    callouts follow five parts, naming where their data lives today. A hairline spec strip closes the section. */
 .hero.hero-space{position:relative;isolation:isolate;overflow:hidden;max-width:none;padding:0;margin:0;color:#f5f6f0;background:radial-gradient(ellipse 46% 62% at 70% 44%,#2a3634a6 0%,#141c2266 45%,transparent 72%),#0a1017;min-height:clamp(620px,calc(100svh - var(--sh-h,102px)),880px);display:flex;flex-direction:column}
-.hero-space-stage{position:absolute;inset:0 0 54px 0;z-index:0}
+.hero-space-stage{position:absolute;inset:0;z-index:0}
 .hero-space-scene{position:absolute;inset:0}
 .hero-space-scene .chair-explode{position:absolute;inset:0;cursor:grab}
 .hero-space-scene .chair-explode:active{cursor:grabbing}
-.hero-space-scene .chair-explode canvas{opacity:0;transition:opacity 1.4s ease}
+.hero-space-scene .chair-explode canvas{opacity:0;transition:opacity .5s ease}
 .hero-space-scene .chair-explode[data-ready] canvas{opacity:1}
 /* a soft shadow under the copy so the headline reads over parts drifting behind it */
 .hero.hero-space::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#0a1017e6 0%,#0a1017b8 28%,#0a101700 52%)}
-.hero-space-inner{position:relative;z-index:2;flex:1;display:flex;align-items:center;width:100%;max-width:1240px;margin:0 auto;padding:72px max(4.2%,0px) 110px;pointer-events:none}
+.hero-space-inner{position:relative;z-index:2;flex:1;display:flex;align-items:center;width:100%;max-width:1240px;margin:0 auto;padding:72px max(4.2%,0px) 72px;pointer-events:none}
 @media(min-width:600px){.hero-space-inner{padding-left:max(4.2%,calc((100% - 1240px) / 2));padding-right:max(4.2%,calc((100% - 1240px) / 2));max-width:none}}
 .hero-space .hero-editorial{width:min(100%,560px);pointer-events:auto}
 .hero-space .eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#9aa4b0}
@@ -1676,7 +1689,7 @@ html[data-passport-plain][data-overlay-open] .passport-overlay{background:#fff}
 main .hero.hero-space h1>span:first-child{color:#7f8893}
 main .hero.hero-space h1>span:last-child{color:#f7f8f4}
 .hero-space p.hero-body{margin-top:26px;max-width:520px;font-size:16px;line-height:1.7;color:#b4bcc6}
-.hero-space .actions{display:flex;align-items:center;gap:22px;margin-top:34px}
+.hero-space .actions{display:flex;align-items:center;justify-content:flex-start;gap:22px;margin-top:34px}
 .hero-space .button.primary{background:#f7f7f2;border-color:#f7f7f2;color:#15181c}
 .hero-space .button.primary:hover{background:#fff}
 .hero-space .hero-textlink{color:#d7dde6;text-decoration-color:#d7dde659;padding:10px 2px}
@@ -1712,10 +1725,81 @@ main .hero.hero-space h1>span:last-child{color:#f7f8f4}
 @media(max-width:720px){
  .hero.hero-space{min-height:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,#1d2a2c99 0%,transparent 70%),#0a1017}
  .hero.hero-space::before{display:none}
- .hero-space-stage{display:none}
- .hero-space-inner{padding:48px 20px 40px}
+ .hero-space-stage{position:relative;inset:auto;height:500px;margin:-16px 0 8px;order:1}.hero-spec{order:2}
+ .hero-space-inner{padding:48px 20px 24px}
  .hero-space h1{font-size:clamp(34px,9.6vw,46px)}.hero-space h1>span{white-space:normal}
  .hero-space .actions{justify-content:flex-start;flex-wrap:wrap;gap:12px 20px}.hero-space .actions>*{white-space:nowrap;flex:0 0 auto;width:auto}
  .hero-spec-inner{height:auto;flex-wrap:wrap;gap:12px 20px;padding:14px 20px}.hero-spec-inner>span:nth-child(4){display:none}.spec-note{margin-left:0;width:100%}
 }
 @media(prefers-reduced-motion:reduce){.hero-space-scene .chair-explode canvas,.hero-callout,.hero-callout-lines g,.hc-raw,.hc-value{transition:none}}
+/* The hero eyebrow as a pill */
+.hero-space .eyebrow{padding:8px 14px 8px 12px;border:1px solid #ffffff24;border-radius:999px;background:#ffffff0a;color:#c3cad3;backdrop-filter:blur(8px)}
+.hero-space .eyebrow i{margin-right:0}
+/* ===== The hero, light: white with a soft green-grey glow behind the graphic; dark ink; the dark primary button ===== */
+.hero.hero-space.hero-light{color:#1d2024;background:radial-gradient(ellipse 46% 62% at 72% 46%,#eef3e2 0%,#f5f7f1 40%,transparent 72%),#ffffff}
+.hero.hero-space.hero-light::before{background:linear-gradient(90deg,#ffffffe6 0%,#ffffffb3 28%,#ffffff00 52%)}
+main .hero.hero-space.hero-light h1>span:first-child{color:#8b9098}
+main .hero.hero-space.hero-light h1>span:last-child{color:#17191c}
+.hero-light.hero-space p.hero-body{color:#4f5359}
+.hero-light.hero-space .eyebrow{border-color:#e3e5e9;background:#f7f8f9;color:#4a4f57;backdrop-filter:none}
+.hero-light.hero-space .eyebrow i{background:#a8cf3c;box-shadow:0 0 0 3px #d6ef8c59}
+.hero-light.hero-space .button.primary{background:#17191c;border-color:#17191c;color:#fff}
+.hero-light.hero-space .button.primary:hover{background:#2e3238}
+.hero-light.hero-space .hero-textlink{color:#25282c;text-decoration-color:#25282c59}
+.hero-light.hero-space .hero-textlink:hover{color:#000;text-decoration-color:currentColor}
+@media(max-width:720px){.hero.hero-space.hero-light{background:radial-gradient(ellipse 90% 40% at 50% 62%,#eef3e2 0%,transparent 70%),#ffffff}}
+/* ===== Consistency pass (critique, Oct 30) ===== */
+/* dark sections: headline leads bright, its second line in neutral grey (no blue tint); body copy neutral */
+main .story-teaser.teaser-globe h2{color:#f7f8f4}
+main .story-teaser.teaser-globe h2 span{color:#7f8893}
+main .story-teaser.teaser-globe .teaser-text{color:#b4bcc6}
+/* the brand strip's label in the site's mono label style */
+main .brand-eyebrow{font:500 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#80868f}
+/* the quote section: no blue hairline */
+.user-quote::before{display:none}
+/* the product model teaser: the same near-black as the other dark sections, its label a pill, its button green */
+.teaser-model.model{background:#0a1017}
+main .teaser-model .model-title p{display:inline-flex;align-items:center;gap:10px;margin-bottom:20px;padding:8px 14px 8px 12px;border:1px solid #ffffff24;border-radius:999px;background:#ffffff0a;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#c3cad3;text-shadow:none}
+main .teaser-model .model-title p::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6ef8c;box-shadow:0 0 10px #d6ef8c99}
+main .teaser-model .teaser-open{border-color:#d6ef8c66;color:#f3f5f1}
+main .teaser-model .teaser-open:hover{background:#d6ef8c14;border-color:#d6ef8c}
+/* ===== Product model page: USPs under the globe, even chapter rhythm, the EPD chapter full width ===== */
+.model-usps{position:relative;z-index:2;list-style:none;margin:0 50px;padding:8px 0 72px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.model-usps li{padding:22px 22px 24px;border:1px solid #ffffff17;border-radius:14px;background:#ffffff06}
+.model-usp-n{display:block;margin-bottom:18px;font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:#d6ef8c}
+.model-usps strong{display:block;font-size:18px;font-weight:500;letter-spacing:-.02em;color:#f3f5f1}
+.model-usps p{margin:8px 0 0;font-size:14px;line-height:1.55;color:#a9afba}
+.model-chapters{padding:0 50px 128px}
+.model-chapter,.model-chapter:first-child{padding:112px 0;min-height:560px}
+.model-chapter-label{font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#d6ef8c;margin-bottom:20px}
+.model-visual{min-height:380px}
+/* traceability: copy above, the EPD chart across the full width (it keeps its shape, so width is what makes it tall) */
+.model-chapter.model-chapter-wide,.model-chapter.model-chapter-wide:nth-child(even){grid-template-columns:1fr;gap:56px;min-height:760px}
+.model-chapter-wide .model-chapter-copy{order:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:72px;align-items:end}
+.model-chapter-wide .model-chapter-copy .model-chapter-label,.model-chapter-wide .model-chapter-copy h3{grid-column:1}
+.model-chapter-wide .model-chapter-copy p{grid-column:2;grid-row:2 / span 2;margin-top:0}
+.model-chapter-wide .model-chapter-copy p.model-chapter-key{grid-row:auto;margin-top:16px}
+.model-chapter-wide .model-visual{min-height:0;padding-top:8px}
+@media(max-width:1000px){.model-usps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){
+ .model-usps{margin:0 24px;padding-bottom:40px}
+ .model-chapters{padding:0 24px 72px}
+ .model-chapter,.model-chapter:first-child{padding:64px 0;min-height:0}
+ .model-visual{min-height:0}
+ .model-chapter.model-chapter-wide,.model-chapter.model-chapter-wide:nth-child(even){gap:28px;min-height:0}
+ .model-chapter-wide .model-chapter-copy{display:block}
+ .model-chapter-wide .model-chapter-copy p{margin-top:16px}
+}
+@media(max-width:520px){.model-usps{grid-template-columns:1fr}}
+.model-flow .model-atmosphere::after{background:linear-gradient(#0a101700,#0a1017)}
+.model-chapter.model-chapter-wide:nth-child(n) .model-chapter-copy{order:0} /* (copy first, over the even chapters' side swap) */
+/* USPs, Attio-style: open columns with a hairline on their left, title and line tight together, a row of fine ticks
+   along the bottom; no fills, no rounded boxes, no numbers */
+.model-usps{gap:0;padding:16px 0 88px}
+.model-usps li{position:relative;display:flex;flex-direction:column;min-height:220px;padding:2px 28px 0 18px;border:0;border-left:1px solid #ffffff1c;border-radius:0;background:none}
+.model-usps strong{font-size:16px;font-weight:500;letter-spacing:-.015em;color:#f3f5f1}
+.model-usps p{margin:6px 0 0;font-size:14px;line-height:1.5;color:#8a929c;max-width:250px}
+.model-usp-ticks{position:absolute;left:0;right:0;bottom:0;height:26px;background:repeating-linear-gradient(90deg,#ffffff17 0 1px,transparent 1px 27px);border-top:0}
+.model-usps li:last-child .model-usp-ticks{right:0}
+@media(max-width:1000px){.model-usps{row-gap:40px}}
+@media(max-width:520px){.model-usps li{min-height:0;padding-bottom:44px}.model-usps{row-gap:28px}}

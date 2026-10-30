@@ -60,6 +60,8 @@ export function ExplodingChair({
   variant = "cross",
   restApart = false,
   holdSeconds,
+  speed = 1,
+  rotateSpeed = 0.9,
   onFrame,
 }: {
   framePad?: number;
@@ -81,6 +83,10 @@ export function ExplodingChair({
   // other state and back.
   restApart?: boolean;
   holdSeconds?: number;
+  // Tempo: the come-apart-and-back loop runs `speed` times as fast as its default; `rotateSpeed` is the turntable's
+  // speed (OrbitControls' autoRotateSpeed, 0.9 by default).
+  speed?: number;
+  rotateSpeed?: number;
   // Each frame: the loop's disassembly progress (0 = assembled, 1 = apart) and where each part's centre is on the
   // canvas (CSS px from its top left, and its distance from the camera), so callouts can follow the parts.
   onFrame?: (frame: { progress: number; parts: { name: string; x: number; y: number; z: number }[] }) => void;
@@ -209,7 +215,7 @@ export function ExplodingChair({
     controls.enableZoom = false; // let the wheel scroll the page, not zoom the chair
     controls.maxPolarAngle = Math.PI / 1.9;
     controls.autoRotate = autoRotate && !reduceMotion; // keeps turning; resumes after a drag
-    controls.autoRotateSpeed = 0.9;
+    controls.autoRotateSpeed = rotateSpeed;
 
     // High-key studio fill (near-shadowless, matches the manufacturer shot)
     scene.add(new Three.AmbientLight(variant === "soft" ? SOFT_LIGHT.ambient : 0xffffff, 0.78));
@@ -439,7 +445,7 @@ export function ExplodingChair({
       }
       if (ready && envReady) {
         if (!reduceMotion) {
-          elapsed += dt;
+          elapsed += dt * speed;
         }
         // Rest fully assembled (amount 0) for HOLD_ASSEMBLED, then ease out to EXPLODE_START and
         // back over EXPLODE_SECONDS. The cosine has zero slope at both ends, so entering/leaving
@@ -584,6 +590,8 @@ export function ExplodingChair({
     variant,
     restApart,
     holdSeconds,
+    speed,
+    rotateSpeed,
     ...view,
   ]);
 

@@ -9,14 +9,16 @@ import PcLogoAnimated from './PcLogoAnimated.astro';
 interface Props {
   theme?: 'light' | 'dark';
   current?: 'how-it-works' | 'product-model';
+  cta?: string; // the contact button's label and link (the homepage says the same as its hero)
+  ctaHref?: string;
 }
-const { theme = 'light', current } = Astro.props;
+const { theme = 'light', current, cta = 'Talk to sales', ctaHref = 'mailto:contact@productconnect.com' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const links = [
   // the homepage, at its top (from anywhere: the other tabs go to their sections, this one to the page itself)
-  { label: 'What we solve', href: base, key: 'home' },
+  { label: 'What we solve', href: `${base}#benefits`, key: 'home' },
   { label: 'The product model', href: `${base}product-model/`, key: 'product-model' },
-  { label: 'How it works', href: `${base}how-it-works/`, key: 'how-it-works' },
+  { label: 'How it works', href: `${base}#benefits-story`, key: 'how-it-works' }, // opens the What we solve story (utilities/storyTakeover.ts)
 ];
 ---
 <header class:list={['site-header', `is-${theme}`]} data-site-header>
@@ -28,9 +30,9 @@ const links = [
     {links.map((link) => (
       <a href={link.href} class:list={{ active: link.key && link.key === current }} aria-current={link.key && link.key === current ? 'page' : undefined}>{link.label}</a>
     ))}
-    <a class="menu-cta" href="mailto:contact@productconnect.com">Talk to sales <ArrowIcon /></a>
+    <a class="menu-cta" href={ctaHref}>{cta} <ArrowIcon /></a>
   </nav>
-  <a class="site-cta" href="mailto:contact@productconnect.com">Talk to sales <ArrowIcon /></a>
+  <a class="site-cta" href={ctaHref}>{cta} <ArrowIcon /></a>
   <button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Open menu" data-menu-toggle>
     <svg class="icon-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
     <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
@@ -71,10 +73,10 @@ const links = [
     --sh-cta-bg: #fff;
   }
   .is-dark {
-    --sh-bg: #101a2a;
+    --sh-bg: #0a1017; /* the dark hero's own near-black, so the header merges with it */
     --sh-ink: #fff;
     --sh-soft: #a8aeaa;
-    --sh-solid: #101a2a;
+    --sh-solid: #0a1017;
     --sh-hover: #fff;
     --sh-rule: #ffffff14;
     --sh-accent: #d6ef8c;

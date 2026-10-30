@@ -17,18 +17,18 @@ const milestones = [
 ].map((m, i) => ({ ...m, left: (m.x / 1200) * 100, top: (curve(m.x) / 650) * 100, delay: 0.35 + (m.x / 1200) * 2.1, pulse: i * 0.9 }));
 ---
 <section class="scale-section frame" aria-labelledby="scale-title">
- <svg viewBox="0 0 1200 650" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="scale-fill" gradientUnits="userSpaceOnUse" x1="0" y1={curve(1200)} x2="0" y2="650"><stop stop-color="#718de4" stop-opacity=".12"/><stop offset="1" stop-color="#718de4" stop-opacity="0"/></linearGradient><linearGradient id="scale-bars" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop stop-color="#c9d3ee"/><stop offset="1" stop-color="#e7ebf4" stop-opacity=".2"/></linearGradient></defs>
+ <svg viewBox="0 0 1200 650" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="scale-fill" gradientUnits="userSpaceOnUse" x1="0" y1={curve(1200)} x2="0" y2="650"><stop stop-color="#7da12a" stop-opacity=".12"/><stop offset="1" stop-color="#7da12a" stop-opacity="0"/></linearGradient><linearGradient id="scale-bars" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop stop-color="#dbe8b5"/><stop offset="1" stop-color="#eef3e2" stop-opacity=".2"/></linearGradient></defs>
   {[150,300,450].map((y)=><line class="scale-grid" x1={-EXT} x2={1200+EXT} y1={y} y2={y}/>)}
-  <g class="scale-ext scale-ext-left"><path d={`${leftLine} L0,650 L${-EXT},650 Z`} fill="url(#scale-fill)"/>{bars(-EXT,-12).map((x)=><line x1={x} x2={x} y1={curve(0)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path d={leftLine} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/></g>
-  <g class="scale-ext scale-ext-right"><path d={`${rightPoints} L${1200+EXT},650 L1200,650 Z`} fill="url(#scale-fill)"/>{bars(1212,1200+EXT).map((x)=><line x1={x} x2={x} y1={Math.max(-2000,curve(x))} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path d={rightPoints} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/></g>
-  <g class="scale-reveal"><path d={`${points} L1200,650 L0,650 Z`} fill="url(#scale-fill)"/>{Array.from({length:101},(_,i)=><line x1={i*12} x2={i*12} y1={curve(i*12)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path class="scale-line" d={points} fill="none" stroke="#7089d9" stroke-width="2" vector-effect="non-scaling-stroke"/>
-  <circle class="scale-trail" r="7" fill="#7089d9"><animateMotion dur="7s" begin="-0.18s" repeatCount="indefinite" path={points}/></circle>
-  <circle class="scale-spark" r="4" fill="#7089d9"><animateMotion dur="7s" repeatCount="indefinite" path={points}/></circle></g></svg>
+  <g class="scale-ext scale-ext-left"><path d={`${leftLine} L0,650 L${-EXT},650 Z`} fill="url(#scale-fill)"/>{bars(-EXT,-12).map((x)=><line x1={x} x2={x} y1={curve(0)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path d={leftLine} fill="none" stroke="#5f7d12" stroke-width="2" vector-effect="non-scaling-stroke"/></g>
+  <g class="scale-ext scale-ext-right"><path d={`${rightPoints} L${1200+EXT},650 L1200,650 Z`} fill="url(#scale-fill)"/>{bars(1212,1200+EXT).map((x)=><line x1={x} x2={x} y1={Math.max(-2000,curve(x))} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path d={rightPoints} fill="none" stroke="#5f7d12" stroke-width="2" vector-effect="non-scaling-stroke"/></g>
+  <g class="scale-reveal"><path d={`${points} L1200,650 L0,650 Z`} fill="url(#scale-fill)"/>{Array.from({length:101},(_,i)=><line x1={i*12} x2={i*12} y1={curve(i*12)} y2="650" stroke="url(#scale-bars)" stroke-width=".7"/>)}<path class="scale-line" d={points} fill="none" stroke="#5f7d12" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  <circle class="scale-trail" r="7" fill="#5f7d12"><animateMotion dur="7s" begin="-0.18s" repeatCount="indefinite" path={points}/></circle>
+  <circle class="scale-spark" r="4" fill="#5f7d12"><animateMotion dur="7s" repeatCount="indefinite" path={points}/></circle></g></svg>
  <div class="scale-marks" aria-hidden="true">{milestones.map((m)=><span class:list={['scale-mark',{flip:m.flip}]} style={`left:${m.left}%;top:${m.top}%;--delay:${m.delay}s;--pulse:${m.pulse}s`}><i></i><b>{m.label}</b></span>)}</div>
  <div class="scale-copy"><h2 id="scale-title">Built for your team.<br/><span>Ready for your entire company.</span></h2><div class="scale-details"><p><strong>Multi-tenant core</strong><span>Shared infrastructure, with a workspace for each company, designed to keep its data separate</span></p><p><strong>Elastic architecture</strong><span>Built to grow with your data and workloads</span></p><p><strong>API &amp; MCP</strong><span>Structured access for systems and AI tools</span></p></div></div>
 </section>
 <style>
-.scale-section{position:relative;min-height:660px;overflow:hidden;background:#fff;border-top:1px solid #e9eaec;border-bottom:1px solid #e9eaec}.scale-section svg,.scale-marks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.scale-copy{position:relative;z-index:1;padding:85px 50px 160px;max-width:770px}.scale-copy h2{font-size:clamp(32px,4vw,48px);line-height:1.13;margin-top:27px}.scale-copy h2 span{color:#8a909b}.scale-details{display:grid;grid-template-columns:1fr 1fr;gap:28px 32px;margin-top:48px;max-width:540px}.scale-details p{border-left:2px solid #8295d1;padding-left:18px;line-height:1.4}.scale-details strong{display:block;font-size:21px;font-weight:500;color:#242528}.scale-details p span{display:block;font-size:13px;margin-top:5px;color:#72777e}
+.scale-section{position:relative;min-height:660px;overflow:hidden;background:#fff}.scale-section svg,.scale-marks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.scale-copy{position:relative;z-index:1;padding:85px 50px 160px;max-width:770px}.scale-copy h2{font-size:clamp(32px,4vw,48px);line-height:1.13;margin-top:27px}.scale-copy h2 span{color:#8a909b}.scale-details{display:grid;grid-template-columns:1fr 1fr;gap:28px 32px;margin-top:48px;max-width:540px}.scale-details p{border-left:2px solid #a8cf3c;padding-left:18px;line-height:1.4}.scale-details strong{display:block;font-size:21px;font-weight:500;color:#242528}.scale-details p span{display:block;font-size:13px;margin-top:5px;color:#72777e}
 /* full window width; the graph, its labels and the copy keep to the 1240px frame (their sizes as before) */
 .scale-section.frame{max-width:none;border-left:0;border-right:0;border-radius:0}
 .scale-section svg,.scale-marks{left:50%;width:min(100%,1240px);translate:-50% 0}
@@ -37,15 +37,15 @@ const milestones = [
 /* the ends past the frame: the flat start shows with the curve, the climb on the right fades in once it is drawn */
 .scale-ext-right{opacity:0}.scale-section.is-visible .scale-ext-right{opacity:1;transition:opacity .8s 1.6s}
 @media(prefers-reduced-motion:reduce){.scale-ext-right{opacity:1;transition:none}}
-.scale-grid{stroke:#eef1f6;stroke-width:1;stroke-dasharray:2 6;vector-effect:non-scaling-stroke}
+.scale-grid{stroke:#f1f3ee;stroke-width:1;stroke-dasharray:2 6;vector-effect:non-scaling-stroke}
 .scale-reveal{clip-path:inset(0 100% 0 0);transition:clip-path 2.4s cubic-bezier(.22,1,.36,1)}.scale-section.is-visible .scale-reveal{clip-path:inset(0)}
-.scale-spark{filter:drop-shadow(0 0 6px #7089d9);opacity:0}.scale-trail{opacity:0}.scale-section.is-visible .scale-spark{opacity:1;transition:opacity 1s 2s}.scale-section.is-visible .scale-trail{opacity:.14;transition:opacity 1s 2s}
+.scale-spark{filter:drop-shadow(0 0 6px #5f7d12);opacity:0}.scale-trail{opacity:0}.scale-section.is-visible .scale-spark{opacity:1;transition:opacity 1s 2s}.scale-section.is-visible .scale-trail{opacity:.14;transition:opacity 1s 2s}
 .scale-mark{position:absolute;z-index:2;opacity:0;transform:translateY(6px);transition:opacity .6s var(--delay),transform .6s var(--delay)}
 .scale-section.is-visible .scale-mark{opacity:1;transform:none}
-.scale-mark i{position:absolute;left:0;top:0;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;border:2px solid #7089d9;box-sizing:border-box}
-.scale-mark i::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:1px solid #7089d9;opacity:0}
+.scale-mark i{position:absolute;left:0;top:0;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;border:2px solid #5f7d12;box-sizing:border-box}
+.scale-mark i::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:1px solid #5f7d12;opacity:0}
 .scale-section.is-visible .scale-mark i::after{animation:scale-ping 3.6s var(--pulse) infinite}
-.scale-mark b{position:absolute;left:12px;top:10px;white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:.01em;color:#5d6b92;background:#fffffff2;border:1px solid #e3e8f3;border-radius:999px;padding:4px 9px}
+.scale-mark b{position:absolute;left:12px;top:10px;white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:.01em;color:#4f6a10;background:#fffffff2;border:1px solid #e1ebc4;border-radius:999px;padding:4px 9px}
 .scale-mark.flip b{left:auto;right:12px}
 @keyframes scale-ping{0%{transform:scale(1);opacity:.6}70%,100%{transform:scale(3.2);opacity:0}}
 @media(min-width:600px) and (max-width:900px){.scale-copy{padding-bottom:250px}.scale-section svg,.scale-marks{top:auto;bottom:0;height:220px}} /* narrower screens: the curve runs below the text, not through it */
@@ -55,7 +55,7 @@ const milestones = [
 /* Points with a blue left rule, a title and a short line (no numbers); two on top and the third below the first, so
    the block steps down on the left, where the curve below it is low (one column on phones) */
 .scale-details{gap:30px 32px}
-.scale-details p{border-left:2px solid #8295d1;padding-left:18px}
+.scale-details p{border-left:2px solid #a8cf3c;padding-left:18px}
 .scale-details strong{font-size:19px}
 .scale-details p span{font-size:14px;line-height:1.5;margin-top:6px}
 @media(max-width:599px){.scale-details{grid-template-columns:1fr}}

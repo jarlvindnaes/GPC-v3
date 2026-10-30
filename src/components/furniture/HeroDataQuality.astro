@@ -1,0 +1,303 @@
+---
+// The hero graphic, top to bottom: the Soft Lounge Chair turning in 3D, raw data orbiting it, the data-quality card
+// beneath, and the three outputs under that.
+// Orbit: raw data cards (a supplier's PDF, an email, a spreadsheet, the ERP, a 3D model, a photo…) circle the chair,
+// passing behind it and in front. Dive: one at a time, a card swoops down into the data-quality card, resolving from
+// its raw source into a clean value with a score on the way; the chair's halo and the card pulse as it lands and the
+// score climbs. Bad data (duplicate, outdated, no data) is marked and falls away. Output: CO₂ numbers, the EPD and the
+// passport light up as enough approved data is in. Then it starts over.
+// Values match the passport where it has them; the rest is illustrative.
+import { ExplodingChair } from '../wireframe/ExplodingChair';
+import { FileCheck2, Gauge, QrCode } from 'lucide-react';
+const outputs = [
+  { id: 'co2', Icon: Gauge, title: 'CO₂ numbers', value: '39.4 kg CO₂e', wait: 'Waiting' },
+  { id: 'epd', Icon: FileCheck2, title: 'EPD', value: 'Ready to verify', wait: 'Waiting' },
+  { id: 'dpp', Icon: QrCode, title: 'Product Passport', value: 'Live · one scan away', wait: 'Waiting' },
+];
+---
+<div class="hq" data-graphic-slot="quality">
+  <div class="hq-halo" aria-hidden="true"><i></i></div>
+  <svg class="hq-orbit" aria-hidden="true"><ellipse data-hq-orbit /></svg>
+  <div class="hq-chair" aria-hidden="true">
+    <ExplodingChair client:only="react" variant="soft" autoRotate framePad={0.9} explodeAmount={0.17} view={[0.8, 0.3, 1]} holdSeconds={0.8} speed={3} rotateSpeed={3.2} />
+  </div>
+  <div class="hq-cards" aria-hidden="true"></div>
+  <div class="hq-stack">
+  <div class="hq-hub">
+    <div class="hq-head"><div class="hq-title"><small>Soft Lounge Chair · TAKT</small><strong>Data quality</strong></div><div class="hq-score"><b data-hq-score>0</b><small>/100</small></div></div>
+    <div class="hq-bar"><i data-hq-bar></i></div>
+    <ul class="hq-rows"></ul>
+    <div class="hq-foot"><span>Ingested <b data-hq-in>0</b></span><span>Distilled <b data-hq-dist>0</b></span><span>Approved <b data-hq-ok>0</b></span><span class="hq-done"><i></i>Approved</span></div>
+  </div>
+  <svg class="hq-links" aria-hidden="true">{outputs.map((o) => <path data-hq-link={o.id} />)}</svg>
+  <ul class="hq-outs">
+    {outputs.map(({ id, Icon, title, value, wait }) => (
+      <li class="hq-out" data-hq-out={id}>
+        <span class="hq-out-icon" aria-hidden="true"><Icon size={16} strokeWidth={1.7} /></span>
+        <span class="hq-out-text"><strong>{title}</strong><small><span class="hq-out-wait">{wait}</span><span class="hq-out-value">{value}</span></small></span>
+      </li>
+    ))}
+  </ul>
+  </div>
+</div>
+
+<script>
+type Card = { tag: string; raw: string; clean?: string; score: number; reject?: string };
+const CARDS: Card[] = [
+  { tag: 'Supplier', raw: 'FSC_cert_2023.pdf', clean: 'Oak · FSC 100%', score: 96 },
+  { tag: 'Email', raw: 'Re: Fwd: foam density?', clean: 'HR foam · 35 kg/m³', score: 88 },
+  { tag: 'Sheet', raw: 'BOM_v7.xlsx', clean: '9 components', score: 91 },
+  { tag: 'ERP', raw: 'item 4471 · rev. B', clean: 'Oak veneer · 1.2 kg', score: 93 },
+  { tag: 'Sheet', raw: 'price_list_FINAL(2).xlsx', score: 31, reject: 'Duplicate' },
+  { tag: '3D model', raw: 'chair_rev_B.step', clean: 'Volume 0.018 m³', score: 97 },
+  { tag: 'Supplier', raw: 'leather_spec_v2.pdf', clean: 'Leather · 1.4 kg', score: 90 },
+  { tag: 'Photo', raw: 'IMG_2291.jpg', score: 12, reject: 'No data' },
+  { tag: 'Certificate', raw: 'EPD_draft_v3.docx', clean: 'EN 15804+A2', score: 85 },
+  { tag: 'Customer', raw: 'return note #812', clean: 'Bolt torque spec', score: 79 },
+  { tag: 'CSV', raw: 'BOM_old.csv', score: 24, reject: 'Outdated' },
+  { tag: 'Supplier', raw: 'bolts_grade_8.8.xlsx', clean: 'Steel · zinc plated', score: 94 },
+];
+// how many approved values each output needs before it lights (the passport: the whole record approved)
+const NEEDS: Record<string, number> = { co2: 4, epd: 7, dpp: Infinity };
+
+const root = document.querySelector<HTMLElement>('[data-graphic-slot="quality"]');
+if (root) init(root);
+
+function init(root: HTMLElement) {
+  const chair = root.querySelector<HTMLElement>('.hq-chair')!, halo = root.querySelector<HTMLElement>('.hq-halo')!;
+  const orbitSvg = root.querySelector<SVGSVGElement>('.hq-orbit')!, orbitEl = root.querySelector<SVGEllipseElement>('[data-hq-orbit]')!;
+  const cardsEl = root.querySelector<HTMLElement>('.hq-cards')!, hub = root.querySelector<HTMLElement>('.hq-hub')!, rows = root.querySelector<HTMLElement>('.hq-rows')!;
+  const scoreEl = root.querySelector<HTMLElement>('[data-hq-score]')!, barEl = root.querySelector<HTMLElement>('[data-hq-bar]')!;
+  const nIn = root.querySelector<HTMLElement>('[data-hq-in]')!, nDist = root.querySelector<HTMLElement>('[data-hq-dist]')!, nOk = root.querySelector<HTMLElement>('[data-hq-ok]')!;
+  const linksSvg = root.querySelector<SVGSVGElement>('.hq-links')!;
+  const outs = new Map([...root.querySelectorAll<HTMLElement>('[data-hq-out]')].map((el) => [el.dataset.hqOut!, el]));
+  const links = new Map([...root.querySelectorAll<SVGPathElement>('[data-hq-link]')].map((el) => [el.dataset.hqLink!, el]));
+
+  let w = 0, h = 0;
+  const rel = (el: Element) => { const r = el.getBoundingClientRect(), rr = root.getBoundingClientRect(); return { l: r.left - rr.left, t: r.top - rr.top, r: r.right - rr.left, b: r.bottom - rr.top, w: r.width, h: r.height, cx: r.left - rr.left + r.width / 2, cy: r.top - rr.top + r.height / 2 }; };
+  // the orbit: a wide ellipse around the chair's middle, as if seen from slightly above
+  const orbit = () => { const c = rel(chair); return { cx: c.cx, cy: c.cy + c.h * 0.08, rx: Math.min(w * (w < 560 ? 0.34 : 0.44), c.w * 0.5 + 60), ry: c.h * 0.3 }; };
+  const layout = () => {
+    const rr = root.getBoundingClientRect();
+    w = rr.width; h = rr.height;
+    root.classList.toggle('is-narrow', w < 560);
+    linksSvg.setAttribute('viewBox', `0 0 ${w} ${h}`); orbitSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const o = orbit();
+    orbitEl.setAttribute('cx', o.cx.toFixed(1)); orbitEl.setAttribute('cy', o.cy.toFixed(1)); orbitEl.setAttribute('rx', o.rx.toFixed(1)); orbitEl.setAttribute('ry', o.ry.toFixed(1));
+    const c = rel(chair); halo.style.transform = `translate(${c.cx.toFixed(1)}px,${(c.cy + c.h * 0.1).toFixed(1)}px)`;
+    // connectors: from the card's bottom edge down to each output
+    const hb = rel(hub);
+    [...outs.entries()].forEach(([id, el], i) => {
+      const o2 = rel(el), x1 = hb.l + hb.w * (0.22 + i * 0.28), y1 = hb.b, x2 = o2.cx, y2 = o2.t, k = Math.max(14, (y2 - y1) / 2);
+      links.get(id)!.setAttribute('d', `M${x1},${y1} C${x1},${y1 + k} ${x2},${y2 - k} ${x2},${y2}`);
+    });
+  };
+  layout();
+  new ResizeObserver(layout).observe(root);
+
+  // the cards: orbit the chair, then one at a time dive into the data-quality card
+  const ease = (q: number) => (q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2);
+  const SLOTS = 4, OMEGA = 0.95, DIVE = 540, FALL = 560, EVERY = 780, FIRST = 300, JOIN_GAP = 280, END_HOLD = 2600;
+  type Live = { card: Card; el: HTMLElement; mode: 'orbit' | 'dive' | 'fall'; theta: number; born: number; t0: number; from: { x: number; y: number }; ctrl: { x: number; y: number }; resolved: boolean };
+  let live: Live[] = [], next = 0, counts = { in: 0, dist: 0, ok: 0 }, scores: number[] = [], shown = 0, target = 0, t = 0, lastDive = 0, lastJoin = -1e9, finishedAt = -1;
+  const spawn = () => {
+    const card = CARDS[next++], el = document.createElement('div');
+    el.className = 'hq-card'; el.dataset.kind = card.tag === 'Supplier' ? 'supplier' : '';
+    el.innerHTML = `<div class="hq-top"><em>${card.tag}</em><b class="hq-status"><i></i><span class="s-dist">Distilling</span><span class="s-ok">${card.score}</span><span class="s-bad">${card.reject ?? ''}</span></b></div><div class="hq-body"><span class="hq-raw">${card.raw}</span><span class="hq-clean">${card.clean ?? card.raw}</span></div>`;
+    cardsEl.appendChild(el);
+    // joins at the back of the orbit, behind the chair
+    live.push({ card, el, mode: 'orbit', theta: -Math.PI / 2 - 0.4, born: t, t0: 0, from: { x: 0, y: 0 }, ctrl: { x: 0, y: 0 }, resolved: false });
+    counts.in++; lastJoin = t;
+  };
+  const light = () => {
+    for (const [id, el] of outs) {
+      const on = id === 'dpp' ? finishedAt >= 0 : counts.ok >= NEEDS[id];
+      el.classList.toggle('is-lit', on); links.get(id)!.classList.toggle('is-lit', on);
+    }
+  };
+  const pulse = (el: HTMLElement, cls: string) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+  const addRow = (card: Card) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${card.clean}</span><small>${card.tag}</small><b>${card.score}</b>`;
+    rows.prepend(li);
+    requestAnimationFrame(() => li.classList.add('is-in'));
+    while (rows.children.length > 3) rows.lastElementChild!.remove();
+    scores.push(card.score); counts.ok++;
+    target = scores.reduce((a, b) => a + b, 0) / scores.length;
+    pulse(hub, 'is-pulse'); pulse(halo, 'is-pulse');
+    light();
+  };
+  const reset = () => {
+    live.forEach((l) => l.el.remove()); live = []; next = 0; counts = { in: 0, dist: 0, ok: 0 }; scores = []; target = 0; shown = 0; finishedAt = -1; lastDive = 0; lastJoin = -1e9;
+    rows.innerHTML = ''; hub.classList.remove('is-done'); t = 0; light();
+  };
+  const place = (el: HTMLElement, x: number, y: number, scale: number, op: number, z: number) => {
+    x = Math.min(Math.max(x, el.offsetWidth / 2 + 4), w - el.offsetWidth / 2 - 4); // (never off the stage's sides)
+    el.style.transform = `translate(${(x - el.offsetWidth / 2).toFixed(1)}px,${(y - el.offsetHeight / 2).toFixed(1)}px) scale(${scale.toFixed(3)})`;
+    el.style.opacity = op.toFixed(3); el.style.zIndex = String(z);
+  };
+  const update = (dt: number) => {
+    const o = orbit(), hb = rel(hub), landing = { x: hb.cx, y: hb.t + 26 };
+    // data joins the orbit while there is room and data left
+    if (next < CARDS.length && t >= FIRST && live.filter((l) => l.mode === 'orbit').length < SLOTS && t - lastJoin > JOIN_GAP) spawn();
+    // the oldest orbiting card dives once it comes round the front
+    if (t - lastDive >= EVERY) {
+      const cand = live.find((l) => l.mode === 'orbit' && Math.sin(l.theta) > 0.25 && t - l.born > 650);
+      if (cand) {
+        cand.mode = 'dive'; cand.t0 = t; lastDive = t;
+        cand.from = { x: o.cx + o.rx * Math.cos(cand.theta), y: o.cy + o.ry * Math.sin(cand.theta) };
+        cand.ctrl = { x: cand.from.x + (cand.from.x - o.cx) * 0.35, y: cand.from.y + 70 };
+        cand.el.classList.add('is-diving', 'is-distilling');
+        if (!cand.card.reject) counts.dist++;
+      }
+    }
+    for (const l of [...live]) {
+      const el = l.el;
+      if (l.mode === 'orbit') {
+        l.theta += (OMEGA * dt) / 1000;
+        const s = Math.sin(l.theta), depth = (s + 1) / 2; // 0 at the back, 1 in front
+        const fade = Math.min(1, (t - l.born) / 320);
+        place(el, o.cx + o.rx * Math.cos(l.theta), o.cy + o.ry * s, 0.74 + 0.26 * depth, fade * (0.45 + 0.55 * depth), s > 0 ? 5 : 1);
+      } else if (l.mode === 'dive') {
+        const q = ease(Math.min((t - l.t0) / DIVE, 1));
+        const x = (1 - q) ** 2 * l.from.x + 2 * (1 - q) * q * l.ctrl.x + q * q * landing.x;
+        const y = (1 - q) ** 2 * l.from.y + 2 * (1 - q) * q * l.ctrl.y + q * q * landing.y;
+        if (!l.resolved && q > 0.45) { l.resolved = true; el.classList.add(l.card.reject ? 'is-rejected' : 'is-clean'); }
+        if (l.card.reject && q > 0.62) { l.mode = 'fall'; l.t0 = t; l.from = { x, y }; continue; }
+        place(el, x, y, 1 - 0.12 * q, q < 0.85 ? 1 : 1 - (q - 0.85) / 0.15, 6);
+        if (q >= 1) { live = live.filter((k) => k !== l); el.remove(); addRow(l.card); }
+      } else {
+        const q = Math.min((t - l.t0) / FALL, 1);
+        place(el, l.from.x + 40 * q, l.from.y + 90 * q * q, 0.9, 1 - q, 6);
+        if (q >= 1) { live = live.filter((k) => k !== l); el.remove(); }
+      }
+    }
+  };
+  const paint = () => {
+    shown += (target - shown) * 0.16;
+    scoreEl.textContent = String(Math.round(shown));
+    barEl.style.width = `${shown.toFixed(1)}%`;
+    nIn.textContent = String(counts.in); nDist.textContent = String(counts.dist); nOk.textContent = String(counts.ok);
+  };
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused')) {
+    CARDS.filter((c) => !c.reject).forEach((c) => addRow(c));
+    counts = { in: CARDS.length, dist: scores.length, ok: scores.length }; shown = target; finishedAt = 0; paint(); light();
+    hub.classList.add('is-done');
+    return;
+  }
+
+  let raf = 0, last = 0, visible = true;
+  const tick = (now: number) => {
+    raf = requestAnimationFrame(tick);
+    const dt = last ? Math.min(now - last, 250) : 0;
+    last = now; t += dt;
+    update(dt);
+    paint();
+    if (next >= CARDS.length && live.length === 0 && finishedAt < 0) { finishedAt = t; hub.classList.add('is-done'); light(); pulse(halo, 'is-pulse'); }
+    if (finishedAt >= 0 && t - finishedAt > END_HOLD) reset();
+  };
+  const run = () => { if (!raf && visible && !document.hidden) { last = 0; raf = requestAnimationFrame(tick); } };
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; visible ? run() : stop(); }).observe(root);
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : run()));
+  run();
+}
+</script>
+
+<style is:global>
+/* a vertical stack: chair, data in orbit, the data-quality card, the outputs */
+.hq{position:absolute;top:1%;bottom:3%;left:46%;right:2%}
+.hq-halo{position:absolute;left:0;top:0;z-index:0;width:0;height:0;pointer-events:none}
+.hq-halo i{position:absolute;left:-220px;top:-140px;width:440px;height:280px;border-radius:50%;background:radial-gradient(ellipse at center,#dfeec0 0%,#eef3e2 40%,transparent 70%);opacity:.9}
+.hq-halo.is-pulse i{animation:hq-halo .8s ease-out}
+@keyframes hq-halo{0%{transform:scale(1)}30%{transform:scale(1.08);filter:saturate(1.3)}100%{transform:scale(1)}}
+.hq-orbit{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.hq-orbit ellipse{fill:none;stroke:#1d202418;stroke-width:1;stroke-dasharray:2 6}
+.hq-chair{position:absolute;left:0;right:0;top:3%;height:46%;z-index:4;pointer-events:none}
+.hq-chair .chair-explode{pointer-events:auto}
+.hq-chair .chair-explode{position:absolute;inset:0}
+.hq-chair .chair-explode canvas{opacity:0;transition:opacity .6s ease}
+.hq-chair .chair-explode[data-ready] canvas{opacity:1}
+.hq-cards{position:absolute;inset:0;pointer-events:none}
+.hq-card{position:absolute;left:0;top:0;width:176px;padding:7px 9px 8px;border-radius:9px;background:#ffffffe8;border:1px solid #e3e5e9;box-shadow:0 10px 26px #1d2a3a14;opacity:0;will-change:transform,opacity;transition:border-color .35s,box-shadow .35s;backdrop-filter:blur(6px)}
+.hq-card.is-diving{box-shadow:0 14px 34px #1d2a3a22,0 0 0 3px #d6ef8c33}
+.hq-stack{position:absolute;left:50%;top:43%;z-index:3;transform:translateX(-50%);width:min(560px,96%);display:flex;flex-direction:column;align-items:center;gap:34px}
+.hq-hub{position:relative;width:min(380px,70%);padding:14px 16px 12px;border-radius:14px;background:#ffffffee;border:1px solid #e3e5e9;box-shadow:0 14px 34px #1d2a3a14,0 2px 6px #1d2a3a0d;backdrop-filter:blur(8px);transition:border-color .6s,box-shadow .6s}
+.hq-hub.is-pulse{animation:hq-hub .6s ease-out}
+@keyframes hq-hub{0%{box-shadow:0 14px 34px #1d2a3a14,0 0 0 0 #a8cf3c66}100%{box-shadow:0 14px 34px #1d2a3a14,0 0 0 14px #a8cf3c00}}
+.hq-hub.is-done{border-color:#c9de8f;box-shadow:0 14px 34px #1d2a3a14,0 0 0 4px #d6ef8c40}
+.hq-links{position:absolute;inset:0;width:100%;height:100%;z-index:4;overflow:visible;pointer-events:none}
+.hq-links path{fill:none;stroke:#d5d9df;stroke-width:1.4;stroke-dasharray:3 5;transition:stroke .4s}
+.hq-links path.is-lit{stroke:#8fb43a;stroke-width:1.6;animation:hq-flow .9s linear infinite}
+@keyframes hq-flow{to{stroke-dashoffset:-16}}
+.hq-outs{position:relative;width:100%;margin:0;padding:0;list-style:none;display:flex;gap:10px}
+.hq-out{flex:1;display:flex;align-items:center;gap:10px;min-width:0;padding:10px 12px 10px 10px;border:1px solid #e3e5e9;border-radius:12px;background:#ffffffee;box-shadow:0 8px 22px #1d2a3a0d;opacity:.55;transition:opacity .5s,border-color .5s,box-shadow .5s,transform .5s}
+.hq-out.is-lit{opacity:1;border-color:#c9de8f;box-shadow:0 12px 30px #1d2a3a14,0 0 0 3px #d6ef8c33;transform:translateY(-2px)}
+.hq-out-icon{flex:none;width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#f4f5f7;color:#80868f;border:1px solid #eceef1;transition:background .5s,color .5s,border-color .5s}
+.hq-out.is-lit .hq-out-icon{background:#f1f5e4;color:#4f6a10;border-color:#e1ebc4}
+.hq-out-text{display:flex;flex-direction:column;gap:4px;min-width:0;width:100%}
+.hq-out-text strong{font-size:13px;font-weight:500;color:#1d2024;letter-spacing:-.01em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hq-out-text small{position:relative;height:12px;width:100%;font:500 9.5px/12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.hq-out-text small>span{position:absolute;left:0;right:0;top:0;overflow:hidden;text-overflow:ellipsis;transition:opacity .4s}
+.hq-out-wait{color:#a1a6ad}.hq-out-value{color:#5f7d12;opacity:0}
+.hq-out.is-lit .hq-out-wait{opacity:0}.hq-out.is-lit .hq-out-value{opacity:1}
+/* the data cards' insides */
+.hq-top{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.hq-top em{font:500 9.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;letter-spacing:.1em;text-transform:uppercase;padding:3px 5px;border-radius:4px;background:#f1f2f4;color:#6b717a}
+.hq-card[data-kind="supplier"] .hq-top em{background:#e9eefc;color:#4a63b8}
+.hq-status{margin-left:auto;display:none;align-items:center;gap:5px;font:500 9.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+.hq-status i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.hq-status>span{display:none}
+.hq-card.is-distilling .hq-status{display:inline-flex;color:#7a8089}.hq-card.is-distilling .hq-status i{animation:hq-blink .3s ease-in-out infinite alternate}.hq-card.is-distilling .s-dist{display:inline}
+.hq-card.is-clean .hq-status{color:#5f7d12}.hq-card.is-clean .hq-status i{animation:none}.hq-card.is-clean .s-dist{display:none}.hq-card.is-clean .s-ok{display:inline}
+.hq-card.is-rejected .hq-status{color:#b86a12}.hq-card.is-rejected .hq-status i{animation:none}.hq-card.is-rejected .s-dist{display:none}.hq-card.is-rejected .s-bad{display:inline}
+@keyframes hq-blink{to{opacity:.25}}
+.hq-body{position:relative;margin-top:6px;height:14px;white-space:nowrap}
+.hq-body>span{position:absolute;inset:0;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s,transform .3s}
+.hq-raw{font:500 10.5px/14px ui-monospace,SFMono-Regular,Menlo,monospace;color:#7a8089}
+.hq-clean{font:500 12px/14px Inter,sans-serif;color:#1d2024;opacity:0;transform:translateY(5px)}
+.hq-card.is-clean .hq-raw{opacity:0;transform:translateY(-5px)}.hq-card.is-clean .hq-clean{opacity:1;transform:none}
+.hq-card.is-clean{border-color:#c9de8f}
+.hq-card.is-rejected{border-color:#f1d1a8}.hq-card.is-rejected .hq-raw{text-decoration:line-through;text-decoration-color:#b86a1299}
+/* the data-quality card's insides */
+.hq-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.hq-title{display:flex;flex-direction:column;gap:5px}
+.hq-title small{font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#80868f}
+.hq-title strong{font-size:15px;font-weight:500;color:#1d2024;letter-spacing:-.01em}
+.hq-score{display:flex;align-items:baseline;gap:2px;font-variant-numeric:tabular-nums}
+.hq-score b{font-size:30px;font-weight:500;letter-spacing:-.04em;color:#1d2024;line-height:1}
+.hq-hub.is-done .hq-score b{color:#5f7d12}
+.hq-score small{font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#80868f}
+.hq-bar{height:3px;margin:12px 0 10px;border-radius:2px;background:#eef0f2;overflow:hidden}
+.hq-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8fa7ef,#a8cf3c);border-radius:2px}
+.hq-rows{list-style:none;margin:0;padding:0;min-height:90px}
+.hq-rows li{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;min-height:30px;border-bottom:1px solid #f0f1f3;opacity:0;transform:translateY(-6px);transition:opacity .35s,transform .35s}
+.hq-rows li.is-in{opacity:1;transform:none}
+.hq-rows span{font-size:12.5px;color:#1d2024;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hq-rows span::before{content:"";display:inline-block;width:5px;height:5px;margin-right:8px;border-radius:50%;background:#a8cf3c;vertical-align:1px}
+.hq-rows small{font:500 9.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#80868f}
+.hq-rows b{font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#5f7d12;min-width:18px;text-align:right}
+.hq-foot{display:flex;align-items:center;gap:14px;padding-top:10px;border-top:1px solid #eceef1;font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#80868f;white-space:nowrap}
+.hq-foot b{color:#3a3e44;font-weight:500}
+.hq-done{display:none;align-items:center;gap:6px;color:#5f7d12}
+.hq-done i{width:6px;height:6px;border-radius:50%;background:#a8cf3c}
+.hq-hub.is-done .hq-foot>span:not(.hq-done){display:none}.hq-hub.is-done .hq-done{display:inline-flex}
+@media(max-width:1150px){.hq{left:50%}.hq-card{width:160px}.hq-out-text strong{font-size:12px}}
+@media(max-width:720px){
+ .hq{left:3%;right:3%;top:0;bottom:2%}
+ .hq-chair{height:38%}
+ .hq-chair{top:0;height:42%}
+ .hq-stack{top:37%;width:100%;gap:26px}
+ .hq-hub{width:min(360px,100%)}
+ .hq-rows{min-height:0}
+ .hq-outs{gap:6px}
+ .hq-out{flex-direction:column;align-items:flex-start;gap:6px;padding:8px}
+ .hq-out-icon{width:26px;height:26px}
+ .hq-out-text strong{font-size:11.5px;white-space:normal}
+ .hq-out-text small{font-size:8.5px}
+ .hq-card{width:148px}
+ .hq-halo i{left:-170px;top:-110px;width:340px;height:220px}
+}
+@media(prefers-reduced-motion:reduce){.hq-links path.is-lit,.hq-halo.is-pulse i,.hq-hub.is-pulse{animation:none}}
+</style>

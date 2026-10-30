@@ -1,0 +1,316 @@
+---
+// The particle orb (in the closing call to action, above its button): a lighter port of logo-constellation-alive.html
+// (Jarl's constellation logo). Particles and anchor nodes form a sphere of great circles with spokes; clicking it lets
+// them go and gathers them into the "product connect" wordmark, and back. The button is the orb's place and hit area;
+// the canvas spans the whole section around it (behind its content), so particles let go by a click fly across the
+// full section. It starts already formed as the orb (no gathering on load). The canvas is transparent (trails fade
+// out rather than being painted over), so it sits on the section's own background. Less detailed than the original (about a quarter of
+// the particles, fewer rings and spokes, calmer connections) and in the site's colours: white dust, lime nodes and
+// mesh, a soft blue-white for long links. Runs only while on screen; still with reduced motion or paused motion.
+---
+<button type="button" class="particle-orb" aria-pressed="false" aria-label="Product Connect logo: show the wordmark" data-particle-orb></button>
+
+<script>
+import { motionPaused } from '../utilities/motion';
+
+const root = document.querySelector<HTMLButtonElement>('[data-particle-orb]');
+if (root) init(root);
+
+function init(root: HTMLButtonElement) {
+  // the canvas: the whole section, behind its content (the section is the positioned, isolated parent)
+  const field = (root.closest('section') ?? root.parentElement!) as HTMLElement;
+  const cv = document.createElement('canvas');
+  cv.setAttribute('aria-hidden', 'true');
+  cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block';
+  field.appendChild(cv);
+  const ctx = cv.getContext('2d')!;
+  const NSVG = 'http://www.w3.org/2000/svg';
+  // colours: the site's lime, a soft blue-white, white dust; the background is the footer's own
+  const LIME = [214, 239, 140], BLUE = [196, 206, 242];
+  const rgba = (c: number[], a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`;
+
+  /* letterforms: centre-line strokes, x-height 0..100 */
+  const S = 22, R = 39;
+  const circ = (cx: number, cy = 50, r = R) => `M${cx - r},${cy} A${r},${r} 0 1 1 ${cx + r},${cy} A${r},${r} 0 1 1 ${cx - r},${cy}`;
+  const GLYPHS: Record<string, { w: number; d: string[] }> = {
+    p: { w: 100, d: ['M11,0 L11,150', circ(50)] },
+    r: { w: 62, d: ['M11,100 L11,0', 'M11,50 A39,39 0 0 1 50,11 L62,11'] },
+    o: { w: 100, d: [circ(50)] },
+    d: { w: 100, d: [circ(50), 'M89,-55 L89,100'] },
+    u: { w: 100, d: ['M11,0 L11,50 A39,39 0 0 0 89,50', 'M89,0 L89,100'] },
+    c: { w: 90, d: ['M77.58,22.42 A39,39 0 1 0 77.58,77.58'] },
+    t: { w: 56, d: ['M22,-45 L22,70 A19,19 0 0 0 41,89 L56,89', 'M0,11 L56,11'] },
+    n: { w: 100, d: ['M11,100 L11,0', 'M11,50 A39,39 0 0 1 89,50 L89,100'] },
+    e: { w: 100, d: ['M11,50 L89,50 A39,39 0 1 0 77.58,77.58'] },
+  };
+  const GAP = 13, VB = { x: -35, y: -25, w: 790, h: 450 };
+  const measure = document.createElementNS(NSVG, 'svg');
+  measure.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+  root.appendChild(measure);
+  const anchorsOf = (d: string) => {
+    const p = document.createElementNS(NSVG, 'path');
+    p.setAttribute('d', d); measure.appendChild(p);
+    const L = p.getTotalLength(), n = Math.max(2, Math.round(L / 78)), pts: { x: number; y: number }[] = [];
+    for (let i = 0; i <= n; i++) { const a = p.getPointAtLength((L * i) / n); pts.push({ x: a.x, y: a.y }); }
+    const f = pts[0], la = pts[pts.length - 1];
+    if (Math.hypot(f.x - la.x, f.y - la.y) < 1) pts.pop();
+    p.remove();
+    return pts;
+  };
+  const glyphLayout = () => {
+    const out: { line: number; x: number; y: number; d: string[] }[] = [];
+    [{ word: 'product', y: 60 }, { word: 'connect', y: 300 }].forEach((ln, li) => {
+      let x = 0;
+      [...ln.word].forEach((ch) => { const g = GLYPHS[ch]; out.push({ line: li, x, y: ln.y, d: g.d }); x += g.w + GAP; });
+    });
+    return out;
+  };
+
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const smooth = (a: number, b: number, v: number) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+  type V3 = [number, number, number];
+  const cross = (a: V3, b: V3): V3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const norm = (a: V3): V3 => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+  const rot3 = (v: V3, ax: number, ay: number, az: number): V3 => {
+    let [x, y, z] = v, c = Math.cos(az), s = Math.sin(az);
+    [x, y] = [x * c - y * s, x * s + y * c];
+    c = Math.cos(ax); s = Math.sin(ax); [y, z] = [y * c - z * s, y * s + z * c];
+    c = Math.cos(ay); s = Math.sin(ay); [x, z] = [x * c + z * s, -x * s + z * c];
+    return [x, y, z];
+  };
+
+  type Ring = { u: V3; v: V3; r: number; off: V3; spd: number };
+  type Spoke = { node: P; phi: number; e: number; tphi: number; len: number; sway: number };
+  type P = { x: number; y: number; vx: number; vy: number; tx: number; ty: number; lx: number; ly: number; z: number; node: boolean; delay: number; ph: number; fq: number; amp: number; size: number; bright: number; glow: number; ring: number; th: number; sv?: V3; spoke: Spoke | null };
+  type Conn = { a: P; b: P; born: number; grow: number; life: number; long: boolean; spark: boolean; landed: boolean };
+  let W = 0, H = 0, dpr = 1, sc = 1, parts: P[] = [], nodes: P[] = [], all: P[] = [], conns: Conn[] = [], flashes: { x: number; y: number; born: number }[] = [];
+  let rings: Ring[] = [], spokes: Spoke[] = [], SR = 1, CX = 0, CY = 0, RA: V3 = [0, 0, 0];
+  let mode: 'sphere' | 'logo' = 'sphere', morph = 1, gatherAt = 0, start = 0, ptr: { x: number; y: number } | null = null;
+  const ringPoint = (g: Ring, th: number): V3 => {
+    const c = Math.cos(th), s = Math.sin(th);
+    return [(g.u[0] * c + g.v[0] * s) * g.r + g.off[0], (g.u[1] * c + g.v[1] * s) * g.r + g.off[1], (g.u[2] * c + g.v[2] * s) * g.r];
+  };
+  const assignSphere = () => {
+    rings = [];
+    const NR = 14;
+    for (let i = 0; i < NR; i++) {
+      const tilt = i < 3 ? rnd(0.9, 1.35) : rnd(0, 0.38), az = rnd(0, 6.283);
+      const n: V3 = [Math.sin(tilt) * Math.cos(az), Math.sin(tilt) * Math.sin(az), Math.cos(tilt)];
+      const u = norm(cross(n, Math.abs(n[0]) < 0.9 ? [1, 0, 0] : [0, 1, 0])), v = cross(n, u);
+      rings.push({ u, v, r: rnd(0.9, 1.05), off: [rnd(-1, 1) * 0.05, rnd(-1, 1) * 0.05, 0], spd: rnd(-0.18, 0.18) });
+    }
+    parts.forEach((p) => {
+      p.spoke = null;
+      if (Math.random() < 0.86) { p.ring = (Math.random() * NR) | 0; p.th = Math.random() * 6.283; }
+      else { p.ring = -1; const z = rnd(-1, 1), a = rnd(0, 6.283), s = Math.sqrt(1 - z * z); p.sv = [s * Math.cos(a), s * Math.sin(a), z]; }
+    });
+    const order = nodes.slice().sort(() => Math.random() - 0.5), NSP = Math.min(18, order.length);
+    spokes = [];
+    order.forEach((p, i) => {
+      if (i < NSP) {
+        const phi = (i / NSP) * 6.283 + rnd(-0.08, 0.08);
+        const s: Spoke = { node: p, phi, e: phi + rnd(-0.07, 0.07), tphi: phi + rnd(-0.13, 0.13), len: rnd(1.1, 1.36), sway: rnd(0, 6.283) };
+        p.spoke = s; p.ring = -2; spokes.push(s);
+      } else { p.spoke = null; p.ring = (Math.random() * NR) | 0; p.th = Math.random() * 6.283; }
+    });
+  };
+  const updateTargets = (abs: number) => {
+    RA = [0.28 * Math.sin(abs * 0.11 + 1), 0.45 * Math.sin(abs * 0.15), abs * 0.06];
+    for (const p of all) {
+      if (mode === 'logo') { p.tx = p.lx; p.ty = p.ly; p.z = 1; continue; }
+      if (p.spoke) {
+        const s = p.spoke, a = s.tphi + 0.03 * Math.sin(abs * 0.8 + s.sway), rr = s.len * SR * (1 + 0.02 * Math.sin(abs * 1.1 + s.sway));
+        p.tx = CX + Math.cos(a) * rr; p.ty = CY + Math.sin(a) * rr; p.z = 1; continue;
+      }
+      const v = p.ring >= 0 ? ringPoint(rings[p.ring], p.th + abs * rings[p.ring].spd) : p.sv!;
+      const r = rot3(v, RA[0], RA[1], RA[2]);
+      p.tx = CX + r[0] * SR; p.ty = CY + r[1] * SR; p.z = r[2];
+    }
+  };
+
+  const build = () => {
+    const fb = field.getBoundingClientRect(), ab = root.getBoundingClientRect();
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.width = Math.max(1, Math.round(fb.width * dpr));
+    H = cv.height = Math.max(1, Math.round(fb.height * dpr));
+    // the orb's box (the button), in canvas px
+    const ax = (ab.left - fb.left) * dpr, ay = (ab.top - fb.top) * dpr, aw = Math.max(1, ab.width * dpr), ah = Math.max(1, ab.height * dpr);
+    sc = Math.min(aw / VB.w, (ah * 0.86) / VB.h) * 0.92;
+    const lox = aw / 2 - (VB.x + VB.w / 2) * sc, loy = ah / 2 - (VB.y + VB.h / 2) * sc, ox = ax + lox, oy = ay + loy;
+    const glyphs = glyphLayout();
+    // the wordmark's pixels (rasterised in the orb's box), for the dust to land on
+    const OW = Math.round(aw), OH = Math.round(ah);
+    const off = document.createElement('canvas'); off.width = OW; off.height = OH;
+    const o = off.getContext('2d')!;
+    o.setTransform(sc, 0, 0, sc, lox, loy);
+    o.lineCap = 'butt'; o.lineJoin = 'bevel'; o.strokeStyle = '#fff';
+    glyphs.forEach((g) => { o.save(); o.translate(g.x, g.y); o.lineWidth = S; g.d.forEach((d) => o.stroke(new Path2D(d))); o.restore(); });
+    o.globalCompositeOperation = 'destination-out';
+    glyphs.filter((g) => g.line === 1).forEach((g) => { o.save(); o.translate(g.x, g.y); o.lineWidth = S - 9; g.d.forEach((d) => o.stroke(new Path2D(d))); o.restore(); });
+    const img = o.getImageData(0, 0, OW, OH).data, step = Math.max(2, Math.round(2.5 * sc));
+    let targets: [number, number][] = [];
+    for (let y = 0; y < OH; y += step) for (let x = 0; x < OW; x += step) {
+      const jx = x + (Math.random() - 0.5) * step * 0.6, jy = y + (Math.random() - 0.5) * step * 0.6;
+      if (img[(Math.round(clamp(jy, 0, OH - 1)) * OW + Math.round(clamp(jx, 0, OW - 1))) * 4 + 3] > 128) targets.push([ax + jx, ay + jy]);
+    }
+    targets = targets.sort(() => Math.random() - 0.5).slice(0, 1400);
+    const mk = (tx: number, ty: number, node: boolean): P => ({ x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx, ty, lx: tx, ly: ty, z: 1, node, delay: Math.random() * 1.2, ph: Math.random() * 6.28, fq: rnd(0.6, 1.8), amp: rnd(0.3, 1) * (node ? 1.6 : 0.8), size: node ? 1 : rnd(0.75, 1.25), bright: rnd(0.5, 0.95), glow: 0, ring: 0, th: 0, spoke: null });
+    parts = targets.map(([x, y]) => mk(x, y, false));
+    nodes = [];
+    glyphs.forEach((g) => g.d.forEach((d) => anchorsOf(d).forEach((pt) => nodes.push(mk(ox + (g.x + pt.x) * sc, oy + (g.y + pt.y) * sc, true)))));
+    all = parts.concat(nodes);
+    SR = Math.min(aw, ah) * 0.34; CX = ax + aw / 2; CY = ay + ah / 2;
+    assignSphere();
+    conns = []; flashes = [];
+    // already formed: every particle starts on its place in the current shape, fully settled (no gathering)
+    start = performance.now(); gatherAt = -10;
+    updateTargets(start / 1000);
+    for (const p of all) { p.x = p.tx; p.y = p.ty; }
+    ctx.clearRect(0, 0, W, H);
+  };
+
+  const spawnConn = (t: number) => {
+    const pool = mode === 'sphere' ? nodes.filter((n) => !n.spoke) : nodes;
+    const a = pool[(Math.random() * pool.length) | 0], long = Math.random() < 0.14;
+    const maxD = (long ? 420 : 150) * sc, minD = (long ? 160 : 18) * sc;
+    const cands = pool.filter((b) => b !== a && (() => { const d = Math.hypot(a.tx - b.tx, a.ty - b.ty); return d > minD && d < maxD; })());
+    if (!cands.length) return;
+    conns.push({ a, b: cands[(Math.random() * cands.length) | 0], born: t, grow: rnd(0.18, 0.5), life: rnd(0.9, 2.4), long, spark: Math.random() < 0.5, landed: false });
+    a.glow = 1;
+  };
+  const burst = (x: number, y: number, power: number) => {
+    for (const p of all) {
+      const dx = p.x - x, dy = p.y - y, d = Math.hypot(dx, dy) + 1, f = power * dpr * (0.4 + Math.random()) * Math.min(1, (260 * dpr) / d);
+      p.vx += (dx / d) * f; p.vy += (dy / d) * f;
+    }
+  };
+
+  const draw = (now: number, still = false) => {
+    const t = (now - start) / 1000, abs = now / 1000;
+    const alive = smooth(gatherAt + 2, gatherAt + 3.2, t);
+    updateTargets(abs);
+    morph += ((mode === 'sphere' ? 1 : 0) - morph) * (still ? 1 : 0.04);
+    if (!still && alive > 0.3 && Math.random() < ((7 + 3 * Math.sin(abs * 0.7)) / 60) * alive) spawnConn(t);
+    // trails: the last frame fades out (transparent canvas), unless drawing a still frame
+    if (still) ctx.clearRect(0, 0, W, H);
+    else { ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
+    // physics: gather onto the targets, breathe around them, give way to the pointer
+    const repR = 60 * sc;
+    for (const p of all) {
+      if (still) { p.x = p.tx; p.y = p.ty; continue; }
+      const a = smooth(gatherAt + p.delay, gatherAt + 1.8 + p.delay, t);
+      if (a < 1) {
+        const ang = Math.sin((p.x * 0.0035) / dpr + abs * 0.3) * 2.2 + Math.cos((p.y * 0.0042) / dpr - abs * 0.23) * 2.2;
+        p.vx += Math.cos(ang) * 0.07 * dpr * (1 - a); p.vy += Math.sin(ang) * 0.07 * dpr * (1 - a);
+      }
+      const jx = Math.sin(abs * p.fq * 2.1 + p.ph) * p.amp * dpr * alive, jy = Math.cos(abs * p.fq * 1.7 + p.ph * 1.3) * p.amp * dpr * alive;
+      p.vx += (p.tx + jx - p.x) * 0.035 * a; p.vy += (p.ty + jy - p.y) * 0.035 * a;
+      if (ptr) {
+        const dx = p.x - ptr.x, dy = p.y - ptr.y, d2 = dx * dx + dy * dy;
+        if (d2 < repR * repR) { const d = Math.sqrt(d2) + 0.01, f = (1 - d / repR) * 1.2 * dpr; p.vx += (dx / d) * f; p.vy += (dy / d) * f; }
+      }
+      const damp = 0.955 - 0.13 * a;
+      p.vx *= damp; p.vy *= damp; p.x += p.vx; p.y += p.vy;
+      if (a < 0.05) { if (p.x < -20) p.x += W + 40; if (p.x > W + 20) p.x -= W + 40; if (p.y < -20) p.y += H + 40; if (p.y > H + 20) p.y -= H + 40; }
+      if (p.node) p.glow *= 0.94;
+    }
+    // the orb's rings and spokes, fading in with the morph
+    if (morph > 0.01) {
+      ctx.lineWidth = 0.8 * dpr; ctx.strokeStyle = `rgba(255,255,255,${(0.14 * morph).toFixed(3)})`;
+      for (const g of rings) {
+        ctx.beginPath();
+        for (let k = 0; k <= 72; k++) { const r = rot3(ringPoint(g, (k / 72) * 6.283 + abs * g.spd), RA[0], RA[1], RA[2]); k ? ctx.lineTo(CX + r[0] * SR, CY + r[1] * SR) : ctx.moveTo(CX + r[0] * SR, CY + r[1] * SR); }
+        ctx.stroke();
+      }
+      ctx.lineWidth = dpr; ctx.strokeStyle = `rgba(255,255,255,${(0.45 * morph).toFixed(3)})`;
+      for (const s of spokes) {
+        ctx.beginPath(); ctx.moveTo(CX + Math.cos(s.phi) * SR, CY + Math.sin(s.phi) * SR); ctx.lineTo(CX + Math.cos(s.e) * SR * 1.08, CY + Math.sin(s.e) * SR * 1.08); ctx.lineTo(s.node.x, s.node.y); ctx.stroke();
+      }
+    }
+    // dust
+    for (const p of parts) {
+      const flick = 0.75 + 0.25 * Math.sin(abs * 3 * p.fq + p.ph), depth = 0.3 + (0.7 * (p.z + 1)) / 2, s = 1.5 * dpr * p.size;
+      ctx.fillStyle = `rgba(255,255,255,${(p.bright * flick * depth).toFixed(3)})`;
+      ctx.fillRect(p.x - s / 2, p.y - s / 2, s, s);
+    }
+    // a faint lime mesh between close nodes
+    const thr = 62 * sc;
+    ctx.lineWidth = dpr;
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j], dx = a.x - b.x, dy = a.y - b.y;
+        if (Math.abs(dx) > thr || Math.abs(dy) > thr) continue;
+        const d = Math.hypot(dx, dy);
+        if (d >= thr) continue;
+        const keep = a.spoke || b.spoke ? 1 - morph : 1;
+        if (keep < 0.02) continue;
+        ctx.strokeStyle = rgba(LIME, (1 - d / thr) * 0.32 * (0.55 + 0.45 * Math.sin(abs * 2.3 + i * 1.7 + j * 0.9)) * keep);
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      }
+    }
+    // connections popping in: lime for short ones, blue-white for long jumps; a spark runs along some
+    conns = conns.filter((c) => t - c.born < c.grow + c.life + 0.5);
+    for (const c of conns) {
+      const age = t - c.born, g = smooth(0, 1, age / c.grow), fade = 1 - smooth(c.grow + c.life, c.grow + c.life + 0.5, age);
+      if (!c.landed && g >= 1) { c.landed = true; c.b.glow = 1; if (c.long) flashes.push({ x: c.b.x, y: c.b.y, born: t }); }
+      const ex = c.a.x + (c.b.x - c.a.x) * g, ey = c.a.y + (c.b.y - c.a.y) * g;
+      ctx.strokeStyle = c.long ? rgba(BLUE, 0.6 * fade) : rgba(LIME, 0.75 * fade);
+      ctx.lineWidth = (c.long ? 1 : 1.4) * dpr;
+      ctx.beginPath(); ctx.moveTo(c.a.x, c.a.y); ctx.lineTo(ex, ey); ctx.stroke();
+      if (c.spark && g >= 1 && fade > 0) {
+        const u = ((age - c.grow) * 1.4) % 2, k = u < 1 ? u : 2 - u;
+        ctx.fillStyle = `rgba(240,250,215,${fade.toFixed(3)})`;
+        ctx.beginPath(); ctx.arc(c.a.x + (c.b.x - c.a.x) * k, c.a.y + (c.b.y - c.a.y) * k, 1.6 * dpr, 0, 6.283); ctx.fill();
+      }
+    }
+    flashes = flashes.filter((f) => t - f.born < 0.8);
+    for (const f of flashes) {
+      const k = (t - f.born) / 0.8;
+      ctx.strokeStyle = rgba(LIME, 1 - k); ctx.lineWidth = dpr;
+      ctx.beginPath(); ctx.arc(f.x, f.y, (3 + k * 18) * dpr, 0, 6.283); ctx.stroke();
+    }
+    // the anchor nodes, brightening when a connection lands on them
+    for (const n of nodes) {
+      const s = (3.6 + n.glow * 3) * dpr, k = n.glow;
+      ctx.fillStyle = `rgb(${Math.round(LIME[0] + (245 - LIME[0]) * k)},${Math.round(LIME[1] + (252 - LIME[1]) * k)},${Math.round(LIME[2] + (225 - LIME[2]) * k)})`;
+      ctx.fillRect(n.x - s / 2, n.y - s / 2, s, s);
+    }
+  };
+
+  const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches || motionPaused();
+  const setMode = (m: 'sphere' | 'logo', x = CX, y = CY) => {
+    mode = m;
+    root.setAttribute('aria-pressed', String(m === 'logo'));
+    root.setAttribute('aria-label', m === 'logo' ? 'Product Connect logo: show the orb' : 'Product Connect logo: show the wordmark');
+    if (still()) { draw(performance.now(), true); return; }
+    burst(x, y, 4);
+    for (const q of all) q.delay = Math.random() * 0.9;
+    gatherAt = (performance.now() - start) / 1000 + 0.15;
+  };
+  root.addEventListener('click', (e) => {
+    const r = field.getBoundingClientRect(), byKey = e.detail === 0;
+    setMode(mode === 'sphere' ? 'logo' : 'sphere', byKey ? CX : (e.clientX - r.left) * dpr, byKey ? CY : (e.clientY - r.top) * dpr);
+  });
+  field.addEventListener('pointermove', (e) => { const r = field.getBoundingClientRect(); ptr = { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr }; });
+  field.addEventListener('pointerleave', () => (ptr = null));
+
+  build();
+  let raf = 0, visible = false;
+  const tick = (now: number) => { raf = requestAnimationFrame(tick); if (!still()) draw(now); };
+  const run = () => { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(tick); };
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+  if (still()) draw(performance.now(), true);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; visible ? run() : stop(); }, { rootMargin: '200px' }).observe(field);
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : run()));
+  let rt = 0;
+  const rebuild = () => { clearTimeout(rt); rt = window.setTimeout(() => { const m = mode; mode = m; build(); morph = m === 'sphere' ? 1 : 0; updateTargets(performance.now() / 1000); for (const p of all) { p.x = p.tx; p.y = p.ty; } if (still()) draw(performance.now(), true); }, 150); };
+  const ro = new ResizeObserver(rebuild); ro.observe(field); ro.observe(root);
+}
+</script>
+
+<style>
+  .particle-orb{display:block;width:min(420px,100%);aspect-ratio:16 / 10;padding:0;border:0;background:none;border-radius:16px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .particle-orb:focus-visible{outline:2px solid #d6ef8c;outline-offset:6px}
+</style>

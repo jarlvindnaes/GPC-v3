@@ -1,0 +1,18 @@
+---
+// "Product data is hard. We're here to help.": a short statement below the brand strip.
+---
+<section class="help" aria-labelledby="help-title">
+  <p class="help-eyebrow"><i aria-hidden="true"></i>Why it’s hard</p>
+  <h2 id="help-title"><span>Product data is hard.</span> <span>We’re here to help.</span></h2>
+</section>
+
+<style>
+  .help{display:flex;flex-direction:column;align-items:center;text-align:center;padding:120px 24px;background:#fff}
+  .help-eyebrow{display:inline-flex;align-items:center;gap:10px;margin:0 0 28px;padding:8px 14px 8px 12px;border:1px solid #e3e5e9;border-radius:999px;background:#f7f8f9;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#4a4f57}
+  .help-eyebrow i{width:6px;height:6px;border-radius:50%;background:#a8cf3c;box-shadow:0 0 0 3px #d6ef8c59}
+  .help h2{margin:0;font-size:clamp(36px,4.6vw,64px);line-height:1.05;letter-spacing:-.045em;font-weight:480}
+  .help h2 span{display:block}
+  .help h2 span:first-child{color:#8b9098}
+  .help h2 span:last-child{color:#17191c}
+  @media(max-width:600px){.help{padding:80px 20px}}
+</style>

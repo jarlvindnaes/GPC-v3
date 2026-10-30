@@ -1,0 +1,258 @@
+---
+// Below "Product data is hard": an interactive node graph. Six data sources feed one Product Connect node, which
+// outputs EPDs, CO₂ numbers, Digital Product Passports and product optimisations. Pulses run along the links;
+// nodes can be dragged (or moved with the arrow keys once focused); hovering, focusing or tapping a node lights up
+// its path and shows a one-line caption. On narrow screens the graph runs top to bottom and dragging is off.
+import { BadgeCheck, Box, Database, Factory, FileCheck2, FileSpreadsheet, Gauge, QrCode, Sparkles, Users } from 'lucide-react';
+import PcMark from '../PcMark.astro';
+type Node = { id: string; kind: 'src' | 'hub' | 'out'; title: string; sub: string; caption: string; Icon?: typeof Factory };
+const nodes: Node[] = [
+  { id: 'suppliers', kind: 'src', title: 'Suppliers', sub: 'Materials · certificates', Icon: Factory, caption: 'Suppliers enter their own data, from materials to certificates.' },
+  { id: 'sheets', kind: 'src', title: 'Spreadsheets', sub: 'BOMs · price lists', Icon: FileSpreadsheet, caption: 'Bills of materials and price lists, read in as they are.' },
+  { id: 'erp', kind: 'src', title: 'ERP', sub: 'Items · weights', Icon: Database, caption: 'Item numbers, weights and revisions from the systems you already run.' },
+  { id: 'cad', kind: 'src', title: '3D models', sub: 'Geometry · volumes', Icon: Box, caption: 'Geometry and volumes from your CAD and 3D files.' },
+  { id: 'certs', kind: 'src', title: 'Certificates', sub: 'FSC · test reports', Icon: BadgeCheck, caption: 'Certificates and test reports, linked to the parts they cover.' },
+  { id: 'customers', kind: 'src', title: 'Customers', sub: 'Use · returns', Icon: Users, caption: 'What happens after the sale: use, care and returns.' },
+  { id: 'pc', kind: 'hub', title: 'Product Connect', sub: 'One product model', caption: 'Everything lands in one product model, down to every component, checked and approved.' },
+  { id: 'epd', kind: 'out', title: 'EPDs', sub: 'EN 15804+A2', Icon: FileCheck2, caption: 'EPD calculations on EN 15804+A2, ready for independent verification.' },
+  { id: 'co2', kind: 'out', title: 'CO₂ numbers', sub: 'Per product · per part', Icon: Gauge, caption: 'CO₂e for every product, down to each component, updated as your data changes.' },
+  { id: 'dpp', kind: 'out', title: 'Digital Product Passports', sub: 'One scan away', Icon: QrCode, caption: 'A passport for every product, ready before the EU rules land.' },
+  { id: 'opt', kind: 'out', title: 'Product optimisations', sub: 'Materials · suppliers', Icon: Sparkles, caption: 'See which material, component or supplier moves the numbers most.' },
+];
+---
+<section class="dn" aria-labelledby="dn-title" data-nodes>
+  <h2 id="dn-title" class="sr-only">How Product Connect turns scattered data into EPDs, CO₂ numbers, passports and optimisations</h2>
+  <div class="dn-stage" data-dn-stage>
+    <svg class="dn-edges" aria-hidden="true"><g data-dn-paths></g><g data-dn-pulses></g></svg>
+    {nodes.map((n) => (
+      <button type="button" class:list={['dn-node', `dn-${n.kind}`]} data-dn-node={n.id} data-kind={n.kind} data-caption={n.caption} aria-describedby="dn-caption">
+        {n.kind === 'hub'
+          ? <span class="dn-hub-mark"><PcMark /></span>
+          : n.Icon && <span class="dn-icon" aria-hidden="true"><n.Icon size={16} strokeWidth={1.7} /></span>}
+        <span class="dn-text"><strong>{n.title}</strong><small>{n.sub}</small></span>
+        <i class="dn-port dn-port-in" aria-hidden="true"></i><i class="dn-port dn-port-out" aria-hidden="true"></i>
+      </button>
+    ))}
+  </div>
+  <div class="dn-bar">
+    <p class="dn-caption" id="dn-caption" aria-live="polite" data-dn-caption>Six kinds of data in. One product model. Everything you get asked for, out.</p>
+    <button type="button" class="dn-reset" data-dn-reset>Reset layout</button>
+  </div>
+  <p class="dn-hint" aria-hidden="true"><span class="dn-hint-wide">Drag the nodes · hover to follow the data</span><span class="dn-hint-narrow">Tap a node to follow the data</span></p>
+</section>
+
+<script>
+import { motionPaused } from '../../utilities/motion';
+const root = document.querySelector<HTMLElement>('[data-nodes]');
+if (root) init(root);
+
+function init(root: HTMLElement) {
+  const stage = root.querySelector<HTMLElement>('[data-dn-stage]')!;
+  const svg = root.querySelector<SVGSVGElement>('.dn-edges')!;
+  const gPaths = root.querySelector<SVGGElement>('[data-dn-paths]')!, gPulses = root.querySelector<SVGGElement>('[data-dn-pulses]')!;
+  const caption = root.querySelector<HTMLElement>('[data-dn-caption]')!, defaultCaption = caption.textContent ?? '';
+  const els = new Map([...root.querySelectorAll<HTMLElement>('[data-dn-node]')].map((el) => [el.dataset.dnNode!, el]));
+  const srcs = [...els.values()].filter((e) => e.dataset.kind === 'src').map((e) => e.dataset.dnNode!);
+  const outs = [...els.values()].filter((e) => e.dataset.kind === 'out').map((e) => e.dataset.dnNode!);
+  const edges: [string, string][] = [...srcs.map((s) => [s, 'pc'] as [string, string]), ...outs.map((o) => ['pc', o] as [string, string])];
+  const NS = 'http://www.w3.org/2000/svg';
+
+  // default layouts, as fractions of the stage (centre of each node): wide = left to right, narrow = top to bottom
+  const wide: Record<string, [number, number]> = { pc: [0.5, 0.5] };
+  srcs.forEach((id, i) => (wide[id] = [0.12, 0.09 + (i * 0.82) / (srcs.length - 1)]));
+  outs.forEach((id, i) => (wide[id] = [0.865, 0.18 + (i * 0.64) / (outs.length - 1)]));
+  const narrowL: Record<string, [number, number]> = { pc: [0.5, 0.5] };
+  srcs.forEach((id, i) => (narrowL[id] = [i % 2 ? 0.75 : 0.25, 0.05 + Math.floor(i / 2) * 0.12]));
+  outs.forEach((id, i) => (narrowL[id] = [i % 2 ? 0.75 : 0.25, 0.81 + Math.floor(i / 2) * 0.13]));
+  let narrow = false, moved: Record<string, [number, number]> = {};
+  const pos = (id: string): [number, number] => moved[id] ?? (narrow ? narrowL : wide)[id];
+
+  // paths: one per edge, plus pulses travelling along them
+  const paths = edges.map(([a, b]) => {
+    const p = document.createElementNS(NS, 'path');
+    p.classList.add('dn-path'); p.dataset.from = a; p.dataset.to = b;
+    gPaths.appendChild(p);
+    return p;
+  });
+  type Pulse = { path: SVGPathElement; dot: SVGCircleElement; t: number; speed: number; out: boolean };
+  const pulses: Pulse[] = [];
+  paths.forEach((path) => {
+    const out = path.dataset.from === 'pc';
+    for (let k = 0; k < (out ? 2 : 1); k++) {
+      const dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('r', out ? '3.2' : '2.6');
+      dot.classList.add('dn-pulse', out ? 'dn-pulse-out' : 'dn-pulse-in');
+      gPulses.appendChild(dot);
+      pulses.push({ path, dot, t: Math.random() + k * 0.5, speed: 0.22 + Math.random() * 0.12, out });
+    }
+  });
+
+  const layout = () => {
+    const r = stage.getBoundingClientRect();
+    narrow = r.width < 760;
+    root.classList.toggle('is-narrow', narrow);
+    svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
+    for (const [id, el] of els) {
+      const [fx, fy] = pos(id);
+      el.style.transform = `translate(${(fx * r.width - el.offsetWidth / 2).toFixed(1)}px,${(fy * r.height - el.offsetHeight / 2).toFixed(1)}px)`;
+    }
+    route();
+  };
+  // a link leaves the right of its source and enters the left of its target (narrow: bottom to top)
+  const route = () => {
+    const sr = stage.getBoundingClientRect();
+    for (const p of paths) {
+      const a = els.get(p.dataset.from!)!.getBoundingClientRect(), b = els.get(p.dataset.to!)!.getBoundingClientRect();
+      let d: string;
+      if (narrow) {
+        const x1 = a.left + a.width / 2 - sr.left, y1 = a.bottom - sr.top, x2 = b.left + b.width / 2 - sr.left, y2 = b.top - sr.top, k = Math.max(30, (y2 - y1) / 2);
+        d = `M${x1},${y1} C${x1},${y1 + k} ${x2},${y2 - k} ${x2},${y2}`;
+      } else {
+        const x1 = a.right - sr.left, y1 = a.top + a.height / 2 - sr.top, x2 = b.left - sr.left, y2 = b.top + b.height / 2 - sr.top, k = Math.max(40, (x2 - x1) / 2);
+        d = `M${x1},${y1} C${x1 + k},${y1} ${x2 - k},${y2} ${x2},${y2}`;
+      }
+      p.setAttribute('d', d);
+    }
+  };
+
+  // highlight: a node, its links and (through the hub) the whole path
+  const focusOn = (id: string | null) => {
+    root.classList.toggle('has-focus', !!id);
+    const lit = new Set<string>();
+    if (id) {
+      lit.add(id);
+      if (id === 'pc') els.forEach((_, k) => lit.add(k));
+      else { lit.add('pc'); (els.get(id)!.dataset.kind === 'src' ? outs : srcs).forEach((k) => lit.add(k)); }
+    }
+    els.forEach((el, k) => el.classList.toggle('is-lit', lit.has(k)));
+    // lit links: all for the hub; for a source, its own link plus every output link; for an output, the reverse
+    const kind = id ? els.get(id)!.dataset.kind : '';
+    paths.forEach((p) => {
+      const on = !!id && (kind === 'hub' || p.dataset.from === id || p.dataset.to === id || (kind === 'src' && p.dataset.from === 'pc') || (kind === 'out' && p.dataset.to === 'pc'));
+      p.classList.toggle('is-lit', on);
+    });
+    caption.textContent = id ? els.get(id)!.dataset.caption ?? '' : defaultCaption;
+  };
+  els.forEach((el, id) => {
+    el.addEventListener('mouseenter', () => focusOn(id));
+    el.addEventListener('mouseleave', () => { if (document.activeElement !== el) focusOn(null); });
+    el.addEventListener('focus', () => focusOn(id));
+    el.addEventListener('blur', () => focusOn(null));
+    // keyboard: arrow keys move a focused node (wide layout)
+    el.addEventListener('keydown', (e) => {
+      if (narrow) return;
+      const step = e.shiftKey ? 0.05 : 0.015, d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      const [x, y] = pos(id);
+      moved[id] = [Math.min(Math.max(x + d[0], 0.06), 0.94), Math.min(Math.max(y + d[1], 0.06), 0.94)];
+      layout();
+    });
+  });
+
+  // dragging (wide layout, mouse and pen; a tap or click without movement still focuses the node)
+  let drag: { id: string; dx: number; dy: number; x0: number; y0: number; moved: boolean } | null = null;
+  stage.addEventListener('pointerdown', (e) => {
+    const el = (e.target as Element).closest<HTMLElement>('[data-dn-node]');
+    if (!el || narrow || e.pointerType === 'touch') return;
+    const sr = stage.getBoundingClientRect(), [fx, fy] = pos(el.dataset.dnNode!);
+    drag = { id: el.dataset.dnNode!, dx: e.clientX - (sr.left + fx * sr.width), dy: e.clientY - (sr.top + fy * sr.height), x0: e.clientX, y0: e.clientY, moved: false };
+    el.setPointerCapture(e.pointerId);
+    el.classList.add('is-dragging');
+  });
+  stage.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 3) drag.moved = true;
+    if (!drag.moved) return;
+    const sr = stage.getBoundingClientRect();
+    moved[drag.id] = [Math.min(Math.max((e.clientX - drag.dx - sr.left) / sr.width, 0.06), 0.94), Math.min(Math.max((e.clientY - drag.dy - sr.top) / sr.height, 0.06), 0.94)];
+    root.classList.add('was-moved');
+    layout();
+  });
+  const endDrag = () => { if (!drag) return; els.get(drag.id)?.classList.remove('is-dragging'); drag = null; };
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+  root.querySelector('[data-dn-reset]')!.addEventListener('click', () => { moved = {}; root.classList.remove('was-moved'); layout(); });
+
+  layout();
+  new ResizeObserver(layout).observe(stage);
+
+  // pulses: run while visible; still with reduced motion (the links stay drawn)
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still) { pulses.forEach((p) => p.dot.remove()); return; }
+  let visible = false, raf = 0, last = 0;
+  const tick = (now: number) => {
+    raf = requestAnimationFrame(tick);
+    const dt = last ? Math.min(now - last, 100) / 1000 : 0;
+    last = now;
+    if (motionPaused()) return;
+    for (const p of pulses) {
+      p.t = (p.t + dt * p.speed) % 1;
+      const len = p.path.getTotalLength();
+      if (!len) continue;
+      const pt = p.path.getPointAtLength(p.t * len);
+      p.dot.setAttribute('cx', pt.x.toFixed(1));
+      p.dot.setAttribute('cy', pt.y.toFixed(1));
+      p.dot.style.opacity = String(Math.sin(p.t * Math.PI).toFixed(3));
+    }
+  };
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible && !raf) { last = 0; raf = requestAnimationFrame(tick); }
+    if (!visible) { cancelAnimationFrame(raf); raf = 0; }
+  }).observe(root);
+}
+</script>
+
+<style>
+  .dn{position:relative;padding:0 max(4.2%,24px) 120px;background:#fff}
+  .dn-stage{position:relative;max-width:1180px;height:600px;margin:0 auto;border:1px solid #eceef1;border-radius:20px;background:radial-gradient(#e7e9ec 1px,transparent 1.4px) 0 0/22px 22px,radial-gradient(ellipse 40% 50% at 50% 50%,#f3f7e8,transparent 70%),#fbfbfa;overflow:hidden;touch-action:pan-y}
+  .dn-edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .dn-edges :global(.dn-path){fill:none;stroke:#d5d9df;stroke-width:1.4;transition:stroke .25s,stroke-width .25s,opacity .25s}
+  .dn.has-focus .dn-edges :global(.dn-path){opacity:.35}
+  .dn-edges :global(.dn-path.is-lit){stroke:#8fb43a;stroke-width:2;opacity:1}
+  .dn-edges :global(.dn-pulse-in){fill:#8b9098}
+  .dn-edges :global(.dn-pulse-out){fill:#9cc23a}
+  .dn-node{position:absolute;left:0;top:0;display:flex;align-items:center;gap:11px;width:214px;padding:11px 14px 11px 11px;border:1px solid #e3e5e9;border-radius:12px;background:#fff;box-shadow:0 1px 2px #1d2a3a0a,0 8px 22px #1d2a3a0d;font:inherit;text-align:left;color:#1d2024;cursor:grab;user-select:none;transition:border-color .25s,box-shadow .25s,opacity .25s}
+  .dn-node:hover,.dn-node.is-lit{border-color:#c9de8f;box-shadow:0 1px 2px #1d2a3a0a,0 12px 30px #1d2a3a14}
+  .dn.has-focus .dn-node:not(.is-lit){opacity:.45}
+  .dn-node.is-dragging{cursor:grabbing;box-shadow:0 18px 40px #1d2a3a24;z-index:3}
+  .dn-node:focus-visible{outline:2px solid #a8cf3c;outline-offset:3px}
+  .dn-out{width:256px}
+  .dn-src{width:232px}
+  .dn-icon{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:#f4f5f7;color:#4a4f57;border:1px solid #eceef1}
+  .dn-out .dn-icon{background:#f1f5e4;color:#4f6a10;border-color:#e1ebc4}
+  .dn-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .dn-text strong{font-size:14px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dn-text small{font:500 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;color:#80868f;white-space:nowrap}
+  .dn-port{position:absolute;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#fff;border:1.5px solid #c3c8cf}
+  .dn-port-in{left:-4.5px}.dn-port-out{right:-4.5px}
+  .dn-src .dn-port-in,.dn-out .dn-port-out{display:none}
+  .dn-node.is-lit .dn-port{border-color:#8fb43a}
+  /* the hub: dark, larger, the logo mark */
+  .dn-hub{width:236px;padding:16px 18px;gap:14px;border-color:#17191c;background:#17191c;color:#f3f5f1;box-shadow:0 16px 40px #17191c33,0 0 0 8px #d6ef8c26}
+  .dn-hub:hover,.dn-hub.is-lit{border-color:#17191c;box-shadow:0 16px 40px #17191c40,0 0 0 10px #d6ef8c40}
+  .dn-hub-mark{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:11px;background:#ffffff12;color:#fff;--pc-mark-dot:#d6ef8c}
+  .dn-hub-mark :global(svg){height:20px;width:auto}
+  .dn-hub .dn-text strong{font-size:16px}
+  .dn-hub .dn-text small{color:#d6ef8c}
+  .dn-hub .dn-port{background:#17191c;border-color:#d6ef8c}
+  .dn-bar{max-width:1180px;margin:18px auto 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .dn-caption{margin:0;min-height:24px;font-size:16px;line-height:1.5;color:#1d2024}
+  .dn-reset{flex:none;padding:7px 12px;border:1px solid #e3e5e9;border-radius:8px;background:#fff;font:500 12px/1 Inter,sans-serif;color:#4a4f57;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .25s}
+  .dn.was-moved .dn-reset{opacity:1;pointer-events:auto}
+  .dn-reset:focus-visible{outline:2px solid #a8cf3c;outline-offset:2px}
+  .dn-hint{max-width:1180px;margin:10px auto 0;font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#a1a6ad}
+  .dn-hint-narrow{display:none}
+  /* narrow: top to bottom, no dragging */
+  .dn.is-narrow .dn-stage{height:900px}
+  .dn.is-narrow .dn-node{width:min(158px,44%);padding:9px 10px 9px 9px;gap:8px;cursor:pointer}
+  .dn.is-narrow .dn-icon{width:28px;height:28px}
+  .dn.is-narrow .dn-text strong{font-size:12.5px;white-space:normal;line-height:1.2}
+  .dn.is-narrow .dn-text small{display:none}
+  .dn.is-narrow .dn-hub{width:min(230px,70%)}
+  .dn.is-narrow .dn-port{display:none}
+  .dn.is-narrow .dn-hint-wide{display:none}.dn.is-narrow .dn-hint-narrow{display:inline}
+  @media(max-width:600px){.dn{padding:0 16px 80px}.dn-caption{font-size:15px}}
+  @media(prefers-reduced-motion:reduce){.dn-node,.dn-edges :global(.dn-path){transition:none}}
+</style>

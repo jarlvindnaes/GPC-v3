@@ -1,0 +1,74 @@
+---
+// Three short quotes that take turns, with dots to pick one. Advances every 7s; pauses while hovered or focused, while
+// the tab is hidden or motion is paused; never advances on its own with reduced motion.
+// Only Alex Williamson's quote is a real, approved one. The other two are the draft persona quotes from
+// BenefitProof.astro, marked "Draft quote" on the page (CLAUDE.md: never present drafts as customer proof):
+// replace them with approved quotes (and set draft: false) before going live.
+const base = import.meta.env.BASE_URL;
+type Quote = { lead: string; rest: string; name: string; role: string; portrait?: string; initials?: string; draft?: boolean };
+const quotes: Quote[] = [
+  { lead: 'Adding data to Product Connect', rest: 'reminds me of how it was to play ‘The Sims’', name: 'Alex Williamson', role: 'Experience Sustainability Specialist · New Works', portrait: `${base}v4/alex-williamson.webp` },
+  { lead: 'I need numbers I can hand to an auditor', rest: 'without holding my breath.', name: 'Sustainability lead', role: 'Furniture manufacturer', initials: 'SL', draft: true },
+  { lead: 'Less time chasing supplier files,', rest: 'more time doing something useful with the data.', name: 'Supply chain manager', role: 'Furniture manufacturer', initials: 'SC', draft: true },
+];
+---
+<section class="customer-story user-quote frame" aria-roledescription="carousel" aria-label="What our users say" data-quotes>
+  <svg class="quote-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/></svg>
+  <div class="quote-track">
+    {quotes.map((q, i) => (
+      <figure class:list={['quote-slide', { 'is-active': i === 0 }]} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${quotes.length}`} aria-hidden={i === 0 ? undefined : 'true'} data-quote>
+        <blockquote class="quote-balance">{q.lead} <span>{q.rest}</span></blockquote>
+        <figcaption class="quote-person">
+          {q.portrait ? <img src={q.portrait} alt="" width="56" height="56" loading="lazy" /> : <span class="quote-initials" aria-hidden="true">{q.initials}</span>}
+          <span><strong>{q.name}</strong><small>{q.role}</small>{q.draft && <em class="quote-draft">Draft quote</em>}</span>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+  <div class="quote-dots" role="group" aria-label="Choose a quote">
+    {quotes.map((_, i) => <button type="button" class="quote-dot" aria-label={`Quote ${i + 1}`} aria-current={i === 0 ? 'true' : undefined} data-quote-dot={i}><i></i></button>)}
+  </div>
+</section>
+
+<script>
+import { motionPaused } from '../../utilities/motion';
+const root = document.querySelector<HTMLElement>('[data-quotes]');
+if (root) {
+  const slides = [...root.querySelectorAll<HTMLElement>('[data-quote]')];
+  const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-quote-dot]')];
+  let current = 0, held = false;
+  const show = (i: number) => {
+    current = (i + slides.length) % slides.length;
+    slides.forEach((s, j) => { s.classList.toggle('is-active', j === current); if (j === current) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true'); });
+    dots.forEach((d, j) => { if (j === current) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+  };
+  dots.forEach((d, i) => d.addEventListener('click', () => { show(i); restart(); }));
+  root.addEventListener('mouseenter', () => (held = true));
+  root.addEventListener('mouseleave', () => (held = false));
+  root.addEventListener('focusin', () => (held = true));
+  root.addEventListener('focusout', () => (held = false));
+  let timer = 0;
+  const restart = () => {
+    window.clearInterval(timer);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    timer = window.setInterval(() => { if (!held && !document.hidden && !motionPaused()) show(current + 1); }, 7000);
+  };
+  restart();
+}
+</script>
+
+<style>
+  .quote-track{display:grid;width:100%;margin-top:4px}
+  .quote-slide{grid-area:1/1;margin:0;display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
+  .quote-slide.is-active{opacity:1;transform:none;pointer-events:auto}
+  .quote-initials{width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:50%;background:#f1f5e4;color:#4f6a10;font:600 15px/1 Inter,Arial,sans-serif;box-shadow:0 0 0 4px #fff,0 0 0 5px #e3e6ee}
+  .quote-draft{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:4px;background:#fdf3e2;color:#9a5b0e;font:500 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;letter-spacing:.06em;text-transform:uppercase}
+  .quote-dots{display:flex;justify-content:center;gap:4px;margin-top:36px}
+  .quote-dot{display:grid;place-items:center;width:28px;height:28px;padding:0;border:0;background:none;cursor:pointer}
+  .quote-dot i{display:block;width:8px;height:8px;border-radius:999px;background:#d3d6dc;transition:width .35s ease,background .35s ease}
+  .quote-dot:hover i{background:#9aa0a8}
+  .quote-dot[aria-current] i{width:24px;background:#17191c}
+  .quote-dot:focus-visible{outline:2px solid #a8cf3c;outline-offset:2px;border-radius:6px}
+  @media(prefers-reduced-motion:reduce){.quote-slide,.quote-dot i{transition:none}}
+  @media(max-width:599px){.quote-initials{width:46px;height:46px;font-size:13px}.quote-dots{margin-top:28px}}
+</style>
