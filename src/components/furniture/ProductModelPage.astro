@@ -10,6 +10,7 @@ import ClosingCta from '../ClosingCta.astro';
 import SeoMeta from '../SeoMeta.astro';
 import SiteHeader from '../SiteHeader.astro';
 import ModelChapters from './ModelChapters.astro';
+import Scale from './Scale.astro';
 const base = import.meta.env.BASE_URL;
 const pageTitle = 'Dynamic Product Model · Product Connect';
 const pageDescription = 'One living model of your products: connected knowledge, MCP access for AI tools, full traceability, your supply chain mapped and impact built in.';
@@ -19,7 +20,8 @@ const pageDescription = 'One living model of your products: connected knowledge,
 <SiteHeader theme="dark" current="product-model" />
 <main id="main"><section class="story-teaser teaser-model model model-flow model-page" aria-labelledby="model-page-title"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>Understand your products in a new way</p><h1 id="model-page-title">Dynamic Product Model</h1></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div><div class="teaser-copy"><p class="teaser-text">One living model of your products <br class="dome-break"/>lets you work fast and see insights the moment your data changes.</p></div></div>
 <ModelChapters /></div></section>
-<ClosingCta id="contact" text="Bring one of your products. We’ll walk through its data, its footprint and what its passport could look like." subject="Product Connect · Product demo" /></main><Footer />
+<Scale />
+<ClosingCta id="contact" text="Bring one of your products. We’ll show you what it looks like with every component, supplier and number in one place, and what your teams could do with it." subject="Product Connect · Product demo" /></main><Footer />
 <script>
 import { initReveal } from "../../utilities/reveal";
 import { initDataScenes } from "./data-scenes";

@@ -10,7 +10,6 @@ import ClosingCta from '../ClosingCta.astro';
 import SeoMeta from '../SeoMeta.astro';
 import SiteHeader from '../SiteHeader.astro';
 import StoryDotsNav from '../StoryDotsNav.astro';
-import Scale from './Scale.astro';
 import HeroDataQuality from './HeroDataQuality.astro';
 import BenefitProof from './BenefitProof.astro';
 import BrandStrip from './BrandStrip.astro';
@@ -18,21 +17,21 @@ import HelpSection from './HelpSection.astro';
 import DataNodes from './DataNodes.astro';
 import QuoteCarousel from './QuoteCarousel.astro';
 import Co2Report from './Co2Report.astro';
-import { Award, ClipboardCheck, FileSpreadsheet, Flag, Presentation, QrCode, ScanSearch, ShieldAlert, UserRoundPlus } from 'lucide-react';
+import { Award, ClipboardCheck, FileSpreadsheet, Presentation, QrCode, ScanSearch, ShieldAlert, UserRoundPlus } from 'lucide-react';
 const base = import.meta.env.BASE_URL;
 // Page title and description for search and link previews: Product Connect is for any physical product, not only furniture.
 const pageTitle = 'Your product data finally has a home · Product Connect';
-const pageDescription = 'Product data for manufacturers. Bring it into one place, down to every component, and CO₂ numbers, EPDs and Digital Product Passports are ready whenever someone asks.';
+const pageDescription = 'Product data for manufacturers. Product Connect brings every component, material and supplier into one model, so design, sourcing, sales and sustainability all work from the same truth.';
 const contact = 'mailto:contact@productconnect.com';
 const walkthrough = 'mailto:contact@productconnect.com?subject=Book%20a%20Product%20Connect%20walkthrough';
 // The testimonial (portrait, person, company, quote) is a fictional placeholder; hidden until an approved one exists.
 const SHOW_DRAFT_TESTIMONIAL = false;
 const benefits = [
- {id:'harvest-data',short:'Suppliers',label:'Supplier data & management',title:'Stop chasing suppliers.',lead:'Save time and effort collecting data',text:'No spreadsheets, no emails back and forth. Suppliers onboard through a state-of-the-art experience and enter their data directly in the platform. Suppliers are rewarded for helping you out with LCA data on their own products.'},
- {id:'trusted-co2',short:'Emissions',label:'Trusted emission numbers',title:'Emission numbers you can trust.',lead:'EPD calculations in days, not months',text:'Auditor-grade calculations built on EN 15804+A2 and the ISO standards behind every EPD, verified and validated end to end. It’s a world first, and it cuts the whole EPD process from months to weeks.'},
- {id:'analyse-improve',short:'Analyse',label:'Analyse & improve',title:'Know exactly what to fix',lead:'Better products, more deals won.',text:'See where your impact really comes from, and what will move it most: a material, a component, a supplier. Improve your products and your supply chain with confidence, and bring better numbers to every tender.'},
- {id:'product-passports',short:'Clients',label:'Connect with clients',title:'Open new sales channels',lead:'Tomorrow’s customer experience.',text:'Every product gets a passport that stays up to date, one scan away, and connects you directly with the people who own it. Give your sales team a story competitors can’t match, and set the standard in your category.'},
- {id:'beat-regulation',short:'EU rules',label:'Beat EU regulation',title:'Ahead of the rules. Ahead of the rest.',lead:'New EU rules are on their way.',text:'Get your Digital Product Passports in place early, and outperform the competitors still scrambling to catch up.'}
+ // The four pillars, one per buyer function. (Order follows the scroll story's colour hand-offs: globe, report, comparison, passport.)
+ {id:'harvest-data',short:'Supply chain',label:'Run a sharper supply chain',title:'Stop chasing suppliers.',lead:'Every tier mapped',text:'Suppliers enter their own data, and every tier of your supply chain is mapped, so risk and changes are visible.'},
+ {id:'trusted-co2',short:'Compliance',label:'Be ready for any ask',title:'Ready for any ask.',lead:'Days, not months',text:'When someone asks for an EPD, a CO₂ number or a passport, the data is already there. New EU rules are covered too.'},
+ {id:'analyse-improve',short:'Products',label:'Build better products',title:'Build better products',lead:'See what drives cost and impact.',text:'See what every component costs in material, supplier and impact, and compare alternatives before you commit.'},
+ {id:'product-passports',short:'Sales',label:'Sell with proof',title:'Sell with proof',lead:'Answers in minutes, not weeks.',text:'Answer spec requests, tenders and customer questions in minutes, and give every product a passport that connects you to its owner.'}
 ];
 // A bullet's key phrase is marked **like this** in its text and set apart (.pt-hl), so the bullet reads at a glance
 // (its text in one span, .pt-text: the bullet is a flex row, which would lay the pieces out as columns)
@@ -46,70 +45,47 @@ const supplierSteps: { title: string; points: Point[] }[] = [
 ];
 // Chapter 2's paragraph as titled bullet steps in its card.
 const co2Steps: { title: string; points: Point[] }[] = [
- { title: 'Audit-ready by design', points: [[ClipboardCheck, 'Auditor-grade calculations built on **EN 15804+A2** and the ISO standards behind every EPD.']] },
- { title: 'Verified & validated', points: [[Award, 'The world’s first end-to-end verified tool for broad use: **EPD calculations in days, not months**.']] }
+ { title: 'Audit-ready by design', points: [[ClipboardCheck, 'Calculations on **EN 15804+A2** and the ISO standards behind every EPD, built to be verified end to end.']] },
+ { title: 'Days, not months', points: [[Award, 'When someone asks for an EPD, a CO₂ number or a passport, **the data is already there**. New EU rules are covered too.']] }
 ];
 // Chapters with a small eyebrow (from the lead) above the headline (the title), like chapters 1 and 2.
-const eyebrowChapters = ['analyse-improve', 'product-passports', 'beat-regulation'];
+const eyebrowChapters = ['analyse-improve', 'product-passports'];
 // Chapters whose paragraph is shown as check bullets.
 // Each bullet carries an icon that leans into its text (lucide); the check mark remains the fallback in CSS.
 type Point = [typeof Award, string, string]; // (icon, bullet, its short title for the story dot tooltip)
 const chapterPoints: Record<string, Point[]> = {
- 'beat-regulation': [
-  [Flag, 'Get your Digital Product Passports in place early, and **outperform the competitors** still scrambling to catch up.', 'Get there early']
- ],
  'analyse-improve': [
-  [ScanSearch, 'See what drives your impact, from materials to suppliers, and **improve your products with confidence**.', 'What drives your impact']
+  [ScanSearch, 'See what every component costs in material, supplier and impact, and **compare alternatives before you commit**.', 'Compare before you commit']
  ],
  'product-passports': [
-  [QrCode, 'Every product gets a passport that stays up to date, one scan away, and **connects you directly** with the people who own it.', 'A direct line to every owner'],
-  [Presentation, 'Give your sales team a story competitors can’t match, and **set the standard in your category**.', 'A story competitors can’t match']
+  [Presentation, 'Answer spec requests, tenders and customer questions **in minutes**, from the same product data.', 'Answers in minutes'],
+  [QrCode, 'Every product gets a passport, one scan away, that **connects you directly** with the people who own it.', 'A direct line to every owner']
  ]
 };
-// "Ahead of the rules": a background effect in the chapter's blue: the EU flag's twelve stars fly in from the
-// right and settle into their circle, which sits low on the right so the stage edges cut it off.
-const starPoints = Array.from({ length: 10 }, (_, i) => {
- const r = i % 2 ? 0.382 : 1;
- const t = (i * Math.PI) / 5 - Math.PI / 2;
- return `${(r * Math.cos(t)).toFixed(3)},${(r * Math.sin(t)).toFixed(3)}`;
-}).join(' ');
-const euStars = Array.from({ length: 12 }, (_, i) => {
- const t = (i * Math.PI) / 6;
- return {
-  x: (50 + 40 * Math.sin(t)).toFixed(2),
-  y: (50 - 40 * Math.cos(t)).toFixed(2),
-  fx: 420 + ((i * 97) % 5) * 90,
-  fy: Math.round((((i * 53) % 7) - 3) * 55),
-  r: 140 + ((i * 37) % 4) * 45,
-  a: (0.62 + ((i * 5) % 12) * 0.05).toFixed(3)
- };
-});
 ---
 <!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{pageTitle}</title><meta name="description" content={pageDescription}/><SeoMeta title={pageTitle} description={pageDescription} /><link rel="icon" href={`${base}nextgen/favicon.svg`} type="image/svg+xml"/><link rel="icon" href={`${base}favicon-dark.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)"/><link rel="icon" href={`${base}favicon-light.png`} type="image/png" sizes="32x32" media="(prefers-color-scheme: light)"/><link rel="icon" href={`${base}favicon.ico`} sizes="48x48"/><link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`}/><link rel="preload" href={`${base}fonts/inter-latin.woff2`} as="font" type="font/woff2" crossorigin="anonymous"/><meta name="theme-color" content="#ffffff"/><style is:inline set:html={`@font-face{font-family:Inter;src:url("${base}fonts/inter-latin.woff2") format("woff2");font-display:swap;font-weight:100 900}`} /><script is:inline>try{if(localStorage.getItem("pc-motion-paused")==="1")document.documentElement.classList.add("motion-paused")}catch(e){}</script></head>
 <body><a class="skip" href="#main">Skip to content</a>
 <SiteHeader theme="light" cta="Book a walkthrough" ctaHref={walkthrough} />
-<main id="main"><section class="hero hero-space hero-light" aria-labelledby="hero-title"><div class="hero-space-stage" aria-hidden="true"><HeroDataQuality /></div><div class="hero-space-inner"><div class="hero-editorial"><span class="eyebrow"><i></i> Product data for manufacturers</span><h1 id="hero-title"><span>Your product data</span><span>finally has a home</span></h1><p class="hero-body">Right now it’s probably a mess. Everyone’s is. Product Connect brings it together, down to every component, so CO₂ numbers, EPDs and Digital Product Passports are ready whenever someone asks.</p><div class="actions"><a class="button primary" href="#benefits-story">See how it works <ArrowIcon /></a><a class="hero-textlink" href={walkthrough}>Book a walkthrough</a></div></div></div><p class="sr-only">Illustration: raw product data from suppliers, spreadsheets, the ERP and 3D models is distilled into clean values and approved into one product record with a quality score.</p></section>
-<p class="eyebrow brand-eyebrow">Trusted with product data from circular market leaders</p>
+<main id="main"><section class="hero hero-space hero-light" aria-labelledby="hero-title"><div class="hero-space-stage" aria-hidden="true"><HeroDataQuality /></div><div class="hero-space-inner"><div class="hero-editorial"><span class="eyebrow"><i></i> Product data for manufacturers</span><h1 id="hero-title"><span>Your product data</span><span>finally has a home</span></h1><p class="hero-body">Right now it’s probably a mess. Everyone’s is. Product Connect brings every component, material and supplier into one model, so design, sourcing, sales and sustainability all work from the same truth.</p><div class="actions"><a class="button primary" href="#benefits-story">See how it works <ArrowIcon /></a><a class="hero-textlink" href={walkthrough}>Book a walkthrough</a></div></div></div><p class="sr-only">Illustration: raw product data from suppliers, spreadsheets, the ERP and 3D models is distilled into clean values and approved into one product record with a quality score.</p></section>
+<p class="eyebrow brand-eyebrow">Trusted by market leaders</p>
 <BrandStrip />
 <HelpSection />
 <DataNodes />
-<section id="benefits" class="story-teaser teaser-globe" data-story-teaser="what-we-solve" aria-labelledby="teaser-globe-title"><div class="teaser-inner frame"><div class="teaser-copy"><p class="teaser-eyebrow">What we solve</p><h2 id="teaser-globe-title">From supplier data<br/><span>to new sales.</span></h2><p class="teaser-text">Learn how we turn your supply chain data into impact numbers you can trust and act on, and connect you with the people who own your products.</p><ul class="teaser-points"><li>Suppliers enter their data directly</li><li>Audit-ready EPD calculations</li><li>Passports that open new sales channels</li></ul><button type="button" class="teaser-open" data-story-open="what-we-solve">Experience the full story <ArrowIcon /></button></div><div class="teaser-visual globe-stage" role="img" aria-label="An interactive globe tracing one product's supply chain. Drag to turn it."><LazySupplyChainGlobe client:only="react" size={0.6} /></div></div></section>
+<section id="benefits" class="story-teaser teaser-globe" data-story-teaser="what-we-solve" aria-labelledby="teaser-globe-title"><div class="teaser-inner frame"><div class="teaser-copy"><p class="teaser-eyebrow">What we solve</p><h2 id="teaser-globe-title">From supplier data<br/><span>to new sales.</span></h2><p class="teaser-text">Turn your supply chain data into decisions every team can act on: better products, steadier sourcing, and a sales story competitors can’t match.</p><button type="button" class="teaser-open" data-story-open="what-we-solve">Experience the full story <ArrowIcon /></button></div><div class="teaser-visual globe-stage" role="img" aria-label="An interactive globe tracing one product's supply chain. Drag to turn it."><LazySupplyChainGlobe client:only="react" size={0.6} /></div></div></section>
 <section id="benefits-story" class="benefits frame" data-story-takeover="what-we-solve" data-story-name="the What we solve story"><div class="benefit-layout"><aside class="benefit-nav"><nav aria-label="Product benefits">{benefits.map((b,i)=><a href={`#${b.id}`} data-benefit-link={b.id} aria-current={i===0?'location':undefined}><span class="nav-full">{b.label}</span><span class="nav-short">{b.short}</span><span class="nav-arrow" aria-hidden="true">↗︎</span></a>)}</nav><p>From product data<br/>to what comes next.</p></aside><div class="chapters"><div class="story-stage" data-story-stage><div class="story-bg" aria-hidden="true"></div><div class="story-tint" aria-hidden="true"></div>{benefits.map((b,i)=><section id={b.id} class="chapter" data-chapter><div class="chapter-pin">{i>1&&<div class="chapter-heading">{eyebrowChapters.includes(b.id) ? <><span class="chapter-eyebrow">{b.lead.replace(/\.$/,'')}</span><h3>{b.title.split(/(?<=\.) /).map((part, j) => j > 0 ? <><br/><span class="title-after">{part}</span></> : part)}</h3>{chapterPoints[b.id] ? <ul class="chapter-points">{chapterPoints[b.id].map(([Icon, p, title])=><li data-title={title}><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{p.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></li>)}</ul> : <p>{b.text}</p>}</> : <><h3>{b.title} <span>{b.lead}</span></h3><p>{b.text}</p>{i===1&&<small class="epd-process-note">EPD publication follows the applicable programme rules and independent verification.</small>}</>}</div>}
 <div class:list={['ui-stage',`stage-${i}`]}>
 {i===0&&<div class="hero-visual live-visual"><div class="window live-window"><div class="globe-intro"><h3 class="sr-only">Supply chain management</h3><span class="intro-eyebrow" aria-hidden="true">Supply chain management</span></div><div class="globe-points">{supplierSteps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map(([Icon, point])=><p class="sentence"><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{point.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></p>)}</div>)}</div><div class="globe-stage" role="img" aria-label="Interactive globe tracing one product's supply chain, from raw materials and component suppliers to the factory and the product owner"><LazySupplyChainGlobe client:only="react" size={0.655} /></div></div></div>}
 {i===1&&<div class="co2-card"><div class="globe-intro co2-intro"><h3 class="sr-only">{b.title.replace(/\.$/, '')}</h3><span class="intro-eyebrow" aria-hidden="true">{b.title.replace(/\.$/, '')}</span></div><div class="globe-points co2-points">{co2Steps.map((step)=><div class="step"><p class="step-title">{step.title}</p>{step.points.map(([Icon, point])=><p class="sentence"><span class="pt-icon" aria-hidden="true"><Icon size={13} strokeWidth={1.8} /></span><span class="pt-text">{point.split('**').map((part, j) => (j % 2 ? <strong class="pt-hl">{part}</strong> : part))}</span></p>)}</div>)}</div><small class="co2-note">EPD publication follows the applicable programme rules and independent verification.</small><div class="co2-report-wrap"><span class="co2-illustrative" aria-hidden="true">Illustrative data</span><Co2Report /></div></div>}
 {i===2&&<div class="screen-card compare"><div class="ui-bar"><span>Compare components</span><span class="pill">Illustrative data</span></div><div class="compare-body"><div class="product-thumb" data-reveal-at="0.62"><img src={`${base}v4/chair.webp`} width="640" height="427" alt="Oak chair used in the product comparison" loading="lazy"/><span>Cross Chair<small>Material comparison</small></span></div><div class="compare-grid"><div data-reveal-at="0.72"><small>Current material</small><h4>Oak / baseline</h4><strong>17.9 <em>kg CO₂e</em></strong><div class="compare-line"></div></div><div class="selected" data-reveal-at="1.22"><small>Alternative material</small><h4>Oak / scenario</h4><strong>14.2 <em>kg CO₂e</em></strong><div class="compare-line shorter"></div></div></div></div></div>}
-{b.id==='beat-regulation'&&<div class="eu-flag" data-reveal-at="0.87" aria-hidden="true">{euStars.map((st)=><svg class="eu-star" viewBox="-1 -1 2 2" aria-hidden="true" style={`--x:${st.x}%;--y:${st.y}%;--fx:${st.fx}px;--fy:${st.fy}px;--r:${st.r}deg;--a:${st.a}`}><polygon points={starPoints} /></svg>)}</div>}
 {i===3&&<div class="passport-composition"><div class="phone-live"><LazyPassportPhone client:only="react" /></div><small class="phone-caption">This passport is interactive. Enlarge it to explore.</small></div>}
 
 </div><BenefitProof index={i} /></div></section>)}<StoryDotsNav class="benefit-dots-nav" before="Product Connect community" after="Dynamic Product Model"><ol class="benefit-dots" aria-hidden="true"></ol></StoryDotsNav></div><div class="story-markers" aria-hidden="true">{benefits.map((b)=><div class="story-marker" data-story-marker={b.id}></div>)}</div></div></div></section>
 
 <QuoteCarousel />
-<section id="product-model" class="story-teaser teaser-model model" aria-labelledby="teaser-model-title"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>Understand your products in a new way</p><h2 id="teaser-model-title">Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div><div class="teaser-copy"><p class="teaser-text">Learn how one living model of your products <br class="dome-break"/>lets you work fast and see insights the moment your data changes.</p><a class="teaser-open" href={`${base}product-model/`}>Explore the product model <ArrowIcon /></a></div></div></div></section>
+<section id="product-model" class="story-teaser teaser-model model" aria-labelledby="teaser-model-title"><div class="model-inner frame"><div class="model-atmosphere"><div class="model-title"><p>Understand your products in a new way</p><h2 id="teaser-model-title">Dynamic Product Model</h2></div><div class="model-horizon data-sphere" role="img" aria-label="Data rains onto a spherical product model, connecting information across its surface"><canvas data-scene="sphere" aria-hidden="true"></canvas></div><div class="teaser-copy"><p class="teaser-text">One living model of every product, <br class="dome-break"/>ready for your systems and AI tools.</p><a class="teaser-open" href={`${base}product-model/`}>Explore the product model <ArrowIcon /></a></div></div></div></section>
 {SHOW_DRAFT_TESTIMONIAL && <section class="customer-story frame" aria-label="Customer testimonial preview"><span class="tag">Testimonial · copy to be confirmed</span><blockquote>“A clearer picture of every product.<br/><span>A better foundation for what comes next.”</span></blockquote><img class="quote-portrait" src={`${base}v4/testimonial-portrait.webp`} alt="Fictional bearded man, placeholder portrait" width="80" height="80" loading="lazy"/><p class="quote-attribution">Mikkel Sørensen<small>Head of Design · Fjordform Studio, Denmark</small></p><p class="quote-note">Fictional testimonial, person and company for design preview.</p></section>}
-<Scale />
 
-<ClosingCta id="contact" text="Bring one of your products. We’ll walk through its data, its footprint and what its passport could look like." subject="Product Connect · Product demo" /></main><Footer />
+<ClosingCta id="contact" text="Bring one of your products. We’ll show you what it looks like with every component, supplier and number in one place, and what your teams could do with it." subject="Product Connect · Product demo" /></main><Footer />
 <script>
 import { motionPaused } from "../../utilities/motion";
 import { glideToStep, registerSnapPoints } from "../../utilities/storySnap";
@@ -347,9 +323,6 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     passportK = staged ? k : 0;
     wantedPassportPart = staged && k >= 1.3 && k < 1.92 ? 'seat-cushion' : null;
    }
-   if (chapter.id === 'beat-regulation' && stage && k > 0) {
-    stageVar('--warm', (1 - clamp(k / 0.6)).toFixed(3)); // warm stone -> the regulation chapter's blue as it arrives
-   }
   });
   if (!staged) document.getElementById('product-passports')?.removeAttribute('data-render-paused');
   if (staged && stage) syncUnderColour(stage);
@@ -375,10 +348,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     stageVar('--pp-zoom', zoom.toFixed(3));
     stageVar('--pp-shift', `${shift.toFixed(1)}px`);
    }
-   // the 3D phone only draws while its chapter is on screen
+   // the 3D phone only draws while its chapter is on screen (the last chapter: from its arrival on, it never leaves)
    const passports = document.getElementById('product-passports');
    const ppK = parseFloat(passports?.style.getPropertyValue('--k') || '0');
-   passports?.toggleAttribute('data-render-paused', !(ppK > 0.001 && ppK < 1.999));
+   passports?.toggleAttribute('data-render-paused', !(ppK > 0.001));
    // ...and with the chapter's second bullet the passport turns to its Parts section (spare parts), back to About
    // when you leave
    const passportTab = passportK >= 1.2 && passportK < 1.92 ? 'parts' : 'about';

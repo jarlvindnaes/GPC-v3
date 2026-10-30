@@ -1,19 +1,12 @@
 ---
 // The hero graphic, top to bottom: the Soft Lounge Chair turning in 3D, raw data orbiting it, the data-quality card
-// beneath, and the three outputs under that.
+// beneath. (The three output tiles, CO₂ / EPD / passport, were dropped: the flow diagram further down makes that point.)
 // Orbit: raw data cards (a supplier's PDF, an email, a spreadsheet, the ERP, a 3D model, a photo…) circle the chair,
 // passing behind it and in front. Dive: one at a time, a card swoops down into the data-quality card, resolving from
 // its raw source into a clean value with a score on the way; the chair's halo and the card pulse as it lands and the
-// score climbs. Bad data (duplicate, outdated, no data) is marked and falls away. Output: CO₂ numbers, the EPD and the
-// passport light up as enough approved data is in. Then it starts over.
+// score climbs. Bad data (duplicate, outdated, no data) is marked and falls away. Then it starts over.
 // Values match the passport where it has them; the rest is illustrative.
 import { ExplodingChair } from '../wireframe/ExplodingChair';
-import { FileCheck2, Gauge, QrCode } from 'lucide-react';
-const outputs = [
-  { id: 'co2', Icon: Gauge, title: 'CO₂ numbers', value: '39.4 kg CO₂e', wait: 'Waiting' },
-  { id: 'epd', Icon: FileCheck2, title: 'EPD', value: 'Ready to verify', wait: 'Waiting' },
-  { id: 'dpp', Icon: QrCode, title: 'Product Passport', value: 'Live · one scan away', wait: 'Waiting' },
-];
 ---
 <div class="hq" data-graphic-slot="quality">
   <div class="hq-halo" aria-hidden="true"><i></i></div>
@@ -29,15 +22,6 @@ const outputs = [
     <ul class="hq-rows"></ul>
     <div class="hq-foot"><span>Ingested <b data-hq-in>0</b></span><span>Distilled <b data-hq-dist>0</b></span><span>Approved <b data-hq-ok>0</b></span><span class="hq-done"><i></i>Approved</span></div>
   </div>
-  <svg class="hq-links" aria-hidden="true">{outputs.map((o) => <path data-hq-link={o.id} />)}</svg>
-  <ul class="hq-outs">
-    {outputs.map(({ id, Icon, title, value, wait }) => (
-      <li class="hq-out" data-hq-out={id}>
-        <span class="hq-out-icon" aria-hidden="true"><Icon size={16} strokeWidth={1.7} /></span>
-        <span class="hq-out-text"><strong>{title}</strong><small><span class="hq-out-wait">{wait}</span><span class="hq-out-value">{value}</span></small></span>
-      </li>
-    ))}
-  </ul>
   </div>
 </div>
 
@@ -57,8 +41,6 @@ const CARDS: Card[] = [
   { tag: 'CSV', raw: 'BOM_old.csv', score: 24, reject: 'Outdated' },
   { tag: 'Supplier', raw: 'bolts_grade_8.8.xlsx', clean: 'Steel · zinc plated', score: 94 },
 ];
-// how many approved values each output needs before it lights (the passport: the whole record approved)
-const NEEDS: Record<string, number> = { co2: 4, epd: 7, dpp: Infinity };
 
 const root = document.querySelector<HTMLElement>('[data-graphic-slot="quality"]');
 if (root) init(root);
@@ -69,9 +51,6 @@ function init(root: HTMLElement) {
   const cardsEl = root.querySelector<HTMLElement>('.hq-cards')!, hub = root.querySelector<HTMLElement>('.hq-hub')!, rows = root.querySelector<HTMLElement>('.hq-rows')!;
   const scoreEl = root.querySelector<HTMLElement>('[data-hq-score]')!, barEl = root.querySelector<HTMLElement>('[data-hq-bar]')!;
   const nIn = root.querySelector<HTMLElement>('[data-hq-in]')!, nDist = root.querySelector<HTMLElement>('[data-hq-dist]')!, nOk = root.querySelector<HTMLElement>('[data-hq-ok]')!;
-  const linksSvg = root.querySelector<SVGSVGElement>('.hq-links')!;
-  const outs = new Map([...root.querySelectorAll<HTMLElement>('[data-hq-out]')].map((el) => [el.dataset.hqOut!, el]));
-  const links = new Map([...root.querySelectorAll<SVGPathElement>('[data-hq-link]')].map((el) => [el.dataset.hqLink!, el]));
 
   let w = 0, h = 0;
   const rel = (el: Element) => { const r = el.getBoundingClientRect(), rr = root.getBoundingClientRect(); return { l: r.left - rr.left, t: r.top - rr.top, r: r.right - rr.left, b: r.bottom - rr.top, w: r.width, h: r.height, cx: r.left - rr.left + r.width / 2, cy: r.top - rr.top + r.height / 2 }; };
@@ -81,16 +60,10 @@ function init(root: HTMLElement) {
     const rr = root.getBoundingClientRect();
     w = rr.width; h = rr.height;
     root.classList.toggle('is-narrow', w < 560);
-    linksSvg.setAttribute('viewBox', `0 0 ${w} ${h}`); orbitSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    orbitSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     const o = orbit();
     orbitEl.setAttribute('cx', o.cx.toFixed(1)); orbitEl.setAttribute('cy', o.cy.toFixed(1)); orbitEl.setAttribute('rx', o.rx.toFixed(1)); orbitEl.setAttribute('ry', o.ry.toFixed(1));
     const c = rel(chair); halo.style.transform = `translate(${c.cx.toFixed(1)}px,${(c.cy + c.h * 0.1).toFixed(1)}px)`;
-    // connectors: from the card's bottom edge down to each output
-    const hb = rel(hub);
-    [...outs.entries()].forEach(([id, el], i) => {
-      const o2 = rel(el), x1 = hb.l + hb.w * (0.22 + i * 0.28), y1 = hb.b, x2 = o2.cx, y2 = o2.t, k = Math.max(14, (y2 - y1) / 2);
-      links.get(id)!.setAttribute('d', `M${x1},${y1} C${x1},${y1 + k} ${x2},${y2 - k} ${x2},${y2}`);
-    });
   };
   layout();
   new ResizeObserver(layout).observe(root);
@@ -109,12 +82,6 @@ function init(root: HTMLElement) {
     live.push({ card, el, mode: 'orbit', theta: -Math.PI / 2 - 0.4, born: t, t0: 0, from: { x: 0, y: 0 }, ctrl: { x: 0, y: 0 }, resolved: false });
     counts.in++; lastJoin = t;
   };
-  const light = () => {
-    for (const [id, el] of outs) {
-      const on = id === 'dpp' ? finishedAt >= 0 : counts.ok >= NEEDS[id];
-      el.classList.toggle('is-lit', on); links.get(id)!.classList.toggle('is-lit', on);
-    }
-  };
   const pulse = (el: HTMLElement, cls: string) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
   const addRow = (card: Card) => {
     const li = document.createElement('li');
@@ -125,11 +92,10 @@ function init(root: HTMLElement) {
     scores.push(card.score); counts.ok++;
     target = scores.reduce((a, b) => a + b, 0) / scores.length;
     pulse(hub, 'is-pulse'); pulse(halo, 'is-pulse');
-    light();
   };
   const reset = () => {
     live.forEach((l) => l.el.remove()); live = []; next = 0; counts = { in: 0, dist: 0, ok: 0 }; scores = []; target = 0; shown = 0; finishedAt = -1; lastDive = 0; lastJoin = -1e9;
-    rows.innerHTML = ''; hub.classList.remove('is-done'); t = 0; light();
+    rows.innerHTML = ''; hub.classList.remove('is-done'); t = 0;
   };
   const place = (el: HTMLElement, x: number, y: number, scale: number, op: number, z: number) => {
     x = Math.min(Math.max(x, el.offsetWidth / 2 + 4), w - el.offsetWidth / 2 - 4); // (never off the stage's sides)
@@ -182,7 +148,7 @@ function init(root: HTMLElement) {
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused')) {
     CARDS.filter((c) => !c.reject).forEach((c) => addRow(c));
-    counts = { in: CARDS.length, dist: scores.length, ok: scores.length }; shown = target; finishedAt = 0; paint(); light();
+    counts = { in: CARDS.length, dist: scores.length, ok: scores.length }; shown = target; finishedAt = 0; paint();
     hub.classList.add('is-done');
     return;
   }
@@ -194,7 +160,7 @@ function init(root: HTMLElement) {
     last = now; t += dt;
     update(dt);
     paint();
-    if (next >= CARDS.length && live.length === 0 && finishedAt < 0) { finishedAt = t; hub.classList.add('is-done'); light(); pulse(halo, 'is-pulse'); }
+    if (next >= CARDS.length && live.length === 0 && finishedAt < 0) { finishedAt = t; hub.classList.add('is-done'); pulse(halo, 'is-pulse'); }
     if (finishedAt >= 0 && t - finishedAt > END_HOLD) reset();
   };
   const run = () => { if (!raf && visible && !document.hidden) { last = 0; raf = requestAnimationFrame(tick); } };

@@ -1456,7 +1456,7 @@ html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:n
 html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:nth-child(3):last-child{opacity:calc(var(--s) * (1 - var(--e)));transform:translateY(calc((1 - var(--s)) * 22px - var(--e) * 14px))}
 html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li:last-child{--e:clamp(0,calc((var(--k) - 1.86) / .06),1);opacity:calc(var(--in) * (1 - var(--out)) * (1 - var(--e)));transform:translateY(calc((1 - var(--in)) * 26px - var(--out) * 18px - var(--e) * 14px))}
 /* the story's last bullet stays: the next section follows straight on */
-html.story-stage #beat-regulation .chapter-points li:last-child{--e:0}
+html.story-stage #product-passports .chapter-points li:last-child{--e:0} /* the last chapter holds at the end */
 @media(prefers-reduced-motion:reduce){html.story-stage :is(#harvest-data,#trusted-co2) .globe-points .step>.sentence:last-child,html.story-stage :is(#analyse-improve,#product-passports,#beat-regulation) .chapter-points li:last-child{transform:none}}
 /* (each step has one bullet, which stays until its title goes: no --b2, the earlier rules' hand-over to a second
    bullet) */
@@ -1803,3 +1803,9 @@ main .teaser-model .teaser-open:hover{background:#d6ef8c14;border-color:#d6ef8c}
 .model-usps li:last-child .model-usp-ticks{right:0}
 @media(max-width:1000px){.model-usps{row-gap:40px}}
 @media(max-width:520px){.model-usps li{min-height:0;padding-bottom:44px}.model-usps{row-gap:28px}}
+
+/* "Sell with proof" is the story's last chapter now (the EU rules chapter was folded into "Be ready for any ask"):
+   it holds at the end instead of fading out, like the last chapter always has */
+html.story-stage .story-stage #product-passports{opacity:clamp(0,var(--k) * 8,1)}
+html.story-stage #product-passports .chapter-heading>:not(.phone-caption){opacity:var(--t)}
+@media(max-width:900px){html.story-stage #product-passports .chapter-heading>.phone-caption{opacity:var(--t)}}

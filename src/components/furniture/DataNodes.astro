@@ -1,9 +1,9 @@
 ---
 // Below "Product data is hard": an interactive node graph. Six data sources feed one Product Connect node, which
-// outputs EPDs, CO₂ numbers, Digital Product Passports and product optimisations. Pulses run along the links;
+// feeds the four things teams do with it: better products, a sharper supply chain, sales proof and verified impact data. Pulses run along the links;
 // nodes can be dragged (or moved with the arrow keys once focused); hovering, focusing or tapping a node lights up
 // its path and shows a one-line caption. On narrow screens the graph runs top to bottom and dragging is off.
-import { BadgeCheck, Box, Database, Factory, FileCheck2, FileSpreadsheet, Gauge, QrCode, Sparkles, Users } from 'lucide-react';
+import { BadgeCheck, Box, Database, Factory, FileCheck2, FileSpreadsheet, Network, QrCode, Sparkles, Users } from 'lucide-react';
 import PcMark from '../PcMark.astro';
 type Node = { id: string; kind: 'src' | 'hub' | 'out'; title: string; sub: string; caption: string; Icon?: typeof Factory };
 const nodes: Node[] = [
@@ -14,14 +14,14 @@ const nodes: Node[] = [
   { id: 'certs', kind: 'src', title: 'Certificates', sub: 'FSC · test reports', Icon: BadgeCheck, caption: 'Certificates and test reports, linked to the parts they cover.' },
   { id: 'customers', kind: 'src', title: 'Customers', sub: 'Use · returns', Icon: Users, caption: 'What happens after the sale: use, care and returns.' },
   { id: 'pc', kind: 'hub', title: 'Product Connect', sub: 'One product model', caption: 'Everything lands in one product model, down to every component, checked and approved.' },
-  { id: 'epd', kind: 'out', title: 'EPDs', sub: 'EN 15804+A2', Icon: FileCheck2, caption: 'EPD calculations on EN 15804+A2, ready for independent verification.' },
-  { id: 'co2', kind: 'out', title: 'CO₂ numbers', sub: 'Per product · per part', Icon: Gauge, caption: 'CO₂e for every product, down to each component, updated as your data changes.' },
-  { id: 'dpp', kind: 'out', title: 'Digital Product Passports', sub: 'One scan away', Icon: QrCode, caption: 'A passport for every product, ready before the EU rules land.' },
-  { id: 'opt', kind: 'out', title: 'Product optimisations', sub: 'Materials · suppliers', Icon: Sparkles, caption: 'See which material, component or supplier moves the numbers most.' },
+  { id: 'products', kind: 'out', title: 'Better products', sub: 'Product development', Icon: Sparkles, caption: 'See what every component costs in material, supplier and impact, and compare alternatives before you commit.' },
+  { id: 'supply', kind: 'out', title: 'Sharper supply chain', sub: 'Sourcing', Icon: Network, caption: 'Every tier mapped, so risk and supplier changes are visible.' },
+  { id: 'sales', kind: 'out', title: 'Sales proof', sub: 'Specs · tenders · passports', Icon: QrCode, caption: 'Answer spec requests and tenders in minutes, with a passport for every product.' },
+  { id: 'impact', kind: 'out', title: 'Verified impact data', sub: 'EPDs · CO₂ · EN 15804+A2', Icon: FileCheck2, caption: 'When someone asks for an EPD or a CO₂ number, it takes days, not months.' },
 ];
 ---
 <section class="dn" aria-labelledby="dn-title" data-nodes>
-  <h2 id="dn-title" class="sr-only">How Product Connect turns scattered data into EPDs, CO₂ numbers, passports and optimisations</h2>
+  <h2 id="dn-title" class="sr-only">How Product Connect turns scattered data into one product model that design, sourcing, sales and sustainability all use</h2>
   <div class="dn-stage" data-dn-stage>
     <svg class="dn-edges" aria-hidden="true"><g data-dn-paths></g><g data-dn-pulses></g></svg>
     {nodes.map((n) => (

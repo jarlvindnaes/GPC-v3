@@ -1,9 +1,10 @@
 ---
-// "Product data is hard. We're here to help.": a short statement below the brand strip.
+// "Why it's hard": names the problem below the brand strip, before the flow diagram shows the answer.
 ---
 <section class="help" aria-labelledby="help-title">
   <p class="help-eyebrow"><i aria-hidden="true"></i>Why it’s hard</p>
-  <h2 id="help-title"><span>Product data is hard.</span> <span>We’re here to help.</span></h2>
+  <h2 id="help-title"><span>Every question about a product</span> <span>turns into a project</span></h2>
+  <p class="help-body">The same chair lives in your ERP, a BOM spreadsheet, a 3D file and twelve supplier PDFs, and they don’t agree. So a customer spec request, a supplier change or a sustainability ask means weeks of chasing.</p>
 </section>
 
 <style>
@@ -14,5 +15,6 @@
   .help h2 span{display:block}
   .help h2 span:first-child{color:#8b9098}
   .help h2 span:last-child{color:#17191c}
+  .help-body{max-width:620px;margin:28px 0 0;font-size:clamp(17px,1.4vw,20px);line-height:1.5;color:#4a4f57;text-wrap:pretty}
   @media(max-width:600px){.help{padding:80px 20px}}
 </style>
